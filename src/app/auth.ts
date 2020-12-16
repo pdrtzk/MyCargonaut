@@ -10,6 +10,7 @@ export class AuthGuard implements CanActivate {
   ) {
   }
 
+  // tslint:disable-next-line:typedef
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const currentUser = null;
     // await this.userService.getCurrentUser().then(res => currentUser = res);
