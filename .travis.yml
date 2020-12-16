@@ -10,11 +10,11 @@ cache:
     - ./node_modules
 install:
   - npm install
-#script:
+script:
   - ng lint
   - ng build --prod --base-href https://dxree.github.io/MyCargonaut/
   - cp dist/mycargonaut/index.html dist/mycargonaut/404.html
-  #- ng test --watch=false
+  - ng test --watch=false
 deploy:
   provider: pages
   skip_cleanup: true
