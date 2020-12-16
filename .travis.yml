@@ -12,8 +12,8 @@ install:
   - npm install
 #script:
   - ng lint
-  #- ng build --prod --base-href https://dxree.github.io/MyCargonaut/
-  #- cp dist/mycargonaut/index.html dist/mycargonaut/404.html
+  - ng build --prod --base-href https://dxree.github.io/MyCargonaut/
+  - cp dist/mycargonaut/index.html dist/mycargonaut/404.html
   #- ng test --watch=false
 deploy:
   provider: pages
