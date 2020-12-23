@@ -1,0 +1,22 @@
+import { SessionOptions } from 'express-session';
+import { ConnectionConfig } from 'mysql';
+
+export class Configuration {
+    public static mysqlOptions: ConnectionConfig = {
+        database: 'cargonaut_db',
+        host: 'localhost',
+        password: '',
+        user: 'root',
+    };
+
+    public static sessionOptions: SessionOptions = {
+        cookie: {
+            maxAge: 5 * 60 * 1000, //  5 min
+        },
+        name: 'MaCookie',
+        resave: true,
+        rolling: true,
+        saveUninitialized: true,
+        secret: 'Secret',
+    };
+}

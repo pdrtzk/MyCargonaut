@@ -1,0 +1,7 @@
+{
+  "name"        : "KMS Cargonaut Projekt",
+  "version"     : "1.0.0",
+  "description" : "Cargonaut Projekt für KMS",
+  "title"       : "Cargonaut",
+  "url"         : "http://localhost:8080"
+}
