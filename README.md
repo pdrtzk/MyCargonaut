@@ -1,3 +1,13 @@
+# Setup the Project
+- server / db -> Datenbank import
+- compile Typescript
+- neue Typescript datei "config" in congif Ordner -> Inhalt aus config skeletton einfügen
+- npm installieren (im Server und im Angular projekt)
+- ng build (oder ng build --watch), um Angular Projekt zu kompilieren
+- server.js (nicht .ts) starten
+- Angular anwendung sollte unter localhost erreichbar sein
+
+
 # MyCargonaut
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
