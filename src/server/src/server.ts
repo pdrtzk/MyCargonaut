@@ -129,5 +129,3 @@ app.post('/logout', (req: Request, res: Response) => {
     message: 'Logged out!',
   });
 });
-
-
