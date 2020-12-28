@@ -42,6 +42,7 @@ var mysql = require("mysql");
 var session = require("express-session");
 var cryptoJS = require("crypto-js");
 var config_1 = require("../config/config");
+var Cargonaut_1 = require("../model/Cargonaut");
 /*****************************************************************************
  *           Configuration       *
  *****************************************************************************/
@@ -125,18 +126,12 @@ app.post('/login', function (req, res) {
     var query = 'SELECT * FROM cargonaut WHERE username = ? AND password = ?;';
     queryPromise(query, data).then(function (rows) {
         if (rows.length === 1) {
-            var user = {
-                id: rows[0].id,
-                username: rows[0].username,
-                firstname: rows[0].firstName,
-                lastname: rows[0].lastName
-            };
-            /*rows[0].id,
-                 rows[0].username,
-                 rows[0].firstName,
-                 rows[0].lastName,
-                 new Date(rows[0].time),
-                 rows[0].rights*/
+            var user = new Cargonaut_1.Cargonaut( /*rows[0].id,
+                rows[0].username,
+                rows[0].firstName,
+                rows[0].lastName,
+                new Date(rows[0].time),
+                rows[0].rights*/);
             // @ts-ignore
             req.session.user = user;
             res.status(200).send({
