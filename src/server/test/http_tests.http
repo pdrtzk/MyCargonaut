@@ -1,5 +1,17 @@
 ### login
-GET http://localhost:8080/login HTTP/1.1
+POST http://localhost:8080/login HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "username": "admin",
+  "password": "admin"
+}
+
+### logout
+POST http://localhost:8080/logout HTTP/1.1
+Content-Type: application/json
+Cookie:
 
 ### Register
 
@@ -19,3 +31,8 @@ Cookie:
   "plz": "123332",
   "city": "teststadt"
 }
+
+
+### get Cargonaut
+GET http://localhost:8080/cargonaut/5 HTTP/1.1
+Cookie:

@@ -50,12 +50,12 @@ async function queryPromise(sql: string, data: any[]): Promise<any> {
  *           Static routes       *
  *****************************************************************************/
 app.use('/', express.static(`../../../dist/MyCargonaut`));
-app.use('/*', express.static(`../../../dist/MyCargonaut`));
+// app.use('/*', express.static(`../../../dist/MyCargonaut`));
 
 app.listen(8080, 'localhost', () => {
   console.log('');
   console.log('-------------------------------------------------------------');
-  console.log('                    UserMan-Backend läuft                       ');
+  console.log('                    UserMan-Backend läuft                    ');
   console.log('-------------------------------------------------------------');
   console.log('       Frontend aufrufen: http://localhost:8080              ');
   console.log('-------------------------------------------------------------');
@@ -63,7 +63,7 @@ app.listen(8080, 'localhost', () => {
 
 
 /*****************************************************************************
- *           Routes       *
+ *           Authentication - Login / logout / Register       *
  *****************************************************************************/
 function isLoggedIn(): (req: Request, res: Response, next: any) => void {
   return (req: Request, res: Response, next) => {
@@ -130,6 +130,9 @@ app.post('/logout', (req: Request, res: Response) => {
   });
 });
 
+/*
+ * Registrieren
+ */
 app.post('/cargonaut', (req: Request, res: Response) => {
   // Read data from request body
   const firstname: string = req.body.firstname;
@@ -187,5 +190,34 @@ app.post('/cargonaut', (req: Request, res: Response) => {
       message: 'Nicht alle Felder ausgefüllt.',
     });
   }
+});
+
+/*****************************************************************************
+ *           Cargonaut       *
+ *****************************************************************************/
+/*
+ * Get Cargonaut
+ */
+app.get('/cargonaut/:id', (req: Request, res: Response) => {
+  const id: string = req.params.id;
+  const data: [string] = [
+    id,
+  ];
+  const query = 'SELECT * FROM cargonaut WHERE id = ?;';
+  queryPromise(query, data).then(results => {
+    if (results.length > 0) {
+      res.status(200).send({
+        user: results[0],
+      });
+    } else{
+      res.status(400).send({
+        message: 'Der User konnte nicht gefunden werden!',
+      });
+    }
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten des Users!',
+    });
+  });
 });
 
