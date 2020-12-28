@@ -1,6 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { LoginComponent } from './login.component';
+import {LoginComponent} from './login.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../app-routing.module';
+import {RouterModule} from '@angular/router';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -8,9 +12,18 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ LoginComponent ]
+      declarations: [LoginComponent],
+      imports: [
+        FormsModule,
+        ReactiveFormsModule,
+        [RouterTestingModule.withRoutes(routes)]
+      ],
+      providers: [
+        RouterModule,
+        // { provide: UserService, useValue: userServiceStub }
+      ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

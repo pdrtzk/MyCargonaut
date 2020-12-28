@@ -9,6 +9,7 @@ import { Cargonaut } from '../shared/cargonaut.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  title = 'MyCargonaut';
   user: Cargonaut;
 
   constructor(/* private accountService: AccountService */) {
