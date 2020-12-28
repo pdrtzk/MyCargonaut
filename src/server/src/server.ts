@@ -1,4 +1,4 @@
-import express    = require ('express');
+import express = require ('express');
 import bodyParser = require ('body-parser');
 import {Request, Response} from 'express';
 import mysql = require ('mysql');
@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 async function queryPromise(sql: string, data: any[]): Promise<any> {
-  return new Promise ((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     database.query(sql, data, (err: MysqlError, rows: any) => {
       if (err) {
         reject(rows);
@@ -52,7 +52,7 @@ async function queryPromise(sql: string, data: any[]): Promise<any> {
 app.use('/', express.static(`../../../dist/MyCargonaut`));
 app.use('/*', express.static(`../../../dist/MyCargonaut`));
 
-app.listen(8080, 'localhost',  () => {
+app.listen(8080, 'localhost', () => {
   console.log('');
   console.log('-------------------------------------------------------------');
   console.log('                    UserMan-Backend läuft                       ');
@@ -129,3 +129,63 @@ app.post('/logout', (req: Request, res: Response) => {
     message: 'Logged out!',
   });
 });
+
+app.post('/cargonaut', (req: Request, res: Response) => {
+  // Read data from request body
+  const firstname: string = req.body.firstname;
+  const lastname: string = req.body.lastname;
+  const username: string = req.body.username;
+  const password: string = cryptoJS.SHA512(req.body.password).toString();
+  const email: string = req.body.email;
+  const geburtsdatum: string = (req.body.geburtsdatum).toLocaleString();
+  const strasse: string = req.body.street;
+  const hausnr: string = req.body.number;
+  const plz: string = req.body.plz;
+  const ort: string = req.body.city;
+  let adresse: number;
+  if (strasse && hausnr && plz && ort) {
+    const dataAdress: [string, string, string, string] = [
+      strasse,
+      hausnr,
+      plz,
+      ort,
+    ];
+    const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+    queryPromise(queryAdress, dataAdress).then(result => {
+      adresse = result.insertId;
+      console.log('Standort angelegt.');
+      if (firstname && lastname) {
+        const data: [string, string, string, string, string, string, number] = [
+          firstname,
+          lastname,
+          username,
+          password,
+          email,
+          geburtsdatum,
+          adresse,
+        ];
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, username, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);';
+        queryPromise(query, data).then(results => {
+          res.status(201).send({
+            message: 'Neuer Nutzer erstellt!',
+            createdUser: results.insertId,
+          });
+        }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Nutzers.',
+            });
+          }
+        );
+      }
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Erstellen eines Standorts.',
+      });
+    });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
+
