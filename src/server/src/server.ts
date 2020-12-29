@@ -368,7 +368,7 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
  *           Post       * // TODO: Post post, get/:id, get all Posts, put
  *****************************************************************************/
 
-/*
+
 // create Post
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
@@ -377,19 +377,32 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   const ankunftZeit: string = req.body.ankunftZeit;
   const bezahlungsart: string = req.body.bezahlungsart;
 
-  const fahrzeug: string = req.body.vehicle;
-  const anzahlSitzplaetze: string = req.body.anzahlSitzplaetze;
+  const fahrzeug: number = req.body.vehicle;
+  const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
   const beschreibung: string = req.body.beschreibung;
   const typ: string = req.body.typ;
   const preis = req.body.price;
 
+  const strasse: string = req.body.street;
+  const hausnr: string = req.body.number;
+  const plz: string = req.body.plz;
+  const ort: string = req.body.city;
 
-  let standort: string;
-  let zielort: string;
-  let laderaum: string;
-
-
-  if (strasse && hausnr && plz && ort) {
+  const zielStrasse: string = req.body.zielStreet;
+  const zielHausnr: string = req.body.zielNumber;
+  const zielPlz: string = req.body.zielPlz;
+  const zielStadt: string = req.body.zielCity;
+  const laenge: number = req.body.length;
+  const breite: number = req.body.width;
+  const hoehe: number = req.body.height;
+  let standort: number;
+  let zielort: number;
+  let laderaum: number;
+  // create startort
+  if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
+    fahrzeug && anzahlSitzplaetze && typ && preis && strasse &&
+    hausnr && plz && ort && zielStrasse && zielHausnr && zielPlz &&
+    zielStadt && laenge && breite && hoehe) {
     const dataAdress: [string, string, string, string] = [
       strasse,
       hausnr,
@@ -398,43 +411,72 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
     ];
     const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
     queryPromise(queryAdress, dataAdress).then(result => {
-      adresse = result.insertId;
-      console.log('Standort angelegt.');
-      if (firstname && lastname) {
-        const data: [string, string, string, string, string, string, number] = [
-          firstname,
-          lastname,
-          username,
-          password,
-          email,
-          geburtsdatum,
-          adresse,
+      standort = result.insertId;
+      // create Zielort
+      const zielDataAdress: [string, string, string, string] = [
+        zielStrasse,
+        zielHausnr,
+        zielPlz,
+        zielStadt,
+      ];
+      const queryZielAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+      queryPromise(queryZielAdress, zielDataAdress).then(results => {
+        zielort = results.insertId;
+        // create laderaum
+        const dataLaderaum: [number, number, number] = [
+          laenge,
+          breite,
+          hoehe,
         ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, username, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);';
-        queryPromise(query, data).then(results => {
-          res.status(201).send({
-            message: 'Neuer Nutzer erstellt!',
-            createdUser: results.insertId,
+        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        queryPromise(queryLade, dataLaderaum).then(resu => {
+          laderaum = resu.insertId;
+          // create Post
+          const data: [number, number, string, string, string, number, number, number, string, string, number, any] = [
+            standort,
+            zielort,
+            startzeit,
+            ankunftZeit,
+            bezahlungsart,
+            laderaum,
+            fahrzeug,
+            anzahlSitzplaetze,
+            beschreibung,
+            typ,
+            cargonaut,
+            preis,
+          ];
+          const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) ' +
+            'VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+          queryPromise(query, data).then(resultPost => {
+            res.status(201).send({
+              message: 'Neuer Post erstellt!',
+              createdVehicle: resultPost.insertId,
+            });
           });
         }).catch(() => {
             res.status(400).send({
-              message: 'Fehler beim Erstellen eines Nutzers.',
+              message: 'Fehler beim Erstellen eines Zielortes.',
             });
           }
         );
-      }
-    }).catch(() => {
-      res.status(400).send({
-        message: 'Fehler beim Erstellen eines Standorts.',
+
+      }).catch(() => {
+        res.status(400).send({
+          message: 'Fehler beim Erstellen eines Standorts.',
+        });
       });
     });
-  } else {
-    res.status(400).send({
-      message: 'Nicht alle Felder ausgefüllt.',
-    });
   }
-});
-*/
+  else
+    {
+      res.status(400).send({
+        message: 'Nicht alle Felder ausgefüllt.',
+      });
+    }
+  }
+);
+
 /*****************************************************************************
  *           buchung       * // TODO: buchung get/:id, post
  *****************************************************************************/
