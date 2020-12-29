@@ -12,9 +12,12 @@ import {Configuration} from '../config/config';
 import {Cargonaut} from '../model/Cargonaut';
 import {replaceTsWithNgInErrors} from '@angular/compiler-cli/src/ngtsc/diagnostics';
 
+
 /*****************************************************************************
  *           Configuration       *
  *****************************************************************************/
+
+
 const app = express();
 const database: Connection = mysql.createConnection(Configuration.mysqlOptions);
 app.use(bodyParser.json());
@@ -47,9 +50,12 @@ async function queryPromise(sql: string, data: any[]): Promise<any> {
   });
 }
 
+
 /*****************************************************************************
  *           Static routes       *
  *****************************************************************************/
+
+
 app.use('/', express.static(`../../../dist/MyCargonaut`));
 // app.use('/*', express.static(`../../../dist/MyCargonaut`));
 
@@ -62,9 +68,12 @@ app.listen(8080, 'localhost', () => {
   console.log('-------------------------------------------------------------');
 });
 
+
 /*****************************************************************************
  *           Authentication - Login / logout / Register       *
  *****************************************************************************/
+
+
 function isLoggedIn(): (req: Request, res: Response, next: any) => void {
   return (req: Request, res: Response, next) => {
     // @ts-ignore
@@ -78,6 +87,7 @@ function isLoggedIn(): (req: Request, res: Response, next: any) => void {
   };
 }
 
+// check if logged in
 app.get('/login', isLoggedIn(), (req: Request, res: Response) => {
   res.status(200).send({
     message: 'User ist weiterhin eingeloggt!',
@@ -85,9 +95,8 @@ app.get('/login', isLoggedIn(), (req: Request, res: Response) => {
     user: req.session.user
   });
 });
-/**
- * Login
- */
+
+// Login
 app.post('/login', (req: Request, res: Response) => {
   const username: string = req.body.username;
   const password: string = req.body.password;
@@ -118,9 +127,7 @@ app.post('/login', (req: Request, res: Response) => {
   });
 });
 
-/**
- * Logout
- */
+// Logout
 app.post('/logout', (req: Request, res: Response) => {
   // @ts-ignore
   delete req.session.user;
@@ -129,10 +136,8 @@ app.post('/logout', (req: Request, res: Response) => {
   });
 });
 
-/*
- * Registrieren
- */
-app.post('/cargonaut', (req: Request, res: Response) => {
+// Registrieren
+app.post('/cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
   const firstname: string = req.body.firstname;
   const lastname: string = req.body.lastname;
@@ -155,7 +160,6 @@ app.post('/cargonaut', (req: Request, res: Response) => {
     const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
     queryPromise(queryAdress, dataAdress).then(result => {
       adresse = result.insertId;
-      console.log('Standort angelegt.');
       if (firstname && lastname) {
         const data: [string, string, string, string, string, string, number] = [
           firstname,
@@ -179,24 +183,17 @@ app.post('/cargonaut', (req: Request, res: Response) => {
           }
         );
       }
-    }).catch(() => {
-      res.status(400).send({
-        message: 'Fehler beim Erstellen eines Standorts.',
-      });
-    });
-  } else {
-    res.status(400).send({
-      message: 'Nicht alle Felder ausgefüllt.',
     });
   }
 });
 
+
 /*****************************************************************************
  *           Cargonaut       *
  *****************************************************************************/
-/*
- * Get Cargonaut
- */
+
+
+// Get Cargonaut
 app.get('/cargonaut/:id', (req: Request, res: Response) => {
   const id: string = req.params.id;
   const data: [string] = [
@@ -220,15 +217,37 @@ app.get('/cargonaut/:id', (req: Request, res: Response) => {
   });
 });
 
-// TODO: put Cargonaut
+// Get Cargonaut
+app.put('/cargonaut/:id', (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+  const firstname: string = req.body.firstname;
+  const lastname: string = req.body.lastname;
+  const email: string = req.body.email;
+  const data: [string, string, string, number] = [
+    firstname,
+    lastname,
+    email,
+    id,
+  ];
+  const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, email = ? WHERE id = ?;';
+  queryPromise(query, data).then(() => {
+    res.status(200).send({
+      message: `Updated user ${id}`,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Der User konnte nicht bearbeitet werden.',
+    });
+  });
+});
+
 
 /*****************************************************************************
  *           Fahrzeuge       *
  *****************************************************************************/
-// TODO: fahrzeug get all from cargonaut, get/:id
-/*
- * add new vehicle
- */
+
+
+// add new vehicle
 app.post('/vehicle/:owner', (req: Request, res: Response) => {
   // Read data from request body
   const art: string = req.body.type;
@@ -278,12 +297,154 @@ app.post('/vehicle/:owner', (req: Request, res: Response) => {
   }
 });
 
-// TODO: Bewertung get/:id, post, (put, delete)
+// get vehicle
+app.get('/vehicle/:id', (req: Request, res: Response) => {
+  const id: string = req.params.id;
+  const data: [string] = [
+    id,
+  ];
+  const query = 'SELECT * FROM fahrzeug WHERE id = ?;';
+  queryPromise(query, data).then(results => {
+    if (results.length > 0) {
+      res.status(200).send({
+        vehicle: results[0],
+      });
+    } else {
+      res.status(400).send({
+        message: 'Das Fahrzeug konnte nicht gefunden werden!',
+      });
+    }
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten des Fahrzeugs!',
+    });
+  });
+});
 
-// TODO: buchung get/:id, post
+// get vehicles from cargonaut
+app.get('/vehicles/:cargonaut', (req: Request, res: Response) => {
+  const cargonaut: string = req.params.cargonaut;
+  const data: [string] = [
+    cargonaut,
+  ];
+  const query = 'SELECT * FROM fahrzeug WHERE besitzer = ?;';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      vehicles: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten der Fahrzeuge!',
+    });
+  });
+});
+
+// delete vehicle
+app.delete('/vehicle/:id', (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+  const query = 'DELETE FROM fahrzeug WHERE id = ?;';
+
+  queryPromise(query, [id]).then(result => {
+    // Check if database response contains at least one entry
+    if (result.affectedRows === 1) {
+      res.status(200).send({
+        message: `Fahrzeug gelöscht`,
+      });
+    } else {
+      res.status(400).send({
+        message: 'Fahrzeug konnte nicht gefunden werden!',
+      });
+    }
+  }).catch(err => {
+    // Database operation has failed
+    res.status(500).send({
+      message: 'Datenbank Fehler: ' + err
+    });
+  });
+});
 
 
-// TODO: Post post, get/:id, get all Posts, put
+/*****************************************************************************
+ *           Post       * // TODO: Post post, get/:id, get all Posts, put
+ *****************************************************************************/
+
+/*
+// create Post
+app.post('/post/:cargonaut', async (req: Request, res: Response) => {
+  // Read data from request body
+  const cargonaut: number = Number(req.params.cargonaut);
+  const startzeit: string = req.body.startzeit;
+  const ankunftZeit: string = req.body.ankunftZeit;
+  const bezahlungsart: string = req.body.bezahlungsart;
+
+  const fahrzeug: string = req.body.vehicle;
+  const anzahlSitzplaetze: string = req.body.anzahlSitzplaetze;
+  const beschreibung: string = req.body.beschreibung;
+  const typ: string = req.body.typ;
+  const preis = req.body.price;
+
+
+  let standort: string;
+  let zielort: string;
+  let laderaum: string;
+
+
+  if (strasse && hausnr && plz && ort) {
+    const dataAdress: [string, string, string, string] = [
+      strasse,
+      hausnr,
+      plz,
+      ort,
+    ];
+    const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+    queryPromise(queryAdress, dataAdress).then(result => {
+      adresse = result.insertId;
+      console.log('Standort angelegt.');
+      if (firstname && lastname) {
+        const data: [string, string, string, string, string, string, number] = [
+          firstname,
+          lastname,
+          username,
+          password,
+          email,
+          geburtsdatum,
+          adresse,
+        ];
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, username, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);';
+        queryPromise(query, data).then(results => {
+          res.status(201).send({
+            message: 'Neuer Nutzer erstellt!',
+            createdUser: results.insertId,
+          });
+        }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Nutzers.',
+            });
+          }
+        );
+      }
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Erstellen eines Standorts.',
+      });
+    });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
+*/
+/*****************************************************************************
+ *           buchung       * // TODO: buchung get/:id, post
+ *****************************************************************************/
+/*****************************************************************************
+ *           Bewertung       * // TODO: Bewertung get/:id, post, (put, delete)
+ *****************************************************************************/
+
+
+
+
 
 
 
