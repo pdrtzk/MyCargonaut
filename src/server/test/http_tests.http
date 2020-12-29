@@ -4,7 +4,7 @@ Content-Type: application/json
 Cookie:
 
 {
-  "username": "admin",
+  "email": "admin@admin.de",
   "password": "admin"
 }
 
@@ -22,7 +22,6 @@ Cookie:
 {
   "firstname": "Test",
   "lastname": "Tester",
-  "username": "testet",
   "password": "test",
   "email": "test@test.de",
   "geburtsdatum": "18-09-1998",

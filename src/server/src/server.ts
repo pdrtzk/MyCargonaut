@@ -98,10 +98,10 @@ app.get('/login', isLoggedIn(), (req: Request, res: Response) => {
 
 // Login
 app.post('/login', (req: Request, res: Response) => {
-  const username: string = req.body.username;
+  const email: string = req.body.email;
   const password: string = req.body.password;
-  const data: [string, string] = [username, cryptoJS.SHA512(password).toString()];
-  const query = 'SELECT * FROM cargonaut WHERE username = ? AND password = ?;';
+  const data: [string, string] = [email, cryptoJS.SHA512(password).toString()];
+  const query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
   queryPromise(query, data).then(rows => {
     if (rows.length === 1) {
       const user: Cargonaut = new Cargonaut(/*rows[0].id,
@@ -141,7 +141,6 @@ app.post('/cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
   const firstname: string = req.body.firstname;
   const lastname: string = req.body.lastname;
-  const username: string = req.body.username;
   const password: string = cryptoJS.SHA512(req.body.password).toString();
   const email: string = req.body.email;
   const geburtsdatum: string = (req.body.geburtsdatum).toLocaleString();
@@ -161,16 +160,15 @@ app.post('/cargonaut', async (req: Request, res: Response) => {
     queryPromise(queryAdress, dataAdress).then(result => {
       adresse = result.insertId;
       if (firstname && lastname) {
-        const data: [string, string, string, string, string, string, number] = [
+        const data: [string, string, string, string, string, number] = [
           firstname,
           lastname,
-          username,
           password,
           email,
           geburtsdatum,
           adresse,
         ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, username, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?);';
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
         queryPromise(query, data).then(results => {
           res.status(201).send({
             message: 'Neuer Nutzer erstellt!',
@@ -367,8 +365,6 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
 /*****************************************************************************
  *           Post       * // TODO: Post post, get/:id, get all Posts, put
  *****************************************************************************/
-
-
 // create Post
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
