@@ -1,0 +1,45 @@
+.post-space-between {
+  justify-content: space-between;
+}
+
+.post-top-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.post-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-button {
+  width: 100px;
+  height: 30px;
+  border: 0;
+  margin: 5px;
+  background-color: green;
+  color: white;
+}
+
+.post-button:hover {
+  background-color: mediumseagreen;
+}
+
+.post-name-title {
+  font-family: "Calibri";
+  font-size: 40px;
+}
+
+.post-type-label {
+  font-family: "Calibri";
+  font-size: 20px;
+  background-color: mediumseagreen;
+  padding: 10px;
+  border-radius: 20px;
+}
+
+.post-comment-text {
+  border-left: 5px solid grey;
+  padding-left: 5px;
+  font-family: Calibri;
+}

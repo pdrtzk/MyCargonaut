@@ -1,1 +1,60 @@
-<p>post works!</p>
+<div class="post-column">
+  <div class="post-top-row post-space-between">
+    <div class="post-top-row">
+      <!-- title -->
+      <div><p class="post-type-label">{{post.type}}</p></div>
+      <div><p class="post-name-title">{{post.author.firstname}} {{post.author.lastname}}</p></div>
+    </div>
+    <div class="post-top-row">
+      <!-- Buttons -->
+      <div>
+        <button class="post-button">message</button>
+      </div>
+      <div>
+        <button class="post-button">booking</button>
+      </div>
+    </div>
+  </div>
+  <div class="post-top-row">
+    <div style="flex: 4; padding: 10px">
+      <!-- main part -->
+      <div class="post-column">
+        <div class="post-top-row post-space-between">
+          <!-- icons -->
+          <div><p class="post-type-label">sterne</p></div>
+          <div><p class="post-type-label">zahlungsmethode</p></div>
+          <div><p class="post-type-label">preis</p></div>
+        </div>
+        <div class="post-top-row">
+          <!-- text / comment -->
+          <p class="post-comment-text">{{loremIpsum}}</p>
+        </div>
+      </div>
+    </div>
+    <div style="flex: 1; padding: 10px">
+      <!-- right -->
+      <div>
+        <div>
+          <!-- Fahrzeugtyp -->
+          <p>Fahrzeugtyp</p>
+        </div>
+        <div>
+          <!-- Sitzplätze -->
+          <p>Sitzplätze</p>
+        </div>
+        <div>
+          <!-- Gepäckstücke -->
+          <p>Gepäckstücke</p>
+        </div>
+        <div>
+          <!-- Standort -->
+          <p>Standort</p>
+        </div>
+        <div>
+          <!-- Zielort -->
+          <p>Zielort</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
