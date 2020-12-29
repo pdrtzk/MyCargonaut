@@ -10,6 +10,7 @@ import socket = require('socket.io'); // für Chatfunktion
 
 import {Configuration} from '../config/config';
 import {Cargonaut} from '../model/Cargonaut';
+import {replaceTsWithNgInErrors} from '@angular/compiler-cli/src/ngtsc/diagnostics';
 
 /*****************************************************************************
  *           Configuration       *
@@ -61,7 +62,6 @@ app.listen(8080, 'localhost', () => {
   console.log('-------------------------------------------------------------');
 });
 
-
 /*****************************************************************************
  *           Authentication - Login / logout / Register       *
  *****************************************************************************/
@@ -85,7 +85,6 @@ app.get('/login', isLoggedIn(), (req: Request, res: Response) => {
     user: req.session.user
   });
 });
-
 /**
  * Login
  */
@@ -209,7 +208,7 @@ app.get('/cargonaut/:id', (req: Request, res: Response) => {
       res.status(200).send({
         user: results[0],
       });
-    } else{
+    } else {
       res.status(400).send({
         message: 'Der User konnte nicht gefunden werden!',
       });
@@ -220,4 +219,71 @@ app.get('/cargonaut/:id', (req: Request, res: Response) => {
     });
   });
 });
+
+// TODO: put Cargonaut
+
+/*****************************************************************************
+ *           Fahrzeuge       *
+ *****************************************************************************/
+// TODO: fahrzeug get all from cargonaut, get/:id
+/*
+ * add new vehicle
+ */
+app.post('/vehicle/:owner', (req: Request, res: Response) => {
+  // Read data from request body
+  const art: string = req.body.type;
+  const anzahlSitzplaetze: number = req.body.seats;
+  const besitzer: string = req.params.owner;
+  const laenge: number = req.body.length;
+  const breite: number = req.body.width;
+  const hoehe: number = req.body.height;
+  let ladeflaeche: number;
+  if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer) {
+    const dataLade: [number, number, number] = [
+      laenge,
+      breite,
+      hoehe,
+    ];
+    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+    queryPromise(queryLade, dataLade).then(result => {
+      ladeflaeche = result.insertId;
+      const data: [string, number, number, string] = [
+        art,
+        anzahlSitzplaetze,
+        ladeflaeche,
+        besitzer,
+      ];
+      const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer) VALUES (NULL, ?, ?, ?, ?);';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Neues Fahrzeug erstellt!',
+          createdVehicle: results.insertId,
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Erstellen eines Fahrzeugs.',
+          });
+        }
+      );
+
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Erstellen eines Laderaums.',
+      });
+    });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
+
+// TODO: Bewertung get/:id, post, (put, delete)
+
+// TODO: buchung get/:id, post
+
+
+// TODO: Post post, get/:id, get all Posts, put
+
+
 
