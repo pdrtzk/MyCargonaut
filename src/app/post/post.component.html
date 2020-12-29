@@ -2,7 +2,12 @@
   <div class="post-top-row post-space-between">
     <div class="post-top-row">
       <!-- title -->
-      <div><p class="post-type-label">{{post.type}}</p></div>
+      <div *ngIf="post.type==='Angebot'">
+        <p class="post-type-label post-angebot">Angebot</p>
+      </div>
+      <div *ngIf="post.type==='Gesuch'">
+        <p class="post-type-label post-gesuch">Gesuch</p>
+      </div>
       <div><p class="post-name-title">{{post.author.firstname}} {{post.author.lastname}}</p></div>
     </div>
     <div class="post-top-row">
