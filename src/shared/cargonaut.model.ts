@@ -4,7 +4,6 @@ export interface Cargonaut {
   lastname?: string;
   email?: string;
   password?: string;
-  username?: string;
   birthday?: Date;
   address?: Location;
 }
