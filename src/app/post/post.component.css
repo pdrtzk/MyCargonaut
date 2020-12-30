@@ -82,10 +82,13 @@
 
 .post-green-text {
   font-family: Calibri;
+  color: #005B52;
+}
+
+.post-right-align-narrow {
   margin-top: -10px;
   text-align: right;
   font-size: 20px;
-  color: #005B52;
 }
 
 .post-large-grey-text {

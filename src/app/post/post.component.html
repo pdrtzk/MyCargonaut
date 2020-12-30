@@ -32,7 +32,7 @@
           <div class="post-top-row">
             <div style="margin-right: 30px">
               <!-- cargonaut star rating -->
-              <p class="post-value">* * * * *</p> <!-- todo -->
+              <p class="post-value">{{starRatingString}}</p> <!-- todo use icons -->
             </div>
             <div>
               <!-- payment method -->
@@ -49,7 +49,7 @@
         </div>
         <div class="post-top-row">
           <!-- text / comment -->
-          <p class="post-comment-text">{{loremIpsum}}</p>
+          <p class="post-comment-text">{{loremIpsum}}</p> <!-- todo use post comment -->
         </div>
       </div>
     </div>
@@ -62,21 +62,31 @@
         </div>
         <div>
           <!-- Sitzplätze -->
-          <p class="post-green-text">{{post.seats || 0}} Sitzplätze</p>
+          <p class="post-green-text post-right-align-narrow">{{post.seats || 0}} Sitzplätze</p>
         </div>
         <div>
           <!-- Gepäckstücke -->
-          <p class="post-green-text">{{post.vehicle.hold || 0}} Ladeplätze</p>
+          <p class="post-green-text post-right-align-narrow">{{post.vehicle.hold || 0}} Ladeplätze</p>
         </div>
         <div>
           <!-- Standort -->
-          <p class="post-value">{{post.startlocation.city}}</p>
-          <p class="post-label">Standort</p>
+          <div class="post-top-row post-space-between">
+            <p>📍</p> <!-- todo use material icon -->
+            <p class="post-green-text" style="font-size: 20px">{{post.startlocation.city}}</p>
+          </div>
+          <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
+            {{post.start_time.toLocaleDateString()}}, {{post.start_time.toLocaleTimeString()}}
+          </p>
         </div>
         <div>
           <!-- Zielort -->
-          <p class="post-value">{{post.endlocation.city}}</p>
-          <p class="post-label">Zielort</p>
+          <div class="post-top-row post-space-between">
+            <p>🎯</p> <!-- todo use material icon -->
+            <p class="post-green-text" style="font-size: 20px">{{post.endlocation.city}}</p>
+          </div>
+          <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
+            {{post.end_time.toLocaleDateString()}}, {{post.end_time.toLocaleTimeString()}}
+          </p>
         </div>
       </div>
     </div>
