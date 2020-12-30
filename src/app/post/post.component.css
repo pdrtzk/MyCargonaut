@@ -8,22 +8,27 @@
 }
 
 .post-column {
+  padding: 10px;
   background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
 }
 
 .post-button {
-  width: 100px;
-  height: 30px;
   border: 0;
   margin: 5px;
-  background-color: green;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #005B52;
   color: white;
+  font-size: 30px;
+  font-family: Calibri;
+  box-shadow: grey 1px 3px 5px;
 }
 
 .post-button:hover {
-  background-color: mediumseagreen;
+  background-color: #92BDA3;
 }
 
 .post-name-title {
@@ -54,4 +59,39 @@
   border-left: 5px solid grey;
   padding-left: 5px;
   font-family: Calibri;
+}
+
+.post-value {
+  font-family: "Calibri";
+  font-size: 30px;
+}
+
+.post-value-price {
+  font-family: "Calibri";
+  font-size: 70px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.post-label {
+  font-family: "Calibri";
+  font-size: 15px;
+  color: #005B52;
+  margin-top: -30px;
+}
+
+.post-green-text {
+  font-family: Calibri;
+  margin-top: -10px;
+  text-align: right;
+  font-size: 20px;
+  color: #005B52;
+}
+
+.post-large-grey-text {
+  font-family: Calibri;
+  margin-bottom: -10px;
+  text-align: right;
+  font-size: 60px;
+  color: grey;
 }
