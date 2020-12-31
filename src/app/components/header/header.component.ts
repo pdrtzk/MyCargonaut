@@ -7,12 +7,18 @@ import { Component, OnInit } from '@angular/core';
 
 })
 export class HeaderComponent implements OnInit {
-  userLoggedIn = false; // todo: get actual login status
+  userLoggedIn = false; // todo: get actual login status in ngOnInit
+  navbarOpen = false;
+
 
   constructor() { }
 
   ngOnInit(): void {
   }
 
+
+  toggleNavbar(): void {
+    this.navbarOpen = !this.navbarOpen;
+  }
 
 }

@@ -1,6 +1,6 @@
 .logo {
-  height: 10rem;
-  width: auto;
+  height: auto;
+  max-width: 350px;
   background-color: white;
   margin: 0;
   padding: 1rem 1.5rem;
@@ -8,7 +8,6 @@
 
 .navbar {
   background-color: #005b52;
-  z-index: -1;
   padding: 0rem;
   color: white;
   font-family: "MS Gothic";
@@ -21,7 +20,7 @@
 
 .nav-link {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 3rem;
+  font-size: 50px;
 }
 
 .nav-link:active, .nav-link:focus {
@@ -34,10 +33,52 @@
   right: 0;
 }
 
-.nav > .nav-item {
-
+.navbar-toggler {
+  right: 20px;
 }
+
 
 .nav:not(:last-child) > .nav-item {
   margin-right: 2rem;
+}
+
+
+
+@media (max-width: 969px){
+
+  @media(min-width: 768px){
+    .nav-link {
+      font-size: 30px;
+    }
+  }
+
+}
+
+@media (min-width: 768px) {
+  .navbar-toggler {
+    display: none;
+  }
+
+  .navbar-large {
+    display: block;
+  }
+
+  .navbar-small {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-toggler {
+    display: block;
+  }
+
+  .navbar-large {
+    display: none;
+  }
+
+  .nav-link {
+    margin-left: 1rem;
+    font-size: 50px;
+  }
 }
