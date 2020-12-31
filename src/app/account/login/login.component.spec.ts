@@ -5,11 +5,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterTestingModule} from '@angular/router/testing';
 import {routes} from '../../app-routing.module';
 import {RouterModule} from '@angular/router';
-import {AccountRoutingModule} from '../account-routing.module';
 import {MatDialogModule, MatDialogRef, MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
-import {MatInputModule} from '@angular/material/input';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
