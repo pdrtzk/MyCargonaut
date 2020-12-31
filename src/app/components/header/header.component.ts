@@ -25,10 +25,7 @@ export class HeaderComponent implements OnInit {
 
   openLoginDialog(login = true): void {
     console.log('hellooooo from header');
-    const dialogRef = this.dialog.open(AccountComponent, {
-      width: '400px',
-      data: {login}
-    });
+    const dialogRef = AccountComponent.openDialog(this.dialog, login);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log(result);

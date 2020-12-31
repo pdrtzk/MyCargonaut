@@ -39,10 +39,7 @@ export class AuthGuard implements CanActivate {
      */
     // this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
     console.log('auth guard says hello');
-    const dialogRef = this.dialog.open(AccountComponent, {
-      width: '400px',
-      data: {login: true}
-    });
+    const dialogRef = AccountComponent.openDialog(this.dialog);
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('closed: ' + result);

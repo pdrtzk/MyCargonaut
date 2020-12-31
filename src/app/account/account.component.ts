@@ -1,15 +1,13 @@
 import {Component, Inject} from '@angular/core';
-import { Router } from '@angular/router';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {Router} from '@angular/router';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {LoginComponent} from './login/login.component';
 
 // import { AccountService } from '@app/_services';
 
 
-
-@Component({ templateUrl: 'account.component.html', styleUrls: ['account.component.css'] })
+@Component({templateUrl: 'account.component.html', styleUrls: ['account.component.css']})
 export class AccountComponent {
-  public login;
 
   constructor(
     private router: Router,
@@ -24,7 +22,16 @@ export class AccountComponent {
     }*/
   }
 
-  onCloseDialog(): void {
-    this.dialogRef.close();
+  public login;
+
+  static openDialog(dialog: MatDialog, login = true): MatDialogRef<AccountComponent> {
+    return dialog.open(AccountComponent, {
+      width: '400px',
+      data: {login}
+    });
+  }
+
+  onCloseDialog(success = false): void {
+    this.dialogRef.close(success);
   }
 }
