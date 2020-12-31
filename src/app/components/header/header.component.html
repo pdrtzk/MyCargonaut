@@ -1,0 +1,12 @@
+<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+    <a class="navbar-brand"><img class="logo" src="../../../assets/images/myCargonaut_logo.png"></a>
+    <div class="nav" routerLinkActive="active">
+      <div class="nav-item"><a class="nav-link" routerLink="home">HOME</a></div>
+      <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" routerLink="login">LOGIN</a></div>
+      <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" routerLink="register">REGISTRIEREN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="bookings">BUCHUNGEN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="register">PROFIL</a></div>
+    </div>
+</nav>
+
+
