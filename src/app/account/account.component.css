@@ -1,9 +1,14 @@
-h1 {
+h1, label {
   color: #005b52;
-  font-family: Arial, serif;
+  font-family: "Lato", serif;
 }
 
 button {
-
+  background-color: #005b52;
+  border-style: none;
+  padding: 8px;
+  margin: 8px;
+  color: #fff;
+  font-family: Lato, serif;
 }
 
