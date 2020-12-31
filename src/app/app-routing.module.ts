@@ -10,7 +10,7 @@ const accountModule = () => import('./account/account.module').then(x => x.Accou
 
 export const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]},
-  {path: 'account', loadChildren: accountModule},
+  // {path: 'account', loadChildren: accountModule},
   {path: 'bla', component: HomeComponent},
   {path: '**', redirectTo: ''}
 ];

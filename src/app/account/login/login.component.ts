@@ -9,7 +9,7 @@ import {AlertService} from '../../alert/alert.service';
 // import { AccountService, AlertService } from '@app/_services';
 
 
-@Component({templateUrl: 'login.component.html', selector: 'app-login'})
+@Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.component.css']})
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;

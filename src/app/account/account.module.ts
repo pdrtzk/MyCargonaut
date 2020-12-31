@@ -23,7 +23,8 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
     LoginComponent,
     RegisterComponent
   ],
-  exports: [FormsModule, MatDialogModule, MatFormFieldModule, MatButtonModule, MatInputModule]
+  exports: [FormsModule, MatDialogModule, MatFormFieldModule, MatButtonModule, MatInputModule],
+  bootstrap: [LoginComponent, RegisterComponent]
 })
 export class AccountModule {
 }

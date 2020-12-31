@@ -7,7 +7,7 @@ import {LoginComponent} from './login/login.component';
 
 
 
-@Component({ templateUrl: 'account.component.html' })
+@Component({ templateUrl: 'account.component.html', styleUrls: ['account.component.css'] })
 export class AccountComponent {
   public title: string;
 

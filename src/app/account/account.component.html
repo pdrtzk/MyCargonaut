@@ -5,5 +5,5 @@
 </div>
 -->
 
-<app-login (registerClick)="login = false"  *ngIf="login"></app-login>
+<app-login  (registerClick)="login = false"  *ngIf="login"></app-login>
 <app-register (loginClick)="login = true" *ngIf="!login"></app-register>
