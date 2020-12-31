@@ -1,17 +1,10 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
 import {AuthGuard} from './helpers/auth.guard';
-import {AppComponent} from './app.component';
-import {HomeComponent} from './home/home.component';
-import {LoginComponent} from './account/login/login.component';
-import {RegisterComponent} from './account/register/register.component';
-
-const accountModule = () => import('./account/account.module').then(x => x.AccountModule);
+import {HomeComponent} from './components/home/home.component';
 
 export const routes: Routes = [
-  {path: '', component: HomeComponent, canActivate: [AuthGuard]},
-  // {path: 'account', loadChildren: accountModule},
-  {path: 'bla', component: HomeComponent},
+  {path: '', component: HomeComponent, canActivate: [AuthGuard]}, // TODO: canActivate here only for demo. Add it to every protected route
   {path: '**', redirectTo: ''}
 ];
 

@@ -38,14 +38,13 @@ export class AuthGuard implements CanActivate {
     // not logged in so redirect to login page with the return url
      */
     // this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
-    console.log('hello');
+    console.log('auth guard says hello');
     const dialogRef = this.dialog.open(AccountComponent, {
       width: '400px',
-      data: {}
+      data: {login: true}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      // this.email = result;
       console.log('closed: ' + result);
     });
     return false;

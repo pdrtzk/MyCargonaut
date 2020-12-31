@@ -6,21 +6,21 @@
   </button>
 
   <div class="navbar-large">
-   <div class="nav" routerLinkActive="active">
-     <div class="nav-item"><a class="nav-link" routerLink="home">HOME</a></div>
-     <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" (click)="userLoggedIn=true" routerLink="login">LOGIN</a></div>
-     <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" routerLink="register">REGISTRIEREN</a></div>
-     <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="bookings">BUCHUNGEN</a></div>
-     <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="register">PROFIL</a></div>
-   </div>
+    <div class="nav" routerLinkActive="active">
+      <div class="nav-item"><a class="nav-link" routerLink="home">HOME</a></div>
+      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" (click)="openLoginDialog()">LOGIN</a></div>
+      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" (click)="openLoginDialog(false)">REGISTRIEREN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="bookings">BUCHUNGEN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="register">PROFIL</a></div>
+    </div>
   </div>
 
   <div class="navbar-small">
     <div class="collapse navbar-collapse show" [ngClass]="{ 'show': navbarOpen }">
       <div class="navbar-nav mr-auto">
         <div class="nav-item"><a class="nav-link" routerLink="home">HOME</a></div>
-        <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" routerLink="login">LOGIN</a></div>
-        <div *ngIf="userLoggedIn === false" class="nav-item"><a class="nav-link" routerLink="register">REGISTRIEREN</a></div>
+        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" (click)="openLoginDialog()">LOGIN</a></div>
+        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" (click)="openLoginDialog(false)">REGISTRIEREN</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="bookings">BUCHUNGEN</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="register">PROFIL</a></div>
       </div>

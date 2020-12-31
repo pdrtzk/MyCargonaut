@@ -9,14 +9,15 @@ import {LoginComponent} from './login/login.component';
 
 @Component({ templateUrl: 'account.component.html', styleUrls: ['account.component.css'] })
 export class AccountComponent {
-  public title: string;
+  public login;
 
   constructor(
     private router: Router,
     private dialogRef: MatDialogRef<LoginComponent>,
-    @Inject(MAT_DIALOG_DATA) public login = true
+    @Inject(MAT_DIALOG_DATA) private data
     // private accountService: AccountService
   ) {
+    this.login = data.login;
     // redirect to home if already logged in
     /*if ( this.accountService.userValue) {
       this.router.navigate(['/']);

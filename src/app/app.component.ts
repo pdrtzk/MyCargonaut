@@ -14,24 +14,12 @@ export class AppComponent {
   title = 'MyCargonaut';
   user: Cargonaut;
 
-  constructor(public dialog: MatDialog/* private accountService: AccountService */) {
+  constructor(/* private accountService: AccountService */) {
     // this.accountService.user.subscribe(x => this.user = x);
   }
 
   logout() {
     // this.accountService.logout();
-  }
-
-  openDialog(): void {
-    const dialogRef = this.dialog.open(LoginComponent, {
-      width: '300px',
-      data: {}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      // this.email = result;
-      console.log(result);
-    });
   }
 }
 

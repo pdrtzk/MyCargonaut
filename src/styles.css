@@ -1,11 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~@angular/material/prebuilt-themes/indigo-pink.css'; /* TODO: change */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 .mat-dialog-container {
-  background: #eeeeee;
+  background: #eeeeee; /* TODO: change light grey background */
+  height: max-content;
 }
 
-@import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 body {
   margin-top: 0;
