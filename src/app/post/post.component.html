@@ -1,3 +1,4 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <div class="post-column">
   <div class="post-top-row post-space-between">
     <div class="post-top-row">
@@ -32,11 +33,12 @@
           <div class="post-top-row">
             <div style="margin-right: 30px">
               <!-- cargonaut star rating -->
-              <p class="post-value">{{starRatingString}}</p> <!-- todo use icons -->
+              <app-star-rating></app-star-rating>
             </div>
             <div>
               <!-- payment method -->
               <p class="post-value">{{post.payment.type}}</p>
+              <p class="post-label">Zahlungsart</p>
             </div>
           </div>
           <div class="post-top-row">
@@ -52,11 +54,24 @@
           <p class="post-comment-text">{{loremIpsum}}</p> <!-- todo use post comment -->
         </div>
       </div>
+      <div class="post-top-row" style="margin-top: 150px">
+        <!-- weitere Vorschläge (Label) -->
+        <p class="post-label">Andere Kunden haben auch angesehen:</p>
+      </div>
+      <div class="post-top-row" style="justify-content: space-between">
+        <!-- weitere Vorschläge (content) -->
+        <div *ngFor="let relPost of relatedPosts">
+          <app-post-display-card [relPost]="relPost"></app-post-display-card>
+        </div>
+      </div>
     </div>
     <div style="flex: 1; padding: 10px">
       <!-- right -->
-      <div>
-        <div style="text-align: right; color: gray;">
+      <div style="padding-left: 50px">
+        <div style="margin-bottom: -100px">
+          <mat-icon style="font-size: 180px; color: #005B52">directions_car</mat-icon>  <!-- todo dynamic icon -->
+        </div>
+        <div style="text-align: right;">
           <!-- Fahrzeugtyp -->
           <p class="post-large-grey-text">{{post.vehicle.type.type}}</p>
         </div>
@@ -71,7 +86,7 @@
         <div>
           <!-- Standort -->
           <div class="post-top-row post-space-between">
-            <p>📍</p> <!-- todo use material icon -->
+            <mat-icon style="margin-top: 20px; color: #005B52">location_on</mat-icon>
             <p class="post-green-text" style="font-size: 20px">{{post.startlocation.city}}</p>
           </div>
           <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
@@ -81,7 +96,7 @@
         <div>
           <!-- Zielort -->
           <div class="post-top-row post-space-between">
-            <p>🎯</p> <!-- todo use material icon -->
+            <mat-icon style="margin-top: 20px; color: #005B52">flag</mat-icon>
             <p class="post-green-text" style="font-size: 20px">{{post.endlocation.city}}</p>
           </div>
           <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
