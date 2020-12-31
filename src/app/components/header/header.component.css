@@ -16,6 +16,7 @@
 .navbar-brand {
   padding-top: 0rem;
   padding-bottom: 0rem;
+  margin-right: 0;
 }
 
 .nav-link {
@@ -34,7 +35,7 @@
 }
 
 .navbar-toggler {
-  right: 20px;
+  margin: 0.8rem;
 }
 
 
@@ -79,6 +80,7 @@
 
   .nav-link {
     margin-left: 1rem;
-    font-size: 50px;
+    font-size: 30px;
+    margin-right: 150px;
   }
 }
