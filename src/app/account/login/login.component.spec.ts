@@ -5,6 +5,11 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterTestingModule} from '@angular/router/testing';
 import {routes} from '../../app-routing.module';
 import {RouterModule} from '@angular/router';
+import {AccountRoutingModule} from '../account-routing.module';
+import {MatDialogModule, MatDialogRef, MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatButtonModule} from '@angular/material/button';
+import {MatInputModule} from '@angular/material/input';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -12,14 +17,30 @@ describe('LoginComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoginComponent],
+      declarations: [
+        LoginComponent
+      ],
       imports: [
-        FormsModule,
+        // FormsModule,
         ReactiveFormsModule,
+        // AccountRoutingModule,
+        // FormsModule,
+        MatDialogModule,
+        // MatFormFieldModule,
+        // MatButtonModule,
+        // MatInputModule,
         [RouterTestingModule.withRoutes(routes)]
       ],
       providers: [
         RouterModule,
+        {
+          provide: MatDialogRef,
+          useValue: {}
+        },
+        {
+          provide: MAT_DIALOG_DATA,
+          useValue: {}
+        }
         // { provide: UserService, useValue: userServiceStub }
       ]
     })

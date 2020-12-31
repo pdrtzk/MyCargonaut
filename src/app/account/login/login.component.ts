@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
-
-// import { AccountService, AlertService } from '@app/_services';
+import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Router, ActivatedRoute} from '@angular/router';
+import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {from} from 'rxjs';
+import {first} from 'rxjs/operators';
 import {AlertService} from '../../alert/alert.service';
 
-@Component({ templateUrl: 'login.component.html' })
+// import { AccountService, AlertService } from '@app/_services';
+
+
+@Component({templateUrl: 'login.component.html', selector: 'app-login'})
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
+  @Output()
+  registerClick: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -18,17 +23,20 @@ export class LoginComponent implements OnInit {
     private router: Router,
     // private accountService: AccountService,
     private alertService: AlertService
-  ) { }
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
 
   // convenience getter for easy access to form fields
-  get f() { return this.form.controls; }
+  get f() {
+    return this.form.controls;
+  }
 
   onSubmit() {
     this.submitted = true;
@@ -56,4 +64,10 @@ export class LoginComponent implements OnInit {
         }
       });*/
   }
+
+  showRegister() {
+    this.registerClick.emit();
+  }
+
+
 }
