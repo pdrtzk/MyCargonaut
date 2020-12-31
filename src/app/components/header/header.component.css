@@ -1,0 +1,86 @@
+.logo {
+  height: auto;
+  max-width: 350px;
+  background-color: white;
+  margin: 0;
+  padding: 1rem 1.5rem;
+}
+
+.navbar {
+  background-color: #005b52;
+  padding: 0rem;
+  color: white;
+  font-family: "MS Gothic";
+}
+
+.navbar-brand {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin-right: 0;
+}
+
+.nav-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 50px;
+}
+
+.nav-link:active, .nav-link:focus {
+  color: white;
+}
+
+.nav {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.navbar-toggler {
+  margin: 0.8rem;
+}
+
+
+.nav:not(:last-child) > .nav-item {
+  margin-right: 2rem;
+}
+
+
+
+@media (max-width: 969px){
+
+  @media(min-width: 768px){
+    .nav-link {
+      font-size: 30px;
+    }
+  }
+
+}
+
+@media (min-width: 768px) {
+  .navbar-toggler {
+    display: none;
+  }
+
+  .navbar-large {
+    display: block;
+  }
+
+  .navbar-small {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-toggler {
+    display: block;
+  }
+
+  .navbar-large {
+    display: none;
+  }
+
+  .nav-link {
+    margin-left: 1rem;
+    font-size: 30px;
+    margin-right: 150px;
+  }
+}

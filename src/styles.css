@@ -5,3 +5,9 @@
   background: #eeeeee;
 }
 
+@import "../node_modules/bootstrap/dist/css/bootstrap.css";
+
+body {
+  margin-top: 0;
+  margin-bottom: 0;
+}
