@@ -1,3 +1,124 @@
 ### login
-GET http://localhost:8080/login HTTP/1.1
+POST http://localhost:8080/login HTTP/1.1
+Content-Type: application/json
+Cookie:
 
+{
+  "email": "admin@admin.de",
+  "password": "admin"
+}
+
+### logout
+POST http://localhost:8080/logout HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+### Register
+
+POST http://localhost:8080/cargonaut HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "firstname": "Test",
+  "lastname": "Tester",
+  "password": "test",
+  "email": "test@test.de",
+  "geburtsdatum": "18-09-1998",
+  "street": "Teststreet",
+  "number": "123",
+  "plz": "123332",
+  "city": "teststadt"
+}
+
+
+### get Cargonaut
+GET http://localhost:8080/cargonaut/5 HTTP/1.1
+Cookie:
+
+### Update Cargonaut
+PUT http://localhost:8080/cargonaut/8 HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "firstname": "Teston",
+  "lastname": "Testermann",
+  "email": "test@tester.de"
+}
+
+### post vehicle
+POST http://localhost:8080/vehicle/5 HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "type": "Sprinter",
+  "seats": 3,
+  "length": 200,
+  "width": 100,
+  "height": 100
+}
+
+### get vehicle
+GET http://localhost:8080/vehicle/5 HTTP/1.1
+Cookie:
+
+### get vehicles from cargonaut
+GET http://localhost:8080/vehicles/5 HTTP/1.1
+Cookie:
+
+### get vehicles from cargonaut
+DELETE http://localhost:8080/vehicle/6 HTTP/1.1
+Cookie:
+
+
+### creat Post
+POST http://localhost:8080/post/5 HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "startzeit": "0",
+  "ankunftZeit": "0",
+  "bezahlungsart": "Bar",
+  "vehicle": 4,
+  "anzahlSitzplaetze": 1,
+  "beschreibung": "Testeetsttetsetestse esr tsetset e t t etset",
+  "typ": "Angebot",
+  "price": 23.99,
+  "street": "Teststreet",
+  "number": "123",
+  "plz": "123332",
+  "city": "teststadt",
+  "zielStreet": "Testsasdw",
+  "zielNumber": "123",
+  "zielPlz": "123332",
+  "zielCity": "teststadt",
+  "length": "123",
+  "width": "123332",
+  "height": "teststadt"
+}
+
+### get post
+GET http://localhost:8080/post/1 HTTP/1.1
+Cookie:
+
+### get posts
+GET http://localhost:8080/posts HTTP/1.1
+Cookie:
+
+### Update Post
+PUT http://localhost:8080/post/3 HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "startzeit": "",
+  "ankunftZeit": "",
+  "bezahlungsart": "EC",
+  "vehicle": 5,
+  "anzahlSitzplaetze": 9,
+  "beschreibung": "TESTETSETEST  TEStsettete ste t",
+  "price": 39.99
+}
