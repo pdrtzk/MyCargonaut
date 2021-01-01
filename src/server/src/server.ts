@@ -363,7 +363,7 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
 
 
 /*****************************************************************************
- *           Post       * // TODO: Post post, get/:id, get all Posts, put
+ *           Post       * //
  *****************************************************************************/
 // create Post
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
@@ -470,8 +470,80 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
         message: 'Nicht alle Felder ausgefüllt.',
       });
     }
+  });
+
+// get specific Post
+app.get('/post/:id', (req: Request, res: Response) => {
+  const id: string = req.params.id;
+  const data: [string] = [
+    id,
+  ];
+  const query = 'SELECT * FROM post WHERE id = ?;';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      post: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten des Posts!',
+    });
+  });
+});
+
+// get all Posts
+app.get('/posts', (req: Request, res: Response) => { // parameter for sort and filtering
+  /*
+  const parameter: string = req.params.parameter;
+
+  switch (parameter){
+    case '':
+      break;
   }
-);
+*/
+  const query = 'SELECT * FROM post WHERE gebucht = ?;';
+  queryPromise(query, [0]).then(results => {
+    res.status(200).send({
+      posts: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten der Posts!',
+    });
+  });
+});
+
+// Update post
+app.put('/post/:id', (req: Request, res: Response) => {
+  const id: number = Number(req.params.id);
+  const startzeit: string = req.body.startzeit;
+  const ankunftZeit: string = req.body.ankunftZeit;
+  const bezahlungsart: string = req.body.bezahlungsart;
+  const fahrzeug: number = req.body.vehicle;
+  const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
+  const beschreibung: string = req.body.beschreibung;
+  const preis = req.body.price;
+
+  const data: [string, string, string, number, number, string, any, number] = [
+    startzeit,
+    ankunftZeit,
+    bezahlungsart,
+    fahrzeug,
+    anzahlSitzplaetze,
+    beschreibung,
+    preis,
+    id
+  ];
+  const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, fahrzeug = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ? WHERE id = ?;';
+  queryPromise(query, data).then(() => {
+    res.status(200).send({
+      message: `Updated post ${id}`,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Der Post konnte nicht bearbeitet werden.',
+    });
+  });
+});
 
 /*****************************************************************************
  *           buchung       * // TODO: buchung get/:id, post

@@ -99,3 +99,26 @@ Cookie:
   "width": "123332",
   "height": "teststadt"
 }
+
+### get post
+GET http://localhost:8080/post/1 HTTP/1.1
+Cookie:
+
+### get posts
+GET http://localhost:8080/posts HTTP/1.1
+Cookie:
+
+### Update Post
+PUT http://localhost:8080/post/3 HTTP/1.1
+Content-Type: application/json
+Cookie:
+
+{
+  "startzeit": "",
+  "ankunftZeit": "",
+  "bezahlungsart": "EC",
+  "vehicle": 5,
+  "anzahlSitzplaetze": 9,
+  "beschreibung": "TESTETSETEST  TEStsettete ste t",
+  "price": 39.99
+}
