@@ -15,11 +15,20 @@ button:hover {
   background-color: #004b43;
 }
 
+button#close {
+  margin-right: 0;
+}
+
 a {
   font-family: Lato, serif;
   color: #005b52;
 }
 a:hover {
   color: #004b43;
+}
+
+.btn-link {
+  padding: 8px;
+  margin: 8px;
 }
 
