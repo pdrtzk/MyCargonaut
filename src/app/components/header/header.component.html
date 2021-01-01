@@ -23,6 +23,7 @@
         <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" (click)="openLoginDialog(false)">REGISTRIEREN</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="bookings">BUCHUNGEN</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="register">PROFIL</a></div>
+        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" routerLink="home" (click)="userLoggedIn=false">LOGOUT</a></div> <!-- TODO: userLoggedIn only if logout was successful + call logout service -->
       </div>
     </div>
   </div>

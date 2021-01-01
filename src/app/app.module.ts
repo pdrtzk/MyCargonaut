@@ -6,7 +6,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
+import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
 import {AlertComponent} from './alert/alert.component';
+
+import {AccountComponent} from './account/account.component';
+import {LoginComponent} from './account/login/login.component';
+import {RegisterComponent} from './account/register/register.component';
 
 import {JwtInterceptor} from './helpers/jwt.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
@@ -14,9 +19,6 @@ import {ErrorInterceptor} from './helpers/error.interceptor';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {AccountComponent} from './account/account.component';
-import {LoginComponent} from './account/login/login.component';
-import {RegisterComponent} from './account/register/register.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import {RegisterComponent} from './account/register/register.component';
     AlertComponent,
     AccountComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    HomeComponent,
+    SidebarRightComponent
   ],
   imports: [
     BrowserModule,

@@ -24,7 +24,7 @@
   font-size: 50px;
 }
 
-.nav-link:active, .nav-link:focus {
+.nav-link:active, .nav-link:focus, .nav-link:hover {
   color: white;
 }
 
@@ -52,7 +52,6 @@
       font-size: 30px;
     }
   }
-
 }
 
 @media (min-width: 768px) {
