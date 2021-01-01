@@ -1,0 +1,45 @@
+
+<div class="row">
+  <div class="col-sm-3 text-center ">
+    <img class="img-responsive" src="../../../assets/images/person-placeholder.jpg">
+    <button id="contact-button" type="button">Kontaktieren</button>
+  </div>
+  <div class="col-sm-9">
+    <div class="row">
+      <div class="col">
+        <h3>{{getUserName()}}</h3>
+        <p>{{getBirthday()}}</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Fahrzeuge</h3>
+        <div *ngFor="let car of vehiclesUser; let i = index">
+          <app-profile-vehicle [vehicle]="car"></app-profile-vehicle>
+          <hr>
+        </div>
+        <p *ngIf="vehiclesUser == null || vehiclesUser.length <= 0">
+            Dieser Nutzer hat noch keine Fahrzeuge registriert.
+        </p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <h3>Bewertungen</h3>
+        <div *ngFor="let r of ratingsUser; let i = index">
+          <app-profile-rating [rating]="r"></app-profile-rating>
+
+        </div>
+        <p *ngIf="ratingsUser == null || ratingsUser.length <= 0 ">
+          Dieser Nutzer hat noch keine Bewertungen erhalten.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

@@ -1,0 +1,21 @@
+<div class="row">
+  <div class="col">
+    <div>
+      <span class="descriptor carModel">{{vehicle.type.description}}</span>
+    </div>
+    <div>
+      <span class="descriptor">Typ: </span>{{vehicle.type.type}}
+    </div>
+    <div>
+      <span class="descriptor">Sitzplätze: </span>{{vehicle.seats}}
+    </div>
+    <div *ngIf="vehicle.type.type != 'PKW'">
+      <span class="descriptor">Stauraum: </span> {{vehicle.hold.getSpace()}} m<sup>3</sup>
+    </div>
+    <div *ngIf="vehicle.comment.length > 0">
+      <span class="descriptor">Kommentar des Besitzers: </span>{{vehicle.comment}}
+    </div>
+  </div>
+</div>
+
+

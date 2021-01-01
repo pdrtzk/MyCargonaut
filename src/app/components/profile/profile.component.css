@@ -1,0 +1,21 @@
+img {
+  width: 100%;
+}
+
+#contact-button {
+  margin-top: 2rem;
+  padding: 15px;
+  background-color: #005b52;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+}
+
+#contact-button:hover {
+  background-color: #0b9183;
+}
+
+app-profile-vehicle {
+  margin: 2rem 0;
+}
