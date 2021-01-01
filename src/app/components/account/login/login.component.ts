@@ -1,13 +1,10 @@
 import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {from} from 'rxjs';
 import {first} from 'rxjs/operators';
-import {AlertService} from '../../alert/alert.service';
-
-// import { AccountService, AlertService } from '@app/_services';
-
+import {AlertService} from '../../../alert/alert.service';
+import {AccountService} from '../../../services/account.service';
 
 @Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.component.css']})
 export class LoginComponent implements OnInit {
@@ -21,7 +18,7 @@ export class LoginComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    // private accountService: AccountService,
+    private accountService: AccountService,
     private alertService: AlertService
   ) {
   }
@@ -63,6 +60,7 @@ export class LoginComponent implements OnInit {
           this.loading = false;
         }
       });*/
+    console.log('Login: ' + this.accountService.isLoggedIn());
   }
 
   showRegister() {

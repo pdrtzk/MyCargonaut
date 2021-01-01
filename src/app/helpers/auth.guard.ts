@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
 import {Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {LoginComponent} from '../account/login/login.component';
+import {LoginComponent} from '../components/account/login/login.component';
 import {Cargonaut} from '../../shared/cargonaut.model';
 import {switchMap, take} from 'rxjs/operators';
 import {of} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {AppComponent} from '../app.component';
-import {AccountComponent} from '../account/account.component';
+import {AccountComponent} from '../components/account/account.component';
 
 @Injectable({
   providedIn: 'root'

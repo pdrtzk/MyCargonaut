@@ -9,9 +9,9 @@ import {HomeComponent} from './components/home/home.component';
 import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
 import {AlertComponent} from './alert/alert.component';
 
-import {AccountComponent} from './account/account.component';
-import {LoginComponent} from './account/login/login.component';
-import {RegisterComponent} from './account/register/register.component';
+import {AccountComponent} from './components/account/account.component';
+import {LoginComponent} from './components/account/login/login.component';
+import {RegisterComponent} from './components/account/register/register.component';
 
 import {JwtInterceptor} from './helpers/jwt.interceptor';
 import {ErrorInterceptor} from './helpers/error.interceptor';
@@ -34,6 +34,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     ReactiveFormsModule,
     MatDialogModule,

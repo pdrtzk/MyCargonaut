@@ -4,7 +4,7 @@ import {RegisterComponent} from './register.component';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
-import {routes} from '../../app-routing.module';
+import {routes} from '../../../app-routing.module';
 
 describe('RegisterComponent', () => {
   let component: RegisterComponent;

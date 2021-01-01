@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 // import { AccountService } from './_services';
 import { Cargonaut } from '../shared/cargonaut.model';
 import {MatDialog} from '@angular/material/dialog';
-import {LoginComponent} from './account/login/login.component';
+import {LoginComponent} from './components/account/login/login.component';
 
 @Component({
   selector: 'app-root',
