@@ -1,0 +1,28 @@
+.content-wrapper {
+  position: relative;
+  display: flex;
+}
+
+.content-background {
+  margin-left:5rem;
+  padding: 4rem;
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+
+
+@media (max-width: 767px) {
+  .content-background {
+    margin-left: 2rem;
+    padding: 2rem;
+  }
+  #logout-large {
+    width: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  #logout-button {
+    display: none;
+  }
+}
