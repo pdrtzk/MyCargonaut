@@ -1,34 +1,53 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
+import {AlertService} from '../components/alert/alert.service';
+import {Subject} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private alertService: AlertService) {
+    this.userSubject.subscribe(value => this.authenticatedUser = value);
   }
 
   private authenticatedUser: Cargonaut;
+  public userSubject: Subject<Cargonaut> = new Subject<Cargonaut>();
 
-  get user() {
+  get user(): Cargonaut {
     return this.authenticatedUser;
   }
 
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
-
     return new Promise<Cargonaut>(async (resolve, reject) => {
       await http.post('/login', {
         email,
         password
       }).toPromise().then((res: any) => {
         this.authenticatedUser = res.user;
+        this.userSubject.next(res.user);
         resolve(res.user);
-      }).catch((res: any) => {
-        console.log('Error: ' + res);
-        reject(res);
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  public async logout(): Promise<any> {
+    const http = this.http;
+    console.log('logout called');
+    return new Promise(async (resolve, reject) => {
+      await http.post('/logout', {}).toPromise().then(() => {
+        this.authenticatedUser = null;
+        this.userSubject.next(null);
+        resolve();
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
       });
     });
   }

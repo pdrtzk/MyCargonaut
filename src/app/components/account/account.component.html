@@ -9,7 +9,7 @@
   </div>
   <div class="row">
     <div class="col">
-      <app-login (registerClick)="login = false" *ngIf="login"></app-login>
+      <app-login (closeEvent)="onCloseDialog($event.valueOf())" (registerClick)="login = false" *ngIf="login"></app-login>
       <app-register (loginClick)="login = true" *ngIf="!login"></app-register>
     </div>
   </div>

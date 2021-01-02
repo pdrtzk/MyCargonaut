@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {AccountService} from '../../services/account.service';
 
 @Component({
   selector: 'app-sidebar-right',
@@ -8,9 +9,16 @@ import { Component, OnInit } from '@angular/core';
 export class SidebarRightComponent implements OnInit {
   userLoggedIn = true; // todo: get actual login status in ngOnInit
 
-  constructor() { }
+  constructor(private accountService: AccountService) {
+  }
 
   ngOnInit(): void {
+    this.accountService.userSubject.subscribe(value => this.userLoggedIn = !! value);
+  }
+
+  async onLogout() {
+    console.log('onLogout');
+    await this.accountService.logout().then(() => this.userLoggedIn = false);
   }
 
 }

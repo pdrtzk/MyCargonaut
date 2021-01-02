@@ -1,4 +1,4 @@
 <div id="logout-large">
-  <button *ngIf="userLoggedIn" id="logout-button" (click)="userLoggedIn=true"><i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
+  <button *ngIf="userLoggedIn" id="logout-button" routerLink="home" (click)="onLogout()"><i class="fa fa-sign-out fa-3x" aria-hidden="true"></i>
   </button>
 </div>

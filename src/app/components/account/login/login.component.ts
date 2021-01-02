@@ -12,6 +12,8 @@ export class LoginComponent implements OnInit {
   submitted = false;
   @Output()
   registerClick: EventEmitter<void> = new EventEmitter<void>();
+  @Output()
+  closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -47,10 +49,10 @@ export class LoginComponent implements OnInit {
         user = res;
         this.loading = false;
         this.alertService.success('Angemeldet.');
-        /* TODO: Close pop-up with true*/
+        this.closeEvent.emit(true);
       },
       error => {
-        /* TODO: Error message für Benutzer verständlich ausgeben */
+        /* TODO: Error message für Benutzer verständlich ausgeben + Fehlermeldung im Pop up nicht im Hintergrund */
         this.alertService.error(error);
         this.loading = false;
       });
