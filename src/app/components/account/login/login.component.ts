@@ -1,10 +1,9 @@
 import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
-import {from} from 'rxjs';
-import {first} from 'rxjs/operators';
 import {AlertService} from '../../../alert/alert.service';
 import {AccountService} from '../../../services/account.service';
+import {Cargonaut} from '../../../../shared/cargonaut.model';
 
 @Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.component.css']})
 export class LoginComponent implements OnInit {
@@ -35,32 +34,27 @@ export class LoginComponent implements OnInit {
     return this.form.controls;
   }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
-
-    // reset alerts on submit
     this.alertService.clear();
-
-    // stop here if form is invalid
     if (this.form.invalid) {
       return;
     }
-
     this.loading = true;
-    /*this.accountService.login(this.f.username.value, this.f.password.value)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          // get return url from query parameters or default to home page
-          const returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-          this.router.navigateByUrl(returnUrl);
-        },
-        error: error => {
-          this.alertService.error(error);
-          this.loading = false;
-        }
-      });*/
-    console.log('Login: ' + this.accountService.isLoggedIn());
+    let user: Cargonaut;
+    await this.accountService.login(this.f.email.value, this.f.password.value).then(
+      res => {
+        user = res;
+        this.loading = false;
+        this.alertService.success('Angemeldet.');
+        /* TODO: Close pop-up with true*/
+      },
+      error => {
+        /* TODO: Error message für Benutzer verständlich ausgeben */
+        this.alertService.error(error);
+        this.loading = false;
+      });
+    console.log('Login: ' + user?.email);
   }
 
   showRegister() {
