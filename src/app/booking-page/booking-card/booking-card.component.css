@@ -1,0 +1,44 @@
+#booking-card {
+  background-color: white;
+  box-shadow: grey 2px 2px 4px;
+  padding: 5px;
+  padding-left: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  font-family: Calibri;
+}
+
+#booking-card-left {
+  display: flex;
+  flex-direction: row;
+}
+
+#booking-cargonaut-name {
+  font-size: 20px;
+}
+
+#booking-status {
+  font-size: 15px;
+  margin-left: 20px;
+  align-self: center;
+  color: #005b52;
+}
+
+#booking-card-right {
+  padding: 15px;
+}
+
+#booking-card-right button {
+  padding: 5px;
+  margin-left: 10px;
+  font-size: 20px;
+  border: 0;
+  background-color: #005b52;
+  color: white;
+}
+
+#booking-card-right button:hover {
+  background-color: #92bda3;
+}
