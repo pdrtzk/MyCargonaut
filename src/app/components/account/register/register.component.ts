@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {first} from 'rxjs/operators';
 
 // import { AccountService, AlertService } from '@app/_services';
-import {AlertService} from 'src/app/alert/alert.service';
+import {AlertService} from 'src/app/components/alert/alert.service';
 
 @Component({templateUrl: 'register.component.html', selector: 'app-register', styleUrls: ['../account.component.css']})
 export class RegisterComponent implements OnInit {

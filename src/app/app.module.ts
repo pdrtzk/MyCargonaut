@@ -7,7 +7,7 @@ import {AppComponent} from './app.component';
 import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
-import {AlertComponent} from './alert/alert.component';
+import {AlertComponent} from './components/alert/alert.component';
 
 import {AccountComponent} from './components/account/account.component';
 import {LoginComponent} from './components/account/login/login.component';
