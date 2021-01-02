@@ -104,16 +104,12 @@ app.post('/login', (req: Request, res: Response) => {
   const query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
   queryPromise(query, data).then(rows => {
     if (rows.length === 1) {
-      const user: Cargonaut = new Cargonaut(/*rows[0].id,
-          rows[0].username,
-          rows[0].firstName,
-          rows[0].lastName,
-          new Date(rows[0].time),
-          rows[0].rights*/);
+      const user = rows[0];
       // @ts-ignore
       req.session.user = user;
       res.status(200).send({
         message: 'Logged in!',
+        user
       });
     } else {
       res.status(401).send({
@@ -546,8 +542,55 @@ app.put('/post/:id', (req: Request, res: Response) => {
 });
 
 /*****************************************************************************
- *           buchung       * // TODO: buchung get/:id, post
+ *           buchung       * // TODO: post buchung, get/:id, get Posts
  *****************************************************************************/
+app.post('/buchung/:kaeufer', (req: Request, res: Response) => {
+  // Read data from request body
+  const kaeufer: number = Number(req.params.kaeufer);
+  const laenge: number = req.body.length;
+  const breite: number = req.body.width;
+  const hoehe: number = req.body.height;
+  const anzahlSitzplaetze: number = req.body.seats;
+  const post: number = req.body.post;
+  let ladeflaeche: number;
+  if (kaeufer && laenge && breite && hoehe && anzahlSitzplaetze && post) {
+    const dataLade: [number, number, number] = [
+      laenge,
+      breite,
+      hoehe,
+    ];
+    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+    queryPromise(queryLade, dataLade).then(result => {
+      ladeflaeche = result.insertId;
+      const data: [number, number, number, number] = [
+        kaeufer,
+        ladeflaeche,
+        anzahlSitzplaetze,
+        post,
+      ];
+      const query = 'INSERT INTO buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (NULL, ?, ?, ?, ?);';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Gebucht!'
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim buchen.',
+          });
+        }
+      );
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Erstellen eines Laderaums.',
+      });
+    });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
+
 /*****************************************************************************
  *           Bewertung       * // TODO: Bewertung get/:id, post, (put, delete)
  *****************************************************************************/
