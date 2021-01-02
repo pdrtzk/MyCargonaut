@@ -1,6 +1,6 @@
-<mat-icon>star</mat-icon>
-<mat-icon>star</mat-icon>
-<mat-icon>star</mat-icon>
-<mat-icon>star</mat-icon>
-<mat-icon>star</mat-icon>
-<p>durchschnittliche Bewertung (WIP)</p>
+<mat-icon>{{starCount >= 1 ? 'star' : 'star_border'}}</mat-icon>
+<mat-icon>{{starCount >= 2 ? 'star' : 'star_border'}}</mat-icon>
+<mat-icon>{{starCount >= 3 ? 'star' : 'star_border'}}</mat-icon>
+<mat-icon>{{starCount >= 4 ? 'star' : 'star_border'}}</mat-icon>
+<mat-icon>{{starCount >= 5 ? 'star' : 'star_border'}}</mat-icon>
+<p class="post-label">durchschnittliche Bewertung (WIP)</p>
