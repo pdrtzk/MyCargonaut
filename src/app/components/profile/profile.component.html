@@ -5,7 +5,7 @@
 
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
-      <button class="editButton" type="button">Fahrzeug hinzufügen</button>
+      <button class="editButton" type="button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
       <button class="editButton bot-row" type="button">Meine Posts</button>
       <button class="editButton bot-row" type="button">Profilbild ändern</button>
       <button class="editButton bot-row" type="button">Passwort ändern</button>

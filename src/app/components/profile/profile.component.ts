@@ -7,6 +7,8 @@ import {VehicleType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
+import {MatDialog} from '@angular/material/dialog';
+import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
 
 @Component({
   selector: 'app-profile',
@@ -24,7 +26,11 @@ export class ProfileComponent implements OnInit {
   submitted = false;
 
 
-  constructor(private formBuilder: FormBuilder, private accountService: AccountService) {
+  constructor(private formBuilder: FormBuilder, private accountService: AccountService, private dialog: MatDialog) {
+
+    this.myuser = this.accountService.user;
+    this.user = this.myuser; // todo: remove
+
     let addressUser: Address;
     addressUser = {
       plz: '12345',
@@ -88,18 +94,13 @@ export class ProfileComponent implements OnInit {
       hold: hold1
     };
 
-    // to test own profile
-  //  this.user = this.myuser;
+
 
     this.ratingsUser = [rating1, rating2];
     this.vehiclesUser = [vehicle1, vehicle2];
 
-    // todo: get user, ratings and vehicles for user
-    this.myuser = this.accountService.user;
-    console.log('???');
-    console.log(this.myuser.firstname);
-    console.log(this.myuser.lastname);
-    this.user = this.myuser;
+    // todo: get ratings and vehicles for user
+
 
     this.editProfileForm = this.formBuilder.group({
       firstName: [this.user.firstname, Validators.required],
@@ -171,6 +172,18 @@ export class ProfileComponent implements OnInit {
     if (index > -1) {
       this.vehiclesUser.splice(index, 1);
     }
+  }
+
+  submitAddVehicle(ve: Vehicle){
+    // todo: add to database
+    this.vehiclesUser.push(ve);
+  }
+
+  addVehicle(): void {
+    const test = this.dialog.open(AddVehicleComponent);
+    test.afterClosed().subscribe(result => {
+      this.submitAddVehicle(result);
+    });
   }
 
 }
