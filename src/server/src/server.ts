@@ -10,6 +10,10 @@ import * as socket from 'socket.io'; // für Chatfunktion
 
 import {Configuration} from '../config/config';
 
+import socket = require('socket.io'); // für Chatfunktion
+import {replaceTsWithNgInErrors} from '@angular/compiler-cli/src/ngtsc/diagnostics';
+
+import {Cargonaut} from '../../shared/cargonaut.model';
 
 /*****************************************************************************
  *           Configuration       *
@@ -71,7 +75,7 @@ app.listen(8080, 'localhost', () => {
  *           Authentication - Login / logout / Register       *
  *****************************************************************************/
 
-
+// insert in header of Route to check if the Persons logged in before executing the action
 function isLoggedIn(): (req: Request, res: Response, next: any) => void {
   return (req: Request, res: Response, next) => {
     // @ts-ignore
@@ -102,7 +106,13 @@ app.post('/login', (req: Request, res: Response) => {
   const query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
   queryPromise(query, data).then(rows => {
     if (rows.length === 1) {
-      const user = rows[0];
+      const user: Cargonaut = {
+        firstname: rows[0].firstname,
+        lastname: rows[0].lastname,
+        email: rows[0].email,
+        birthday: rows[0].geburtsdatum,
+        address: rows[0].adresse
+      };
       // @ts-ignore
       req.session.user = user;
       res.status(200).send({
@@ -153,28 +163,30 @@ app.post('/cargonaut', async (req: Request, res: Response) => {
     const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
     queryPromise(queryAdress, dataAdress).then(result => {
       adresse = result.insertId;
-      if (firstname && lastname) {
-        const data: [string, string, string, string, string, number] = [
-          firstname,
-          lastname,
-          password,
-          email,
-          geburtsdatum,
-          adresse,
-        ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
-        queryPromise(query, data).then(results => {
-          res.status(201).send({
-            message: 'Neuer Nutzer erstellt!',
-            createdUser: results.insertId,
+      const data: [string, string, string, string, string, number] = [
+        firstname,
+        lastname,
+        password,
+        email,
+        geburtsdatum,
+        adresse,
+      ];
+      const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Neuer Nutzer erstellt!',
+          createdUser: results.insertId,
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
           });
-        }).catch(() => {
-            res.status(400).send({
-              message: 'Fehler beim Erstellen eines Nutzers.',
-            });
-          }
-        );
-      }
+        }
+      );
+    });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
     });
   }
 });
@@ -185,7 +197,7 @@ app.post('/cargonaut', async (req: Request, res: Response) => {
  *****************************************************************************/
 
 
-// Get Cargonaut
+// Get Cargonaut -> Alle Infos eines Cargonauten
 app.get('/cargonaut/:id', (req: Request, res: Response) => {
   const id: string = req.params.id;
   const data: [string] = [
@@ -209,7 +221,7 @@ app.get('/cargonaut/:id', (req: Request, res: Response) => {
   });
 });
 
-// Get Cargonaut
+// Put Cargonaut
 app.put('/cargonaut/:id', (req: Request, res: Response) => {
   const id: number = Number(req.params.id);
   const firstname: string = req.body.firstname;
@@ -222,10 +234,16 @@ app.put('/cargonaut/:id', (req: Request, res: Response) => {
     id,
   ];
   const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, email = ? WHERE id = ?;';
-  queryPromise(query, data).then(() => {
-    res.status(200).send({
-      message: `Updated user ${id}`,
-    });
+  queryPromise(query, data).then(result => {
+    if (result.affectedRows > 0) {
+      res.status(200).send({
+        message: `Updated user ${id}`,
+      });
+    } else{
+      res.status(400).send({
+        message: 'Keinen User zum bearbeiten gefunden.',
+      });
+    }
   }).catch(() => {
     res.status(400).send({
       message: 'Der User konnte nicht bearbeitet werden.',
@@ -289,7 +307,7 @@ app.post('/vehicle/:owner', (req: Request, res: Response) => {
   }
 });
 
-// get vehicle
+// get vehicle -> Alle Infos eines Fahrzeugs
 app.get('/vehicle/:id', (req: Request, res: Response) => {
   const id: string = req.params.id;
   const data: [string] = [
@@ -313,7 +331,7 @@ app.get('/vehicle/:id', (req: Request, res: Response) => {
   });
 });
 
-// get vehicles from cargonaut
+// get vehicles from cargonaut -> Alle Fahrzeuge, die ein bestimmter Cargonaut erstellt hat
 app.get('/vehicles/:cargonaut', (req: Request, res: Response) => {
   const cargonaut: string = req.params.cargonaut;
   const data: [string] = [
@@ -359,6 +377,8 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
 /*****************************************************************************
  *           Post       * //
  *****************************************************************************/
+
+
 // create Post
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
@@ -457,16 +477,14 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
         });
       });
     });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
   }
-  else
-    {
-      res.status(400).send({
-        message: 'Nicht alle Felder ausgefüllt.',
-      });
-    }
-  });
+});
 
-// get specific Post
+// get specific Post -> Alle Infos zu speziellem Post
 app.get('/post/:id', (req: Request, res: Response) => {
   const id: string = req.params.id;
   const data: [string] = [
@@ -484,7 +502,7 @@ app.get('/post/:id', (req: Request, res: Response) => {
   });
 });
 
-// get all Posts
+// get all Posts -> Alle Posts
 app.get('/posts', (req: Request, res: Response) => { // parameter for sort and filtering
   /*
   const parameter: string = req.params.parameter;
@@ -539,9 +557,13 @@ app.put('/post/:id', (req: Request, res: Response) => {
   });
 });
 
+
 /*****************************************************************************
- *           buchung       * // TODO: post buchung, get/:id, get Posts
+ *           buchung       * //
  *****************************************************************************/
+
+
+// Post Buchung
 app.post('/buchung/:kaeufer', (req: Request, res: Response) => {
   // Read data from request body
   const kaeufer: number = Number(req.params.kaeufer);
@@ -589,13 +611,77 @@ app.post('/buchung/:kaeufer', (req: Request, res: Response) => {
   }
 });
 
+// Get buchungen/:cargonaut -> Alle Buchungen, die ein bestimmter Cargonaut gebucht ODER VON IHM GEBUCHT WURDEN
+app.get('/buchungen/:cargonaut', (req: Request, res: Response) => {
+  const cargonaut: number = Number(req.params.cargonaut);
+  const data: [number, number] = [
+    cargonaut,
+    cargonaut,
+  ];
+  const query = 'SELECT * FROM buchung, post WHERE buchung.post = post.id AND (buchung.gebucht_von = ? OR post.verfasser = ?)';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      buchungen: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten des Posts!',
+    });
+  });
+});
+
+
 /*****************************************************************************
- *           Bewertung       * // TODO: Bewertung get/:id, post, (put, delete)
+ *           Bewertung       * //
  *****************************************************************************/
 
 
+// Post Bewertung
+app.post('/bewertung/:verfasser', (req: Request, res: Response) => {
+  // Read data from request body
+  const verfasser: number = Number(req.params.verfasser);
+  const fahrt: number = req.body.fahrt;
+  const punktzahl: number = req.body.punktzahl;
+  const kommentar: string = req.body.kommentar;
+  if (verfasser && fahrt && punktzahl && kommentar) {
+    const data: [number, number, number, string] = [
+      verfasser,
+      fahrt,
+      punktzahl,
+      kommentar,
+    ];
+    const query = 'INSERT INTO bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (NULL, ?, ?, ?, ?);';
+    queryPromise(query, data).then(results => {
+      res.status(201).send({
+        message: 'Bewertung abgegeben!'
+      });
+    }).catch(() => {
+        res.status(400).send({
+          message: 'Fehler beim abgeben der Bewertung.',
+        });
+      }
+    );
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
 
-
-
-
-
+// get bewertungen -> Alle Bewertungen, die zu Fahrten eines bestimmten Cargonauten geschrieben wurden
+app.get('/bewertungen/:cargonaut', (req: Request, res: Response) => {
+  const cargonaut: number = Number(req.params.cargonaut);
+  const data: [number] = [
+    cargonaut,
+  ];
+  const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      bewertungen: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten der Bewertungen!',
+    });
+  });
+});
