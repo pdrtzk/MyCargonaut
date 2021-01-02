@@ -1,0 +1,69 @@
+#editProfileForm {
+  display: none;
+}
+
+img {
+  width: 100%;
+}
+
+#contact-button, .editButton {
+  margin-top: 2rem;
+  padding: 15px;
+  background-color: #005b52;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+}
+
+#contact-button:hover, .editButton:hover {
+  background-color: #0b9183;
+}
+
+app-profile-vehicle {
+  margin: 2rem 0;
+}
+
+.descriptor {
+  font-weight: bold;
+}
+
+.bot-row {
+  margin-top:0.5rem;
+}
+
+.row-no-margin {
+  margin-left: 0;
+}
+
+.editTitle{
+  margin-bottom: 0;
+}
+
+.icon-button {
+  padding-bottom: 0;
+}
+
+.btn:focus {
+  border: none;
+}
+
+.margin-top {
+  margin-top: 0.5rem;
+}
+
+.row-margin-top {
+  margin-top: 2rem;
+}
+
+#editProfileCancelBtn {
+  margin-right: 1rem;
+}
+
+.form-button {
+  background-color: #005b52;
+  border: none;
+}
+.form-button:hover {
+  background-color: #0b9183;
+}

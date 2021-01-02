@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="col">
+    <ngb-rating [(rate)]="rating.ratingStars" [readonly]="true" [max]="5" id="ratingStar">
+      <ng-template let-fill="fill" let-index="index">
+        <span class="star" [class.filled]="fill === 100">&#9733;</span>
+      </ng-template>
+    </ngb-rating>
+
+    <div class="row">
+      <div class="col-md-2">
+        <p class="ratingAuthor">
+          {{rating.author.firstname}} {{rating.author.lastname}}
+        </p>
+      </div>
+      <div class="col-md-10">
+        {{rating.comment}}
+      </div>
+    </div>
+  </div>
+
+</div>
+
