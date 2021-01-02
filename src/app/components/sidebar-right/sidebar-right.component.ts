@@ -7,7 +7,7 @@ import {AccountService} from '../../services/account.service';
   styleUrls: ['./sidebar-right.component.css']
 })
 export class SidebarRightComponent implements OnInit {
-  userLoggedIn = true; // todo: get actual login status in ngOnInit
+  userLoggedIn = false;
 
   constructor(private accountService: AccountService) {
   }
