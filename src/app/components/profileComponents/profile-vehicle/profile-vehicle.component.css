@@ -5,4 +5,42 @@
 .carModel {
   font-size: 1.3rem;
   color: #005b52;
+  margin-right: 0.5rem;
+}
+
+.row-no-margin {
+  margin-left: 0;
+}
+
+h3{
+  margin-bottom: 0;
+}
+
+.btn {
+  padding: 0 0.2rem;
+}
+
+.margin-top {
+ margin-top: 0.5rem;
+}
+
+#editVehicleForm {
+  display: none;
+}
+
+.carForm {
+  display: none;
+}
+
+.editVehicleCancelBtn {
+  margin-right: 1rem;
+}
+
+.form-button {
+  padding: 10px;
+  background-color: #005b52;
+  border: none;
+}
+.form-button:hover {
+  background-color: #0b9183;
 }

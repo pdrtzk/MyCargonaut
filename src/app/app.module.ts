@@ -11,6 +11,9 @@ import { ProfileRatingComponent } from './components/profileComponents/profile-r
 import { ProfileVehicleComponent } from './components/profileComponents/profile-vehicle/profile-vehicle.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
+import { AddVehicleComponent } from './components/profileComponents/add-vehicle/add-vehicle.component';
+import { EditProfileComponent } from './components/profileComponents/edit-profile/edit-profile.component';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
@@ -21,13 +24,17 @@ import {CommonModule} from '@angular/common';
     SidebarRightComponent,
     ProfileComponent,
     ProfileRatingComponent,
-    ProfileVehicleComponent
+    ProfileVehicleComponent,
+    AddVehicleComponent,
+    EditProfileComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    CommonModule
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
