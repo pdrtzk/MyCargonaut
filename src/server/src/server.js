@@ -42,7 +42,6 @@ var mysql = require("mysql");
 var session = require("express-session");
 var cryptoJS = require("crypto-js");
 var config_1 = require("../config/config");
-var Cargonaut_1 = require("../model/Cargonaut");
 /*****************************************************************************
  *           Configuration       *
  *****************************************************************************/
@@ -84,17 +83,17 @@ function queryPromise(sql, data) {
  *           Static routes       *
  *****************************************************************************/
 app.use('/', express.static("../../../dist/MyCargonaut"));
-app.use('/*', express.static("../../../dist/MyCargonaut"));
+// app.use('/*', express.static(`../../../dist/MyCargonaut`));
 app.listen(8080, 'localhost', function () {
     console.log('');
     console.log('-------------------------------------------------------------');
-    console.log('                    UserMan-Backend läuft                       ');
+    console.log('                    UserMan-Backend läuft                    ');
     console.log('-------------------------------------------------------------');
     console.log('       Frontend aufrufen: http://localhost:8080              ');
     console.log('-------------------------------------------------------------');
 });
 /*****************************************************************************
- *           Routes       *
+ *           Authentication - Login / logout / Register       *
  *****************************************************************************/
 function isLoggedIn() {
     return function (req, res, next) {
@@ -109,6 +108,7 @@ function isLoggedIn() {
         }
     };
 }
+// check if logged in
 app.get('/login', isLoggedIn(), function (req, res) {
     res.status(200).send({
         message: 'User ist weiterhin eingeloggt!',
@@ -116,26 +116,20 @@ app.get('/login', isLoggedIn(), function (req, res) {
         user: req.session.user
     });
 });
-/**
- * Login
- */
+// Login
 app.post('/login', function (req, res) {
-    var username = req.body.username;
+    var email = req.body.email;
     var password = req.body.password;
-    var data = [username, cryptoJS.SHA512(password).toString()];
-    var query = 'SELECT * FROM cargonaut WHERE username = ? AND password = ?;';
+    var data = [email, cryptoJS.SHA512(password).toString()];
+    var query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
     queryPromise(query, data).then(function (rows) {
         if (rows.length === 1) {
-            var user = new Cargonaut_1.Cargonaut( /*rows[0].id,
-                rows[0].username,
-                rows[0].firstName,
-                rows[0].lastName,
-                new Date(rows[0].time),
-                rows[0].rights*/);
+            var user = rows[0];
             // @ts-ignore
             req.session.user = user;
             res.status(200).send({
                 message: 'Logged in!',
+                user: user
             });
         }
         else {
@@ -149,9 +143,7 @@ app.post('/login', function (req, res) {
         });
     });
 });
-/**
- * Logout
- */
+// Logout
 app.post('/logout', function (req, res) {
     // @ts-ignore
     delete req.session.user;
@@ -159,4 +151,442 @@ app.post('/logout', function (req, res) {
         message: 'Logged out!',
     });
 });
+// Registrieren
+app.post('/cargonaut', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var firstname, lastname, password, email, geburtsdatum, strasse, hausnr, plz, ort, adresse, dataAdress, queryAdress;
+    return __generator(this, function (_a) {
+        firstname = req.body.firstname;
+        lastname = req.body.lastname;
+        password = cryptoJS.SHA512(req.body.password).toString();
+        email = req.body.email;
+        geburtsdatum = (req.body.geburtsdatum).toLocaleString();
+        strasse = req.body.street;
+        hausnr = req.body.number;
+        plz = req.body.plz;
+        ort = req.body.city;
+        if (strasse && hausnr && plz && ort) {
+            dataAdress = [
+                strasse,
+                hausnr,
+                plz,
+                ort,
+            ];
+            queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+            queryPromise(queryAdress, dataAdress).then(function (result) {
+                adresse = result.insertId;
+                if (firstname && lastname) {
+                    var data = [
+                        firstname,
+                        lastname,
+                        password,
+                        email,
+                        geburtsdatum,
+                        adresse,
+                    ];
+                    var query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
+                    queryPromise(query, data).then(function (results) {
+                        res.status(201).send({
+                            message: 'Neuer Nutzer erstellt!',
+                            createdUser: results.insertId,
+                        });
+                    })["catch"](function () {
+                        res.status(400).send({
+                            message: 'Fehler beim Erstellen eines Nutzers.',
+                        });
+                    });
+                }
+            });
+        }
+        return [2 /*return*/];
+    });
+}); });
+/*****************************************************************************
+ *           Cargonaut       *
+ *****************************************************************************/
+// Get Cargonaut
+app.get('/cargonaut/:id', function (req, res) {
+    var id = req.params.id;
+    var data = [
+        id,
+    ];
+    var query = 'SELECT * FROM cargonaut WHERE id = ?;';
+    queryPromise(query, data).then(function (results) {
+        if (results.length > 0) {
+            res.status(200).send({
+                user: results[0],
+            });
+        }
+        else {
+            res.status(400).send({
+                message: 'Der User konnte nicht gefunden werden!',
+            });
+        }
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Fehler beim getten des Users!',
+        });
+    });
+});
+// Get Cargonaut
+app.put('/cargonaut/:id', function (req, res) {
+    var id = Number(req.params.id);
+    var firstname = req.body.firstname;
+    var lastname = req.body.lastname;
+    var email = req.body.email;
+    var data = [
+        firstname,
+        lastname,
+        email,
+        id,
+    ];
+    var query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, email = ? WHERE id = ?;';
+    queryPromise(query, data).then(function () {
+        res.status(200).send({
+            message: "Updated user " + id,
+        });
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Der User konnte nicht bearbeitet werden.',
+        });
+    });
+});
+/*****************************************************************************
+ *           Fahrzeuge       *
+ *****************************************************************************/
+// add new vehicle
+app.post('/vehicle/:owner', function (req, res) {
+    // Read data from request body
+    var art = req.body.type;
+    var anzahlSitzplaetze = req.body.seats;
+    var besitzer = req.params.owner;
+    var laenge = req.body.length;
+    var breite = req.body.width;
+    var hoehe = req.body.height;
+    var ladeflaeche;
+    if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer) {
+        var dataLade = [
+            laenge,
+            breite,
+            hoehe,
+        ];
+        var queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        queryPromise(queryLade, dataLade).then(function (result) {
+            ladeflaeche = result.insertId;
+            var data = [
+                art,
+                anzahlSitzplaetze,
+                ladeflaeche,
+                besitzer,
+            ];
+            var query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer) VALUES (NULL, ?, ?, ?, ?);';
+            queryPromise(query, data).then(function (results) {
+                res.status(201).send({
+                    message: 'Neues Fahrzeug erstellt!',
+                    createdVehicle: results.insertId,
+                });
+            })["catch"](function () {
+                res.status(400).send({
+                    message: 'Fehler beim Erstellen eines Fahrzeugs.',
+                });
+            });
+        })["catch"](function () {
+            res.status(400).send({
+                message: 'Fehler beim Erstellen eines Laderaums.',
+            });
+        });
+    }
+    else {
+        res.status(400).send({
+            message: 'Nicht alle Felder ausgefüllt.',
+        });
+    }
+});
+// get vehicle
+app.get('/vehicle/:id', function (req, res) {
+    var id = req.params.id;
+    var data = [
+        id,
+    ];
+    var query = 'SELECT * FROM fahrzeug WHERE id = ?;';
+    queryPromise(query, data).then(function (results) {
+        if (results.length > 0) {
+            res.status(200).send({
+                vehicle: results[0],
+            });
+        }
+        else {
+            res.status(400).send({
+                message: 'Das Fahrzeug konnte nicht gefunden werden!',
+            });
+        }
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Fehler beim getten des Fahrzeugs!',
+        });
+    });
+});
+// get vehicles from cargonaut
+app.get('/vehicles/:cargonaut', function (req, res) {
+    var cargonaut = req.params.cargonaut;
+    var data = [
+        cargonaut,
+    ];
+    var query = 'SELECT * FROM fahrzeug WHERE besitzer = ?;';
+    queryPromise(query, data).then(function (results) {
+        res.status(200).send({
+            vehicles: results,
+        });
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Fehler beim getten der Fahrzeuge!',
+        });
+    });
+});
+// delete vehicle
+app["delete"]('/vehicle/:id', function (req, res) {
+    var id = Number(req.params.id);
+    var query = 'DELETE FROM fahrzeug WHERE id = ?;';
+    queryPromise(query, [id]).then(function (result) {
+        // Check if database response contains at least one entry
+        if (result.affectedRows === 1) {
+            res.status(200).send({
+                message: "Fahrzeug gel\u00F6scht",
+            });
+        }
+        else {
+            res.status(400).send({
+                message: 'Fahrzeug konnte nicht gefunden werden!',
+            });
+        }
+    })["catch"](function (err) {
+        // Database operation has failed
+        res.status(500).send({
+            message: 'Datenbank Fehler: ' + err
+        });
+    });
+});
+/*****************************************************************************
+ *           Post       * //
+ *****************************************************************************/
+// create Post
+app.post('/post/:cargonaut', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var cargonaut, startzeit, ankunftZeit, bezahlungsart, fahrzeug, anzahlSitzplaetze, beschreibung, typ, preis, strasse, hausnr, plz, ort, zielStrasse, zielHausnr, zielPlz, zielStadt, laenge, breite, hoehe, standort, zielort, laderaum, dataAdress, queryAdress;
+    return __generator(this, function (_a) {
+        cargonaut = Number(req.params.cargonaut);
+        startzeit = req.body.startzeit;
+        ankunftZeit = req.body.ankunftZeit;
+        bezahlungsart = req.body.bezahlungsart;
+        fahrzeug = req.body.vehicle;
+        anzahlSitzplaetze = req.body.anzahlSitzplaetze;
+        beschreibung = req.body.beschreibung;
+        typ = req.body.typ;
+        preis = req.body.price;
+        strasse = req.body.street;
+        hausnr = req.body.number;
+        plz = req.body.plz;
+        ort = req.body.city;
+        zielStrasse = req.body.zielStreet;
+        zielHausnr = req.body.zielNumber;
+        zielPlz = req.body.zielPlz;
+        zielStadt = req.body.zielCity;
+        laenge = req.body.length;
+        breite = req.body.width;
+        hoehe = req.body.height;
+        // create startort
+        if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
+            fahrzeug && anzahlSitzplaetze && typ && preis && strasse &&
+            hausnr && plz && ort && zielStrasse && zielHausnr && zielPlz &&
+            zielStadt && laenge && breite && hoehe) {
+            dataAdress = [
+                strasse,
+                hausnr,
+                plz,
+                ort,
+            ];
+            queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+            queryPromise(queryAdress, dataAdress).then(function (result) {
+                standort = result.insertId;
+                // create Zielort
+                var zielDataAdress = [
+                    zielStrasse,
+                    zielHausnr,
+                    zielPlz,
+                    zielStadt,
+                ];
+                var queryZielAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+                queryPromise(queryZielAdress, zielDataAdress).then(function (results) {
+                    zielort = results.insertId;
+                    // create laderaum
+                    var dataLaderaum = [
+                        laenge,
+                        breite,
+                        hoehe,
+                    ];
+                    var queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+                    queryPromise(queryLade, dataLaderaum).then(function (resu) {
+                        laderaum = resu.insertId;
+                        // create Post
+                        var data = [
+                            standort,
+                            zielort,
+                            startzeit,
+                            ankunftZeit,
+                            bezahlungsart,
+                            laderaum,
+                            fahrzeug,
+                            anzahlSitzplaetze,
+                            beschreibung,
+                            typ,
+                            cargonaut,
+                            preis,
+                        ];
+                        var query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) ' +
+                            'VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+                        queryPromise(query, data).then(function (resultPost) {
+                            res.status(201).send({
+                                message: 'Neuer Post erstellt!',
+                                createdVehicle: resultPost.insertId,
+                            });
+                        });
+                    })["catch"](function () {
+                        res.status(400).send({
+                            message: 'Fehler beim Erstellen eines Zielortes.',
+                        });
+                    });
+                })["catch"](function () {
+                    res.status(400).send({
+                        message: 'Fehler beim Erstellen eines Standorts.',
+                    });
+                });
+            });
+        }
+        else {
+            res.status(400).send({
+                message: 'Nicht alle Felder ausgefüllt.',
+            });
+        }
+        return [2 /*return*/];
+    });
+}); });
+// get specific Post
+app.get('/post/:id', function (req, res) {
+    var id = req.params.id;
+    var data = [
+        id,
+    ];
+    var query = 'SELECT * FROM post WHERE id = ?;';
+    queryPromise(query, data).then(function (results) {
+        res.status(200).send({
+            post: results,
+        });
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Fehler beim getten des Posts!',
+        });
+    });
+});
+// get all Posts
+app.get('/posts', function (req, res) {
+    /*
+    const parameter: string = req.params.parameter;
+  
+    switch (parameter){
+      case '':
+        break;
+    }
+  */
+    var query = 'SELECT * FROM post WHERE gebucht = ?;';
+    queryPromise(query, [0]).then(function (results) {
+        res.status(200).send({
+            posts: results,
+        });
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Fehler beim getten der Posts!',
+        });
+    });
+});
+// Update post
+app.put('/post/:id', function (req, res) {
+    var id = Number(req.params.id);
+    var startzeit = req.body.startzeit;
+    var ankunftZeit = req.body.ankunftZeit;
+    var bezahlungsart = req.body.bezahlungsart;
+    var fahrzeug = req.body.vehicle;
+    var anzahlSitzplaetze = req.body.anzahlSitzplaetze;
+    var beschreibung = req.body.beschreibung;
+    var preis = req.body.price;
+    var data = [
+        startzeit,
+        ankunftZeit,
+        bezahlungsart,
+        fahrzeug,
+        anzahlSitzplaetze,
+        beschreibung,
+        preis,
+        id
+    ];
+    var query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, fahrzeug = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ? WHERE id = ?;';
+    queryPromise(query, data).then(function () {
+        res.status(200).send({
+            message: "Updated post " + id,
+        });
+    })["catch"](function () {
+        res.status(400).send({
+            message: 'Der Post konnte nicht bearbeitet werden.',
+        });
+    });
+});
+/*****************************************************************************
+ *           buchung       * // TODO: post buchung, get/:id, get Posts
+ *****************************************************************************/
+app.post('/buchung/:kaeufer', function (req, res) {
+    // Read data from request body
+    var kaeufer = Number(req.params.kaeufer);
+    var laenge = req.body.length;
+    var breite = req.body.width;
+    var hoehe = req.body.height;
+    var anzahlSitzplaetze = req.body.seats;
+    var post = req.body.post;
+    var ladeflaeche;
+    if (kaeufer && laenge && breite && hoehe && anzahlSitzplaetze && post) {
+        var dataLade = [
+            laenge,
+            breite,
+            hoehe,
+        ];
+        var queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        queryPromise(queryLade, dataLade).then(function (result) {
+            ladeflaeche = result.insertId;
+            var data = [
+                kaeufer,
+                ladeflaeche,
+                anzahlSitzplaetze,
+                post,
+            ];
+            var query = 'INSERT INTO buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (NULL, ?, ?, ?, ?);';
+            queryPromise(query, data).then(function (results) {
+                res.status(201).send({
+                    message: 'Gebucht!'
+                });
+            })["catch"](function () {
+                res.status(400).send({
+                    message: 'Fehler beim buchen.',
+                });
+            });
+        })["catch"](function () {
+            res.status(400).send({
+                message: 'Fehler beim Erstellen eines Laderaums.',
+            });
+        });
+    }
+    else {
+        res.status(400).send({
+            message: 'Nicht alle Felder ausgefüllt.',
+        });
+    }
+});
+/*****************************************************************************
+ *           Bewertung       * // TODO: Bewertung get/:id, post, (put, delete)
+ *****************************************************************************/
 //# sourceMappingURL=server.js.map

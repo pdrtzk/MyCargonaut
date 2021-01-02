@@ -1,16 +1,14 @@
-import express = require ('express');
-import bodyParser = require ('body-parser');
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
 import {Request, Response} from 'express';
-import mysql = require ('mysql');
-import session = require ('express-session');
-import cryptoJS = require ('crypto-js');
+import * as mysql from 'mysql';
+import * as session from 'express-session';
+import * as cryptoJS from 'crypto-js';
 import {Connection, MysqlError} from 'mysql';
 
-import socket = require('socket.io'); // für Chatfunktion
+import * as socket from 'socket.io'; // für Chatfunktion
 
 import {Configuration} from '../config/config';
-import {Cargonaut} from '../model/Cargonaut';
-import {replaceTsWithNgInErrors} from '@angular/compiler-cli/src/ngtsc/diagnostics';
 
 
 /*****************************************************************************
