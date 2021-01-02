@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgbDate, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NgbDate, NgbModule, NgbDatepicker} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-new-post-modal',
