@@ -13,6 +13,7 @@ export class ProfileVehicleComponent implements OnInit {
   @Input() ownProfile: boolean;
 
   @Output() submitCallback: EventEmitter<any> = new EventEmitter();
+  @Output() submitDeleteCallback: EventEmitter<any> = new EventEmitter();
   editVehicleForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) { }
@@ -36,7 +37,7 @@ export class ProfileVehicleComponent implements OnInit {
   }
 
   deleteVehicle(): void {
-    // todo: callback to parent
+    this.submitDeleteCallback.emit(this.vehicle);
   }
 
   onSubmit(): void {

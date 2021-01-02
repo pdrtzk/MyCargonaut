@@ -162,7 +162,14 @@ export class ProfileComponent implements OnInit {
     const index = this.vehiclesUser.findIndex(s => s.id === car.id);
     this.vehiclesUser[index] = car;
     // todo: submit car via service
+  }
 
+  submitDeleteVehicle(car: Vehicle): void {
+    const index = this.vehiclesUser.findIndex(s => s.id === car.id);
+    // todo: submit car via service
+    if (index > -1) {
+      this.vehiclesUser.splice(index, 1);
+    }
   }
 
 }

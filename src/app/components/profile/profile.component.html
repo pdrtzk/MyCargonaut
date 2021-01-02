@@ -58,7 +58,7 @@
       <div class="col">
         <h3>Fahrzeuge</h3>
         <div *ngFor="let car of vehiclesUser; let i = index">
-          <app-profile-vehicle [vehicle]="car" [ownProfile]="ownProfile" (submitCallback)="submitEditVehicle($event)"></app-profile-vehicle>
+          <app-profile-vehicle [vehicle]="car" [ownProfile]="ownProfile" (submitCallback)="submitEditVehicle($event)" (submitDeleteCallback)="submitDeleteVehicle($event)"></app-profile-vehicle>
           <hr>
         </div>
         <p *ngIf="vehiclesUser == null || vehiclesUser.length <= 0">
