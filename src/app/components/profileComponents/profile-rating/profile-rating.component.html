@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col">
-    <ngb-rating [(rate)]="rating.ratingStars" [readonly]="true" [max]="5" id="ratingStar">
+    <ngb-rating [(rate)]=rating.ratingStars [readonly]="true" [max]="5" id="ratingStar">
       <ng-template let-fill="fill" let-index="index">
         <span class="star" [class.filled]="fill === 100">&#9733;</span>
       </ng-template>

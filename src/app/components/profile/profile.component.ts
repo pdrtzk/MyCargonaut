@@ -6,6 +6,7 @@ import {Vehicle} from '../../../shared/vehicle.model';
 import {VehicleType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AccountService} from '../../services/account.service';
 
 @Component({
   selector: 'app-profile',
@@ -23,7 +24,7 @@ export class ProfileComponent implements OnInit {
   submitted = false;
 
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private accountService: AccountService) {
     let addressUser: Address;
     addressUser = {
       plz: '12345',
@@ -32,14 +33,6 @@ export class ProfileComponent implements OnInit {
       city: 'Musterstadt'
     };
 
-    this.myuser = {
-      firstname: 'Max',
-      lastname: 'Mustermann',
-      birthday: new Date('1980-10-10'),
-      email: 'max@mustermann.de',
-      password: 'test',
-      address: addressUser,
-    };
     // user for not own profile
     this.user = {
       firstname: 'Erika',
@@ -96,10 +89,17 @@ export class ProfileComponent implements OnInit {
     };
 
     // to test own profile
-    this.user = this.myuser;
+  //  this.user = this.myuser;
 
     this.ratingsUser = [rating1, rating2];
     this.vehiclesUser = [vehicle1, vehicle2];
+
+    // todo: get user, ratings and vehicles for user
+    this.myuser = this.accountService.user;
+    console.log('???');
+    console.log(this.myuser.firstname);
+    console.log(this.myuser.lastname);
+    this.user = this.myuser;
 
     this.editProfileForm = this.formBuilder.group({
       firstName: [this.user.firstname, Validators.required],
@@ -110,10 +110,11 @@ export class ProfileComponent implements OnInit {
       plz: [this.user.address.plz, Validators.required],
       city: [this.user.address.city, Validators.required],
     });
+
   }
 
   ngOnInit(): void {
-    // todo: get user, ratings and vehicles for user
+
     this.ownProfile = true; // or false, depending on id
   }
 

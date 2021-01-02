@@ -11,6 +11,7 @@ export class AccountService {
 
   constructor(private http: HttpClient, private alertService: AlertService) {
     this.userSubject.subscribe(value => this.authenticatedUser = value);
+
   }
 
   private authenticatedUser: Cargonaut;
@@ -23,11 +24,12 @@ export class AccountService {
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.post('/login', {
+      await http.post('http://localhost:8080/login', {
         email,
         password
       }).toPromise().then((res: any) => {
         this.authenticatedUser = res.user;
+        console.log(this.authenticatedUser.firstname);
         this.userSubject.next(res.user);
         resolve(res.user);
       }).catch(error => {
@@ -41,7 +43,7 @@ export class AccountService {
     const http = this.http;
     console.log('logout called');
     return new Promise(async (resolve, reject) => {
-      await http.post('/logout', {}).toPromise().then(() => {
+      await http.post('http://localhost:8080/logout', {}).toPromise().then(() => {
         this.authenticatedUser = null;
         this.userSubject.next(null);
         resolve();
