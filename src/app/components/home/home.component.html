@@ -1,10 +1,61 @@
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <div class="row">
+        <div class="col searchbar">
+          <form>
+            <label>
+              <input type="text" placeholder="Search.." name="search">
+            </label>
+            <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary" ngbDropdownToggle>Stadt</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>Action - 1</button>
+              <button ngbDropdownItem>Another Action</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary" ngbDropdownToggle>Entfernung</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>Action - 1</button>
+              <button ngbDropdownItem>Another Action</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary" ngbDropdownToggle>Transporttyp</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem>Action - 1</button>
+              <button ngbDropdownItem>Another Action</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-2">
+      <a routerLink="addpost">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80%" height="80%" fill="#005B52" class="bi bi-plus-circle-fill"
+             viewBox="0 0 16 16">
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+<app-home-post></app-home-post>
+<app-home-post></app-home-post>
+<app-home-post></app-home-post>
+<app-home-post></app-home-post>
+<app-home-post></app-home-post>
+
+

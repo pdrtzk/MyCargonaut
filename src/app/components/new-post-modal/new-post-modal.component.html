@@ -1,0 +1,126 @@
+<div id="modal">
+  <div class="modal-header">
+    <h1 class="modal-title" id="modal-basic-title">Post erstellen</h1>
+    <button type="button" class="close" aria-label="Close">
+      <span aria-hidden="true">X</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container">
+      <div class="row justify-content-around">
+        <div class="col-md-6 col-sm-12">
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-primary button-styled button-wide"
+                      [ngStyle]="{'background-color': (posttype=='angebot') ? '#b3cecb' : '#005B52'}"
+                      (click)="posttype='angebot'">Angebot
+              </button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-primary button-styled button-wide"
+                      [ngStyle]="{'background-color': (posttype=='gesuch') ? '#b3cecb' : '#005B52'}"
+                      (click)="posttype='gesuch'">Gesuch
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1">
+              <h5 class="green-color">von</h5>
+            </div>
+            <div class="col-10">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp1="ngbDatepicker"
+                       disabled>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary shadow" (click)="dp1.toggle()" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                      <path
+                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                      <path
+                        d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">bis</h5></div>
+            <div class="col-10">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp2="ngbDatepicker"
+                       disabled>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary input" (click)="dp2.toggle()" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                      <path
+                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                      <path
+                        d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-sm-12">
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Fahrzeugtyp</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem>Action - 1</button>
+                  <button ngbDropdownItem>Another Action</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Standort</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Standort</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem>Action - 1</button>
+                  <button ngbDropdownItem>Another Action</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Zielort</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Zielort</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem>Action - 1</button>
+                  <button ngbDropdownItem>Another Action</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div class="row">
+            <div class="col">
+              <h5 class="green-color">Beschreibung</h5>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <textarea class="description-input" rows="6"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary button-styled">Speichern</button>
+  </div>
+</div>
