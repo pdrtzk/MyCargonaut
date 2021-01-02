@@ -9,7 +9,12 @@ export class AccountService {
 
   constructor(private http: HttpClient) {
   }
-  public user: Cargonaut;
+
+  private authenticatedUser: Cargonaut;
+
+  get user() {
+    return this.authenticatedUser;
+  }
 
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
@@ -19,7 +24,7 @@ export class AccountService {
         email,
         password
       }).toPromise().then((res: any) => {
-        this.user = res.user;
+        this.authenticatedUser = res.user;
         resolve(res.user);
       }).catch((res: any) => {
         console.log('Error: ' + res);

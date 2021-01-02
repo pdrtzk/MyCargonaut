@@ -93,7 +93,8 @@ INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `ge
 (13, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@test.de', '0000-00-00', 38),
 (18, 'Berta', 'Besispiel', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'berta@beispiel.de', '1960-01-01', 52),
 (19, 'Max', 'Mustermann', 'test', 'max@mustermann.de', '1990-01-12', 10),
-(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19', 21);
+(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19', 21),
+(1, 'Tina', 'Tester', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'tina@tester.de', '2001-01-20', 1);
 
 -- --------------------------------------------------------
 

@@ -10,9 +10,6 @@ import * as socket from 'socket.io'; // für Chatfunktion
 
 import {Configuration} from '../config/config';
 
-import socket = require('socket.io'); // für Chatfunktion
-import {replaceTsWithNgInErrors} from '@angular/compiler-cli/src/ngtsc/diagnostics';
-
 import {Cargonaut} from '../../shared/cargonaut.model';
 
 /*****************************************************************************
