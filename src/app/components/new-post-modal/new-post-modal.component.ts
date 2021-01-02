@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {NgbDate, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-new-post-modal',
@@ -8,7 +9,7 @@ import {Component, OnInit} from '@angular/core';
 export class NewPostModalComponent implements OnInit {
 
 
-  posttype: string;
+  posttype: string = '';
 
   ngOnInit(): void {
     this.posttype = '';
