@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {Post} from '../../shared/post.model';
 
 @Component({
   selector: 'app-booking-page',
@@ -7,7 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class BookingPageComponent implements OnInit {
 
-  constructor() { }
+  displayPage = 'inbox';
+  @Input() inbox: Post[];
+  @Input() outbox: Post[];
+
+  constructor() {
+  }
+
+  setDisplayPage(page: string): void {
+    this.displayPage = page;
+  }
 
   ngOnInit(): void {
   }

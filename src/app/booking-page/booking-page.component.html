@@ -1,4 +1,15 @@
 <div id="booking-page">
-  <p>Buchungen</p>
-  <app-booking-card></app-booking-card>
+  <div id="booking-list-switch">
+    <div (click)="setDisplayPage('outbox')">
+      <p *ngIf="displayPage==='outbox'" class="booking-label-selected">in Auftrag gegeben</p>
+      <p *ngIf="displayPage!=='outbox'">in Auftrag gegeben</p>
+    </div>
+    <p id="booking-placeholder">|</p>
+    <div (click)="setDisplayPage('inbox')">
+      <p *ngIf="displayPage==='inbox'" class="booking-label-selected">beauftragt</p>
+      <p *ngIf="displayPage!=='inbox'">beauftragt</p>
+    </div>
+  </div>
+  <app-booking-list *ngIf="displayPage === 'inbox'" [bookings]="inbox"></app-booking-list>
+  <app-booking-list *ngIf="displayPage === 'outbox'" [bookings]="outbox"></app-booking-list>
 </div>

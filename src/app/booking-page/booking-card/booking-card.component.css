@@ -10,6 +10,10 @@
   font-family: Calibri;
 }
 
+#booking-card:hover{
+  box-shadow: grey 4px 4px 4px;
+}
+
 #booking-card-left {
   display: flex;
   flex-direction: row;

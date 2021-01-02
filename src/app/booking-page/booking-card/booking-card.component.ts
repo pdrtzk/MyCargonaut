@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Post} from '../../../shared/post.model';
 
 @Component({
@@ -8,7 +8,7 @@ import {Post} from '../../../shared/post.model';
 })
 export class BookingCardComponent implements OnInit {
 
-  //@Input() booking: Post;
+  @Input() booking: Post;
 
   constructor() { }
 
