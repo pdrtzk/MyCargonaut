@@ -16,11 +16,11 @@
       <!-- Buttons -->
       <div>
         <button class="post-button">
-          M <!-- add message icon todo -->
+          <mat-icon>email</mat-icon>
         </button>
       </div>
       <div>
-        <button class="post-button">buchen</button>
+        <button class="post-button">Buchen</button>
       </div>
     </div>
   </div>
@@ -31,13 +31,16 @@
         <div class="post-top-row post-space-between">
           <!-- icons -->
           <div class="post-top-row">
-            <div style="margin-right: 30px">
+            <div style="margin-right: 30px; margin-top: 20px">
               <!-- cargonaut star rating -->
               <app-star-rating [starCount]="4"></app-star-rating>
             </div>
             <div>
               <!-- payment method -->
-              <p class="post-value">{{post.payment.type}}</p>
+              <div style="display: flex; flex-direction: row;">
+                <mat-icon style="align-self: center">payment</mat-icon>
+                <p class="post-value" style="padding-left: 10px">{{post.payment.type}}</p>
+              </div>
               <p class="post-label">Zahlungsart</p>
             </div>
           </div>

@@ -9,8 +9,10 @@ import {Post} from '../../../shared/post.model';
 export class PostDisplayCardComponent implements OnInit {
 
   @Input() relPost: Post;
+  style = 'display-card';
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }
