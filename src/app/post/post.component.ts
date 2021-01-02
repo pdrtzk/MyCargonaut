@@ -1,6 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Post} from 'src/shared/post.model';
-import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-post',
@@ -10,11 +9,11 @@ import {MatIconModule} from '@angular/material/icon';
 export class PostComponent implements OnInit {
   @Input() post: Post;
   @Input() relatedPosts: Post[];
-  public loremIpsum: string = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
+  public loremIpsum = 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.';
   public starRatingString = ''; // todo use material icons
 
   ngOnInit(): void {
-    let rating = 4; // todo
+    const rating = 4; // todo
     for (let i = 0; i < rating; i++) {
       this.starRatingString += '⭐';
     }
