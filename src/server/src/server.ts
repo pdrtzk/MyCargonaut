@@ -187,7 +187,7 @@ app.post('/cargonaut', async (req: Request, res: Response) => {
  *****************************************************************************/
 
 
-// Get Cargonaut
+// Get Cargonaut -> Alle Infos eines Cargonauten
 app.get('/cargonaut/:id', (req: Request, res: Response) => {
   const id: string = req.params.id;
   const data: [string] = [
@@ -361,6 +361,8 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
 /*****************************************************************************
  *           Post       * //
  *****************************************************************************/
+
+
 // create Post
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
@@ -459,14 +461,12 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
         });
       });
     });
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
   }
-  else
-    {
-      res.status(400).send({
-        message: 'Nicht alle Felder ausgefüllt.',
-      });
-    }
-  });
+});
 
 // get specific Post
 app.get('/post/:id', (req: Request, res: Response) => {
@@ -541,9 +541,12 @@ app.put('/post/:id', (req: Request, res: Response) => {
   });
 });
 
+
 /*****************************************************************************
- *           buchung       * // TODO: post buchung, get/:id, get Posts
+ *           buchung       * //
  *****************************************************************************/
+
+
 app.post('/buchung/:kaeufer', (req: Request, res: Response) => {
   // Read data from request body
   const kaeufer: number = Number(req.params.kaeufer);
@@ -591,13 +594,74 @@ app.post('/buchung/:kaeufer', (req: Request, res: Response) => {
   }
 });
 
+app.get('/buchungen/:cargonaut', (req: Request, res: Response) => {
+  const cargonaut: number = Number(req.params.cargonaut);
+  const data: [number, number] = [
+    cargonaut,
+    cargonaut,
+  ];
+  const query = 'SELECT * FROM buchung, post WHERE buchung.post = post.id AND (buchung.gebucht_von = ? OR post.verfasser = ?)';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      buchungen: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten des Posts!',
+    });
+  });
+});
+
+
 /*****************************************************************************
- *           Bewertung       * // TODO: Bewertung get/:id, post, (put, delete)
+ *           Bewertung       * //
  *****************************************************************************/
 
 
+app.post('/bewertung/:verfasser', (req: Request, res: Response) => {
+  // Read data from request body
+  const verfasser: number = Number(req.params.verfasser);
+  const fahrt: number = req.body.fahrt;
+  const punktzahl: number = req.body.punktzahl;
+  const kommentar: string = req.body.kommentar;
+  if (verfasser && fahrt && punktzahl && kommentar) {
+    const data: [number, number, number, string] = [
+      verfasser,
+      fahrt,
+      punktzahl,
+      kommentar,
+    ];
+    const query = 'INSERT INTO bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (NULL, ?, ?, ?, ?);';
+    queryPromise(query, data).then(results => {
+      res.status(201).send({
+        message: 'Bewertung abgegeben!'
+      });
+    }).catch(() => {
+        res.status(400).send({
+          message: 'Fehler beim abgeben der Bewertung.',
+        });
+      }
+    );
+  } else {
+    res.status(400).send({
+      message: 'Nicht alle Felder ausgefüllt.',
+    });
+  }
+});
 
-
-
-
-
+app.get('/bewertungen/:cargonaut', (req: Request, res: Response) => {
+  const cargonaut: number = Number(req.params.cargonaut);
+  const data: [number] = [
+    cargonaut,
+  ];
+  const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+  queryPromise(query, data).then(results => {
+    res.status(200).send({
+      bewertungen: results,
+    });
+  }).catch(() => {
+    res.status(400).send({
+      message: 'Fehler beim getten der Bewertungen!',
+    });
+  });
+});
