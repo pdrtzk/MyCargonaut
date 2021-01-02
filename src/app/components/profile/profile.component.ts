@@ -5,13 +5,14 @@ import {Address} from '../../../shared/address.model';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {VehicleType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css']
 })
+
 export class ProfileComponent implements OnInit {
   user: Cargonaut; // the user to whom the profile belongs to - get through id from service later on
   myuser: Cargonaut; // the logged in user - get from service later
