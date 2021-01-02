@@ -8,6 +8,8 @@ import { PostDisplayCardComponent } from './post/post-display-card/post-display-
 import { StarRatingComponent } from './post/star-rating/star-rating.component';
 import {PostVehicleTypeIconComponent} from './post/post-vehicle-type-icon/post-vehicle-type-icon.component';
 
+import {MatIconModule} from '@angular/material/icon';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -19,6 +21,7 @@ import {PostVehicleTypeIconComponent} from './post/post-vehicle-type-icon/post-v
   imports: [
     BrowserModule,
     AppRoutingModule,
+    MatIconModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

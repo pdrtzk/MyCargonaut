@@ -1,6 +1,6 @@
 <div class="post-displayCard">
   <app-post-vehicle-type-icon [type]="relPost?.vehicle?.type?.type" [style]="style"></app-post-vehicle-type-icon>
-  <p class="post-displayCard-title" style="font-weight: bold; margin-top: -15px">{{relPost.type}} von {{relPost.author.firstname}} {{relPost.author.lastname}}</p>
-  <p class="post-displayCard-text">{{relPost.start_time.toLocaleDateString()}}, {{relPost.start_time.toLocaleTimeString()}} - {{relPost.end_time.toLocaleTimeString()}}</p>
-  <p class="post-displayCard-text">{{relPost.startlocation?.city}} - {{relPost.endlocation?.city}}</p>
+  <p class="post-displayCard-title" style="font-weight: bold; margin-top: -15px">{{relPost?.type}} von {{relPost?.author?.firstname}} {{relPost?.author?.lastname}}</p>
+  <p class="post-displayCard-text">{{relPost?.start_time?.toLocaleDateString()}}, {{relPost?.start_time?.toLocaleTimeString()}} - {{relPost?.end_time?.toLocaleTimeString()}}</p>
+  <p class="post-displayCard-text">{{relPost?.startlocation?.city}} - {{relPost?.endlocation?.city}}</p>
 </div>
