@@ -1,5 +1,5 @@
 import {TestBed} from '@angular/core/testing';
-import {HttpClientModule} from "@angular/common/http";
+import {HttpClientModule} from '@angular/common/http';
 
 import {PostService} from './post.service';
 
