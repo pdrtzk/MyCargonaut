@@ -12,14 +12,14 @@
           <div class="row">
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': (posttype=='angebot') ? '#b3cecb' : '#005B52'}"
-                      (click)="posttype='angebot'">Angebot
+                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#b3cecb'}"
+                      (click)="this.posttype = !this.posttype">Angebot
               </button>
             </div>
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': (posttype=='gesuch') ? '#b3cecb' : '#005B52'}"
-                      (click)="posttype='gesuch'">Gesuch
+                      [ngStyle]="{'background-color': posttype ? '#b3cecb' : '#005B52'}"
+                      (click)="this.posttype = !this.posttype">Gesuch
               </button>
             </div>
           </div>
@@ -30,7 +30,7 @@
             <div class="col-10">
               <div class="input-group">
                 <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp1="ngbDatepicker"
-                       disabled>
+                       [readOnly]="true" [(ngModel)]="startDate">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary shadow" (click)="dp1.toggle()" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -50,7 +50,7 @@
             <div class="col-10">
               <div class="input-group">
                 <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp2="ngbDatepicker"
-                       disabled>
+                       [readOnly]="true" [(ngModel)]="endDate">
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary input" (click)="dp2.toggle()" type="button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -70,10 +70,11 @@
           <div class="row">
             <div class="col">
               <div ngbDropdown class="dropdown shadow">
-                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Fahrzeugtyp</button>
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.currVehicle ? this.currVehicle : 'Fahrzeugtyp'}}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem>Action - 1</button>
-                  <button ngbDropdownItem>Another Action</button>
+                  <button ngbDropdownItem *ngFor="let vehicle of vehicles"
+                          (click)="this.currVehicle = vehicle">{{vehicle}}</button>
                 </div>
               </div>
             </div>
@@ -82,10 +83,10 @@
             <div class="col-4"><h5 class="green-color">Standort</h5></div>
             <div class="col-8">
               <div ngbDropdown class="dropdown shadow">
-                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Standort</button>
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.startCity ? this.startCity : 'Standort'}}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem>Action - 1</button>
-                  <button ngbDropdownItem>Another Action</button>
+                  <button ngbDropdownItem *ngFor="let city of cities" (click)="this.startCity = city">{{city}}</button>
                 </div>
               </div>
             </div>
@@ -94,10 +95,10 @@
             <div class="col-4"><h5 class="green-color">Zielort</h5></div>
             <div class="col-8">
               <div ngbDropdown class="dropdown shadow">
-                <button class="btn btn-primary button-styled button-wide" ngbDropdownToggle>Zielort</button>
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.endCity ? this.endCity : 'Zielort'}}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button ngbDropdownItem>Action - 1</button>
-                  <button ngbDropdownItem>Another Action</button>
+                  <button ngbDropdownItem *ngFor="let city of cities" (click)="this.endCity = city">{{city}}</button>
                 </div>
               </div>
             </div>
@@ -113,7 +114,7 @@
           </div>
           <div class="row">
             <div class="col">
-              <textarea class="description-input" rows="6"></textarea>
+              <textarea class="description-input" rows="6" [(ngModel)]="description"></textarea>
             </div>
           </div>
         </div>
@@ -121,6 +122,7 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary button-styled">Speichern</button>
+    <p style="color: red" *ngIf="!this.filledForm">Bitte füllen sie alle Felder korrekt aus!</p>
+    <button type="button" class="btn btn-primary button-styled" (click)="savePost()">Speichern</button>
   </div>
 </div>
