@@ -380,28 +380,28 @@ app.delete('/vehicle/:id', (req: Request, res: Response) => {
 app.post('/post/:cargonaut', async (req: Request, res: Response) => {
   // Read data from request body
   const cargonaut: number = Number(req.params.cargonaut);
-  const startzeit: string = req.body.startzeit;
-  const ankunftZeit: string = req.body.ankunftZeit;
-  const bezahlungsart: string = req.body.bezahlungsart;
+  const startzeit: string = req.body.post.start_time;
+  const ankunftZeit: string = req.body.post.end_time;
+  const bezahlungsart: string = req.body.post.payment;
 
-  const fahrzeug: number = req.body.vehicle;
-  const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
-  const beschreibung: string = req.body.beschreibung;
-  const typ: string = req.body.typ;
-  const preis = req.body.price;
+  const fahrzeug: number = req.body.post.vehicle.id;
+  const anzahlSitzplaetze: number = req.body.post.seats;
+  const beschreibung: string = req.body.post.description;
+  const typ: string = req.body.post.type; // 'Angebot' oder 'Gesuch'
+  const preis = req.body.post.price;
 
-  const strasse: string = req.body.street;
-  const hausnr: string = req.body.number;
-  const plz: string = req.body.plz;
-  const ort: string = req.body.city;
+  const strasse: string = req.body.post.startlocation.street;
+  const hausnr: string = req.body.post.startlocation.housenumber;
+  const plz: string = req.body.post.startlocation.plz;
+  const ort: string = req.body.post.startlocation.city;
 
-  const zielStrasse: string = req.body.zielStreet;
-  const zielHausnr: string = req.body.zielNumber;
-  const zielPlz: string = req.body.zielPlz;
-  const zielStadt: string = req.body.zielCity;
-  const laenge: number = req.body.length;
-  const breite: number = req.body.width;
-  const hoehe: number = req.body.height;
+  const zielStrasse: string = req.body.post.endlocation.street;
+  const zielHausnr: string = req.body.post.endlocation.housenumber;
+  const zielPlz: string = req.body.post.endlocation.plz;
+  const zielStadt: string = req.body.post.endlocation.city;
+  const laenge: number = req.body.post.hold.length;
+  const breite: number = req.body.post.hold.width;
+  const hoehe: number = req.body.post.hold.height;
   let standort: number;
   let zielort: number;
   let laderaum: number;
@@ -523,6 +523,7 @@ app.get('/posts', (req: Request, res: Response) => { // parameter for sort and f
 
 // Update post
 app.put('/post/:id', (req: Request, res: Response) => {
+
   const id: number = Number(req.params.id);
   const startzeit: string = req.body.startzeit;
   const ankunftZeit: string = req.body.ankunftZeit;
