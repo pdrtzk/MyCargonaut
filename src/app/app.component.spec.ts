@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import {MatDialogModule} from '@angular/material/dialog';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -7,6 +8,9 @@ describe('AppComponent', () => {
       declarations: [
         AppComponent
       ],
+      imports: [
+        MatDialogModule
+      ]
     }).compileComponents();
   });
 
@@ -22,10 +26,12 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('MyCargonaut');
   });
 
-  xit('should render title', () => {
+  /*
+  it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement;
     expect(compiled.querySelector('.content span').textContent).toContain('MyCargonaut app is running!');
   });
+  */
 });

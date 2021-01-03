@@ -1,0 +1,48 @@
+
+
+<form [formGroup]="editProfileForm">
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="firstName">Vorname</label>
+      <input id="firstName" type="text" formControlName="firstName" class="form-control"/>
+    </div>
+    <div class="col-6">
+      <label for="lastName">Nachname</label>
+      <input id="lastName" type="text" formControlName="lastName" class="form-control"/>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="birthday">Geburtsdatum</label>
+      <input
+        type="date"
+        id="birthday"
+        name="birthday"
+        class="form-control"
+        formControlName="birthday"
+      />
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="street">Straße</label>
+      <input id="street" type="text" formControlName="street" class="form-control"/>
+    </div>
+    <div class="col-6">
+      <label for="housenumber">Hausnummer</label>
+      <input id="housenumber" type="text" formControlName="housenumber" class="form-control"/>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="plz">Postleitzahl</label>
+      <input id="plz" type="text" formControlName="plz" class="form-control"/>
+    </div>
+    <div class="col-6">
+      <label for="city">Stadt</label>
+      <input id="city" type="text" formControlName="city" class="form-control"/>
+    </div>
+  </div>
+</form>

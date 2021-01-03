@@ -8,5 +8,5 @@
       "es2015.promise"
     ]
   },
-  "compileOnSave": true
+  "compileOnSave": true,
 }

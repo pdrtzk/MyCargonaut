@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 
+// import { AccountService } from './_services';
+import { Cargonaut } from '../shared/cargonaut.model';
+import {MatDialog} from '@angular/material/dialog';
+import {LoginComponent} from './components/account/login/login.component';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +12,14 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'MyCargonaut';
+  user: Cargonaut;
+
+  constructor(/* private accountService: AccountService */) {
+    // this.accountService.user.subscribe(x => this.user = x);
+  }
+
+  logout() {
+    // this.accountService.logout();
+  }
 }
+

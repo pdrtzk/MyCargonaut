@@ -1,12 +1,13 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule} from '@angular/router';
-import {AuthGuard} from './auth';
-import {AppComponent} from './app.component';
+import {AuthGuard} from './helpers/auth.guard';
+import {HomeComponent} from './components/home/home.component';
+import {ProfileComponent} from './components/profile/profile.component';
+
 
 export const routes: Routes = [
-   {path: '', component: AppComponent, /*canActivate: [AuthGuard]*/},
-  // {path: 'login', component: LoginComponent},
-  // {path: 'register', component: RegisterComponent},
+  {path: '', component: HomeComponent, canActivate: [AuthGuard]}, // TODO: canActivate here only for demo. Add it to every protected route
+  {path: 'profile', component: ProfileComponent},
   {path: '**', redirectTo: ''}
 ];
 

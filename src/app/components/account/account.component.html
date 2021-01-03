@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col">
+      <h1 mat-dialog-title class="">{{login ? 'Anmeldung' : 'Registrierung'}}</h1>
+    </div>
+    <div class="col">
+      <button id="close" (click)="onCloseDialog()" class="btn btn-primary float-right">Schließen</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <app-login (closeEvent)="onCloseDialog($event.valueOf())" (registerClick)="login = false" *ngIf="login"></app-login>
+      <app-register (loginClick)="login = true" *ngIf="!login"></app-register>
+    </div>
+  </div>
+</div>
