@@ -1,0 +1,59 @@
+<div mat-dialog-content>
+<form [formGroup]="addVehicleForm" class="carForm" id="addVehicleForm-{{vehicle.id}}">
+  <h4>Fahrzeugangaben</h4>
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="type">Typ</label>
+      <select class="form-control" id="type" name="type" formControlName="type">
+        <option ngValue="pkw">PKW</option>
+        <option ngValue="lkw">LKW</option>
+        <option ngValue="bus">Transporter</option>
+
+      </select>
+    </div>
+    <div class="col-6">
+      <label for="model">Model</label>
+      <input id="model" type="text" formControlName="model" class="form-control"/>
+    </div>
+  </div>
+  <div class="row form-group">
+    <div class="col-6">
+      <label for="seats">Sitzanzahl</label>
+      <input id="seats" type="number" formControlName="seats" class="form-control"/>
+    </div>
+    <div class="col-6">
+      <label for="comment">Kommentare</label>
+      <input id="comment" type="text" formControlName="comment" class="form-control"/>
+    </div>
+  </div>
+
+  <div *ngIf="vehicle.type.type !== 'pkw'" >
+    <h4>Stauraum</h4>
+    <div class="row form-group">
+      <div class="col-6">
+        <label for="length">Länge</label>
+        <input id="length" type="number" formControlName="length" class="form-control"/>
+      </div>
+      <div class="col-6">
+        <label for="width">Breite</label>
+        <input id="width" type="number" formControlName="width" class="form-control"/>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-6">
+        <label for="height">Höhe</label>
+        <input id="height" type="number" formControlName="height" class="form-control"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <button  class="btn btn-primary addVehicleCancelBtn form-button"  (click)="onCancel()">
+      Abbrechen
+    </button>
+    <button  class="btn btn-primary form-button" id="addVehicleSubmitBtn" [mat-dialog-close]="onSubmit()" (click)="onSubmit()">
+      Bestätigen
+    </button>
+  </div>
+</form>
+</div>

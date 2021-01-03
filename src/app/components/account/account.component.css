@@ -1,0 +1,34 @@
+h1, label {
+  color: #005b52;
+  font-family: "Lato", serif;
+}
+
+button { /* TODO: change color of chosen button */
+  background-color: #005b52;
+  border-style: none;
+  padding: 8px;
+  margin: 8px;
+  color: #fff;
+  font-family: Lato, serif;
+}
+button:hover {
+  background-color: #004b43;
+}
+
+button#close {
+  margin-right: 0;
+}
+
+a {
+  font-family: Lato, serif;
+  color: #005b52;
+}
+a:hover {
+  color: #004b43;
+}
+
+.btn-link {
+  padding: 8px;
+  margin: 8px;
+}
+

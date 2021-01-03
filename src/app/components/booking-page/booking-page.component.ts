@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Post} from '../../shared/post.model';
+import {Post} from '../../../shared/post.model';
+import {BookingService} from '../../services/booking.service';
 
 @Component({
   selector: 'app-booking-page',
@@ -9,13 +10,15 @@ import {Post} from '../../shared/post.model';
 export class BookingPageComponent implements OnInit {
 
   displayPage = 'inbox';
-  @Input() inbox: Post[];
-  @Input() outbox: Post[];
+  inbox: Post[];
+  outbox: Post[];
 
-  constructor() {
+  constructor(private bookingService: BookingService) {
   }
 
   setDisplayPage(page: string): void {
+    this.inbox = this.bookingService.getInboxBookings();
+    this.outbox = this.bookingService.getOutboxBookings();
     this.displayPage = page;
   }
 

@@ -1,0 +1,32 @@
+
+#logout-large {
+  background-color: #005b52;
+  width: 5rem;
+  height: 80%;
+  float:right;
+  margin-bottom: 7rem;
+}
+
+#logout-button {
+  padding-top: 2rem;
+  margin-left: 0.5rem;
+  background-color: #005b52;
+  color: rgba(255, 255, 255, 0.7);
+  border: none;
+}
+
+#logout-button:hover, #logout-button:active, #logout-button:focus {
+  color: white;
+}
+
+@media (max-width: 767px) {
+
+  #logout-large {
+    width: 2rem;
+    margin-bottom: 5rem;
+  }
+
+  #logout-button {
+    display: none;
+  }
+}
