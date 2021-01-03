@@ -9,7 +9,7 @@ import {PostComponent} from './components/post/post.component';
 export const routes: Routes = [
   {path: '', component: HomeComponent, canActivate: [AuthGuard]}, // TODO: canActivate here only for demo. Add it to every protected route
   {path: 'profile', component: ProfileComponent},
-  {path: 'post', component: PostComponent /* todo add post id param */},
+  {path: 'post/:id', component: PostComponent},
   {path: '**', redirectTo: ''}
 ];
 
