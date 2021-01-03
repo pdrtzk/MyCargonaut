@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Post} from '../../../shared/post.model';
+import {Post} from '../../../../shared/post.model';
 
 @Component({
   selector: 'app-post-display-card',

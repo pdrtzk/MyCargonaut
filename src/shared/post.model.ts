@@ -2,7 +2,6 @@ import {Payment} from './payment.model';
 import {Hold} from './hold.model';
 import {Vehicle} from './vehicle.model';
 import {Cargonaut} from './cargonaut.model';
-import {Location} from './location.model';
 
 export interface Post {
   id?: number;

@@ -3,10 +3,10 @@ import {NgModule} from '@angular/core';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 
-import {PostComponent} from './post/post.component';
-import {PostDisplayCardComponent} from './post/post-display-card/post-display-card.component';
-import {StarRatingComponent} from './post/star-rating/star-rating.component';
-import {PostVehicleTypeIconComponent} from './post/post-vehicle-type-icon/post-vehicle-type-icon.component';
+import {PostComponent} from './components/post/post.component';
+import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
+import {StarRatingComponent} from './components/post/star-rating/star-rating.component';
+import {PostVehicleTypeIconComponent} from './components/post/post-vehicle-type-icon/post-vehicle-type-icon.component';
 
 import {MatIconModule} from '@angular/material/icon';
 
