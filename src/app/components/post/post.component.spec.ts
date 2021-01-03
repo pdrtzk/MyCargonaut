@@ -10,7 +10,6 @@ import {MatDialogModule} from '@angular/material/dialog';
 describe('PostComponent', () => {
   let component: PostComponent;
   let fixture: ComponentFixture<PostComponent>;
-  let router: Router;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -22,9 +21,6 @@ describe('PostComponent', () => {
       ]
     })
       .compileComponents();
-
-    // router = TestBed.inject(Router);
-    // router.initialNavigation();
   });
 
   beforeEach(() => {
