@@ -4,6 +4,7 @@ import {PostComponent} from './post.component';
 import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {routes} from '../../app-routing.module';
+import {HttpClientModule} from '@angular/common/http';
 
 describe('PostComponent', () => {
   let component: PostComponent;
@@ -13,7 +14,10 @@ describe('PostComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [PostComponent],
-      imports: [RouterTestingModule.withRoutes(routes)]
+      imports: [
+        HttpClientModule,
+        RouterTestingModule.withRoutes(routes)
+      ]
     })
       .compileComponents();
 
