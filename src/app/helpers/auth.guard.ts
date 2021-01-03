@@ -32,6 +32,7 @@ export class AuthGuard implements CanActivate {
     // TODO: Hintergrund "verstecken", wenn noch nicht angemeldet...
     // TODO: Nach Logout direkt wieder zu Home zurück
     const user = this.accountService.user;
+    console.log('can activate logged in? ' + !!user);
     if (user) {
       // authorised so return true
       return true;
@@ -45,9 +46,7 @@ export class AuthGuard implements CanActivate {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('closed: ' + result);
-      if (!result) {
-        this.router.navigate([state.url]).then();
-      }
+      this.router.navigate([state.url]).then();
     });
     return false;
 
