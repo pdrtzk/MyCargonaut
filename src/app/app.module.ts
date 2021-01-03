@@ -56,7 +56,7 @@ import {CommonModule} from '@angular/common';
     EditProfileComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     MatIconModule,
     BrowserAnimationsModule,

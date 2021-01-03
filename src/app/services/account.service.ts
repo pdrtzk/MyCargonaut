@@ -24,7 +24,7 @@ export class AccountService {
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.post('http://localhost:8080/login', {
+      await http.post('http://localhost:4200/api/login', {
         email,
         password
       }).toPromise().then((res: any) => {
@@ -43,7 +43,7 @@ export class AccountService {
     const http = this.http;
     console.log('logout called');
     return new Promise(async (resolve, reject) => {
-      await http.post('http://localhost:8080/logout', {}).toPromise().then(() => {
+      await http.post('http://localhost:4200/api/logout', {}).toPromise().then(() => {
         this.authenticatedUser = null;
         this.userSubject.next(null);
         resolve();

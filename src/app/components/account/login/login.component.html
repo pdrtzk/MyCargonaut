@@ -20,7 +20,7 @@
   </form>
 </div>
 <div mat-dialog-actions>
-  <button (click)="onSubmit()" cdkFocusInitial [disabled]="loading" class="btn btn-primary">
+  <button (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     Anmelden
   </button>
