@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {RouterTestingModule} from '@angular/router/testing';
 import {routes} from '../../app-routing.module';
 import {HttpClientModule} from '@angular/common/http';
+import {MatDialogModule} from '@angular/material/dialog';
 
 describe('PostComponent', () => {
   let component: PostComponent;
@@ -15,14 +16,15 @@ describe('PostComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [PostComponent],
       imports: [
+        MatDialogModule,
         HttpClientModule,
-        RouterTestingModule.withRoutes(routes)
+        RouterTestingModule
       ]
     })
       .compileComponents();
 
-    router = TestBed.inject(Router);
-    router.initialNavigation();
+    // router = TestBed.inject(Router);
+    // router.initialNavigation();
   });
 
   beforeEach(() => {
