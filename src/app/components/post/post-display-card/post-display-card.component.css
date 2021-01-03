@@ -1,0 +1,20 @@
+.post-displayCard {
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: grey 2px 2px 10px;
+}
+
+.post-displayCard:hover {
+  box-shadow: grey 4px 4px 20px;
+}
+
+.post-displayCard-title {
+  font-family: "MS Gothic";
+  color: #005B52;
+}
+
+.post-displayCard-text {
+  font-family: Calibri;
+  font-size: 15px;
+}

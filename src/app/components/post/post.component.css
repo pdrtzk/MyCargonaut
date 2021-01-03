@@ -1,0 +1,102 @@
+.post-space-between {
+  justify-content: space-between;
+}
+
+.post-top-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.post-column {
+  padding: 10px;
+  background-color: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+}
+
+.post-button {
+  border: 0;
+  margin: 5px;
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  background-color: #005B52;
+  color: white;
+  font-size: 30px;
+  font-family: Calibri;
+  box-shadow: grey 1px 3px 5px;
+  min-height: 60px;
+}
+
+.post-button:hover {
+  background-color: #92BDA3;
+}
+
+.post-name-title {
+  font-family: "Calibri";
+  font-size: 40px;
+  color: #005B52;
+}
+
+.post-type-label {
+  font-family: "Calibri";
+  font-size: 30px;
+  padding: 10px;
+  margin-right: 30px;
+  border-radius: 40px;
+}
+
+.post-gesuch {
+  background-color: #e5e5e5;
+  color: #005B52;
+}
+
+.post-angebot {
+  background-color: #005B52;
+  color: #f5f5f5;
+}
+
+.post-comment-text {
+  border-left: 5px solid grey;
+  padding-left: 5px;
+  font-family: Calibri;
+}
+
+.post-value {
+  font-family: "Calibri";
+  font-size: 30px;
+}
+
+.post-value-price {
+  font-family: "Calibri";
+  font-size: 70px;
+  margin-top: 0px;
+  margin-bottom: 20px;
+}
+
+.post-label {
+  font-family: "Calibri";
+  font-size: 15px;
+  color: #005B52;
+  margin-top: -20px;
+}
+
+.post-green-text {
+  font-family: Calibri;
+  color: #005B52;
+}
+
+.post-right-align-narrow {
+  margin-top: -10px;
+  text-align: right;
+  font-size: 20px;
+}
+
+.post-large-grey-text {
+  font-family: Calibri;
+  margin-bottom: -10px;
+  text-align: right;
+  font-size: 60px;
+  color: grey;
+  margin-top: 200px;
+}
