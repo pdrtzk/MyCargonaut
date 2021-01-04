@@ -19,7 +19,7 @@ export class SidebarRightComponent implements OnInit {
 
   async onLogout() {
     console.log('onLogout');
-    await this.accountService.logout().then(() => this.userLoggedIn = false);
+    await this.accountService.logout();
   }
 
 }
