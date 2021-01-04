@@ -91,13 +91,11 @@ export function app(): express.Express {
 
 // Login
   server.post('/api/login', (req: Request, res: Response) => {
-    console.log('req.body = ' + req.body);
     const email: string = req.body.email;
     const password: string = req.body.password;
     const data: [string, string] = [email, cryptoJS.SHA512(password).toString()];
     const query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
     queryPromise(query, data).then(rows => {
-      console.log(rows[0]);
       if (rows.length === 1) {
         const user: Cargonaut = {
           firstname: rows[0].firstname,
