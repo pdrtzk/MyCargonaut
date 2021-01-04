@@ -51,12 +51,32 @@ export class AccountService {
     });
   }
 
-  public async logout(): Promise<any> {
+  public async logout(): Promise<void> {
     const http = this.http;
     console.log('logout called');
-    return new Promise(async (resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/logout', {}).toPromise().then(() => {
         this.userSubject.next(null);
+        resolve();
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  public async register(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      await http.post('http://localhost:4200/api/cargonaut', { // TODO: if db model has same value names simply add user to body
+      firstname: user.firstname,
+      lastname: user.lastname,
+      password: user.password,
+      email: user.email,
+      geburtsdatum: user.birthday
+    }).
+      toPromise().then(() => {
+        // this.login(user.email, user.password).then(() => resolve());
         resolve();
       }).catch(error => {
         console.log('Error: ' + error);

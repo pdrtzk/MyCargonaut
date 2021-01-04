@@ -133,55 +133,37 @@ export function app(): express.Express {
 
 // Registrieren
   server.post('/api/cargonaut', async (req: Request, res: Response) => {
-    // Read data from request body
-    const firstname: string = req.body.firstname;
-    const lastname: string = req.body.lastname;
-    const password: string = cryptoJS.SHA512(req.body.password).toString();
-    const email: string = req.body.email;
-    const geburtsdatum: string = (req.body.geburtsdatum).toLocaleString();
-    const strasse: string = req.body.street;
-    const hausnr: string = req.body.number;
-    const plz: string = req.body.plz;
-    const ort: string = req.body.city;
-    let adresse: number;
-    if (strasse && hausnr && plz && ort) {
-      const dataAdress: [string, string, string, string] = [
-        strasse,
-        hausnr,
-        plz,
-        ort,
+      // Read data from request body
+      const firstname: string = req.body.firstname;
+      const lastname: string = req.body.lastname;
+      const password: string = cryptoJS.SHA512(req.body.password).toString();
+      const email: string = req.body.email;
+      const geburtsdatum: string = (req.body.geburtsdatum).toLocaleString();
+      const adresse = 1; // TODO: remove adresse from db model
+      const data: [string, string, string, string, string, number] = [
+        firstname,
+        lastname,
+        password,
+        email,
+        geburtsdatum,
+        adresse,
       ];
-      const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
-      queryPromise(queryAdress, dataAdress).then(result => {
-        adresse = result.insertId;
-        const data: [string, string, string, string, string, number] = [
-          firstname,
-          lastname,
-          password,
-          email,
-          geburtsdatum,
-          adresse,
-        ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
-        queryPromise(query, data).then(results => {
-          res.status(201).send({
-            message: 'Neuer Nutzer erstellt!',
-            createdUser: results.insertId,
+      console.log(data);
+      const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Neuer Nutzer erstellt!',
+          createdUser: results.insertId,
+        });
+      }).catch((error) => {
+          console.log('Error: ' + error);
+          res.status(400).send({
+            message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
           });
-        }).catch(() => {
-            res.status(400).send({
-              message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
-            });
-          }
-        );
-      });
-    } else {
-      res.status(400).send({
-        message: 'Nicht alle Felder ausgefüllt.',
-      });
+        }
+      );
     }
-  });
-
+  );
 
   /*****************************************************************************
    *           Cargonaut       *
@@ -682,14 +664,14 @@ export function app(): express.Express {
     res.status(404).send('this data request is  not supported');
   });
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
-  // Serve static files from /browser
+// Example Express Rest API endpoints
+// server.get('/api/**', (req, res) => { });
+// Serve static files from /browser
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'
   }));
 
-  // All regular routes use the Universal engine
+// All regular routes use the Universal engine
   server.get('*', (req, res) => {
     res.render(indexHtml, {req, providers: [{provide: APP_BASE_HREF, useValue: req.baseUrl}]});
   });

@@ -1,19 +1,19 @@
 <div mat-dialog-content class="container" style="flex: 1 1 auto">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group row">
-      <label for="firstName">Vorname</label> <br>
-      <input id="firstName" type="text" formControlName="firstName" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"/>
-      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-        <div *ngIf="f.firstName.errors.required">Vorname wird benötigt</div>
+      <label for="firstname">Vorname</label> <br>
+      <input id="firstname" type="text" formControlName="firstname" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }"/>
+      <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
+        <div *ngIf="f.firstname.errors.required">Vorname wird benötigt</div>
       </div>
     </div>
     <div class="form-group row">
-      <label for="lastName">Nachname</label> <br>
-      <input id="lastName" type="text" formControlName="lastName" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"/>
-      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-        <div *ngIf="f.lastName.errors.required">Nachname wird benötigt</div>
+      <label for="lastname">Nachname</label> <br>
+      <input id="lastname" type="text" formControlName="lastname" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }"/>
+      <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
+        <div *ngIf="f.lastname.errors.required">Nachname wird benötigt</div>
       </div>
     </div>
     <div class="form-group row">
@@ -45,7 +45,7 @@
     </div>
   </form>
   <div mat-dialog-actions class="row">
-    <button [disabled]="loading" class="btn btn-primary">
+    <button (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
       Registrieren
     </button>
