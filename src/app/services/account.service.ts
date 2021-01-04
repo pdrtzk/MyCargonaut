@@ -67,15 +67,28 @@ export class AccountService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/cargonaut', { // TODO: if db model has same value names simply add user to body
-      firstname: user.firstname,
-      lastname: user.lastname,
-      password: user.password,
-      email: user.email,
-      geburtsdatum: user.birthday
-    }).
-      toPromise().then(() => {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        password: user.password,
+        email: user.email,
+        geburtsdatum: user.birthday
+      }).toPromise().then(() => {
         // this.login(user.email, user.password).then(() => resolve());
         resolve();
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  public async getUser(id: number): Promise<Cargonaut> {
+    const http = this.http;
+    return new Promise<Cargonaut>(async (resolve, reject) => {
+      await http.get('http://localhost:4200/api/cargonaut/' + id).toPromise().then((res: any) => {
+        console.log('cargonaut: ' + res);
+        const user: Cargonaut = {};
+        resolve(user);
       }).catch(error => {
         console.log('Error: ' + error);
         reject(error);
