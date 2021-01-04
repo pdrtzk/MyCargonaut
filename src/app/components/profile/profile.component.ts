@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
   vehiclesUser: Vehicle [];
   ownProfile: boolean;
 
-  editProfileForm: FormGroup;
+  picsrc: string | ArrayBuffer = '../../../assets/images/person-placeholder.jpg';
   submitted = false;
 
 
@@ -128,10 +128,21 @@ export class ProfileComponent implements OnInit {
     document.getElementById('user-info').style.display = 'none';
   }
 
+  cancelPic(): void {
+    document.getElementById('picButton').style.display = 'block';
+    document.getElementById('edit-profile-pic').style.display = 'none';
+  }
+
+  editPic(): void {
+    document.getElementById('picButton').style.display = 'none';
+    document.getElementById('edit-profile-pic').style.display = 'block';
+  }
+
   submitEditUser(user: Cargonaut): void {
     // todo: error
     // todo: send to service
     this.user = user;
+    console.log('ok');
     document.getElementById('editProfileForm').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
   }
@@ -161,4 +172,14 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  onSelectFile(event) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      // tslint:disable-next-line:no-shadowed-variable
+      reader.onload = (event) => { // called once readAsDataURL is completed
+        this.picsrc = event.target.result;
+      };
+    }
+  }
 }

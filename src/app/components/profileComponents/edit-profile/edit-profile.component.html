@@ -1,4 +1,4 @@
-<form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()" id="editProfileForm">
+<form [formGroup]="editProfileForm" id="editProfileForm">
   <div class="error"></div>
   <div class="row form-group">
     <div class="col-6">
@@ -26,7 +26,7 @@
     <button  class="btn btn-primary form-button" id="editProfileCancelBtn" (click)="cancelEditProfile()">
       Abbrechen
     </button>
-    <button  class="btn btn-primary form-button" id="editProfileSubmitBtn">
+    <button  class="btn btn-primary form-button" id="editProfileSubmitBtn" (click)="onSubmit()">
       Bestätigen
     </button>
   </div>

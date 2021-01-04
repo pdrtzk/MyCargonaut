@@ -26,11 +26,13 @@ export class EditProfileComponent implements OnInit {
   }
 
   cancelEditProfile(): void {
+    this.editProfileForm.reset({firstName: this.user.firstname, lastName: this.user.lastname, birthday: this.user.birthday});
     document.getElementById('editProfileForm').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
   }
 
   onSubmit(): void {
+    console.log('testeee');
     this.user.firstname = this.editProfileForm.controls.firstName.value;
     this.user.lastname = this.editProfileForm.controls.lastName.value;
     this.user.birthday = this.editProfileForm.controls.birthday.value;

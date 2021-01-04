@@ -1,13 +1,20 @@
 
 <div class="row">
   <div class="col-sm-3 text-center ">
-    <img class="img-responsive" src="../../../assets/images/person-placeholder.jpg">
+    <img class="img-responsive" [src]="picsrc">
 
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
       <button class="editButton bot-row" type="button">Meine Nachrichten</button>
-      <button class="editButton bot-row" type="button">Profilbild ändern</button>
+      <button class="editButton bot-row" type="button" id="picButton" (click)="editPic()">Profilbild ändern</button>
+
+      <div id="edit-profile-pic">
+        <input type='file' name="pic" id="pic" (change)="onSelectFile($event)">
+        <label class="pick-pic form-button" for="pic">Datei wählen</label>
+        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Bestätigen</button>
+      </div>
+
       <button class="editButton bot-row" type="button">Passwort ändern</button>
       <button class="editButton bot-row" type="button">Nutzer entfernen</button>
     </ng-template>
@@ -37,7 +44,7 @@
       </div>
     </div>
 
-    <app-edit-profile id="editProfileForm" [user]="user"></app-edit-profile>
+    <app-edit-profile id="editProfileForm" [user]="user" (submitCallback)="submitEditUser($event)"></app-edit-profile>
 
     <div class="row row-margin-top">
       <div class="col">

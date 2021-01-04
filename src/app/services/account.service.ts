@@ -11,7 +11,6 @@ export class AccountService {
 
   constructor(private http: HttpClient, private alertService: AlertService) {
     this.userSubject.subscribe(value => this.authenticatedUser = value);
-
   }
 
   private authenticatedUser: Cargonaut;

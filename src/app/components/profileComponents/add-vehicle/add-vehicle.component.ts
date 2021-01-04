@@ -31,10 +31,8 @@ export class AddVehicleComponent implements OnInit {
   }
 
   onSubmit(): void{
-    console.log('hhhhhhh');
-    console.log(this.addVehicleForm.controls.type.value);
     if (this.addVehicleForm.invalid){
-      console.log('NO INVALID');
+      console.log('TODO: ERROR');
       return;
     }
     this.vehicle.type.type = this.getVehicleTypeFromString(this.addVehicleForm.controls.type.value);
@@ -46,8 +44,6 @@ export class AddVehicleComponent implements OnInit {
       this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
       this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
     }
-
-    console.log(this.vehicle.type.type);
     this.submitCallback.emit(this.vehicle);
 
     this.addVehicleForm.reset();

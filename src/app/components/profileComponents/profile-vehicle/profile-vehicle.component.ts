@@ -66,7 +66,19 @@ export class ProfileVehicleComponent implements OnInit {
   }
 
   resetForm(): void {
-   this.editVehicleForm.reset();
+   this.editVehicleForm.reset({
+     type: this.vehicle.type.type,
+     model: this.vehicle.type.description,
+     seats: this.vehicle.seats,
+     comment: this.vehicle.comment,
+   });
+   if (this.vehicle.type.type !== VehicleTypeType.PKW){
+     this.editVehicleForm.reset({
+       length: this.vehicle.hold.length,
+       width: this.vehicle.hold.width,
+       height: this.vehicle.hold.height
+     });
+   }
   }
 
   getVehicleTypeString(): string {
