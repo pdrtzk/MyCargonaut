@@ -21,6 +21,20 @@ export class AccountService {
     return this.authenticatedUser;
   }
 
+  public async isLoggedIn(): Promise<boolean> {
+    const http = this.http;
+    return new Promise<boolean>(async (resolve, reject) => {
+      await http.get('http://localhost:4200/api/login').toPromise().then((res: any) => {
+        this.userSubject.next(res.user);
+        resolve(true);
+      }).catch(error => {
+        this.userSubject.next(null);
+        console.log('Error: ' + error);
+        resolve(false);
+      });
+    });
+  }
+
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
