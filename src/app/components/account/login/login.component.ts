@@ -48,11 +48,14 @@ export class LoginComponent implements OnInit {
       res => {
         user = res;
         this.loading = false;
+        const returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+        this.router.navigateByUrl(returnUrl, {replaceUrl: true});
         this.alertService.success('Angemeldet.');
         this.closeEvent.emit(true);
       },
       error => {
         /* TODO: Error message für Benutzer verständlich ausgeben + Fehlermeldung im Pop up nicht im Hintergrund */
+        console.log(error);
         this.alertService.error(error);
         this.loading = false;
       });

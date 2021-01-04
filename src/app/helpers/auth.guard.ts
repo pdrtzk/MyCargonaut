@@ -1,20 +1,14 @@
 import {Injectable} from '@angular/core';
 import {Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {LoginComponent} from '../components/account/login/login.component';
-import {Cargonaut} from '../../shared/cargonaut.model';
-import {switchMap, take} from 'rxjs/operators';
-import {of} from 'rxjs';
-import {MatDialog} from '@angular/material/dialog';
-import {AppComponent} from '../app.component';
-import {AccountComponent} from '../components/account/account.component';
 import {AccountService} from '../services/account.service';
+import {AlertService} from '../components/alert/alert.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(readonly accountService: AccountService, private router: Router, private dialog: MatDialog) {
+  constructor(readonly accountService: AccountService, private router: Router, private alertService: AlertService) {
   }
 
   /** Returns true whenever the user is authenticated */
@@ -28,27 +22,24 @@ export class AuthGuard implements CanActivate {
   }
 
   // Implements single route user authentication guarding
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    // TODO: Hintergrund "verstecken", wenn noch nicht angemeldet...
-    // TODO: Nach Logout direkt wieder zu Home zurück
+  async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    console.log('auth guard opens pop up on state url: ' + state.url + ' and activated route outlet: ' + route.url.toString());
+
+    await this.accountService.isLoggedIn();
     const user = this.accountService.user;
+
     console.log('can activate logged in? ' + !!user);
     if (user) {
       // authorised so return true
       return true;
+    } else {
+
+      console.log('if logged in shouldn\'t be here');
+      // not logged in so redirect to login page with the return url});
+      await this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}, replaceUrl: true});
+      this.router.navigate([], {replaceUrl: true});
+      this.alertService.info('Bitte melden Sie sich vorher an.');
+      return false;
     }
-
-    // not logged in so redirect to login page with the return url
-
-    // this.router.navigate(['/account/login'], { queryParams: { returnUrl: state.url }});
-    console.log('auth guard opens pop up on: ' + state.url);
-    const dialogRef = AccountComponent.openDialog(this.dialog);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('closed: ' + result);
-      this.router.navigate([state.url]).then();
-    });
-    return false;
-
   }
 }

@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
-import {AlertService} from '../components/alert/alert.service';
 import {Subject} from 'rxjs';
 
 @Injectable({
@@ -9,9 +8,8 @@ import {Subject} from 'rxjs';
 })
 export class AccountService {
 
-  constructor(private http: HttpClient, private alertService: AlertService) {
+  constructor(private http: HttpClient) {
     this.userSubject.subscribe(value => this.authenticatedUser = value);
-
   }
 
   private authenticatedUser: Cargonaut;
@@ -58,7 +56,6 @@ export class AccountService {
     console.log('logout called');
     return new Promise(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/logout', {}).toPromise().then(() => {
-        this.authenticatedUser = null;
         this.userSubject.next(null);
         resolve();
       }).catch(error => {

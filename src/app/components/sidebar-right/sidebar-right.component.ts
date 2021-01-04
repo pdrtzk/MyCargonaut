@@ -14,6 +14,7 @@ export class SidebarRightComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.userLoggedIn = !! value);
+    this.accountService.isLoggedIn();
   }
 
   async onLogout() {
