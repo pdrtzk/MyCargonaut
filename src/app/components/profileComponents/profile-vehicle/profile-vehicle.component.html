@@ -22,12 +22,12 @@
     </ng-template>
 
     <div class="margin-top">
-      <span class="descriptor">Typ: </span>{{getVehicleType()}}
+      <span class="descriptor">Typ: </span>{{getVehicleTypeString()}}
     </div>
     <div>
       <span class="descriptor">Sitzplätze: </span>{{vehicle.seats}}
     </div>
-    <div *ngIf="vehicle.type.type != 'pkw'">
+    <div *ngIf="getVehicleType() !== 'pkw'">
       <span class="descriptor">Stauraum: </span> {{vehicle.hold.getSpace()}} m<sup>3</sup>
     </div>
     <div *ngIf="vehicle.comment.length > 0">
@@ -47,7 +47,8 @@
         <option ngValue="pkw">PKW</option>
         <option ngValue="lkw">LKW</option>
         <option ngValue="bus">Transporter</option>
-
+        <option ngValue="plane">Flugzeug</option>
+        <option ngValue="boat">Schiff</option>
       </select>
     </div>
     <div class="col-6">

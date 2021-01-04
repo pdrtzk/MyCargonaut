@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Rating} from '../../../shared/rating.model';
-import {Address} from '../../../shared/address.model';
 import {Vehicle} from '../../../shared/vehicle.model';
-import {VehicleType} from '../../../shared/vehicle-type.model';
+import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
@@ -34,23 +33,15 @@ export class ProfileComponent implements OnInit {
     this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
 
-    let addressUser: Address;
-    addressUser = {
-      plz: '12345',
-      street: 'Musterstraße',
-      housenumber: '12a',
-      city: 'Musterstadt'
-    };
-
     // user for not own profile
+   /*
     this.user = {
       firstname: 'Erika',
       lastname: 'Musterfrau',
       birthday: new Date('1994-08-21'),
       email: 'erika@mustermann.de',
       password: 'test',
-      address: {},
-    };
+    };*/
 
     let rating1: Rating;
     rating1 = {
@@ -68,12 +59,12 @@ export class ProfileComponent implements OnInit {
 
     let vehicleType1: VehicleType;
     vehicleType1 = {
-      type: 'pkw',
+      type: VehicleTypeType.PKW,
       description: 'Audi 5120x'
     };
     let vehicleType2: VehicleType;
     vehicleType2 = {
-      type: 'bus',
+      type: VehicleTypeType.LKW,
       description: 'Nissan 350z'
     };
     const hold1: Hold = new Hold(3.0, 2.0, 1.5);
@@ -103,22 +94,14 @@ export class ProfileComponent implements OnInit {
     this.vehiclesUser = [vehicle1, vehicle2];
 
     // todo: get ratings and vehicles for user
-
-
-    this.editProfileForm = this.formBuilder.group({
-      firstName: [this.user.firstname, Validators.required],
-      lastName: [this.user.lastname, Validators.required],
-      birthday: [this.user.birthday, Validators.required],
-      street: [this.user.address.street, Validators.required],
-      housenumber: [this.user.address.housenumber, Validators.required],
-      plz: [this.user.address.plz, Validators.required],
-      city: [this.user.address.city, Validators.required],
-    });
+    console.log(this.user.firstname);
+    console.log(this.user.birthday);
 
   }
 
   ngOnInit(): void {
-
+    this.myuser = this.accountService.user;
+    this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
   }
 
@@ -128,12 +111,16 @@ export class ProfileComponent implements OnInit {
     return result / this.ratingsUser.length;
   }
 
+  getUser(): Cargonaut {
+    return this.user;
+  }
+
   getUserName(): string {
     return this.user.firstname + ' ' + this.user.lastname;
   }
 
   getBirthday(): string {
-    return this.user.birthday.toLocaleDateString();
+    return new Date(this.user.birthday).toLocaleDateString();
   }
 
   editProfile(): void {
@@ -141,23 +128,10 @@ export class ProfileComponent implements OnInit {
     document.getElementById('user-info').style.display = 'none';
   }
 
-  onSubmit(): void {
-    if (this.editProfileForm.invalid) {
-      return;
-    }
+  submitEditUser(user: Cargonaut): void {
+    // todo: error
     // todo: send to service
-    this.user.firstname = this.editProfileForm.controls.firstName.value;
-    this.user.lastname = this.editProfileForm.controls.lastName.value;
-    this.user.birthday = this.editProfileForm.controls.birthday.value;
-    this.user.address.street = this.editProfileForm.controls.street.value;
-    this.user.address.housenumber = this.editProfileForm.controls.housenumber.value;
-    this.user.address.plz = this.editProfileForm.controls.plz.value;
-    this.user.address.city = this.editProfileForm.controls.city.value;
-    document.getElementById('editProfileForm').style.display = 'none';
-    document.getElementById('user-info').style.display = 'block';
-  }
-
-  cancelEditProfile(): void {
+    this.user = user;
     document.getElementById('editProfileForm').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
   }
@@ -177,15 +151,13 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  submitAddVehicle(ve: Vehicle){
-    // todo: add to database
-    this.vehiclesUser.push(ve);
-  }
-
   addVehicle(): void {
     const test = this.dialog.open(AddVehicleComponent);
-    test.afterClosed().subscribe(result => {
-      this.submitAddVehicle(result);
+    const sub = test.componentInstance.submitCallback.subscribe((result: Vehicle) => {
+      console.log(result.seats);
+      this.vehiclesUser.push(result);
+    });
+    test.afterClosed().subscribe(() => {
     });
   }
 

@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
-import {Post} from '../../shared/post.model';
+import {DriveStatus, Post, PostType} from '../../shared/post.model';
+import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -100,15 +101,16 @@ export class PostService {
   getPostById(id: number): Post {
     return {
       id: 1,
+      status: DriveStatus.AUFGETRAGEN,
       start_time: new Date(2020, 12, 31, 23, 40),
       end_time: new Date(2021, 1, 1, 10, 50),
       payment: 'Paypal',
-      type: 'Angebot',
+      type: PostType.OFFER,
       vehicle: {
         id: 3,
         type: {
           id: 1,
-          type: 'PKW',
+          type: VehicleTypeType.PKW,
           description: 'vw golf'
         },
         seats: 3,
@@ -136,7 +138,8 @@ export class PostService {
           firstname: 'Max',
           lastname: 'Mustermann'
         },
-        type: 'Angebot',
+        type: PostType.OFFER,
+        status: DriveStatus.AUFGETRAGEN,
         start_time: new Date(2020, 12, 32, 5, 30),
         end_time: new Date(2020, 12, 32, 10, 30),
         /*        startlocation: {
@@ -147,7 +150,7 @@ export class PostService {
                 },*/
         vehicle: {
           type: {
-            type: 'pkw'
+            type: VehicleTypeType.PKW
           }
         }
       }, {
@@ -155,7 +158,8 @@ export class PostService {
           firstname: 'Lisa',
           lastname: 'Müller'
         },
-        type: 'Angebot',
+        status: DriveStatus.AUFGETRAGEN,
+        type: PostType.OFFER,
         start_time: new Date(2020, 12, 32, 5, 30),
         end_time: new Date(2020, 12, 32, 10, 30),
         /*        startlocation: {
@@ -166,11 +170,12 @@ export class PostService {
                 },*/
         vehicle: {
           type: {
-            type: 'plane'
+            type: VehicleTypeType.PLANE
           }
         }
       }, {
-        type: 'Gesuch',
+      status: DriveStatus.AUFGETRAGEN,
+        type: PostType.SEARCHING,
         author: {
           firstname: 'Angela',
           lastname: 'Merkel'
@@ -185,7 +190,7 @@ export class PostService {
                 },*/
         vehicle: {
           type: {
-            type: 'lkw'
+            type: VehicleTypeType.LKW,
           }
         }
       }

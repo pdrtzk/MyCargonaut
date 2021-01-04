@@ -1,4 +1,4 @@
-import {Address} from './address.model';
+
 
 export interface Cargonaut {
   id?: number;
@@ -7,5 +7,5 @@ export interface Cargonaut {
   email?: string;
   password?: string;
   birthday?: Date;
-  address?: Address;
+  avgRating?: number;
 }

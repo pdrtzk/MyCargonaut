@@ -8,7 +8,8 @@
         <option ngValue="pkw">PKW</option>
         <option ngValue="lkw">LKW</option>
         <option ngValue="bus">Transporter</option>
-
+        <option ngValue="plane">Flugzeug</option>
+        <option ngValue="boat">Schiff</option>
       </select>
     </div>
     <div class="col-6">
@@ -27,7 +28,7 @@
     </div>
   </div>
 
-  <div *ngIf="vehicle.type.type !== 'pkw'" >
+  <div *ngIf="addVehicleForm.controls.type.value !== 'pkw'" >
     <h4>Stauraum</h4>
     <div class="row form-group">
       <div class="col-6">
@@ -48,10 +49,10 @@
   </div>
 
   <div class="form-group">
-    <button  class="btn btn-primary addVehicleCancelBtn form-button"  (click)="onCancel()">
+    <button  class="btn btn-primary addVehicleCancelBtn form-button"  [mat-dialog-close]="false" (click)="onCancel()">
       Abbrechen
     </button>
-    <button  class="btn btn-primary form-button" id="addVehicleSubmitBtn" [mat-dialog-close]="onSubmit()" (click)="onSubmit()">
+    <button  class="btn btn-primary form-button" id="addVehicleSubmitBtn" [mat-dialog-close]="true" (click)="onSubmit()">
       Bestätigen
     </button>
   </div>

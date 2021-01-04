@@ -6,7 +6,7 @@
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
-      <button class="editButton bot-row" type="button">Meine Posts</button>
+      <button class="editButton bot-row" type="button">Meine Nachrichten</button>
       <button class="editButton bot-row" type="button">Profilbild ändern</button>
       <button class="editButton bot-row" type="button">Passwort ändern</button>
       <button class="editButton bot-row" type="button">Nutzer entfernen</button>
@@ -29,10 +29,6 @@
           </div>
           <p class="margin-top"><span class="descriptor">Emailadresse: </span>{{user.email}}</p>
           <p><span class="descriptor">Geburtsdatum: </span>{{getBirthday()}}</p>
-          <p>
-            <span class="descriptor">Adresse: </span>
-            {{user.address.street}} {{user.address.housenumber}}, {{user.address.plz}} {{user.address.city}}
-          </p>
         </div>
         <ng-template #elseBlock>
           <h3>{{getUserName()}}</h3>
@@ -41,18 +37,7 @@
       </div>
     </div>
 
-    <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()" id="editProfileForm">
-      <div class="error"></div>
-    <app-edit-profile id="app-edit-profile" [editProfileForm]="editProfileForm"></app-edit-profile>
-      <div class="form-group">
-        <button  class="btn btn-primary form-button" id="editProfileCancelBtn" (click)="cancelEditProfile()">
-          Abbrechen
-        </button>
-        <button  class="btn btn-primary form-button" id="editProfileSubmitBtn">
-          Bestätigen
-        </button>
-      </div>
-    </form>
+    <app-edit-profile id="editProfileForm" [user]="user"></app-edit-profile>
 
     <div class="row row-margin-top">
       <div class="col">
