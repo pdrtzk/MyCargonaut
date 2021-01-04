@@ -31,7 +31,6 @@ export class HeaderComponent implements OnInit {
   }
 
   async onLogout() {
-    console.log('onLogout');
     await this.accountService.logout();
   }
 

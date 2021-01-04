@@ -37,7 +37,7 @@ export function app(): express.Express {
     if (err) {
       console.log('Database connection failed: ', err);
     } else {
-      console.log('Database is connected');
+      console.log('Database is connected.');
     }
   });
 
@@ -148,7 +148,6 @@ export function app(): express.Express {
         geburtsdatum,
         adresse,
       ];
-      console.log(data);
       const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, adresse) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
       queryPromise(query, data).then(results => {
         res.status(201).send({
@@ -156,7 +155,6 @@ export function app(): express.Express {
           createdUser: results.insertId,
         });
       }).catch((error) => {
-          console.log('Error: ' + error);
           res.status(400).send({
             message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
           });

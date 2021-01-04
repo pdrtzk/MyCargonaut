@@ -23,18 +23,15 @@ export class AuthGuard implements CanActivate {
 
   // Implements single route user authentication guarding
   async canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    console.log('auth guard opens pop up on state url: ' + state.url + ' and activated route outlet: ' + route.url.toString());
 
     await this.accountService.isLoggedIn();
     const user = this.accountService.user;
 
-    console.log('can activate logged in? ' + !!user);
     if (user) {
       // authorised so return true
       return true;
     } else {
 
-      console.log('if logged in shouldn\'t be here');
       // not logged in so redirect to login page with the return url});
       await this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}, replaceUrl: true});
       this.router.navigate([], {replaceUrl: true});

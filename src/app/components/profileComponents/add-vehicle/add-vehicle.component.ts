@@ -39,7 +39,6 @@ export class AddVehicleComponent implements OnInit {
     this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
     this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
     this.submitCallback.emit(this.vehicle);
-    console.log('test');
     return this.vehicle;
   }
 

@@ -55,7 +55,6 @@ export class LoginComponent implements OnInit {
       },
       error => {
         /* TODO: Error message für Benutzer verständlich ausgeben + Fehlermeldung im Pop up nicht im Hintergrund */
-        console.log(error);
         this.alertService.error(error);
         this.loading = false;
       });

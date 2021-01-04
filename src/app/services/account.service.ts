@@ -41,7 +41,6 @@ export class AccountService {
         password
       }).toPromise().then((res: any) => {
         this.authenticatedUser = res.user;
-        console.log(this.authenticatedUser.firstname);
         this.userSubject.next(res.user);
         resolve(res.user);
       }).catch(error => {
@@ -53,7 +52,6 @@ export class AccountService {
 
   public async logout(): Promise<void> {
     const http = this.http;
-    console.log('logout called');
     return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/logout', {}).toPromise().then(() => {
         this.userSubject.next(null);
