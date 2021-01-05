@@ -12,6 +12,8 @@ export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
   private readonly postId: number;
+  loggedInUserIsOwner = true; // todo
+  editModeOn = false;
 
   constructor(private postService: PostService, private route: ActivatedRoute) {
     this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
@@ -19,7 +21,11 @@ export class PostComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.post = this.postService.getPostById(1); // TODO: use this.postId as id
+    this.post = this.postService.getPostById(this.postId);
     this.relatedPosts = this.postService.getMorePosts();
+  }
+
+  toggleEditMode(): void {
+    this.editModeOn = !this.editModeOn;
   }
 }

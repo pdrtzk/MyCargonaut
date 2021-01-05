@@ -15,6 +15,12 @@
     <div class="post-top-row">
       <!-- Buttons -->
       <div>
+        <button class="post-button" *ngIf="loggedInUserIsOwner && !editModeOn" (click)="toggleEditMode()">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="toggleEditMode()">
+          <mat-icon>cancel</mat-icon>
+        </button>
         <button class="post-button">
           <mat-icon>email</mat-icon>
         </button>
@@ -24,89 +30,96 @@
       </div>
     </div>
   </div>
-  <div class="post-top-row">
-    <div style="flex: 4; padding: 10px">
-      <!-- main part -->
-      <div class="post-column">
-        <div class="post-top-row post-space-between">
-          <!-- icons -->
-          <div class="post-top-row">
-            <div style="margin-right: 30px; margin-top: 20px">
-              <!-- cargonaut star rating -->
-              <app-star-rating [starCount]="4"></app-star-rating>
-            </div>
-            <div>
-              <!-- payment method -->
-              <div style="display: flex; flex-direction: row;">
-                <mat-icon style="align-self: center">payment</mat-icon>
-                <p class="post-value" style="padding-left: 10px">{{post?.payment?.type}}</p>
+  <!-- edit mode off -->
+  <div *ngIf="!editModeOn">
+    <div class="post-top-row">
+      <div style="flex: 4; padding: 10px">
+        <!-- main part -->
+        <div class="post-column">
+          <div class="post-top-row post-space-between">
+            <!-- icons -->
+            <div class="post-top-row">
+              <div style="margin-right: 30px; margin-top: 20px">
+                <!-- cargonaut star rating -->
+                <app-star-rating [starCount]="4"></app-star-rating>
               </div>
-              <p class="post-label">Zahlungsart</p>
+              <div>
+                <!-- payment method -->
+                <div style="display: flex; flex-direction: row;">
+                  <mat-icon style="align-self: center">payment</mat-icon>
+                  <p class="post-value" style="padding-left: 10px;">{{post?.payment}}</p>
+                </div>
+                <p class="post-label">Zahlungsart</p>
+              </div>
+            </div>
+            <div class="post-top-row">
+              <div style="text-align: right">
+                <!-- Price -->
+                <p class="post-value-price">{{post?.price}} €</p>
+                <p class="post-label">Preis</p>
+              </div>
             </div>
           </div>
           <div class="post-top-row">
-            <div style="text-align: right">
-              <!-- Price -->
-              <p class="post-value-price">{{post?.price}} €</p>
-              <p class="post-label">Preis</p>
+            <!-- text / comment -->
+            <p class="post-comment-text">{{'...'}}</p> <!-- todo use post comment -->
+          </div>
+        </div>
+        <div class="post-top-row" style="margin-top: 150px">
+          <!-- weitere Vorschläge (Label) -->
+          <p class="post-label">Andere Kunden haben auch angesehen:</p>
+        </div>
+        <div class="post-top-row" style="justify-content: space-between">
+          <!-- weitere Vorschläge (content) -->
+          <div *ngFor="let relPost of relatedPosts">
+            <app-post-display-card [relPost]="relPost"></app-post-display-card>
+          </div>
+        </div>
+      </div>
+      <div style="flex: 1; padding: 10px">
+        <!-- right -->
+        <div style="padding-left: 50px">
+          <div style="margin-bottom: -100px">
+            <mat-icon style="font-size: 180px; color: #005B52">directions_car</mat-icon>  <!-- todo dynamic icon -->
+          </div>
+          <div style="text-align: right;">
+            <!-- Fahrzeugtyp -->
+            <p class="post-large-grey-text">{{post?.vehicle?.type?.type}}</p>
+          </div>
+          <div>
+            <!-- Sitzplätze -->
+            <p class="post-green-text post-right-align-narrow">{{post?.seats || 0}} Sitzplätze</p>
+          </div>
+          <div>
+            <!-- Gepäckstücke -->
+            <p class="post-green-text post-right-align-narrow">{{post?.vehicle?.hold || 0}} Ladeplätze</p>
+          </div>
+          <div>
+            <!-- Standort -->
+            <div class="post-top-row post-space-between">
+              <mat-icon style="margin-top: 20px; color: #005B52">location_on</mat-icon>
+              <p class="post-green-text" style="font-size: 20px">{{post?.startlocation?.city}}</p>
             </div>
+            <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
+              {{post?.start_time?.toLocaleDateString()}}, {{post?.start_time?.toLocaleTimeString()}}
+            </p>
           </div>
-        </div>
-        <div class="post-top-row">
-          <!-- text / comment -->
-          <p class="post-comment-text">{{'...'}}</p> <!-- todo use post comment -->
-        </div>
-      </div>
-      <div class="post-top-row" style="margin-top: 150px">
-        <!-- weitere Vorschläge (Label) -->
-        <p class="post-label">Andere Kunden haben auch angesehen:</p>
-      </div>
-      <div class="post-top-row" style="justify-content: space-between">
-        <!-- weitere Vorschläge (content) -->
-        <div *ngFor="let relPost of relatedPosts">
-          <app-post-display-card [relPost]="relPost"></app-post-display-card>
+          <div>
+            <!-- Zielort -->
+            <div class="post-top-row post-space-between">
+              <mat-icon style="margin-top: 20px; color: #005B52">flag</mat-icon>
+              <p class="post-green-text" style="font-size: 20px">{{post?.endlocation?.city}}</p>
+            </div>
+            <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
+              {{post?.end_time?.toLocaleDateString()}}, {{post?.end_time?.toLocaleTimeString()}}
+            </p>
+          </div>
         </div>
       </div>
     </div>
-    <div style="flex: 1; padding: 10px">
-      <!-- right -->
-      <div style="padding-left: 50px">
-        <div style="margin-bottom: -100px">
-          <mat-icon style="font-size: 180px; color: #005B52">directions_car</mat-icon>  <!-- todo dynamic icon -->
-        </div>
-        <div style="text-align: right;">
-          <!-- Fahrzeugtyp -->
-          <p class="post-large-grey-text">{{post?.vehicle?.type?.type}}</p>
-        </div>
-        <div>
-          <!-- Sitzplätze -->
-          <p class="post-green-text post-right-align-narrow">{{post?.seats || 0}} Sitzplätze</p>
-        </div>
-        <div>
-          <!-- Gepäckstücke -->
-          <p class="post-green-text post-right-align-narrow">{{post?.vehicle?.hold || 0}} Ladeplätze</p>
-        </div>
-        <div>
-          <!-- Standort -->
-          <div class="post-top-row post-space-between">
-            <mat-icon style="margin-top: 20px; color: #005B52">location_on</mat-icon>
-            <p class="post-green-text" style="font-size: 20px">{{post?.startlocation?.city}}</p>
-          </div>
-          <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-            {{post?.start_time?.toLocaleDateString()}}, {{post?.start_time?.toLocaleTimeString()}}
-          </p>
-        </div>
-        <div>
-          <!-- Zielort -->
-          <div class="post-top-row post-space-between">
-            <mat-icon style="margin-top: 20px; color: #005B52">flag</mat-icon>
-            <p class="post-green-text" style="font-size: 20px">{{post?.endlocation?.city}}</p>
-          </div>
-          <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-            {{post?.end_time?.toLocaleDateString()}}, {{post?.end_time?.toLocaleTimeString()}}
-          </p>
-        </div>
-      </div>
-    </div>
+  </div>
+  <!-- edit mode on -->
+  <div>
+    <p>edit mode</p>
   </div>
 </div>
