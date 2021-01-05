@@ -4,6 +4,7 @@ import {Rating} from '../../../shared/rating.model';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
+import { DatePipe } from '@angular/common'
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
@@ -15,7 +16,8 @@ import {VehicleService} from '../../services/vehicle.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  providers: [DatePipe]
 })
 
 export class ProfileComponent implements OnInit {
@@ -29,7 +31,8 @@ export class ProfileComponent implements OnInit {
   submitted = false;
 
 
-  constructor(private formBuilder: FormBuilder, private accountService: AccountService, private vehicleService: VehicleService, private dialog: MatDialog) {
+  // tslint:disable-next-line:max-line-length
+  constructor(private formBuilder: FormBuilder, public datepipe: DatePipe, private accountService: AccountService, private vehicleService: VehicleService, private dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -92,7 +95,7 @@ export class ProfileComponent implements OnInit {
     this.vehiclesUser = [vehicle1, vehicle2];
 
     // todo: get ratings and vehicles for user
-    this.vehicleService.getAllVehicles(this.user.id);
+  //  this.vehicleService.getAllVehicles(this.user.id);
 
   }
 
@@ -111,7 +114,11 @@ export class ProfileComponent implements OnInit {
   }
 
   getBirthday(): string {
-    return new Date(this.user.birthday).toLocaleDateString();
+    return this.datepipe.transform(this.user.birthday, 'yyyy-MM-dd');
+  }
+
+  getBirthdayFormat(): string {
+    return this.datepipe.transform(this.user.birthday, 'dd.MM.yyyy');
   }
 
   editProfile(): void {
