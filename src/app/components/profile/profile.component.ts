@@ -4,7 +4,7 @@ import {Rating} from '../../../shared/rating.model';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
@@ -23,8 +23,8 @@ import {VehicleService} from '../../services/vehicle.service';
 export class ProfileComponent implements OnInit {
   user: Cargonaut; // the user to whom the profile belongs to - get through id from service later on
   myuser: Cargonaut; // the logged in user - get from service later
-  ratingsUser: Rating [];
-  vehiclesUser: Vehicle [];
+  ratingsUser: Rating [] = [];
+  vehiclesUser: Vehicle [] = [];
   ownProfile: boolean;
 
   picsrc: string | ArrayBuffer = '../../../assets/images/person-placeholder.jpg';
@@ -40,6 +40,7 @@ export class ProfileComponent implements OnInit {
     this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
+    this.getVehiclesForUser();
 
     let rating1: Rating;
     rating1 = {
@@ -55,48 +56,26 @@ export class ProfileComponent implements OnInit {
       author: this.user
     };
 
-
-    let vehicleType1: VehicleType;
-    vehicleType1 = {
-      type: VehicleTypeType.PKW,
-      description: 'Audi 5120x'
-    };
-    let vehicleType2: VehicleType;
-    vehicleType2 = {
-      type: VehicleTypeType.LKW,
-      description: 'Nissan 350z'
-    };
-    const hold1: Hold = new Hold(3.0, 2.0, 1.5);
-
-    let vehicle1: Vehicle;
-    vehicle1 = {
-      id: 1,
-      owner: this.myuser,
-      type: vehicleType1,
-      comment: 'Sehr verlässlich, unter 2000km.',
-      seats: 5,
-    };
-
-    let vehicle2: Vehicle;
-    vehicle2 = {
-      id: 2,
-      owner: this.myuser,
-      type: vehicleType2,
-      comment: 'Viel Stauraum.',
-      seats: 2,
-      hold: hold1
-    };
-
-
     console.log('Firstname:' + this.user.firstname);
     console.log(this.user.id);
 
     this.ratingsUser = [rating1, rating2];
-    this.vehiclesUser = [vehicle1, vehicle2];
-
     // todo: get ratings and vehicles for user
-  //  this.vehicleService.getAllVehicles(this.user.id);
+  }
 
+  async getVehiclesForUser(): Promise<void> {
+    let tempVehicles: Vehicle[];
+    await this.vehicleService.getAllVehicles(this.user.id).then(
+      res => {
+        tempVehicles = res;
+      }
+    );
+    tempVehicles.forEach(async elem => {
+      await this.vehicleService.getVehicleHold(elem).then(
+        res => {
+          this.vehiclesUser.push(res);
+        });
+      });
   }
 
   getStarAverage(): number {
@@ -152,19 +131,34 @@ export class ProfileComponent implements OnInit {
     // todo: submit car via service
   }
 
-  submitDeleteVehicle(car: Vehicle): void {
-    const index = this.vehiclesUser.findIndex(s => s.id === car.id);
-    // todo: submit car via service
-    if (index > -1) {
-      this.vehiclesUser.splice(index, 1);
-    }
+  async submitDeleteVehicle(car: Vehicle): Promise<void> {
+    await this.vehicleService.deleteVehicle(car.id).then(
+      res => {
+        const index = this.vehiclesUser.findIndex(s => s.id === car.id);
+        if (index > -1) {
+          this.vehiclesUser.splice(index, 1);
+        }
+      }
+    );
+  }
+
+  async addVehicleToDatabase(vehicle: Vehicle): Promise<void> {
+    await this.vehicleService.addVehicle(this.user.id, vehicle).then(
+      res => {
+        vehicle.id = res;
+        this.vehiclesUser.push(vehicle);
+      },
+      error => {
+        const errorMsg = 'Fahrzeug konnte nicht hinzugefügt werden.' + error;
+        document.getElementById('profileErrorAdd').innerHTML = errorMsg;
+      }
+    );
   }
 
   addVehicle(): void {
     const test = this.dialog.open(AddVehicleComponent);
     const sub = test.componentInstance.submitCallback.subscribe((result: Vehicle) => {
-      console.log(result.seats);
-      this.vehiclesUser.push(result);
+      this.addVehicleToDatabase(result);
     });
     test.afterClosed().subscribe(() => {
     });

@@ -60,7 +60,7 @@ database.connect(function (err) {
 app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     next();
 });
 function queryPromise(sql, data) {
@@ -279,8 +279,10 @@ app.post('/vehicle/:owner', function (req, res) {
     var laenge = req.body.length;
     var breite = req.body.width;
     var hoehe = req.body.height;
+    var kommentar = req.body.comment;
+    var modell = req.body.model;
     var ladeflaeche;
-    if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer) {
+    if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer && modell) {
         var dataLade = [
             laenge,
             breite,
@@ -294,8 +296,11 @@ app.post('/vehicle/:owner', function (req, res) {
                 anzahlSitzplaetze,
                 ladeflaeche,
                 besitzer,
+                modell,
+                kommentar
             ];
-            var query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer) VALUES (NULL, ?, ?, ?, ?);';
+            // tslint:disable-next-line:max-line-length
+            var query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
             queryPromise(query, data).then(function (results) {
                 res.status(201).send({
                     message: 'Neues Fahrzeug erstellt!',
@@ -325,10 +330,19 @@ app.get('/vehicle/:id', function (req, res) {
         id,
     ];
     var query = 'SELECT * FROM fahrzeug WHERE id = ?;';
+    var query2 = 'SELECT * FROM laderaum WHERE id =?;';
     queryPromise(query, data).then(function (results) {
         if (results.length > 0) {
-            res.status(200).send({
-                vehicle: results[0],
+            var data2 = [results[0].ladeflaeche];
+            queryPromise(query2, data2).then(function (results2) {
+                res.status(200).send({
+                    vehicle: results[0],
+                    hold: results2[0]
+                });
+            })["catch"](function () {
+                res.status(400).send({
+                    message: 'Fehler beim Getten des Fahrzeugs!',
+                });
             });
         }
         else {

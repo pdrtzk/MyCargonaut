@@ -41,9 +41,13 @@ export class AddVehicleComponent implements OnInit {
     this.vehicle.seats = this.addVehicleForm.controls.seats.value;
     this.vehicle.comment = this.addVehicleForm.controls.comment.value;
     if (this.vehicle.type.type !== VehicleTypeType.PKW)  {
-      this.vehicle.hold.length = this.addVehicleForm.controls.length.value;
-      this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
-      this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
+    this.vehicle.hold.length = this.addVehicleForm.controls.length.value;
+    this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
+    this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
+    } else {
+      this.vehicle.hold.length = 1;
+      this.vehicle.hold.height = 1;
+      this.vehicle.hold.width = 1;
     }
     this.submitCallback.emit(this.vehicle);
 
