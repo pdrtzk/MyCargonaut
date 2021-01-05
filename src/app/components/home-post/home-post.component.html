@@ -3,23 +3,32 @@
     <div class="col-5">
       <div class="row">
         <div class="col-6">
-          <h3 class="green-color bold">Lisa Müller</h3>
+          <h3 class="green-color bold">{{post.author.firstname}} {{post.author.lastname}}</h3>
         </div>
-        <div class="col-6 post-type-search">
-          <h3 class="green-color bold">Gesuch</h3>
+        <div class="col-6 post-type-search"
+             *ngClass="{'post-type-search': post.type == 'Gesuch', 'post-type-offer': post.type == 'Angebot'}">
+          <h3 class="bold" *ngIf="{'color': post.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type}}</h3>
         </div>
       </div>
+      s
       <div class="row">
         <div class="col-6 margin-1">
-          <h4 class="bold">18.12.2020</h4>
+          <h4 class="bold">
+            {{post.start_time.getDay()}}.{{post.start_time.getMonth()}}.{{post.start_time.getFullYear()}}
+            -
+            {{post.end_time.getDay()}}.{{post.end_time.getMonth()}}.{{post.end_time.getFullYear()}}
+          </h4>
         </div>
         <div class="col-6 margin-1">
-          <h4 class="bold">18:00-23:00</h4>
+          <h4 class="bold">
+            {{post.start_time.getHours()}}:{{post.start_time.getMinutes()}}
+            -
+            {{post.end_time.getHours()}}:{{post.end_time.getMinutes()}}</h4>
         </div>
       </div>
       <div class="row justify-content-start">
         <div class="col-6">
-          <h6 class="bold">3 Sitzplätze</h6>
+          <h6 class="bold">{{post.seats}} Sitzplätze</h6>
         </div>
       </div>
     </div>
@@ -34,7 +43,7 @@
               </svg>
             </div>
             <div class="col-9">
-              <h3 class="green-color bold">Lollar</h3>
+              <h3 class="green-color bold">{{post.startlocation}}</h3>
             </div>
           </div>
         </div>

@@ -24,13 +24,15 @@
 }
 
 .post-type-search {
-  background-color: #e5e5e5;
+  background-color: #005B52;
   border-radius: 25px;
   height: 2.5rem;
 }
 
 .post-type-offer {
-
+  background-color: #e5e5e5;
+  border-radius: 25px;
+  height: 2.5rem;
 }
 
 .margin-1 {
