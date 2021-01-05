@@ -108,7 +108,6 @@ app.post('/login', (req: Request, res: Response) => {
         lastname: rows[0].lastname,
         email: rows[0].email,
         birthday: rows[0].geburtsdatum,
-        address: rows[0].adresse
       };
       // @ts-ignore
       req.session.user = user;
@@ -453,8 +452,7 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
             cargonaut,
             preis,
           ];
-          const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) ' +
-            'VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+          const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
           queryPromise(query, data).then(resultPost => {
             res.status(201).send({
               message: 'Neuer Post erstellt!',
@@ -462,8 +460,7 @@ app.post('/post/:cargonaut', async (req: Request, res: Response) => {
             });
           });
         }).catch(() => {
-            res.status(400).send({
-              message: 'Fehler beim Erstellen eines Zielortes.',
+            res.status(400).send({              message: 'Fehler beim Erstellen eines Zielortes.',
             });
           }
         );

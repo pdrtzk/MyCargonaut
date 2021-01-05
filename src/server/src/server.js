@@ -130,7 +130,6 @@ app.post('/login', function (req, res) {
                 lastname: rows[0].lastname,
                 email: rows[0].email,
                 birthday: rows[0].geburtsdatum,
-                address: rows[0].adresse
             };
             // @ts-ignore
             req.session.user = user;
@@ -390,25 +389,25 @@ app.post('/post/:cargonaut', function (req, res) { return __awaiter(void 0, void
     var cargonaut, startzeit, ankunftZeit, bezahlungsart, fahrzeug, anzahlSitzplaetze, beschreibung, typ, preis, strasse, hausnr, plz, ort, zielStrasse, zielHausnr, zielPlz, zielStadt, laenge, breite, hoehe, standort, zielort, laderaum, dataAdress, queryAdress;
     return __generator(this, function (_a) {
         cargonaut = Number(req.params.cargonaut);
-        startzeit = req.body.startzeit;
-        ankunftZeit = req.body.ankunftZeit;
-        bezahlungsart = req.body.bezahlungsart;
-        fahrzeug = req.body.vehicle;
-        anzahlSitzplaetze = req.body.anzahlSitzplaetze;
-        beschreibung = req.body.beschreibung;
-        typ = req.body.typ;
-        preis = req.body.price;
-        strasse = req.body.street;
-        hausnr = req.body.number;
-        plz = req.body.plz;
-        ort = req.body.city;
-        zielStrasse = req.body.zielStreet;
-        zielHausnr = req.body.zielNumber;
-        zielPlz = req.body.zielPlz;
-        zielStadt = req.body.zielCity;
-        laenge = req.body.length;
-        breite = req.body.width;
-        hoehe = req.body.height;
+        startzeit = req.body.post.start_time;
+        ankunftZeit = req.body.post.end_time;
+        bezahlungsart = req.body.post.payment;
+        fahrzeug = req.body.post.vehicle.id;
+        anzahlSitzplaetze = req.body.post.seats;
+        beschreibung = req.body.post.description;
+        typ = req.body.post.type;
+        preis = req.body.post.price;
+        strasse = req.body.post.startlocation.street;
+        hausnr = req.body.post.startlocation.housenumber;
+        plz = req.body.post.startlocation.plz;
+        ort = req.body.post.startlocation.city;
+        zielStrasse = req.body.post.endlocation.street;
+        zielHausnr = req.body.post.endlocation.housenumber;
+        zielPlz = req.body.post.endlocation.plz;
+        zielStadt = req.body.post.endlocation.city;
+        laenge = req.body.post.hold.length;
+        breite = req.body.post.hold.width;
+        hoehe = req.body.post.hold.height;
         // create startort
         if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
             fahrzeug && anzahlSitzplaetze && typ && preis && strasse &&
@@ -457,8 +456,7 @@ app.post('/post/:cargonaut', function (req, res) { return __awaiter(void 0, void
                             cargonaut,
                             preis,
                         ];
-                        var query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) ' +
-                            'VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+                        var query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
                         queryPromise(query, data).then(function (resultPost) {
                             res.status(201).send({
                                 message: 'Neuer Post erstellt!',
@@ -466,8 +464,7 @@ app.post('/post/:cargonaut', function (req, res) { return __awaiter(void 0, void
                             });
                         });
                     })["catch"](function () {
-                        res.status(400).send({
-                            message: 'Fehler beim Erstellen eines Zielortes.',
+                        res.status(400).send({ message: 'Fehler beim Erstellen eines Zielortes.',
                         });
                     });
                 })["catch"](function () {
