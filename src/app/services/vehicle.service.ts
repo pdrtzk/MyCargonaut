@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
 import {Subject} from 'rxjs';
 import {Vehicle} from '../../shared/vehicle.model';
+import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -36,7 +37,7 @@ ladeflaeche: 8
           v.comment = elem.kommentar;
           v.id = elem.id;
           v.seats = elem.anzahl_sitzplaetze;
-          v.type.type = v.type.getVehicleType(elem.art);
+          v.type.type = this.getVehicleType(elem.art);
           v.type.description = elem.modell;
           this.allVehiclesUser.push(v);
         });
@@ -123,4 +124,14 @@ ladeflaeche: 8
     });
   }
 
+
+  getVehicleType(type: string): VehicleTypeType {
+    switch (type) {
+      case('PKW') : return VehicleTypeType.PKW;
+      case('LKW') : return VehicleTypeType.LKW;
+      case('Transporter') : return VehicleTypeType.BUS;
+      case('Flugzeug') : return VehicleTypeType.PLANE;
+      case('Schiff') : return VehicleTypeType.BOAT;
+    }
+  }
 }
