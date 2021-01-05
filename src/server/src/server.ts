@@ -104,11 +104,11 @@ app.post('/login', (req: Request, res: Response) => {
   queryPromise(query, data).then(rows => {
     if (rows.length === 1) {
       const user: Cargonaut = {
+        id: rows[0].id,
         firstname: rows[0].firstname,
         lastname: rows[0].lastname,
         email: rows[0].email,
         birthday: rows[0].geburtsdatum,
-        address: rows[0].adresse
       };
       // @ts-ignore
       req.session.user = user;

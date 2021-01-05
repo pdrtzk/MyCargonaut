@@ -28,6 +28,7 @@ export class AccountService {
         password
       }).toPromise().then((res: any) => {
         this.authenticatedUser = res.user;
+        console.log(res);
         console.log(this.authenticatedUser.firstname);
         this.userSubject.next(res.user);
         resolve(res.user);

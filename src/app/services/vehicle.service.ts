@@ -13,6 +13,21 @@ export class VehicleService {
   constructor(private http: HttpClient) {
   }
 
+  // get vehicles
+  public async getAllVehicles(cargonautId: number): Promise<Cargonaut> {
+    console.log('get all vehicles');
+    const http = this.http;
+    return new Promise<Cargonaut>(async (resolve, reject) => {
+      await http.get('http://localhost:8080/vehicles/' + cargonautId.toString(), {
+      }).toPromise().then((res: any) => {
+        console.log(res);
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
   // update vehicle
 
   // add new vehicle

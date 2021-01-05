@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
+import {VehicleService} from '../../services/vehicle.service';
 
 
 @Component({
@@ -28,20 +29,14 @@ export class ProfileComponent implements OnInit {
   submitted = false;
 
 
-  constructor(private formBuilder: FormBuilder, private accountService: AccountService, private dialog: MatDialog) {
+  constructor(private formBuilder: FormBuilder, private accountService: AccountService, private vehicleService: VehicleService, private dialog: MatDialog) {
+  }
+
+  ngOnInit(): void {
 
     this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
-
-    // user for not own profile
-   /*
-    this.user = {
-      firstname: 'Erika',
-      lastname: 'Musterfrau',
-      birthday: new Date('1994-08-21'),
-      email: 'erika@mustermann.de',
-      password: 'test',
-    };*/
+    this.ownProfile = true; // or false, depending on id
 
     let rating1: Rating;
     rating1 = {
@@ -56,6 +51,7 @@ export class ProfileComponent implements OnInit {
       comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
       author: this.user
     };
+
 
     let vehicleType1: VehicleType;
     vehicleType1 = {
@@ -89,20 +85,15 @@ export class ProfileComponent implements OnInit {
     };
 
 
+    console.log('Firstname:' + this.user.firstname);
+    console.log(this.user.id);
 
     this.ratingsUser = [rating1, rating2];
     this.vehiclesUser = [vehicle1, vehicle2];
 
     // todo: get ratings and vehicles for user
-    console.log(this.user.firstname);
-    console.log(this.user.birthday);
+    this.vehicleService.getAllVehicles(this.user.id);
 
-  }
-
-  ngOnInit(): void {
-    this.myuser = this.accountService.user;
-    this.user = this.myuser; // todo: remove
-    this.ownProfile = true; // or false, depending on id
   }
 
   getStarAverage(): number {
