@@ -87,8 +87,8 @@ export function app(): express.Express {
   // checks if User is allowed to use action
   function isPrivileged(permissionId: number) {
     return (req: Request, res: Response, next) => {
-      console.log(req.session.user.id);
-      if (permissionId === Number(req.session.user.id)) {
+      // @ts-ignore
+      if (permissionId === Number(req.session.cookie.user.id)) {
         next();
       } else {
         res.status(403).send({
