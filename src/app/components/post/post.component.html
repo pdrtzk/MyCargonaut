@@ -62,7 +62,7 @@
           </div>
           <div class="post-top-row">
             <!-- text / comment -->
-            <p class="post-comment-text">{{post.description}}</p>
+            <p class="post-comment-text">{{post?.description}}</p>
           </div>
         </div>
         <div class="post-top-row" style="margin-top: 150px">
@@ -125,7 +125,7 @@
         Zahlungsart
       </p>
       <select #paymentSelect (change)="updatePostProperty('payment', paymentSelect.value)">
-        <option selected value="{{post.payment}}">{{post.payment}}</option>
+        <option selected value="{{post?.payment}}">{{post?.payment}}</option>
         <option *ngFor="let payment of supportedPaymentOptions" value="{{payment}}">{{payment}}</option>
       </select>
     </div>
@@ -133,15 +133,15 @@
       <p>
         Preis in €
       </p>
-      <input value="{{post.price}}" #priceInput (change)="updatePostProperty('price', priceInput.value)"/>
+      <input value="{{post?.price}}" #priceInput (change)="updatePostProperty('price', priceInput.value)"/>
     </div>
     <div class="post-edit">
       <p>
         Fahrzeugtyp
       </p>
       <select> <!-- todo change -->
-        <option selected value="{{post.vehicle.type}}">{{post.vehicle.type.type.toString()}}</option>
-        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle.type.type.toString()}}</option>
+        <option selected value="{{post?.vehicle?.type}}">{{post?.vehicle?.type?.type?.toString()}}</option>
+        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.type?.toString()}}</option>
       </select>
     </div>
     <div class="post-edit">
@@ -155,30 +155,30 @@
         freie Ladefläche (L*B*H)
       </p>
       <div style="display: flex; flex-direction: row;">
-        <input #holdLengthInput value="{{post.hold.length}}" (change)="setLength(holdLengthInput.value)"/>
-        <input #holdWidthInput value="{{post.hold.width}}" (change)="setWidth(holdWidthInput.value)"/>
-        <input #holdHeightInput value="{{post.hold.height}}" (change)="setHeight(holdHeightInput.value)"/>
+        <input #holdLengthInput value="{{post?.hold?.length}}" (change)="setLength(holdLengthInput.value)"/>
+        <input #holdWidthInput value="{{post?.hold?.width}}" (change)="setWidth(holdWidthInput.value)"/>
+        <input #holdHeightInput value="{{post?.hold?.height}}" (change)="setHeight(holdHeightInput.value)"/>
       </div>
     </div>
     <div class="post-edit">
       <p>
         Abfahrtsort
       </p>
-      <input #startLocationInput value="{{post.startlocation}}" (change)="startLocationInput.value"/>
+      <input #startLocationInput value="{{post?.startlocation}}" (change)="startLocationInput.value"/>
     </div>
     <div class="post-edit">
       <p>
         Zielort
       </p>
-      <input #endLocationInput value="{{post.endlocation}}" (change)="endLocationInput.value"/>
+      <input #endLocationInput value="{{post?.endlocation}}" (change)="endLocationInput.value"/>
     </div>
     <div class="post-edit">
       <p>
         Startzeit
       </p>
       <div style="display: flex; flex-direction: row;">
-        <input type="date" value="{{post.start_time.toDateString()}}"/> <!-- todo -->
-        <input type="time" value="{{post.start_time.toLocaleTimeString()}}"/>
+        <input type="date" value="{{post?.start_time?.toDateString()}}"/> <!-- todo -->
+        <input type="time" value="{{post?.start_time?.toLocaleTimeString()}}"/>
       </div>
     </div>
     <div class="post-edit">
@@ -195,7 +195,7 @@
         Beschreibung
       </p>
       <div style="display: flex; flex-direction: row;">
-        <textarea #descriptionInput (change)="updatePostProperty('description', descriptionInput.value)">{{post.description}}</textarea>
+        <textarea #descriptionInput (change)="updatePostProperty('description', descriptionInput.value)">{{post?.description}}</textarea>
       </div>
     </div>
   </div>
