@@ -65,11 +65,13 @@ export function app(): express.Express {
     });
   }
 
+
+
   /*****************************************************************************
    *           Authentication - Login / logout / Register       *
    *****************************************************************************/
 
-// insert in header of Route to check if the Persons logged in before executing the action
+  // insert in header of Route to check if the Persons logged in before executing the action
   function isLoggedIn(): (req: Request, res: Response, next: any) => void {
     return (req: Request, res: Response, next) => {
       // @ts-ignore
@@ -82,7 +84,19 @@ export function app(): express.Express {
       }
     };
   }
-
+  // checks if User is allowed to use action
+  function isPrivileged(permissionId: number) {
+    return (req: Request, res: Response, next) => {
+      console.log(req.session.user.id);
+      if (permissionId === Number(req.session.user.id)) {
+        next();
+      } else {
+        res.status(403).send({
+          message: 'You have no Permission to do this.',
+        });
+      }
+    };
+  }
 // check if logged in
   server.get('/api/login', isLoggedIn(), (req: Request, res: Response) => {
     res.status(200).send({
@@ -101,6 +115,7 @@ export function app(): express.Express {
     queryPromise(query, data).then(rows => {
       if (rows.length === 1) {
         const user: Cargonaut = {
+          id: rows[0].id,
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
@@ -198,7 +213,7 @@ export function app(): express.Express {
   });
 
 // Put Cargonaut
-  server.put('/api/cargonaut/:id', (req: Request, res: Response) => {
+  server.put('/api/cargonaut/:id', async (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const firstname: string = req.body.firstname;
     const lastname: string = req.body.lastname;
@@ -325,7 +340,7 @@ export function app(): express.Express {
     const query = 'SELECT * FROM fahrzeug WHERE besitzer = ?;';
     queryPromise(query, data).then(results => {
       const vehicles: Vehicle [] = [];
-      for (const result of results){
+      for (const result of results) {
         const vehicle: Vehicle = {
           id: result.id,
           type: result.art,
@@ -529,7 +544,7 @@ export function app(): express.Express {
     const query = 'SELECT * FROM post WHERE gebucht = ?;';
     queryPromise(query, [0]).then(results => {
       const posts: Post [] = [];
-      for (const result of results){
+      for (const result of results) {
         const post: Post = {
           id: result.id,
           startlocation: result.standort,
@@ -713,7 +728,7 @@ export function app(): express.Express {
     const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
-      for (const result of results){
+      for (const result of results) {
         const rating: Rating = {
           id: result.id,
           author: result.verfasser,
