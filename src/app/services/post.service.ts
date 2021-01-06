@@ -102,6 +102,7 @@ export class PostService {
     return {
       id: 1,
       status: DriveStatus.AUFGETRAGEN,
+      description: 'test',
       start_time: new Date(2020, 12, 31, 23, 40),
       startlocation: 'Gießen',
       end_time: new Date(2021, 1, 1, 10, 50),

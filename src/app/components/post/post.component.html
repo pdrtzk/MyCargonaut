@@ -62,7 +62,7 @@
           </div>
           <div class="post-top-row">
             <!-- text / comment -->
-            <p class="post-comment-text">{{'...'}}</p> <!-- todo use post comment -->
+            <p class="post-comment-text">{{post.description}}</p>
           </div>
         </div>
         <div class="post-top-row" style="margin-top: 150px">
@@ -98,7 +98,7 @@
             <!-- Standort -->
             <div class="post-top-row post-space-between">
               <mat-icon style="margin-top: 20px; color: #005B52">location_on</mat-icon>
-              <p class="post-green-text" style="font-size: 20px">{{post?.startlocation?.city}}</p>
+              <p class="post-green-text" style="font-size: 20px">{{post?.startlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
               {{post?.start_time?.toLocaleDateString()}}, {{post?.start_time?.toLocaleTimeString()}}
@@ -108,7 +108,7 @@
             <!-- Zielort -->
             <div class="post-top-row post-space-between">
               <mat-icon style="margin-top: 20px; color: #005B52">flag</mat-icon>
-              <p class="post-green-text" style="font-size: 20px">{{post?.endlocation?.city}}</p>
+              <p class="post-green-text" style="font-size: 20px">{{post?.endlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
               {{post?.end_time?.toLocaleDateString()}}, {{post?.end_time?.toLocaleTimeString()}}
