@@ -66,13 +66,7 @@ export class AccountService {
   public async register(user: Cargonaut): Promise<void> {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/cargonaut', { // TODO: if db model has same value names simply add user to body
-        firstname: user.firstname,
-        lastname: user.lastname,
-        password: user.password,
-        email: user.email,
-        birthday: user.birthday
-      }).toPromise().then(() => {
+      await http.post('http://localhost:4200/api/cargonaut', user).toPromise().then(() => {
         // this.login(user.email, user.password).then(() => resolve());
         resolve();
       }).catch(error => {
