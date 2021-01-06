@@ -262,14 +262,14 @@ export function app(): express.Express {
     const kommentar: string = req.body.comment;
     const modell: string = req.body.model;
     let ladeflaeche: number;
-    console.log('hi 1');
+
     if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer && modell) {
       const dataLade: [number, number, number] = [
         laenge,
         breite,
         hoehe,
       ];
-      console.log('hi 2');
+
       const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.insertId;
@@ -289,7 +289,6 @@ export function app(): express.Express {
             createdVehicle: results.insertId,
           });
         }).catch(() => {
-          console.log('hi 5');
           res.status(400).send({
               message: 'Fehler beim Erstellen eines Fahrzeugs.',
             });
@@ -297,13 +296,11 @@ export function app(): express.Express {
         );
 
       }).catch(() => {
-        console.log('hi 4');
         res.status(400).send({
           message: 'Fehler beim Erstellen eines Laderaums.',
         });
       });
     } else {
-      console.log('hi 3');
       res.status(400).send({
         message: 'Nicht alle Felder ausgefüllt.',
       });

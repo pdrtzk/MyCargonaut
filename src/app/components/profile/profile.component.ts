@@ -46,9 +46,9 @@ export class ProfileComponent implements OnInit {
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
     this.getVehiclesForUser();
-    this.getRatingsForUser();
+    // this.getRatingsForUser();
 
-/*
+
     let rating1: Rating;
     rating1 = {
       ratingStars: 4,
@@ -63,7 +63,7 @@ export class ProfileComponent implements OnInit {
       author: this.user
     };
 
-    this.ratingsUser = [rating1, rating2];*/
+    this.ratingsUser = [rating1, rating2];
   }
 
   async getVehiclesForUser(): Promise<void> {
