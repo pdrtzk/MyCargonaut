@@ -3,6 +3,8 @@ import {Post} from 'src/shared/post.model';
 import {PostService} from '../../services/post.service';
 import {ActivatedRoute} from '@angular/router';
 import {Vehicle} from '../../../shared/vehicle.model';
+import {Rating} from '../../../shared/rating.model';
+import {Cargonaut} from '../../../shared/cargonaut.model';
 
 @Component({
   selector: 'app-post',
@@ -13,8 +15,9 @@ export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
   private readonly postId: number;
+  currentUser: Cargonaut = {}; // todo
 
-  loggedInUserIsOwner = true; // todo
+  loggedInUserIsOwner = false; // todo
   editModeOn = false;
 
   supportedPaymentOptions: string[] = ['Bar', 'Karte'];
@@ -26,7 +29,7 @@ export class PostComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.post = await this.postService.getSpecificPost(this.postId);
+    this.post = await this.postService.getPostById(this.postId);
     this.relatedPosts = this.postService.getMorePosts(); // todo
   }
 
@@ -57,6 +60,10 @@ export class PostComponent implements OnInit {
 
   setHeight(val: any) {
     this.post.hold.length = val;
+  }
+
+  addRating(rating: Rating): void {
+    console.log(rating);
   }
 
 }

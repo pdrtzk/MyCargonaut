@@ -1,0 +1,10 @@
+<!-- todo schön machen ;) -->
+<p>comment</p>
+<textarea #comment (change)="updateComment(comment.value)">
+  {{rating.comment}}
+</textarea>
+<br>
+<p>stars</p>
+<input type="number" #stars value="{{rating.ratingStars}}" (change)="updateStars(stars.value)">
+<br>
+<button (click)="onAddRating(rating)">SUBMIT</button>

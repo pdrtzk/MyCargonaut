@@ -75,6 +75,19 @@
             <app-post-display-card [relPost]="relPost"></app-post-display-card>
           </div>
         </div>
+        <div
+          *ngIf="!loggedInUserIsOwner"
+        >
+          <hr style="margin-top: 20px; margin-bottom: 20px">
+          <div class="post-top-row">
+            <!-- rating -->
+            <app-add-rating
+              [author]=currentUser
+              [post]=post
+              [onAddRating]=addRating
+            ></app-add-rating>
+          </div>
+        </div>
       </div>
       <div style="flex: 1; padding: 10px">
         <!-- right -->
