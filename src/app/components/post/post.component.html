@@ -119,7 +119,84 @@
     </div>
   </div>
   <!-- edit mode on -->
-  <div>
-    <p>edit mode</p>
+  <div *ngIf="editModeOn">
+    <div class="post-edit">
+      <p>
+        Zahlungsart
+      </p>
+      <select>
+        <option selected value="{{post.payment}}">{{post.payment}}</option>
+        <option *ngFor="let payment of supportedPaymentOptions" value="{{payment}}">{{payment}}</option>
+      </select>
+    </div>
+    <div class="post-edit">
+      <p>
+        Preis in €
+      </p>
+      <input value="{{post.price}}"/>
+    </div>
+    <div class="post-edit">
+      <p>
+        Fahrzeugtyp
+      </p>
+      <select>
+        <option selected value="{{post.vehicle.type}}">{{post.vehicle.type.type.toString()}}</option>
+        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle.type.type.toString()}}</option>
+      </select>
+    </div>
+    <div class="post-edit">
+      <p>
+        freie Sitze
+      </p>
+      <input value="{{post.seats}}"/>
+    </div>
+    <div class="post-edit">
+      <p>
+        freie Ladefläche (L*B*H)
+      </p>
+      <div style="display: flex; flex-direction: row;">
+        <input value="{{post.hold.length}}"/>
+        <input value="{{post.hold.width}}"/>
+        <input value="{{post.hold.height}}"/>
+      </div>
+    </div>
+    <div class="post-edit">
+      <p>
+        Abfahrtsort
+      </p>
+      <input value="{{post.startlocation}}"/>
+    </div>
+    <div class="post-edit">
+      <p>
+        Zielort
+      </p>
+      <input value="{{post.endlocation}}"/>
+    </div>
+    <div class="post-edit">
+      <p>
+        Startzeit
+      </p>
+      <div style="display: flex; flex-direction: row;">
+        <input type="date" value="{{post.start_time.toDateString()}}"/> <!-- todo -->
+        <input type="time" value="{{post.start_time.toLocaleTimeString()}}"/>
+      </div>
+    </div>
+    <div class="post-edit">
+      <p>
+        Ankunftszeit
+      </p>
+      <div style="display: flex; flex-direction: row;">
+        <input type="date" value="{{post.end_time.toDateString()}}"/> <!-- todo -->
+        <input type="time" value="{{post.end_time.toLocaleTimeString()}}"/>
+      </div>
+    </div>
+    <div class="post-edit">
+      <p>
+        Beschreibung
+      </p>
+      <div style="display: flex; flex-direction: row;">
+        <textarea>{{post.description}}</textarea>
+      </div>
+    </div>
   </div>
 </div>

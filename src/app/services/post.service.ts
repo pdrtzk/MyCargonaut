@@ -103,7 +103,9 @@ export class PostService {
       id: 1,
       status: DriveStatus.AUFGETRAGEN,
       start_time: new Date(2020, 12, 31, 23, 40),
+      startlocation: 'Gießen',
       end_time: new Date(2021, 1, 1, 10, 50),
+      endlocation: 'Frankfurt',
       payment: 'Paypal',
       type: PostType.OFFER,
       vehicle: {
@@ -127,7 +129,15 @@ export class PostService {
         birthday: new Date(2000, 12, 24)
       },
       price: 150,
-      closed: false
+      closed: false,
+      hold: {
+        height: 50,
+        length: 120,
+        width: 70,
+        getSpace(): number {
+          return 0;
+        }
+      }
     };
   }
 
