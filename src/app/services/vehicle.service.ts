@@ -29,7 +29,7 @@ ladeflaeche: 8
     console.log('get all vehicles');
     const http = this.http;
     return new Promise<Vehicle[]>(async (resolve, reject) => {
-      await http.get('http://localhost:8080/vehicles/' + cargonautId.toString(), {
+      await http.get('http://localhost:4200/api/vehicles/' + cargonautId.toString(), {
       headers: headersY
       }).toPromise().then((res: any) => {
         res.vehicles.forEach(elem => {
@@ -51,7 +51,7 @@ ladeflaeche: 8
 
   public async getVehicleHold(ve: Vehicle): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
-      await this.http.get('http://localhost:8080/vehicle/' + ve.id, {
+      await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {
       }).toPromise().then((res: any) => {
         console.log(res);
         ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
@@ -70,7 +70,7 @@ ladeflaeche: 8
     console.log('update vehicle');
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:8080/vehicle/' + cargonautId.toString(), {
+      await http.get('http://localhost:4200/api/vehicle/' + cargonautId.toString(), {
       }).toPromise().then((res: any) => {
         console.log(res);
       }).catch(error => {
@@ -91,7 +91,7 @@ ladeflaeche: 8
 
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.post('http://localhost:8080/vehicle/' + cargonautId.toString(), {
+      await http.post('http://localhost:4200/api/vehicle/' + cargonautId.toString(), {
         model,
         type,
         length,
@@ -113,7 +113,7 @@ ladeflaeche: 8
     console.log('delete vehicle');
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.delete('http://localhost:8080/vehicle/' + vehicleId.toString(), {
+      await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {
       }).toPromise().then((res: any) => {
         console.log(res);
         resolve(true);
