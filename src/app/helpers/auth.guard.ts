@@ -34,7 +34,6 @@ export class AuthGuard implements CanActivate {
 
       // not logged in so redirect to login page with the return url});
       await this.router.navigate(['/login'], {queryParams: {returnUrl: state.url}, replaceUrl: true});
-      this.router.navigate([], {replaceUrl: true});
       this.alertService.info('Bitte melden Sie sich vorher an.');
       return false;
     }

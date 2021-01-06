@@ -104,8 +104,7 @@ export function app(): express.Express {
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
-          birthday: rows[0].geburtsdatum,
-          address: rows[0].adresse
+          birthday: rows[0].geburtsdatum
         };
         // @ts-ignore
         req.session.user = user;
@@ -504,7 +503,8 @@ export function app(): express.Express {
         author: result.verfasser,
         price: result.ladeflaeche,
         closed: result.gebucht,
-        description: result.beschreibung
+        description: result.beschreibung,
+        status: null // TODO: get status from db
       };
       res.status(200).send({
         post
@@ -544,7 +544,8 @@ export function app(): express.Express {
           author: result.verfasser,
           price: result.ladeflaeche,
           closed: result.gebucht,
-          description: result.beschreibung
+          description: result.beschreibung,
+          status: null // TODO: get status from db
         };
         posts.push(post);
       }
