@@ -33,4 +33,18 @@ export class PostComponent implements OnInit {
   toggleEditMode(): void {
     this.editModeOn = !this.editModeOn;
   }
+
+  saveChanges(): void {
+    console.log(this.post);
+    this.postService.updatePost(this.post, this.postId).then();
+    this.editModeOn = false;
+  }
+
+  updatePostProperty(propertyName: string, value: any): void {
+    if (!this.post[propertyName]) {
+      return;
+    }
+    this.post[propertyName] = value;
+  }
+
 }

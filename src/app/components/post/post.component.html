@@ -18,8 +18,8 @@
         <button class="post-button" *ngIf="loggedInUserIsOwner && !editModeOn" (click)="toggleEditMode()">
           <mat-icon>edit</mat-icon>
         </button>
-        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="toggleEditMode()">
-          <mat-icon>cancel</mat-icon>
+        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="saveChanges()">
+          <mat-icon>save</mat-icon>
         </button>
         <button class="post-button">
           <mat-icon>email</mat-icon>
@@ -124,7 +124,7 @@
       <p>
         Zahlungsart
       </p>
-      <select>
+      <select #paymentSelect (change)="updatePostProperty('payment', paymentSelect.value)">
         <option selected value="{{post.payment}}">{{post.payment}}</option>
         <option *ngFor="let payment of supportedPaymentOptions" value="{{payment}}">{{payment}}</option>
       </select>
@@ -133,13 +133,13 @@
       <p>
         Preis in €
       </p>
-      <input value="{{post.price}}"/>
+      <input value="{{post.price}}" #priceInput (change)="updatePostProperty('price', priceInput.value)"/>
     </div>
     <div class="post-edit">
       <p>
         Fahrzeugtyp
       </p>
-      <select>
+      <select> <!-- todo change -->
         <option selected value="{{post.vehicle.type}}">{{post.vehicle.type.type.toString()}}</option>
         <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle.type.type.toString()}}</option>
       </select>
@@ -148,7 +148,7 @@
       <p>
         freie Sitze
       </p>
-      <input value="{{post.seats}}"/>
+      <input value="{{post.seats}}" #seatsInput (change)="updatePostProperty('seats', seatsInput.value )"/>
     </div>
     <div class="post-edit">
       <p>
@@ -164,13 +164,13 @@
       <p>
         Abfahrtsort
       </p>
-      <input value="{{post.startlocation}}"/>
+      <input #startLocationInput value="{{post.startlocation}}" (change)="startLocationInput.value"/>
     </div>
     <div class="post-edit">
       <p>
         Zielort
       </p>
-      <input value="{{post.endlocation}}"/>
+      <input #endLocationInput value="{{post.endlocation}}" (change)="endLocationInput.value"/>
     </div>
     <div class="post-edit">
       <p>
@@ -195,7 +195,7 @@
         Beschreibung
       </p>
       <div style="display: flex; flex-direction: row;">
-        <textarea>{{post.description}}</textarea>
+        <textarea #descriptionInput (change)="updatePostProperty('description', descriptionInput.value)">{{post.description}}</textarea>
       </div>
     </div>
   </div>
