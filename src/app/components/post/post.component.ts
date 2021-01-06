@@ -25,9 +25,9 @@ export class PostComponent implements OnInit {
     console.log(this.postId); // only for debugging
   }
 
-  ngOnInit(): void {
-    this.post = this.postService.getPostById(this.postId);
-    this.relatedPosts = this.postService.getMorePosts();
+  async ngOnInit(): Promise<void> {
+    this.post = await this.postService.getSpecificPost(this.postId);
+    this.relatedPosts = this.postService.getMorePosts(); // todo
   }
 
   toggleEditMode(): void {
