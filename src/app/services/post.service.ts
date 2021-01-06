@@ -46,7 +46,7 @@ export class PostService {
   public async createPost(cargonaut: Cargonaut, post: Post): Promise<number> {
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.post('http://localhost:8080/post/' + cargonaut.id, {
+      await http.post('http://localhost:4200/api/post/' + cargonaut.id, {
         post
       }).toPromise().then((res: any) => {
         console.log('Success: ' + res.message);
@@ -61,7 +61,7 @@ export class PostService {
   public async getAllPosts(): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
-      await http.get('http://localhost:8080/posts').toPromise().then((res: any) => {
+      await http.get('http://localhost:4200/api/posts').toPromise().then((res: any) => {
         resolve(res.posts);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -73,7 +73,7 @@ export class PostService {
   public async getSpecificPost(postId: number): Promise<Post> {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
-      await http.get('http://localhost:8080/post/' + postId).toPromise().then((res: any) => {
+      await http.get('http://localhost:4200/api/post/' + postId).toPromise().then((res: any) => {
         resolve(res.post);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -85,7 +85,7 @@ export class PostService {
   public async updatePost(post: Post, postId: number): Promise<Post> {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
-      await http.put('http://localhost:8080/post/' + postId, {
+      await http.put('http://localhost:4200/api/post/' + postId, {
         post
       }).toPromise().then((res: any) => {
         resolve(res.post);

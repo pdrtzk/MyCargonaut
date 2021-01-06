@@ -1,22 +1,22 @@
-<div mat-dialog-content>
+<div mat-dialog-content class="container" style="flex: 1 1 auto">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="firstName">Vorname</label> <br>
-      <input id="firstName" type="text" formControlName="firstName" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }"/>
-      <div *ngIf="submitted && f.firstName.errors" class="invalid-feedback">
-        <div *ngIf="f.firstName.errors.required">Vorname wird benötigt</div>
+    <div class="form-group row">
+      <label for="firstname">Vorname</label> <br>
+      <input id="firstname" type="text" formControlName="firstname" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }"/>
+      <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
+        <div *ngIf="f.firstname.errors.required">Vorname wird benötigt</div>
       </div>
     </div>
-    <div class="form-group">
-      <label for="lastName">Nachname</label> <br>
-      <input id="lastName" type="text" formControlName="lastName" class="form-control"
-             [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }"/>
-      <div *ngIf="submitted && f.lastName.errors" class="invalid-feedback">
-        <div *ngIf="f.lastName.errors.required">Nachname wird benötigt</div>
+    <div class="form-group row">
+      <label for="lastname">Nachname</label> <br>
+      <input id="lastname" type="text" formControlName="lastname" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }"/>
+      <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
+        <div *ngIf="f.lastname.errors.required">Nachname wird benötigt</div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
       <label for="birthday">Geburtstag</label> <br>
       <input id="birthday" type="date" formControlName="birthday" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.birthday.errors }"/>
@@ -25,7 +25,7 @@
         <div *ngIf="f.birthday.errors.pattern">Kein gültiges Datum</div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
       <label for="email">Email-Adresse</label> <br>
       <input id="email" type="email" formControlName="email" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
@@ -34,7 +34,7 @@
         <div *ngIf="f.email.errors.email">Keine gültige Email-Adresse</div>
       </div>
     </div>
-    <div class="form-group">
+    <div class="form-group row">
       <label for="password">Passwort</label> <br>
       <input id="password" type="password" formControlName="password" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.password.errors }"/>
@@ -44,13 +44,11 @@
       </div>
     </div>
   </form>
+  <div mat-dialog-actions class="row">
+    <button (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Registrieren
+    </button>
+    <a routerLink="/login" class="btn-link">Anmelden</a>
+  </div>
 </div>
-<div mat-dialog-actions>
-  <button [disabled]="loading" class="btn btn-primary">
-    <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-    Registrieren
-  </button>
-  <a (click)="showLogin()" class="btn-link">Anmelden</a>
-</div>
-
-

@@ -24,9 +24,6 @@ import {ProfileVehicleComponent} from './components/profileComponents/profile-ve
 import {AddVehicleComponent} from './components/profileComponents/add-vehicle/add-vehicle.component';
 import {EditProfileComponent} from './components/profileComponents/edit-profile/edit-profile.component';
 
-import {JwtInterceptor} from './helpers/jwt.interceptor';
-import {ErrorInterceptor} from './helpers/error.interceptor';
-
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -56,7 +53,7 @@ import {CommonModule} from '@angular/common';
     EditProfileComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     MatIconModule,
     BrowserAnimationsModule,
@@ -65,10 +62,6 @@ import {CommonModule} from '@angular/common';
     ReactiveFormsModule,
     MatDialogModule,
     NgbModule,
-  ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

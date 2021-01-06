@@ -30,9 +30,10 @@ export class AddVehicleComponent implements OnInit {
     });
   }
 
+
   onSubmit(): void{
     if (this.addVehicleForm.invalid){
-      console.log('TODO: ERROR');
+      document.getElementById('errorAddVehicle').innerText = 'Fahrzeugtyp, Model und Sitzanzahl müssen angegeben werden.';
       return;
     }
     this.vehicle.type.type = this.getVehicleTypeFromString(this.addVehicleForm.controls.type.value);
@@ -40,19 +41,34 @@ export class AddVehicleComponent implements OnInit {
     this.vehicle.seats = this.addVehicleForm.controls.seats.value;
     this.vehicle.comment = this.addVehicleForm.controls.comment.value;
     if (this.vehicle.type.type !== VehicleTypeType.PKW)  {
-      this.vehicle.hold.length = this.addVehicleForm.controls.length.value;
-      this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
-      this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
+    this.vehicle.hold.length = this.addVehicleForm.controls.length.value;
+    this.vehicle.hold.height = this.addVehicleForm.controls.height.value;
+    this.vehicle.hold.width = this.addVehicleForm.controls.width.value;
+    } else {
+      this.vehicle.hold.length = 1;
+      this.vehicle.hold.height = 1;
+      this.vehicle.hold.width = 1;
     }
     this.submitCallback.emit(this.vehicle);
 
     this.addVehicleForm.reset();
     this.vehicle = new Vehicle();
+    document.getElementById('errorAddVehicle').innerText = '';
+
     this.dialogRef.close(false);
   }
 
   onCancel(): void {
-    console.log('asdnajsndjkansdj');
+    this.addVehicleForm.reset({
+      type: this.getVehicleStringFromType(VehicleTypeType.PKW),
+      model: '',
+      seats: 0,
+      comment: '',
+      length: 0,
+      height: 0,
+      width: 0
+    });
+
     this.dialogRef.close();
   }
 
