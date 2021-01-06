@@ -11,6 +11,7 @@ import {AccountService} from '../../services/account.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
 import {VehicleService} from '../../services/vehicle.service';
+import {RatingService} from '../../services/rating.service';
 
 
 @Component({
@@ -30,10 +31,14 @@ export class ProfileComponent implements OnInit {
   picsrc: string | ArrayBuffer = '../../../assets/images/person-placeholder.jpg';
   submitted = false;
 
-
-  // tslint:disable-next-line:max-line-length
-  constructor(private formBuilder: FormBuilder, public datepipe: DatePipe, private accountService: AccountService, private vehicleService: VehicleService, private dialog: MatDialog) {
-  }
+  constructor(
+    private formBuilder: FormBuilder,
+    public datepipe: DatePipe,
+    private accountService: AccountService,
+    private vehicleService: VehicleService,
+    private ratingsService: RatingService,
+    private dialog: MatDialog
+  ) {  }
 
   ngOnInit(): void {
 
@@ -41,7 +46,9 @@ export class ProfileComponent implements OnInit {
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
     this.getVehiclesForUser();
+    this.getRatingsForUser();
 
+    /*
     let rating1: Rating;
     rating1 = {
       ratingStars: 4,
@@ -54,12 +61,8 @@ export class ProfileComponent implements OnInit {
       ratingStars: 2,
       comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
       author: this.user
-    };
+    };*/
 
-    console.log('Firstname:' + this.user.firstname);
-    console.log(this.user.id);
-
-    this.ratingsUser = [rating1, rating2];
     // todo: get ratings and vehicles for user
   }
 
@@ -76,6 +79,20 @@ export class ProfileComponent implements OnInit {
           this.vehiclesUser.push(res);
         });
       });
+  }
+
+  async getRatingsForUser(): Promise<void> {
+    let tempRatings: Rating[];
+    await this.ratingsService.getRatingsForUser(this.user.id).then(
+      res => {
+        tempRatings = res;
+      }
+    );
+    tempRatings.forEach(async elem => {
+      // todo: get author from id through accountservice
+      // await this.accountService.getUser(elem.author.id);
+        this.ratingsUser.push(elem);
+    });
   }
 
   getStarAverage(): number {
