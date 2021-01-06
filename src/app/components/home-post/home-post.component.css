@@ -23,14 +23,7 @@
   font-weight: 600;
 }
 
-.post-type-search {
-  background-color: #005B52;
-  border-radius: 25px;
-  height: 2.5rem;
-}
-
-.post-type-offer {
-  background-color: #e5e5e5;
+.post-type {
   border-radius: 25px;
   height: 2.5rem;
 }

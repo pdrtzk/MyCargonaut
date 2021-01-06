@@ -3,32 +3,34 @@
     <div class="col-5">
       <div class="row">
         <div class="col-6">
-          <h3 class="green-color bold">{{post.author.firstname}} {{post.author.lastname}}</h3>
+          <h3
+            class="green-color bold">{{post.author.firstname ? post.author.firstname : 'undefined'}} {{post.author.lastname ? post.author.lastname : 'undefined'}}</h3>
         </div>
-        <div class="col-6 post-type-search"
-             *ngClass="{'post-type-search': post.type == 'Gesuch', 'post-type-offer': post.type == 'Angebot'}">
-          <h3 class="bold" *ngIf="{'color': post.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type}}</h3>
+        <div class="col-6 post-type" *ngIf="{'background-color': post.type == 'Gesuch' ? '#005B52' : '#e5e5e5'}">
+          <h3 class="bold"
+              *ngIf="{'color': post.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type ? post.type : 'Gesuch'}}</h3>
         </div>
       </div>
-      s
       <div class="row">
         <div class="col-6 margin-1">
           <h4 class="bold">
-            {{post.start_time.getDay()}}.{{post.start_time.getMonth()}}.{{post.start_time.getFullYear()}}
-            -
-            {{post.end_time.getDay()}}.{{post.end_time.getMonth()}}.{{post.end_time.getFullYear()}}
+            {{post.start_time ? post.start_time.getDay() : 'undefined'}}
+            .{{post.start_time ? post.start_time.getMonth() : 'undefined'}}
+            .{{post.start_time ? post.start_time.getFullYear() : 'undefined'}}
           </h4>
         </div>
         <div class="col-6 margin-1">
           <h4 class="bold">
-            {{post.start_time.getHours()}}:{{post.start_time.getMinutes()}}
+            {{post.start_time ? post.start_time.getHours() : 'undefined'}}
+            :{{post.start_time ? post.start_time.getMinutes() : 'undefined'}}
             -
-            {{post.end_time.getHours()}}:{{post.end_time.getMinutes()}}</h4>
+            {{post.end_time ? post.end_time.getHours() : 'undefined'}}
+            :{{post.end_time ? post.end_time.getMinutes() : 'undefined'}}</h4>
         </div>
       </div>
       <div class="row justify-content-start">
         <div class="col-6">
-          <h6 class="bold">{{post.seats}} Sitzplätze</h6>
+          <h6 class="bold">{{post.seats ? post.seats : 'undefined'}} Sitzplätze</h6>
         </div>
       </div>
     </div>
@@ -43,7 +45,7 @@
               </svg>
             </div>
             <div class="col-9">
-              <h3 class="green-color bold">{{post.startlocation}}</h3>
+              <h3 class="green-color bold">{{post.startlocation ? post.startlocation : 'Gießen'}}</h3>
             </div>
           </div>
         </div>

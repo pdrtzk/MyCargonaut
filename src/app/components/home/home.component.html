@@ -4,45 +4,51 @@
       <div class="row">
         <div class="col searchbar">
           <form>
-            <label>
-              <input type="text" placeholder="Search.." name="search">
-            </label>
-            <button type="submit" class="search-button"><i class="fa fa-search"></i></button>
+            <div class="row">
+              <div class="col-11">
+                <input id="searchbar" type="text" placeholder="Search.." name="search">
+
+              </div>
+              <div class="col-1">
+                <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+              </div>
+            </div>
           </form>
         </div>
       </div>
       <div class="row">
         <div class="col-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
-            <button class="btn btn-primary" ngbDropdownToggle>Stadt</button>
+            <button class="btn btn-primary" ngbDropdownToggle>{{this.startCity ? this.startCity : 'Stadt'}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem>Action - 1</button>
-              <button ngbDropdownItem>Another Action</button>
+              <button ngbDropdownItem *ngFor="let city of cities" (click)="this.startCity = city">{{city}}</button>
             </div>
           </div>
         </div>
         <div class="col-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
-            <button class="btn btn-primary" ngbDropdownToggle>Entfernung</button>
+            <button class="btn btn-primary"
+                    ngbDropdownToggle>{{this.currPostType ? this.currPostType : 'Angebotstyp' }}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem>Action - 1</button>
-              <button ngbDropdownItem>Another Action</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Angebot'">Angebot</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Gesuch'">Gesuch</button>
             </div>
           </div>
         </div>
         <div class="col-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
-            <button class="btn btn-primary" ngbDropdownToggle>Transporttyp</button>
+            <button class="btn btn-primary"
+                    ngbDropdownToggle>{{this.currVehicle ? this.currVehicle : 'Fahrzeugtyp'}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem>Action - 1</button>
-              <button ngbDropdownItem>Another Action</button>
+              <button ngbDropdownItem *ngFor="let vehicle of vehicles"
+                      (click)="this.currVehicle = vehicle">{{vehicle}}</button>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="col-2">
-      <a routerLink="addpost">
+      <a (click)="showModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="80%" height="80%" fill="#005B52" class="bi bi-plus-circle-fill"
              viewBox="0 0 16 16">
           <path
@@ -52,7 +58,7 @@
     </div>
   </div>
 </div>
-<app-home-post></app-home-post>
+<app-home-post *ngFor="let post of postArray" [post]="post"></app-home-post>
 
 
 

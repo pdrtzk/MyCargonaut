@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {NgbDate, NgbModule, NgbDatepicker, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
-import {Post} from '../../../shared/post.model';
-import {FormsModule} from '@angular/forms';
+import {NgbActiveModal, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
+import {Post} from "../../../shared/post.model";
 
 @Component({
   selector: 'app-new-post-modal',
@@ -21,8 +20,9 @@ export class NewPostModalComponent implements OnInit {
   endDate: any;
   description: string;
   filledForm: boolean;
+  newPost: Post;
 
-  constructor(private calendar: NgbCalendar) {
+  constructor(private calendar: NgbCalendar, public activeModal: NgbActiveModal) {
   }
 
 
@@ -86,7 +86,7 @@ export class NewPostModalComponent implements OnInit {
       console.log('EndCity: ' + this.endCity);
       console.log('Description: ' + this.description);
 
-      // Modal schließen
+      this.closeModal();
     } else {
       this.filledForm = false;
     }
@@ -96,5 +96,26 @@ export class NewPostModalComponent implements OnInit {
     this.currVehicle = undefined;
   }
 
+  closeModal() {
+    this.newPost = {
+      type: this.returnType(this.posttype),
+      vehicle: {
+        type: {
+          type: this.currVehicle
+        }
+      },
+      start_time: this.startDate,
+      end_time: this.endDate,
+      author: {
+        firstname: 'Tina',
+        lastname: 'Turner'
+      }
+    }
+    this.activeModal.close(this.newPost);
+  }
+
+  returnType(type: boolean): string {
+    return type == true ? 'Gesuch' : 'Angebot'
+  }
 
 }

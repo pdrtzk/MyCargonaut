@@ -5,8 +5,6 @@
 .search-button {
   float: right;
   padding: 6px 10px;
-  margin-top: 8px;
-  margin-right: 16px;
   background: #ddd;
   font-size: 17px;
   border: none;
@@ -40,4 +38,8 @@
 
 .shadow {
   box-shadow: 2px 5px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+#searchbar {
+  width: 100%
 }

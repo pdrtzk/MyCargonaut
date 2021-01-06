@@ -1,6 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {HomePostComponent} from './home-post.component';
+import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 describe('HomePostComponent', () => {
   let component: HomePostComponent;
@@ -8,7 +9,9 @@ describe('HomePostComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomePostComponent]
+      imports: [NgbModule],
+      declarations: [HomePostComponent],
+      providers: []
     })
       .compileComponents();
   });

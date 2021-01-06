@@ -2,6 +2,10 @@
   border-radius: 10px;
 }
 
+.modal-dialog {
+  max-width: 100em;
+}
+
 .button-wide {
   width: 100%;
 }

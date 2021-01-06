@@ -1,7 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NewPostModalComponent} from './new-post-modal.component';
-import {NgbDatepicker, NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbDatepicker, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 describe('NewPostModalComponent', () => {
   let component: NewPostModalComponent;
@@ -11,6 +11,7 @@ describe('NewPostModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [NgbModule],
       declarations: [NewPostModalComponent],
+      providers: [NgbActiveModal]
 
     })
       .compileComponents();

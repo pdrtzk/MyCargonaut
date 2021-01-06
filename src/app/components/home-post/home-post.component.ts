@@ -13,9 +13,12 @@ export class HomePostComponent implements OnInit {
   @Input() post: Post;
 
   constructor() {
+
   }
 
   ngOnInit(): void {
+
   }
+
 
 }
