@@ -46,8 +46,8 @@ Cookie:
   "firstname": "Test",
   "lastname": "Tester",
   "password": "test",
-  "email": "test@testasdfsd.de",
-  "geburtsdatum": "18-09-1998"
+  "email": "test@http.de",
+  "birthday": "18-09-1998"
 }
 
 
