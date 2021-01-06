@@ -259,46 +259,57 @@ export function app(): express.Express {
     const laenge: number = req.body.length;
     const breite: number = req.body.width;
     const hoehe: number = req.body.height;
+    const kommentar: string = req.body.comment;
+    const modell: string = req.body.model;
     let ladeflaeche: number;
-    if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer) {
+    console.log('hi 1');
+    if (art && anzahlSitzplaetze && hoehe && breite && laenge && besitzer && modell) {
       const dataLade: [number, number, number] = [
         laenge,
         breite,
         hoehe,
       ];
+      console.log('hi 2');
       const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.insertId;
-        const data: [string, number, number, string] = [
+        const data: [string, number, number, string, string, string] = [
           art,
           anzahlSitzplaetze,
           ladeflaeche,
           besitzer,
+          modell,
+          kommentar
         ];
-        const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer) VALUES (NULL, ?, ?, ?, ?);';
+
+        const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
         queryPromise(query, data).then(results => {
           res.status(201).send({
             message: 'Neues Fahrzeug erstellt!',
             createdVehicle: results.insertId,
           });
         }).catch(() => {
-            res.status(400).send({
+          console.log('hi 5');
+          res.status(400).send({
               message: 'Fehler beim Erstellen eines Fahrzeugs.',
             });
           }
         );
 
       }).catch(() => {
+        console.log('hi 4');
         res.status(400).send({
           message: 'Fehler beim Erstellen eines Laderaums.',
         });
       });
     } else {
+      console.log('hi 3');
       res.status(400).send({
         message: 'Nicht alle Felder ausgefüllt.',
       });
     }
   });
+
 
 // get vehicle -> Alle Infos eines Fahrzeugs
   server.get('/api/vehicle/:id', (req: Request, res: Response) => {
@@ -307,17 +318,19 @@ export function app(): express.Express {
       id,
     ];
     const query = 'SELECT * FROM fahrzeug WHERE id = ?;';
+    const query2 = 'SELECT * FROM laderaum WHERE id =?;';
     queryPromise(query, data).then(results => {
       if (results.length > 0) {
-        const vehicle: Vehicle = {
-          id: results[0].id,
-          type: results[0].art,
-          seats: results[0].anzahl_sitzplaetze,
-          hold: results[0].ladeflaeche,
-          owner: results[0].besitzer
-        };
-        res.status(200).send({
-          vehicle
+        const data2: [string] = [results[0].ladeflaeche];
+        queryPromise(query2, data2).then(results2 => {
+          res.status(200).send({
+            vehicle: results[0],
+            hold: results2[0]
+          });
+        }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Getten des Fahrzeugs!',
+          });
         });
       } else {
         res.status(400).send({
@@ -467,8 +480,7 @@ export function app(): express.Express {
               cargonaut,
               preis,
             ];
-            const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) ' +
-              'VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+            const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
             queryPromise(query, data).then(resultPost => {
               res.status(201).send({
                 message: 'Neuer Post erstellt!',

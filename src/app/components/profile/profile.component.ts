@@ -48,7 +48,7 @@ export class ProfileComponent implements OnInit {
     this.getVehiclesForUser();
     this.getRatingsForUser();
 
-    /*
+/*
     let rating1: Rating;
     rating1 = {
       ratingStars: 4,
@@ -61,13 +61,14 @@ export class ProfileComponent implements OnInit {
       ratingStars: 2,
       comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
       author: this.user
-    };*/
+    };
 
-    // todo: get ratings and vehicles for user
+    this.ratingsUser = [rating1, rating2];*/
   }
 
   async getVehiclesForUser(): Promise<void> {
     let tempVehicles: Vehicle[];
+    this.vehiclesUser.length = 0; // deletes all elements
     await this.vehicleService.getAllVehicles(this.user.id).then(
       res => {
         tempVehicles = res;
@@ -83,6 +84,7 @@ export class ProfileComponent implements OnInit {
 
   async getRatingsForUser(): Promise<void> {
     let tempRatings: Rating[];
+    this.ratingsUser.length = 0; // deletes all elements
     await this.ratingsService.getRatingsForUser(this.user.id).then(
       res => {
         tempRatings = res;
