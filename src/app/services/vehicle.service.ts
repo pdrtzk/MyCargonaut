@@ -25,8 +25,8 @@ ladeflaeche: 8
  */
   // get vehicles
   public async getAllVehicles(cargonautId: number): Promise<Vehicle[]> {
+    this.allVehiclesUser.length = 0;
     const headersY = new HttpHeaders({'Content-Type': 'application/json'});
-    console.log('get all vehicles');
     const http = this.http;
     return new Promise<Vehicle[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/vehicles/' + cargonautId.toString(), {

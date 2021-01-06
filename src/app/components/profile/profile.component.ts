@@ -68,7 +68,7 @@ export class ProfileComponent implements OnInit {
 
   async getVehiclesForUser(): Promise<void> {
     let tempVehicles: Vehicle[];
-    this.vehiclesUser.length = 0; // deletes all elements
+    this.vehiclesUser = []; // deletes all elements
     await this.vehicleService.getAllVehicles(this.user.id).then(
       res => {
         tempVehicles = res;
