@@ -17,7 +17,7 @@ export class PostComponent implements OnInit {
   loggedInUserIsOwner = true; // todo
   editModeOn = false;
 
-  supportedPaymentOptions: string[] = ['bar', 'paypal']; // todo
+  supportedPaymentOptions: string[] = ['Bar', 'Karte'];
   vehicles: Vehicle[];
 
   constructor(private postService: PostService, private route: ActivatedRoute) {
@@ -41,10 +41,22 @@ export class PostComponent implements OnInit {
   }
 
   updatePostProperty(propertyName: string, value: any): void {
-    if (!this.post[propertyName]) {
-      return;
+    if (this.post[propertyName]) {
+      this.post[propertyName] = value;
     }
-    this.post[propertyName] = value;
+  }
+
+
+  setLength(val: any) {
+    this.post.hold.length = val;
+  }
+
+  setWidth(val: any) {
+    this.post.hold.length = val;
+  }
+
+  setHeight(val: any) {
+    this.post.hold.length = val;
   }
 
 }

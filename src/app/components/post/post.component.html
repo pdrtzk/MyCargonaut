@@ -155,9 +155,9 @@
         freie Ladefläche (L*B*H)
       </p>
       <div style="display: flex; flex-direction: row;">
-        <input value="{{post.hold.length}}"/>
-        <input value="{{post.hold.width}}"/>
-        <input value="{{post.hold.height}}"/>
+        <input #holdLengthInput value="{{post.hold.length}}" (change)="setLength(holdLengthInput.value)"/>
+        <input #holdWidthInput value="{{post.hold.width}}" (change)="setWidth(holdWidthInput.value)"/>
+        <input #holdHeightInput value="{{post.hold.height}}" (change)="setHeight(holdHeightInput.value)"/>
       </div>
     </div>
     <div class="post-edit">
