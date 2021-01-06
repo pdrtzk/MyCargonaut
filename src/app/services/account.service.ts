@@ -71,7 +71,7 @@ export class AccountService {
         lastname: user.lastname,
         password: user.password,
         email: user.email,
-        geburtsdatum: user.birthday
+        birthday: user.birthday
       }).toPromise().then(() => {
         // this.login(user.email, user.password).then(() => resolve());
         resolve();

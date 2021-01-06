@@ -154,13 +154,13 @@ export function app(): express.Express {
     const lastname: string = req.body.lastname;
     const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
-    const geburtsdatum: string = (req.body.geburtsdatum).toLocaleString();
+    const birthday: string = (req.body.birthday).toLocaleString();
     const data: [string, string, string, string, string] = [
       firstname,
       lastname,
       password,
       email,
-      geburtsdatum,
+      birthday,
     ];
     const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum) VALUES (NULL, ?, ?, ?, ?, ?);';
     queryPromise(query, data).then(results => {

@@ -46,12 +46,8 @@ Cookie:
   "firstname": "Test",
   "lastname": "Tester",
   "password": "test",
-  "email": "test@testasd.de",
-  "geburtsdatum": "18-09-1998",
-  "street": "Teststreet",
-  "number": "123",
-  "plz": "123332",
-  "city": "teststadt"
+  "email": "test@testasdfsd.de",
+  "geburtsdatum": "18-09-1998"
 }
 
 
