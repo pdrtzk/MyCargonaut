@@ -1,12 +1,12 @@
 import {Hold} from './hold.model';
 import {Vehicle} from './vehicle.model';
 import {Cargonaut} from './cargonaut.model';
-import {Address} from './address.model';
+
 
 export interface Post {
   id?: number;
-  startlocation?: Address;
-  endlocation?: Address;
+  startlocation?: string;
+  endlocation?: string;
   start_time?: Date;
   end_time?: Date;
   payment?: string;
@@ -14,9 +14,19 @@ export interface Post {
   vehicle?: Vehicle;
   bookedBy?: Cargonaut [];
   seats?: number;
-  type?: string; // 'Angebot' oder 'Gesuch'
+  type?: PostType; // 'Angebot' oder 'Gesuch'
   author?: Cargonaut;
   price?: number;
   closed?: boolean;
   description?: string;
+  status: DriveStatus;
+}
+
+export enum PostType {
+  OFFER = 'Angebot',
+  SEARCHING = 'Gesuch'
+}
+
+export enum DriveStatus {
+  AUFGETRAGEN, UNTERWEGS, ABGESCHLOSSEN
 }

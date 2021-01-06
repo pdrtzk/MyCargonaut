@@ -1,57 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Rating} from '../../../shared/rating.model';
-import {Address} from '../../../shared/address.model';
 import {Vehicle} from '../../../shared/vehicle.model';
-import {VehicleType} from '../../../shared/vehicle-type.model';
+import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
+import { DatePipe } from '@angular/common';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
+import {VehicleService} from '../../services/vehicle.service';
+import {RatingService} from '../../services/rating.service';
 
 
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css']
+  styleUrls: ['./profile.component.css'],
+  providers: [DatePipe]
 })
 
 export class ProfileComponent implements OnInit {
   user: Cargonaut; // the user to whom the profile belongs to - get through id from service later on
   myuser: Cargonaut; // the logged in user - get from service later
-  ratingsUser: Rating [];
-  vehiclesUser: Vehicle [];
+  ratingsUser: Rating [] = [];
+  vehiclesUser: Vehicle [] = [];
   ownProfile: boolean;
 
-  editProfileForm: FormGroup;
+  picsrc: string | ArrayBuffer = '../../../assets/images/person-placeholder.jpg';
   submitted = false;
 
+  constructor(
+    private formBuilder: FormBuilder,
+    public datepipe: DatePipe,
+    private accountService: AccountService,
+    private vehicleService: VehicleService,
+    private ratingsService: RatingService,
+    private dialog: MatDialog
+  ) {  }
 
-  constructor(private formBuilder: FormBuilder, private accountService: AccountService, private dialog: MatDialog) {
+  ngOnInit(): void {
 
     this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
+    this.ownProfile = true; // or false, depending on id
+    this.getVehiclesForUser();
+    this.getRatingsForUser();
 
-    let addressUser: Address;
-    addressUser = {
-      plz: '12345',
-      street: 'Musterstraße',
-      housenumber: '12a',
-      city: 'Musterstadt'
-    };
-
-    // user for not own profile
-    this.user = {
-      firstname: 'Erika',
-      lastname: 'Musterfrau',
-      birthday: new Date('1994-08-21'),
-      email: 'erika@mustermann.de',
-      password: 'test',
-      address: {},
-    };
-
+    /*
     let rating1: Rating;
     rating1 = {
       ratingStars: 4,
@@ -64,62 +61,38 @@ export class ProfileComponent implements OnInit {
       ratingStars: 2,
       comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
       author: this.user
-    };
-
-    let vehicleType1: VehicleType;
-    vehicleType1 = {
-      type: 'pkw',
-      description: 'Audi 5120x'
-    };
-    let vehicleType2: VehicleType;
-    vehicleType2 = {
-      type: 'bus',
-      description: 'Nissan 350z'
-    };
-    const hold1: Hold = new Hold(3.0, 2.0, 1.5);
-
-    let vehicle1: Vehicle;
-    vehicle1 = {
-      id: 1,
-      owner: this.myuser,
-      type: vehicleType1,
-      comment: 'Sehr verlässlich, unter 2000km.',
-      seats: 5,
-    };
-
-    let vehicle2: Vehicle;
-    vehicle2 = {
-      id: 2,
-      owner: this.myuser,
-      type: vehicleType2,
-      comment: 'Viel Stauraum.',
-      seats: 2,
-      hold: hold1
-    };
-
-
-
-    this.ratingsUser = [rating1, rating2];
-    this.vehiclesUser = [vehicle1, vehicle2];
+    };*/
 
     // todo: get ratings and vehicles for user
-
-
-    this.editProfileForm = this.formBuilder.group({
-      firstName: [this.user.firstname, Validators.required],
-      lastName: [this.user.lastname, Validators.required],
-      birthday: [this.user.birthday, Validators.required],
-      street: [this.user.address.street, Validators.required],
-      housenumber: [this.user.address.housenumber, Validators.required],
-      plz: [this.user.address.plz, Validators.required],
-      city: [this.user.address.city, Validators.required],
-    });
-
   }
 
-  ngOnInit(): void {
+  async getVehiclesForUser(): Promise<void> {
+    let tempVehicles: Vehicle[];
+    await this.vehicleService.getAllVehicles(this.user.id).then(
+      res => {
+        tempVehicles = res;
+      }
+    );
+    tempVehicles.forEach(async elem => {
+      await this.vehicleService.getVehicleHold(elem).then(
+        res => {
+          this.vehiclesUser.push(res);
+        });
+      });
+  }
 
-    this.ownProfile = true; // or false, depending on id
+  async getRatingsForUser(): Promise<void> {
+    let tempRatings: Rating[];
+    await this.ratingsService.getRatingsForUser(this.user.id).then(
+      res => {
+        tempRatings = res;
+      }
+    );
+    tempRatings.forEach(async elem => {
+      // todo: get author from id through accountservice
+      // await this.accountService.getUser(elem.author.id);
+        this.ratingsUser.push(elem);
+    });
   }
 
   getStarAverage(): number {
@@ -128,12 +101,20 @@ export class ProfileComponent implements OnInit {
     return result / this.ratingsUser.length;
   }
 
+  getUser(): Cargonaut {
+    return this.user;
+  }
+
   getUserName(): string {
     return this.user.firstname + ' ' + this.user.lastname;
   }
 
   getBirthday(): string {
-    return this.user.birthday.toLocaleDateString();
+    return this.datepipe.transform(this.user.birthday, 'yyyy-MM-dd');
+  }
+
+  getBirthdayFormat(): string {
+    return this.datepipe.transform(this.user.birthday, 'dd.MM.yyyy');
   }
 
   editProfile(): void {
@@ -141,23 +122,21 @@ export class ProfileComponent implements OnInit {
     document.getElementById('user-info').style.display = 'none';
   }
 
-  onSubmit(): void {
-    if (this.editProfileForm.invalid) {
-      return;
-    }
-    // todo: send to service
-    this.user.firstname = this.editProfileForm.controls.firstName.value;
-    this.user.lastname = this.editProfileForm.controls.lastName.value;
-    this.user.birthday = this.editProfileForm.controls.birthday.value;
-    this.user.address.street = this.editProfileForm.controls.street.value;
-    this.user.address.housenumber = this.editProfileForm.controls.housenumber.value;
-    this.user.address.plz = this.editProfileForm.controls.plz.value;
-    this.user.address.city = this.editProfileForm.controls.city.value;
-    document.getElementById('editProfileForm').style.display = 'none';
-    document.getElementById('user-info').style.display = 'block';
+  cancelPic(): void {
+    document.getElementById('picButton').style.display = 'block';
+    document.getElementById('edit-profile-pic').style.display = 'none';
   }
 
-  cancelEditProfile(): void {
+  editPic(): void {
+    document.getElementById('picButton').style.display = 'none';
+    document.getElementById('edit-profile-pic').style.display = 'block';
+  }
+
+  submitEditUser(user: Cargonaut): void {
+    // todo: error
+    // todo: send to service
+    this.user = user;
+    console.log('ok');
     document.getElementById('editProfileForm').style.display = 'none';
     document.getElementById('user-info').style.display = 'block';
   }
@@ -169,24 +148,47 @@ export class ProfileComponent implements OnInit {
     // todo: submit car via service
   }
 
-  submitDeleteVehicle(car: Vehicle): void {
-    const index = this.vehiclesUser.findIndex(s => s.id === car.id);
-    // todo: submit car via service
-    if (index > -1) {
-      this.vehiclesUser.splice(index, 1);
-    }
+  async submitDeleteVehicle(car: Vehicle): Promise<void> {
+    await this.vehicleService.deleteVehicle(car.id).then(
+      res => {
+        const index = this.vehiclesUser.findIndex(s => s.id === car.id);
+        if (index > -1) {
+          this.vehiclesUser.splice(index, 1);
+        }
+      }
+    );
   }
 
-  submitAddVehicle(ve: Vehicle){
-    // todo: add to database
-    this.vehiclesUser.push(ve);
+  async addVehicleToDatabase(vehicle: Vehicle): Promise<void> {
+    await this.vehicleService.addVehicle(this.user.id, vehicle).then(
+      res => {
+        vehicle.id = res;
+        this.vehiclesUser.push(vehicle);
+      },
+      error => {
+        const errorMsg = 'Fahrzeug konnte nicht hinzugefügt werden.' + error;
+        document.getElementById('profileErrorAdd').innerHTML = errorMsg;
+      }
+    );
   }
 
   addVehicle(): void {
     const test = this.dialog.open(AddVehicleComponent);
-    test.afterClosed().subscribe(result => {
-      this.submitAddVehicle(result);
+    const sub = test.componentInstance.submitCallback.subscribe((result: Vehicle) => {
+      this.addVehicleToDatabase(result);
+    });
+    test.afterClosed().subscribe(() => {
     });
   }
 
+  onSelectFile(event) { // called each time file input changes
+    if (event.target.files && event.target.files[0]) {
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      // tslint:disable-next-line:no-shadowed-variable
+      reader.onload = (event) => { // called once readAsDataURL is completed
+        this.picsrc = event.target.result;
+      };
+    }
+  }
 }

@@ -67,3 +67,33 @@ app-profile-vehicle {
 .form-button:hover {
   background-color: #0b9183;
 }
+
+
+#pic {
+  display:none;
+}
+
+.pick-pic {
+  background-color: #005b52;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  min-width: 120px;
+}
+
+.pick-pic:hover {
+  cursor: pointer;
+  background-color: #0b9183;
+}
+
+#cancelPickPic {
+  margin-left: 2rem;
+}
+
+#edit-profile-pic {
+  display: none;
+}
+
+.error {
+  color: red;
+}

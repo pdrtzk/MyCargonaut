@@ -1,5 +1,6 @@
 <div mat-dialog-content>
 <form [formGroup]="addVehicleForm" class="carForm" id="addVehicleForm-{{vehicle.id}}">
+  <p id="errorAddVehicle"></p>
   <h4>Fahrzeugangaben</h4>
   <div class="row form-group">
     <div class="col-6">
@@ -8,7 +9,8 @@
         <option ngValue="pkw">PKW</option>
         <option ngValue="lkw">LKW</option>
         <option ngValue="bus">Transporter</option>
-
+        <option ngValue="plane">Flugzeug</option>
+        <option ngValue="boat">Schiff</option>
       </select>
     </div>
     <div class="col-6">
@@ -19,7 +21,7 @@
   <div class="row form-group">
     <div class="col-6">
       <label for="seats">Sitzanzahl</label>
-      <input id="seats" type="number" formControlName="seats" class="form-control"/>
+      <input id="seats" type="number" min=0 formControlName="seats" class="form-control"/>
     </div>
     <div class="col-6">
       <label for="comment">Kommentare</label>
@@ -27,31 +29,31 @@
     </div>
   </div>
 
-  <div *ngIf="vehicle.type.type !== 'pkw'" >
+  <div *ngIf="addVehicleForm.controls.type.value !== 'pkw'" >
     <h4>Stauraum</h4>
     <div class="row form-group">
       <div class="col-6">
         <label for="length">Länge</label>
-        <input id="length" type="number" formControlName="length" class="form-control"/>
+        <input id="length" type="number" min=0 formControlName="length" class="form-control"/>
       </div>
       <div class="col-6">
         <label for="width">Breite</label>
-        <input id="width" type="number" formControlName="width" class="form-control"/>
+        <input id="width" type="number" min=0 formControlName="width" class="form-control"/>
       </div>
     </div>
     <div class="row form-group">
       <div class="col-6">
         <label for="height">Höhe</label>
-        <input id="height" type="number" formControlName="height" class="form-control"/>
+        <input id="height" type="number" min=0 formControlName="height" class="form-control"/>
       </div>
     </div>
   </div>
 
   <div class="form-group">
-    <button  class="btn btn-primary addVehicleCancelBtn form-button"  (click)="onCancel()">
+    <button  class="btn btn-primary addVehicleCancelBtn form-button"  [mat-dialog-close]="false" (click)="onCancel()">
       Abbrechen
     </button>
-    <button  class="btn btn-primary form-button" id="addVehicleSubmitBtn" [mat-dialog-close]="onSubmit()" (click)="onSubmit()">
+    <button  class="btn btn-primary form-button" id="addVehicleSubmitBtn"  (click)="onSubmit()">
       Bestätigen
     </button>
   </div>

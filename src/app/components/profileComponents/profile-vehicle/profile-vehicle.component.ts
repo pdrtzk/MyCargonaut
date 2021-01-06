@@ -1,6 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Vehicle} from '../../../../shared/vehicle.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {VehicleTypeType} from '../../../../shared/vehicle-type.model';
+import {Hold} from '../../../../shared/hold.model';
 
 @Component({
   selector: 'app-profile-vehicle',
@@ -20,13 +22,13 @@ export class ProfileVehicleComponent implements OnInit {
 
   ngOnInit(): void {
     this.editVehicleForm = this.formBuilder.group({
-      type: [this.vehicle.type.type, Validators.required],
+      type: [this.getVehicleType(), Validators.required],
       model: [this.vehicle.type.description, Validators.required], // description
       seats: [this.vehicle.seats, Validators.required],
       comment: [this.vehicle.comment],
-      length: [this.vehicle.type.type !== 'pkw' ? this.vehicle.hold.length : 0],
-      width: [this.vehicle.type.type !== 'pkw' ? this.vehicle.hold.width : 0],
-      height: [this.vehicle.type.type !== 'pkw' ? this.vehicle.hold.height : 0],
+      length: [this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0],
+      width: [this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.width : 0],
+      height: [this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.height : 0],
     });
   }
 
@@ -41,17 +43,28 @@ export class ProfileVehicleComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.vehicle.type.type === VehicleTypeType.PKW && this.editVehicleForm.controls.type.value !== 'pwk'){
+      this.vehicle.hold = new Hold(0, 0, 0); // initialize hold
+    }
+
+    if (this.editVehicleForm.invalid){
+      document.getElementById('errorVehicle').innerText = 'Fahrzeugtyp, Modell, Sitzanzahl ' +
+        'müssen angegeben werden. Bei allen Fahrzeugtypen außer PKW müssen zusätzlich die Dimensionen des Stauraums vermerkt werden.';
+      return;
+    }
     const id = this.vehicle.id.toString();
-    this.vehicle.type.type = this.editVehicleForm.controls.type.value;
+    this.vehicle.type.type = this.getVehicleTypeFromString(this.editVehicleForm.controls.type.value);
     this.vehicle.type.description = this.editVehicleForm.controls.model.value;
     this.vehicle.seats = this.editVehicleForm.controls.seats.value;
     this.vehicle.comment = this.editVehicleForm.controls.comment.value;
-    if (this.vehicle.type.type !== 'pkw'){
+    if (this.vehicle.type.type !== VehicleTypeType.PKW){
       this.vehicle.hold.length = this.editVehicleForm.controls.length.value;
       this.vehicle.hold.width = this.editVehicleForm.controls.width.value;
       this.vehicle.hold.height = this.editVehicleForm.controls.height.value;
+    } else {
+      this.vehicle.hold = null;
     }
-
+    document.getElementById('errorVehicle').innerText = '';
     this.submitCallback.emit(this.vehicle);
     document.getElementById('editVehicleForm-' + id).style.display = 'none';
     document.getElementById('vehicleInfo-' + id).style.display = 'block';
@@ -65,17 +78,59 @@ export class ProfileVehicleComponent implements OnInit {
   }
 
   resetForm(): void {
-   this.editVehicleForm.reset();
+   this.editVehicleForm.reset({
+     type: this.getVehicleType(),
+     model: this.vehicle.type.description,
+     seats: this.vehicle.seats,
+     comment: this.vehicle.comment,
+     length: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0,
+     height: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0,
+     width: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0
+   });
+  }
+
+  getVehicleTypeString(): string {
+    switch (this.vehicle.type.type){
+      case VehicleTypeType.PKW:
+        return 'PKW';
+      case VehicleTypeType.LKW:
+        return 'LKW';
+      case VehicleTypeType.BUS:
+        return 'Transporter';
+      case VehicleTypeType.PLANE:
+        return 'Flugzeug';
+      case VehicleTypeType.BOAT:
+        return 'Schiff';
+    }
   }
 
   getVehicleType(): string {
     switch (this.vehicle.type.type){
+      case VehicleTypeType.PKW:
+        return 'pkw';
+      case VehicleTypeType.LKW:
+        return 'lkw';
+      case VehicleTypeType.BUS:
+        return 'bus';
+      case VehicleTypeType.PLANE:
+        return 'plane';
+      case VehicleTypeType.BOAT:
+        return 'boat';
+    }
+  }
+
+  getVehicleTypeFromString(str: string): VehicleTypeType {
+    switch (str){
       case 'pkw':
-        return 'PKW';
+        return VehicleTypeType.PKW;
       case 'lkw':
-        return 'LKW';
+        return VehicleTypeType.LKW;
       case 'bus':
-        return 'Transporter';
+        return VehicleTypeType.BUS;
+      case 'plane':
+        return VehicleTypeType.PLANE;
+      case 'boat':
+        return VehicleTypeType.BOAT;
     }
   }
 }

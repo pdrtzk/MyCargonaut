@@ -1,19 +1,28 @@
 
 <div class="row">
   <div class="col-sm-3 text-center ">
-    <img class="img-responsive" src="../../../assets/images/person-placeholder.jpg">
+    <img class="img-responsive" [src]="picsrc">
 
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
-      <button class="editButton bot-row" type="button">Meine Posts</button>
-      <button class="editButton bot-row" type="button">Profilbild ändern</button>
+      <button class="editButton bot-row" type="button">Meine Nachrichten</button>
+      <button class="editButton bot-row" type="button" id="picButton" (click)="editPic()">Profilbild ändern</button>
+
+      <div id="edit-profile-pic">
+        <input type='file' name="pic" id="pic" (change)="onSelectFile($event)">
+        <label class="pick-pic form-button" for="pic">Datei wählen</label>
+        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Bestätigen</button>
+      </div>
+
       <button class="editButton bot-row" type="button">Passwort ändern</button>
       <button class="editButton bot-row" type="button">Nutzer entfernen</button>
     </ng-template>
   </div>
 
   <div class="col-sm-9">
+    <p class="error" id="profileErrorAdd"></p>
+    <p class="error" id="profileErrorEdit"></p>
     <div class="row" id="user-info">
       <div class="col">
         <div *ngIf="ownProfile; else elseBlock">
@@ -28,11 +37,7 @@
             </button>
           </div>
           <p class="margin-top"><span class="descriptor">Emailadresse: </span>{{user.email}}</p>
-          <p><span class="descriptor">Geburtsdatum: </span>{{getBirthday()}}</p>
-          <p>
-            <span class="descriptor">Adresse: </span>
-            {{user.address.street}} {{user.address.housenumber}}, {{user.address.plz}} {{user.address.city}}
-          </p>
+          <p><span class="descriptor">Geburtsdatum: </span>{{getBirthdayFormat()}}</p>
         </div>
         <ng-template #elseBlock>
           <h3>{{getUserName()}}</h3>
@@ -41,18 +46,7 @@
       </div>
     </div>
 
-    <form [formGroup]="editProfileForm" (ngSubmit)="onSubmit()" id="editProfileForm">
-      <div class="error"></div>
-    <app-edit-profile id="app-edit-profile" [editProfileForm]="editProfileForm"></app-edit-profile>
-      <div class="form-group">
-        <button  class="btn btn-primary form-button" id="editProfileCancelBtn" (click)="cancelEditProfile()">
-          Abbrechen
-        </button>
-        <button  class="btn btn-primary form-button" id="editProfileSubmitBtn">
-          Bestätigen
-        </button>
-      </div>
-    </form>
+    <app-edit-profile id="editProfileForm" [user]="user" (submitCallback)="submitEditUser($event)"></app-edit-profile>
 
     <div class="row row-margin-top">
       <div class="col">

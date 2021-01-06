@@ -1,6 +1,5 @@
-
-
-<form [formGroup]="editProfileForm">
+<form [formGroup]="editProfileForm" id="editProfileForm">
+  <p id="error"></p>
   <div class="row form-group">
     <div class="col-6">
       <label for="firstName">Vorname</label>
@@ -23,26 +22,12 @@
       />
     </div>
   </div>
-
-  <div class="row form-group">
-    <div class="col-6">
-      <label for="street">Straße</label>
-      <input id="street" type="text" formControlName="street" class="form-control"/>
-    </div>
-    <div class="col-6">
-      <label for="housenumber">Hausnummer</label>
-      <input id="housenumber" type="text" formControlName="housenumber" class="form-control"/>
-    </div>
-  </div>
-
-  <div class="row form-group">
-    <div class="col-6">
-      <label for="plz">Postleitzahl</label>
-      <input id="plz" type="text" formControlName="plz" class="form-control"/>
-    </div>
-    <div class="col-6">
-      <label for="city">Stadt</label>
-      <input id="city" type="text" formControlName="city" class="form-control"/>
-    </div>
+  <div class="form-group">
+    <button  class="btn btn-primary form-button" id="editProfileCancelBtn" (click)="cancelEditProfile()">
+      Abbrechen
+    </button>
+    <button  class="btn btn-primary form-button" id="editProfileSubmitBtn" (click)="onSubmit()">
+      Bestätigen
+    </button>
   </div>
 </form>
