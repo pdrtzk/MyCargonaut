@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AccountComponent} from '../account/account.component';
 import {AccountService} from '../../services/account.service';
-import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-header',

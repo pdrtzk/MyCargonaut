@@ -15,7 +15,6 @@ import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
 import {AlertComponent} from './components/alert/alert.component';
-import {AccountComponent} from './components/account/account.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ProfileComponent} from './components/profile/profile.component';
@@ -41,7 +40,6 @@ import {CommonModule} from '@angular/common';
     HeaderComponent,
     HomeComponent,
     AlertComponent,
-    AccountComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,

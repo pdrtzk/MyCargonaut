@@ -5,7 +5,7 @@ import {AlertService} from '../../alert/alert.service';
 import {AccountService} from '../../../services/account.service';
 import {Cargonaut} from '../../../../shared/cargonaut.model';
 
-@Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.component.css']})
+@Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['login.component.css']})
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
