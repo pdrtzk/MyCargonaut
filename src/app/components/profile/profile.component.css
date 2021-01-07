@@ -93,3 +93,7 @@ app-profile-vehicle {
 #edit-profile-pic {
   display: none;
 }
+
+.error {
+  color: red;
+}

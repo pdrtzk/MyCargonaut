@@ -21,6 +21,8 @@
   </div>
 
   <div class="col-sm-9">
+    <p class="error" id="profileErrorAdd"></p>
+    <p class="error" id="profileErrorEdit"></p>
     <div class="row" id="user-info">
       <div class="col">
         <div *ngIf="ownProfile; else elseBlock">
@@ -35,7 +37,7 @@
             </button>
           </div>
           <p class="margin-top"><span class="descriptor">Emailadresse: </span>{{user.email}}</p>
-          <p><span class="descriptor">Geburtsdatum: </span>{{getBirthday()}}</p>
+          <p><span class="descriptor">Geburtsdatum: </span>{{getBirthdayFormat()}}</p>
         </div>
         <ng-template #elseBlock>
           <h3>{{getUserName()}}</h3>

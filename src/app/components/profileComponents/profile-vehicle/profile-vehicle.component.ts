@@ -1,7 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Vehicle} from '../../../../shared/vehicle.model';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {VehicleTypeType} from '../../../../shared/vehicle-type.model';
+import {Hold} from '../../../../shared/hold.model';
 
 @Component({
   selector: 'app-profile-vehicle',
@@ -42,6 +43,15 @@ export class ProfileVehicleComponent implements OnInit {
   }
 
   onSubmit(): void {
+    if (this.vehicle.type.type === VehicleTypeType.PKW && this.editVehicleForm.controls.type.value !== 'pwk'){
+      this.vehicle.hold = new Hold(0, 0, 0); // initialize hold
+    }
+
+    if (this.editVehicleForm.invalid){
+      document.getElementById('errorVehicle').innerText = 'Fahrzeugtyp, Modell, Sitzanzahl ' +
+        'müssen angegeben werden. Bei allen Fahrzeugtypen außer PKW müssen zusätzlich die Dimensionen des Stauraums vermerkt werden.';
+      return;
+    }
     const id = this.vehicle.id.toString();
     this.vehicle.type.type = this.getVehicleTypeFromString(this.editVehicleForm.controls.type.value);
     this.vehicle.type.description = this.editVehicleForm.controls.model.value;
@@ -51,8 +61,10 @@ export class ProfileVehicleComponent implements OnInit {
       this.vehicle.hold.length = this.editVehicleForm.controls.length.value;
       this.vehicle.hold.width = this.editVehicleForm.controls.width.value;
       this.vehicle.hold.height = this.editVehicleForm.controls.height.value;
+    } else {
+      this.vehicle.hold = null;
     }
-
+    document.getElementById('errorVehicle').innerText = '';
     this.submitCallback.emit(this.vehicle);
     document.getElementById('editVehicleForm-' + id).style.display = 'none';
     document.getElementById('vehicleInfo-' + id).style.display = 'block';
@@ -67,18 +79,14 @@ export class ProfileVehicleComponent implements OnInit {
 
   resetForm(): void {
    this.editVehicleForm.reset({
-     type: this.vehicle.type.type,
+     type: this.getVehicleType(),
      model: this.vehicle.type.description,
      seats: this.vehicle.seats,
      comment: this.vehicle.comment,
+     length: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0,
+     height: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0,
+     width: this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0
    });
-   if (this.vehicle.type.type !== VehicleTypeType.PKW){
-     this.editVehicleForm.reset({
-       length: this.vehicle.hold.length,
-       width: this.vehicle.hold.width,
-       height: this.vehicle.hold.height
-     });
-   }
   }
 
   getVehicleTypeString(): string {

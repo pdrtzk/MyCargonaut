@@ -14,11 +14,11 @@ export class SidebarRightComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.userLoggedIn = !! value);
+    this.accountService.isLoggedIn();
   }
 
   async onLogout() {
-    console.log('onLogout');
-    await this.accountService.logout().then(() => this.userLoggedIn = false);
+    await this.accountService.logout();
   }
 
 }

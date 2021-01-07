@@ -5,6 +5,7 @@ import {first} from 'rxjs/operators';
 
 // import { AccountService, AlertService } from '@app/_services';
 import {AlertService} from 'src/app/components/alert/alert.service';
+import {AccountService} from '../../../services/account.service';
 
 @Component({templateUrl: 'register.component.html', selector: 'app-register', styleUrls: ['../account.component.css']})
 export class RegisterComponent implements OnInit {
@@ -18,14 +19,15 @@ export class RegisterComponent implements OnInit {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    // private accountService: AccountService,
+    private accountService: AccountService,
     private alertService: AlertService
-  ) {}
+  ) {
+  }
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       birthday: ['', Validators.required], // Validators.pattern('([1-9]|0[1-9]|1[0-9]|2[0-9]|3[01])\\.([1-9]|0[1-9]|1[012])\\.[0-9]{4})')
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
@@ -50,18 +52,16 @@ export class RegisterComponent implements OnInit {
     }
 
     this.loading = true;
-    /* this.accountService.register(this.form.value)
-      .pipe(first())
-      .subscribe({
-        next: () => {
-          this.alertService.success('Registration successful', {keepAfterRouteChange: true});
-          this.router.navigate(['../login'], {relativeTo: this.route});
-        },
-        error: error => {
-          this.alertService.error(error);
-          this.loading = false;
-        }
-      }); */
+    this.accountService.register(this.form.value).then(
+      () => {
+        this.alertService.success('Registrierung erfolgreich. Sie können sich nun anmelden.', {keepAfterRouteChange: true});
+        this.router.navigate(['../login'], {relativeTo: this.route});
+      },
+      error => {
+        // TODO: Fehler für Benutzer verständlich ausgeben
+        this.alertService.error(error);
+        this.loading = false;
+      });
   }
 
   showLogin() {

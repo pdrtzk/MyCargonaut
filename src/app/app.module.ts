@@ -1,7 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
+import {BookingPageComponent} from './components/booking-page/booking-page.component';
+import { BookingCardComponent } from './components/booking-page/booking-card/booking-card.component';
+import { BookingListComponent } from './components/booking-page/booking-list/booking-list.component';
 
 import {PostComponent} from './components/post/post.component';
 import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
@@ -24,9 +27,6 @@ import {ProfileVehicleComponent} from './components/profileComponents/profile-ve
 import {AddVehicleComponent} from './components/profileComponents/add-vehicle/add-vehicle.component';
 import {EditProfileComponent} from './components/profileComponents/edit-profile/edit-profile.component';
 
-import {JwtInterceptor} from './helpers/jwt.interceptor';
-import {ErrorInterceptor} from './helpers/error.interceptor';
-
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -38,18 +38,21 @@ import { AddRatingComponent } from './components/post/add-rating/add-rating.comp
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
+    HeaderComponent,
+    SidebarRightComponent,
+    BookingPageComponent,
+    BookingCardComponent,
+    BookingListComponent,
     PostComponent,
     PostDisplayCardComponent,
     StarRatingComponent,
     PostVehicleTypeIconComponent,
-    HeaderComponent,
     HomeComponent,
-    AlertComponent,
     AccountComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    SidebarRightComponent,
     ProfileComponent,
     ProfileRatingComponent,
     ProfileVehicleComponent,
@@ -58,7 +61,7 @@ import { AddRatingComponent } from './components/post/add-rating/add-rating.comp
     AddRatingComponent,
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     MatIconModule,
     BrowserAnimationsModule,
@@ -67,10 +70,6 @@ import { AddRatingComponent } from './components/post/add-rating/add-rating.comp
     ReactiveFormsModule,
     MatDialogModule,
     NgbModule,
-  ],
-  providers: [
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

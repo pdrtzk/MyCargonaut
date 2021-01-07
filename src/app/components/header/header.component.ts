@@ -23,32 +23,15 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.userLoggedIn = !!value);
-    console.log('user logged in? ' + this.userLoggedIn);
+    this.accountService.isLoggedIn().then();
   }
 
   toggleNavbar(): void {
     this.navbarOpen = !this.navbarOpen;
   }
 
-  openLoginDialog(login = true): void {
-    console.log('popup from header');
-    const dialogRef = AccountComponent.openDialog(this.dialog, login);
-
-    /*
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      // only if login  was succesful
-      if (result) {
-        // this.userLoggedIn = true;
-      } else {
-      }
-    });
-    */
-  }
-
   async onLogout() {
-    console.log('onLogout');
-    await this.accountService.logout().then(() => this.userLoggedIn = false);
+    await this.accountService.logout();
   }
 
 }
