@@ -1,0 +1,17 @@
+#booking-page {
+  font-family: Calibri;
+}
+
+#booking-list-switch {
+  display: flex;
+  flex-direction: row;
+}
+
+.booking-label-selected {
+  font-weight: bold;
+}
+
+#booking-placeholder {
+  margin-left: 10px;
+  margin-right: 10px;
+}
