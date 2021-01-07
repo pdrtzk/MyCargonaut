@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Post} from '../../shared/post.model';
+import {Post, PostType} from '../../shared/post.model';
+import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,12 +19,12 @@ export class BookingService {
           firstname: 'Max',
           lastname: 'Mustermann'
         },
-        type: 'Angebot',
+        type: PostType.OFFER,
         start_time: new Date(2020, 12, 32, 5, 30),
         end_time: new Date(2020, 12, 32, 10, 30),
         vehicle: {
           type: {
-            type: 'pkw'
+            type: VehicleTypeType.PKW
           }
         }
       }, {
@@ -31,16 +32,16 @@ export class BookingService {
           firstname: 'Lisa',
           lastname: 'Müller'
         },
-        type: 'Angebot',
+        type: PostType.OFFER,
         start_time: new Date(2020, 12, 32, 5, 30),
         end_time: new Date(2020, 12, 32, 10, 30),
         vehicle: {
           type: {
-            type: 'plane'
+            type: VehicleTypeType.PLANE
           }
         }
       }, {
-        type: 'Gesuch',
+        type: PostType.SEARCHING,
         author: {
           firstname: 'Angela',
           lastname: 'Merkel'
@@ -49,7 +50,7 @@ export class BookingService {
         end_time: new Date(2020, 12, 32, 10, 30),
         vehicle: {
           type: {
-            type: 'lkw'
+            type: VehicleTypeType.LKW
           }
         }
       }

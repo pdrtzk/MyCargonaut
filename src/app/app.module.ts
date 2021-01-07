@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {BookingPageComponent} from './components/booking-page/booking-page.component';
 import { BookingCardComponent } from './components/booking-page/booking-card/booking-card.component';
@@ -32,11 +32,13 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
+    HeaderComponent,
+    SidebarRightComponent,
     BookingPageComponent,
     BookingCardComponent,
     BookingListComponent,
@@ -44,14 +46,11 @@ import {CommonModule} from '@angular/common';
     PostDisplayCardComponent,
     StarRatingComponent,
     PostVehicleTypeIconComponent,
-    HeaderComponent,
     HomeComponent,
-    AlertComponent,
     AccountComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    SidebarRightComponent,
     ProfileComponent,
     ProfileRatingComponent,
     ProfileVehicleComponent,
