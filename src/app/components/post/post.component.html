@@ -88,7 +88,7 @@
             <app-add-rating
               [author]=currentUser
               [post]=post
-              [onAddRating]=addRating
+              (submitRating)=addRating($event)
               style="width: 100%"
             ></app-add-rating>
           </div>

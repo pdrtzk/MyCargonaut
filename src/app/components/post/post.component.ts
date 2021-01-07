@@ -67,6 +67,7 @@ export class PostComponent implements OnInit {
   }
 
   addRating(rating: Rating): void {
+    console.log(rating);
     this.ratings.push(rating);
   }
 

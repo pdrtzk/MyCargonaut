@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output} from '@angular/core';
 import {Rating} from '../../../../shared/rating.model';
 import {Cargonaut} from '../../../../shared/cargonaut.model';
 import {Post} from '../../../../shared/post.model';
+import {EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-add-rating',
@@ -10,13 +11,15 @@ import {Post} from '../../../../shared/post.model';
 })
 export class AddRatingComponent implements OnInit {
 
-  @Input() onAddRating: (rating: Rating) => void;
+  @Output() submitRating = new EventEmitter<Rating>();
   @Input() author: Cargonaut;
   @Input() post: Post;
 
   rating: Rating;
 
-  constructor() {
+  constructor() {}
+
+  refresh(): void {
     this.rating = {
       author: this.author,
       trip: this.post,
@@ -33,7 +36,14 @@ export class AddRatingComponent implements OnInit {
     this.rating.comment = comment;
   }
 
+  submit(): void {
+    console.log(this.author);
+    this.submitRating.emit(this.rating);
+    this.refresh();
+  }
+
   ngOnInit(): void {
+    this.refresh();
   }
 
 }
