@@ -8,7 +8,7 @@ import {Subject} from 'rxjs';
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.userSubject.subscribe(value => this.authenticatedUser = value);
   }
 
@@ -27,7 +27,7 @@ export class AccountService {
         resolve(true);
       }).catch(error => {
         this.userSubject.next(null);
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         resolve(false);
       });
     });
@@ -44,7 +44,7 @@ export class AccountService {
         this.userSubject.next(res.user);
         resolve(res.user);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -57,7 +57,7 @@ export class AccountService {
         this.userSubject.next(null);
         resolve();
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -70,23 +70,50 @@ export class AccountService {
         // this.login(user.email, user.password).then(() => resolve());
         resolve();
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
 
-  public async getUser(id: number): Promise<Cargonaut> {
+  /**
+   * @returns a Cargonaut object with id, firstname and lastname of the specified cargonaut id.
+   * @param userId: the id of the wanted user (Cargonaut)
+   */
+  public async get(userId: number): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/cargonaut/' + id).toPromise().then((res: any) => {
-        console.log('cargonaut: ' + res);
-        const user: Cargonaut = {};
-        resolve(user);
+      await http.get('http://localhost:4200/api/cargonaut/' + userId).toPromise().then((res: any) => {
+        resolve(res.user);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
+
+  public async update(user: Cargonaut): Promise<void> { // TODO: check if logged in user is updates user
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.put('http://localhost:4200/api/cargonaut/' + user.id, user).toPromise().then((res: any) => {
+          this.isLoggedIn();
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+  /**
+   * TODO
+   * @returns resolved Promise<void> if user is deleted or rejected error otherwise
+   *
+   */
 }

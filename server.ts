@@ -188,14 +188,15 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM cargonaut WHERE id = ?;';
+    const query = 'SELECT firstname, lastname FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(results => {
       if (results.length > 0) {
         const user: Cargonaut = {
+          id: results[0].id,
           firstname: results[0].firstname,
           lastname: results[0].lastname,
-          email: results[0].email,
-          birthday: results[0].geburtsdatum,
+          // email: results[0].email,
+          // birthday: results[0].geburtsdatum,
         };
         res.status(200).send({
           user,
@@ -212,23 +213,27 @@ export function app(): express.Express {
     });
   });
 
-// Put Cargonaut
+// Put Cargonaut // TODO: Check if logged in user is same as user id in request + birthday?
   server.put('/api/cargonaut/:id', async (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const firstname: string = req.body.firstname;
     const lastname: string = req.body.lastname;
-    const email: string = req.body.email;
-    const password: string = cryptoJS.SHA512(req.body.password).toString();
-    const data: [string, string, string, string, number] = [
+    const birthday: string = req.body.birthday;
+    const data: [string, string, string, number] = [
       firstname,
       lastname,
-      email,
-      password,
-      id,
+      birthday,
+      id
     ];
-    const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, geburtsdatum = ? WHERE id = ?;';
     queryPromise(query, data).then(result => {
       if (result.affectedRows > 0) {
+        // @ts-ignore
+        req.session.user.firstname = firstname;
+        // @ts-ignore
+        req.session.user.lastname = lastname;
+        // @ts-ignore
+        req.session.user.birthday = birthday;
         res.status(200).send({
           message: `Updated user ${id}`,
         });

@@ -17,11 +17,15 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private accountService: AccountService,
     private alertService: AlertService
   ) {
+    this.accountService.isLoggedIn().then(() => {
+      if (this.accountService.user) {
+        this.router.navigate(['/']).then();
+      }
+    });
   }
 
   ngOnInit() {
@@ -55,7 +59,7 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(this.form.value).then(
       () => {
         this.alertService.success('Registrierung erfolgreich. Sie können sich nun anmelden.', {keepAfterRouteChange: true});
-        this.router.navigate(['../login'], {relativeTo: this.route});
+        this.router.navigate(['/login']);
       },
       error => {
         // TODO: Fehler für Benutzer verständlich ausgeben
