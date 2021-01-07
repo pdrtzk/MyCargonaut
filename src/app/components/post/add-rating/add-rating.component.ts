@@ -25,8 +25,8 @@ export class AddRatingComponent implements OnInit {
     };
   }
 
-  updateStars(stars: string) {
-    this.rating.ratingStars = Number(stars);
+  updateStars(stars: number) {
+    this.rating.ratingStars = stars;
   }
 
   updateComment(comment: string) {

@@ -1,10 +1,23 @@
 <!-- todo schön machen ;) -->
-<p>comment</p>
+<p id="title">
+  Bewertung hinzufügen:
+</p>
+<div
+  id="starRating"
+>
+  <app-star-rating
+    [onEdit]=updateStars
+    starCount=3
+    style="cursor:pointer;"
+  ></app-star-rating>
+</div>
+
 <textarea #comment (change)="updateComment(comment.value)">
   {{rating.comment}}
 </textarea>
-<br>
-<p>stars</p>
-<input type="number" #stars value="{{rating.ratingStars}}" (change)="updateStars(stars.value)">
-<br>
-<button (click)="onAddRating(rating)">SUBMIT</button>
+
+<div id="footer">
+  <button id="submitButton" (click)="onAddRating(rating)">
+    speichern
+  </button>
+</div>

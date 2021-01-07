@@ -15,7 +15,11 @@ export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
   private readonly postId: number;
-  currentUser: Cargonaut = {}; // todo
+  currentUser: Cargonaut = {firstname: 'Chrissi', lastname: 'Eberle'}; // todo
+  public ratings: Rating[] = [
+    {id: 1, ratingStars: 5, comment: 'war super', author: {firstname: 'Max', lastname: 'Mustermann'}}, // todo remove
+    {id: 2, ratingStars: 2, comment: 'schlechter Fahrstil', author: {firstname: 'Lisa', lastname: 'Müller'}} // todo remove
+  ];
 
   loggedInUserIsOwner = false; // todo
   editModeOn = false;
@@ -63,7 +67,7 @@ export class PostComponent implements OnInit {
   }
 
   addRating(rating: Rating): void {
-    console.log(rating);
+    this.ratings.push(rating);
   }
 
 }

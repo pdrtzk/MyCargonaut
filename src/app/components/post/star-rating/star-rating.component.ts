@@ -8,9 +8,20 @@ import {Component, Input, OnInit} from '@angular/core';
 export class StarRatingComponent implements OnInit {
 
   @Input() starCount: number;
-  constructor() { }
+  @Input() onEdit: (stars: number) => void;
+  @Input() showLabel: boolean;
+
+  constructor() {
+  }
 
   ngOnInit(): void {
+  }
+
+  setStarCount(stars: number) {
+    if (this.onEdit) {
+      this.starCount = stars;
+      this.onEdit(stars);
+    }
   }
 
 }

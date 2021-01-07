@@ -41,7 +41,7 @@
             <div class="post-top-row">
               <div style="margin-right: 30px; margin-top: 20px">
                 <!-- cargonaut star rating -->
-                <app-star-rating [starCount]="4"></app-star-rating>
+                <app-star-rating [starCount]="4" [showLabel]="true"></app-star-rating>
               </div>
               <div>
                 <!-- payment method -->
@@ -79,12 +79,17 @@
           *ngIf="!loggedInUserIsOwner"
         >
           <hr style="margin-top: 20px; margin-bottom: 20px">
+          <div *ngFor="let rating of ratings">
+            <app-profile-rating [rating]="rating"></app-profile-rating>
+          </div>
+          <hr style="margin-top: 20px; margin-bottom: 20px">
           <div class="post-top-row">
             <!-- rating -->
             <app-add-rating
               [author]=currentUser
               [post]=post
               [onAddRating]=addRating
+              style="width: 100%"
             ></app-add-rating>
           </div>
         </div>
