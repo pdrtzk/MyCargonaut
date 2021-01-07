@@ -14,7 +14,7 @@ export class AddVehicleComponent implements OnInit {
   addVehicleForm: FormGroup;
   vehicle: Vehicle;
 
-  constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<AddVehicleComponent>) {
+  constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<AddVehicleComponent>) {
     this.vehicle = new Vehicle();
   }
 
@@ -32,7 +32,7 @@ export class AddVehicleComponent implements OnInit {
 
 
   onSubmit(): void{
-    if (this.addVehicleForm.invalid){
+    if (this.addVehicleForm.invalid || this.addVehicleForm.controls.seats.value <= 0){
       document.getElementById('errorAddVehicle').innerText = 'Fahrzeugtyp, Model und Sitzanzahl müssen angegeben werden.';
       return;
     }
