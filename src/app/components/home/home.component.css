@@ -1,0 +1,45 @@
+.container {
+  width: 80%;
+}
+
+.search-button {
+  float: right;
+  padding: 6px 10px;
+  background: #ddd;
+  font-size: 17px;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown > button {
+  width: 100%;
+  background-color: #005B52;
+  border-radius: 2px;
+  border-color: #005B52;
+  font-weight: bold;
+}
+
+.dropdown > button:active, .dropdown > button:hover {
+  background-color: #b3cecb;
+  color: #fffff5;
+  border-color: #b3cecb;
+  border-radius: 2px;
+}
+
+.dropdown > button:focus {
+  box-shadow: 0 0 0 0.2rem #b3cecb;
+  border-radius: 2px;
+}
+
+.dropdown-col {
+  padding-left: 0.2rem;
+  padding-right: 0.2rem;
+}
+
+.shadow {
+  box-shadow: 2px 5px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+#searchbar {
+  width: 100%
+}

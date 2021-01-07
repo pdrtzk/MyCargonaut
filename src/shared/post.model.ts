@@ -12,7 +12,7 @@ export interface Post {
   payment?: string;
   hold?: Hold;
   vehicle?: Vehicle;
-  bookedBy?: Cargonaut [];
+  bookedBy?: Cargonaut[];
   seats?: number;
   type?: PostType; // 'Angebot' oder 'Gesuch'
   author?: Cargonaut;
