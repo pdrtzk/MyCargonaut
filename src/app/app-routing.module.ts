@@ -7,8 +7,6 @@ import {PostComponent} from './components/post/post.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 
-import {AuthGuard} from './auth';
-import {AppComponent} from './app.component';
 import {NewPostModalComponent} from './components/new-post-modal/new-post-modal.component';
 
 export const routes: Routes = [
@@ -18,16 +16,12 @@ export const routes: Routes = [
   {path: 'post/:id', component: PostComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: '', component: HomeComponent, /*canActivate: [AuthGuard]*/},
-  // {path: 'login', component: LoginComponent},
-  // {path: 'register', component: RegisterComponent},
   {path: 'addpost', component: NewPostModalComponent},
   {path: '**', redirectTo: ''}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload', initialNavigation: 'enabled' })],
-  imports: [RouterModule.forRoot(routes)],
   declarations: [],
   exports: [RouterModule]
 })
