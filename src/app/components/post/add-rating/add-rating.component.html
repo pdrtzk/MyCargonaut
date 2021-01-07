@@ -6,7 +6,8 @@
   id="starRating"
 >
   <app-star-rating
-    [onEdit]=updateStars
+    (starChange)="updateStars($event)"
+    canEdit="true"
     starCount=3
     style="cursor:pointer;"
   ></app-star-rating>
