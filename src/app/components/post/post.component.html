@@ -75,24 +75,6 @@
             <app-post-display-card [relPost]="relPost"></app-post-display-card>
           </div>
         </div>
-        <div
-          *ngIf="!loggedInUserIsOwner"
-        >
-          <hr style="margin-top: 20px; margin-bottom: 20px">
-          <div *ngFor="let rating of ratings">
-            <app-profile-rating [rating]="rating"></app-profile-rating>
-          </div>
-          <hr style="margin-top: 20px; margin-bottom: 20px">
-          <div class="post-top-row">
-            <!-- rating -->
-            <app-add-rating
-              [author]=currentUser
-              [post]=post
-              (submitRating)=addRating($event)
-              style="width: 100%"
-            ></app-add-rating>
-          </div>
-        </div>
       </div>
       <div style="flex: 1; padding: 10px">
         <!-- right -->
