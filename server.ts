@@ -849,6 +849,34 @@ export function app(): express.Express {
       });
     });
   });
+  // get bewertungen -> Alle Bewertungen, die zu einem Post gehören
+  server.get('/api/bewertungen/:post', (req: Request, res: Response) => {
+    const post: number = Number(req.params.post);
+    const data: [number] = [
+      post,
+    ];
+    const query = 'SELECT * FROM bewertung WHERE fahrt = ?';
+    queryPromise(query, data).then(results => {
+      const ratings: Rating [] = [];
+      for (const result of results) {
+        const rating: Rating = {
+          id: result.id,
+          author: result.verfasser,
+          trip: result.fahrt,
+          ratingStars: result.punktzahl,
+          comment: result.kommentar
+        };
+        ratings.push(rating);
+      }
+      res.status(200).send({
+        ratings,
+      });
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim getten der Bewertungen!',
+      });
+    });
+  });
 // Durchschnittsbewertung eines Cargonauten
   server.get('/api/avgBewertung/:cargonaut', (req: Request, res: Response) => {
     const cargonaut: number = Number(req.params.cargonaut);
