@@ -33,7 +33,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
-import { AddRatingComponent } from './components/post/add-rating/add-rating.component';
+import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
 
 @NgModule({
   declarations: [

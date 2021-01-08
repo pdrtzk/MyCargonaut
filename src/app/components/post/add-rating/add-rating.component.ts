@@ -3,6 +3,7 @@ import {Rating} from '../../../../shared/rating.model';
 import {Cargonaut} from '../../../../shared/cargonaut.model';
 import {Post} from '../../../../shared/post.model';
 import {EventEmitter} from '@angular/core';
+import {RatingService} from '../../../services/rating.service';
 
 @Component({
   selector: 'app-add-rating',
@@ -17,13 +18,14 @@ export class AddRatingComponent implements OnInit {
 
   rating: Rating;
 
-  constructor() {}
+  constructor(private ratingService: RatingService) {
+  }
 
   refresh(): void {
     this.rating = {
       author: this.author,
       trip: this.post,
-      ratingStars: 0,
+      ratingStars: 1,
       comment: ''
     };
   }
@@ -36,14 +38,12 @@ export class AddRatingComponent implements OnInit {
     this.rating.comment = comment;
   }
 
-  submit(): void {
-    console.log(this.author);
-    this.submitRating.emit(this.rating);
+  ngOnInit(): void {
     this.refresh();
   }
 
-  ngOnInit(): void {
-    this.refresh();
+  onSubmitRating(): void {
+    this.ratingService.addRating(this.rating).then();
   }
 
 }
