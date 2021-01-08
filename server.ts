@@ -441,9 +441,10 @@ export function app(): express.Express {
       });
     });
   });
-  server.put('/api/vehicle/:fahrzeug', (req: Request, res: Response) => {
+  // Update vehicle
+  server.put('/api/vehicle/:vehicle', (req: Request, res: Response) => {
     // Read data from request body
-    const id: number = Number(req.params.fahrzeug);
+    const id: number = Number(req.params.vehicle);
     const art: string = req.body.type;
     const anzahlSitzplaetze: number = req.body.seats;
     const laenge: number = req.body.length;
