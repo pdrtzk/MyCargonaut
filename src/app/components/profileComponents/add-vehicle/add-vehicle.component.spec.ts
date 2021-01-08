@@ -62,7 +62,25 @@ describe('AddVehicleComponent', () => {
     expect(spy).toHaveBeenCalled();
   });
 
-  it('if not filled out correctly, error should be shown and dialog not closed', () => {
+  it('if not filled out correctly, error should be shown and dialog not be closed', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    const dialogRefSpy = spyOn(component.dialogRef, 'close');
+    component.onSubmit();
+    expect(compiled.querySelector('#errorAddVehicle')).toBeTruthy();
+    expect(dialogRefSpy).not.toHaveBeenCalled();
+  });
+
+  it('if not filled out correctly, dialog should be closed and callback to parent should be emitted', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    const dialogRefSpy = spyOn(component.dialogRef, 'close');
+    const eventEmitterSpy = spyOn(component.submitCallback, 'emit');
+    component.addVehicleForm.controls.type.setValue('pkw');
+    component.addVehicleForm.controls.seats.setValue(2);
+    component.addVehicleForm.controls.model.setValue('Audi A21');
+    component.addVehicleForm.controls.comment.setValue('Kein Kommentar.');
+    component.onSubmit();
+    expect(eventEmitterSpy).toHaveBeenCalled();
+    expect(dialogRefSpy).toHaveBeenCalled();
   });
 
 });

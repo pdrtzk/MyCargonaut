@@ -51,7 +51,7 @@ export class AddVehicleComponent implements OnInit {
     }
     this.submitCallback.emit(this.vehicle);
 
-    this.addVehicleForm.reset();
+    this.resetForm();
     this.vehicle = new Vehicle();
     document.getElementById('errorAddVehicle').innerText = '';
 
@@ -59,6 +59,11 @@ export class AddVehicleComponent implements OnInit {
   }
 
   onCancel(): void {
+   this.resetForm();
+   this.dialogRef.close();
+  }
+
+  resetForm(): void {
     this.addVehicleForm.reset({
       type: this.getVehicleStringFromType(VehicleTypeType.PKW),
       model: '',
@@ -68,10 +73,7 @@ export class AddVehicleComponent implements OnInit {
       height: 0,
       width: 0
     });
-
-    this.dialogRef.close();
   }
-
 
   getVehicleStringFromType(type: VehicleTypeType): string {
     switch (type){
