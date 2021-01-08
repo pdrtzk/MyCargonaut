@@ -36,6 +36,11 @@ describe('AddVehicleComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('form is invalid when not edited', () => {
+    expect(component.addVehicleForm.valid).toBeFalsy();
+  });
+
+
   it('#addVehicleCancelBtn should call #onCancel', fakeAsync (() => {
     const compiled = fixture.debugElement.nativeElement;
     spyOn(component, 'onCancel');
@@ -71,7 +76,6 @@ describe('AddVehicleComponent', () => {
   });
 
   it('if filled out correctly, dialog should be closed and callback to parent should be emitted', () => {
-    const compiled = fixture.debugElement.nativeElement;
     const dialogRefSpy = spyOn(component.dialogRef, 'close');
     const eventEmitterSpy = spyOn(component.submitCallback, 'emit');
     component.addVehicleForm.controls.type.setValue('pkw');
