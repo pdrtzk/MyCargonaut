@@ -3,6 +3,7 @@ export class Hold {
   length?: number;
   width?: number;
   height?: number;
+ // all dimensions are in cm
 
   constructor(length: number, width: number, height: number) {
     this.length = length;
@@ -11,6 +12,6 @@ export class Hold {
   }
 
   getSpace(): number {
-    return this.length * this.width * this.height;
+    return (this.length * this.width * this.height) / 100;
   }
 }

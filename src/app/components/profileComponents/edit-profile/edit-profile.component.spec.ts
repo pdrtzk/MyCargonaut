@@ -40,7 +40,7 @@ describe('EditProfileComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('#editProfileCancelBtn should call #onCancel', fakeAsync (() => {
+  it('#editProfileCancelBtn should call #editProfileCancelBtn', fakeAsync (() => {
     const compiled = fixture.debugElement.nativeElement;
     spyOn(component, 'cancelEditProfile');
     const button = compiled.querySelector('#editProfileCancelBtn');

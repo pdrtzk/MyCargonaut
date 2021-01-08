@@ -46,26 +46,30 @@ export class ProfileVehicleComponent implements OnInit {
     if (this.vehicle.type.type === VehicleTypeType.PKW && this.editVehicleForm.controls.type.value !== 'pwk'){
       this.vehicle.hold = new Hold(0, 0, 0); // initialize hold
     }
-
     if (this.editVehicleForm.invalid){
       document.getElementById('errorVehicle').innerText = 'Fahrzeugtyp, Modell, Sitzanzahl ' +
         'müssen angegeben werden. Bei allen Fahrzeugtypen außer PKW müssen zusätzlich die Dimensionen des Stauraums vermerkt werden.';
       return;
     }
     const id = this.vehicle.id.toString();
-    this.vehicle.type.type = this.getVehicleTypeFromString(this.editVehicleForm.controls.type.value);
-    this.vehicle.type.description = this.editVehicleForm.controls.model.value;
-    this.vehicle.seats = this.editVehicleForm.controls.seats.value;
-    this.vehicle.comment = this.editVehicleForm.controls.comment.value;
-    if (this.vehicle.type.type !== VehicleTypeType.PKW){
-      this.vehicle.hold.length = this.editVehicleForm.controls.length.value;
-      this.vehicle.hold.width = this.editVehicleForm.controls.width.value;
-      this.vehicle.hold.height = this.editVehicleForm.controls.height.value;
+    // new Object
+    const newVehicle: Vehicle = new Vehicle();
+    newVehicle.id = this.vehicle.id;
+    newVehicle.owner = this.vehicle.owner;
+    newVehicle.type.type = this.getVehicleTypeFromString(this.editVehicleForm.controls.type.value);
+    newVehicle.type.description = this.editVehicleForm.controls.model.value;
+    newVehicle.seats = this.editVehicleForm.controls.seats.value;
+    newVehicle.comment = this.editVehicleForm.controls.comment.value;
+    if ( newVehicle.type.type !== VehicleTypeType.PKW){
+      newVehicle.hold.length = this.editVehicleForm.controls.length.value;
+      newVehicle.hold.width = this.editVehicleForm.controls.width.value;
+      newVehicle.hold.height = this.editVehicleForm.controls.height.value;
     } else {
-      this.vehicle.hold = null;
+      newVehicle.hold = null;
     }
+
     document.getElementById('errorVehicle').innerText = '';
-    this.submitCallback.emit(this.vehicle);
+    this.submitCallback.emit( newVehicle);
     document.getElementById('editVehicleForm-' + id).style.display = 'none';
     document.getElementById('vehicleInfo-' + id).style.display = 'block';
   }
