@@ -70,7 +70,7 @@ describe('AddVehicleComponent', () => {
     expect(dialogRefSpy).not.toHaveBeenCalled();
   });
 
-  it('if not filled out correctly, dialog should be closed and callback to parent should be emitted', () => {
+  it('if filled out correctly, dialog should be closed and callback to parent should be emitted', () => {
     const compiled = fixture.debugElement.nativeElement;
     const dialogRefSpy = spyOn(component.dialogRef, 'close');
     const eventEmitterSpy = spyOn(component.submitCallback, 'emit');
