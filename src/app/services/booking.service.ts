@@ -26,7 +26,8 @@ export class BookingService {
           type: {
             type: VehicleTypeType.PKW
           }
-        }
+        },
+        closed: true
       }, {
         author: {
           firstname: 'Lisa',
