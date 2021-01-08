@@ -4,7 +4,7 @@ import {Rating} from '../../../shared/rating.model';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {Hold} from '../../../shared/hold.model';
-import { DatePipe } from '@angular/common';
+import {DatePipe} from '@angular/common';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
@@ -12,6 +12,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
 import {VehicleService} from '../../services/vehicle.service';
 import {RatingService} from '../../services/rating.service';
+import {AlertService} from '../alert/alert.service';
 
 
 @Component({
@@ -37,11 +38,14 @@ export class ProfileComponent implements OnInit {
     private accountService: AccountService,
     private vehicleService: VehicleService,
     private ratingsService: RatingService,
+    private alertService: AlertService,
     private dialog: MatDialog
-  ) {  }
+  ) {
+  }
 
   ngOnInit(): void {
-
+    this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
+    this.accountService.isLoggedIn(); // get newest user after
     this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
@@ -57,7 +61,7 @@ export class ProfileComponent implements OnInit {
     };
 
     let rating2: Rating;
-    rating2 =  {
+    rating2 = {
       ratingStars: 2,
       comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
       author: this.user
@@ -79,7 +83,7 @@ export class ProfileComponent implements OnInit {
         res => {
           this.vehiclesUser.push(res);
         });
-      });
+    });
   }
 
   async getRatingsForUser(): Promise<void> {
@@ -93,7 +97,7 @@ export class ProfileComponent implements OnInit {
     tempRatings.forEach(async elem => {
       // todo: get author from id through accountservice
       // await this.accountService.getUser(elem.author.id);
-        this.ratingsUser.push(elem);
+      this.ratingsUser.push(elem);
     });
   }
 
@@ -136,11 +140,15 @@ export class ProfileComponent implements OnInit {
 
   submitEditUser(user: Cargonaut): void {
     // todo: error
-    // todo: send to service
-    this.user = user;
-    console.log('ok');
-    document.getElementById('editProfileForm').style.display = 'none';
-    document.getElementById('user-info').style.display = 'block';
+    console.log(user);
+    this.accountService.update(user).then(() => {
+      this.user = user;
+      console.log('ok');
+      document.getElementById('editProfileForm').style.display = 'none';
+      document.getElementById('user-info').style.display = 'block';
+      this.alertService.success('Profil wurde erfolgreich bearbeitet.');
+    }, () => this.alertService.error('Profil konnte nicht bearbeitet werden.'));
+
   }
 
   // callback from child form
