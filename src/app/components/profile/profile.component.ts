@@ -46,7 +46,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
     this.accountService.isLoggedIn(); // get newest user after
-    //this.myuser = this.accountService.user;
+    this.myuser = this.accountService.user;
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
     this.getVehiclesForUser();
