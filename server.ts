@@ -43,7 +43,7 @@ export function app(): express.Express {
       console.log('Database is connected.');
     }
   });
-
+//Test
   server.use(bodyParser.json());
   server.use(session(Configuration.sessionOptions));
   server.use((req, res, next) => {
