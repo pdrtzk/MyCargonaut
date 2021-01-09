@@ -455,17 +455,18 @@ export function app(): express.Express {
       });
     });
   });
+
   // Update vehicle
   server.put('/api/vehicle/:vehicle', (req: Request, res: Response) => {
     // Read data from request body
     const id: number = Number(req.params.vehicle);
-    const art: string = req.body.type;
-    const anzahlSitzplaetze: number = req.body.seats;
-    const laenge: number = req.body.length;
-    const breite: number = req.body.width;
-    const hoehe: number = req.body.height;
-    const kommentar: string = req.body.comment;
-    const modell: string = req.body.model;
+    const art: string = req.body.vehicle.type.type;
+    const anzahlSitzplaetze: number = req.body.vehicle.seats;
+    const laenge: number = req.body.vehicle.hold.length;
+    const breite: number = req.body.vehicle.hold.width;
+    const hoehe: number = req.body.vehicle.hold.height;
+    const kommentar: string = req.body.vehicle.comment;
+    const modell: string = req.body.vehicle.type.description;
     let ladeflaeche: number;
     const dataLade: [number, number, number] = [
       laenge,

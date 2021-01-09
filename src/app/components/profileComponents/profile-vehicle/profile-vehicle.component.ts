@@ -65,7 +65,9 @@ export class ProfileVehicleComponent implements OnInit {
       newVehicle.hold.width = this.editVehicleForm.controls.width.value;
       newVehicle.hold.height = this.editVehicleForm.controls.height.value;
     } else {
-      newVehicle.hold = null;
+      newVehicle.hold.length = 1;
+      newVehicle.hold.width = 1;
+      newVehicle.hold.height = 1;
     }
 
     document.getElementById('errorVehicle').innerText = '';

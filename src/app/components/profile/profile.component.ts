@@ -153,9 +153,16 @@ export class ProfileComponent implements OnInit {
 
   // callback from child form
   submitEditVehicle(car: Vehicle): void {
-    const index = this.vehiclesUser.findIndex(s => s.id === car.id);
-    this.vehiclesUser[index] = car;
-    // todo: submit car via service
+    this.vehicleService.updateVehicle(car).then(
+      res => {
+        const index = this.vehiclesUser.findIndex(s => s.id === res.id);
+        this.vehiclesUser[index] = res;
+        this.alertService.success('Fahrzeug wurde erfolgreich bearbeitet.');
+      },
+      error => {
+        this.alertService.error('Fahrzeug konnte nicht bearbeitet werden.');
+      }
+    );
   }
 
   async submitDeleteVehicle(car: Vehicle): Promise<void> {

@@ -15,14 +15,7 @@ export class VehicleService {
 
   constructor(private http: HttpClient) {
   }
-/*
-anzahl_sitzplaetze: 2
-art: "LKW"
-besitzer: 12
-id: 6
-kommentar: "Test"
-ladeflaeche: 8
- */
+
   // get vehicles
   public async getAllVehicles(cargonautId: number): Promise<Vehicle[]> {
     this.allVehiclesUser.length = 0;
@@ -43,7 +36,7 @@ ladeflaeche: 8
         });
         resolve(this.allVehiclesUser);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -59,22 +52,22 @@ ladeflaeche: 8
         ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
         resolve(ve);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
 
   // update vehicle - no backend right now
-  public async updateVehicles(cargonautId: number): Promise<Cargonaut> {
-    console.log('update vehicle');
+  public async updateVehicle(vehicle: Vehicle): Promise<Vehicle> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/vehicle/' + cargonautId.toString(), {
+      await http.put('http://localhost:4200/api/vehicle/' + vehicle.id.toString(), {
+        vehicle
       }).toPromise().then((res: any) => {
-        console.log(res);
+        resolve(res);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
