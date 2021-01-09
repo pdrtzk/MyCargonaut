@@ -3,6 +3,7 @@ import {Post} from '../../../shared/post.model';
 import {BookingService} from '../../services/booking.service';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
+import {PostService} from '../../services/post.service';
 
 @Component({
   selector: 'app-booking-page',
@@ -20,13 +21,13 @@ export class BookingPageComponent implements OnInit {
   }
 
   setDisplayPage(page: string): void {
-    this.inbox = this.bookingService.getInboxBookings();
-    this.outbox = this.bookingService.getOutboxBookings();
     this.displayPage = page;
   }
 
-  ngOnInit(): void {
-    this.currentUser = this.accountService.user;
+  async ngOnInit(): Promise<void> {
+    this.currentUser = await this.accountService.user;
+    this.inbox = await this.bookingService.getInboxBookings(this.currentUser.id);
+    this.outbox = this.bookingService.getOutboxBookings();
   }
 
 }

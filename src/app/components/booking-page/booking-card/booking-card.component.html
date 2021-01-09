@@ -4,20 +4,18 @@
     <p id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
     <!-- status -->
     <p id="booking-status">
-      {{booking?.closed ?
-        'abgeschlossen ' + booking?.end_time?.toLocaleDateString() + ' ' + booking?.end_time?.toLocaleTimeString()
-        : 'ausstehend'}}
+      {{booking?.status === 2 ? 'abgeschlossen' : 'ausstehend'}}
     </p>
   </div>
   <div id="booking-card-right">
     <!-- add rating button -->
-    <button *ngIf="booking?.closed" (click)="toggleCommentSection()">bewerten</button>
+    <button *ngIf="commentSectionAvailable" (click)="toggleCommentSection()">bewerten</button>
 
     <!-- message cargonaut -->
     <button>M</button> <!-- todo use icon -->
 
     <!-- view post -->
-    <button>zum Post</button>
+    <button routerLink="/post/{{booking.id}}">zum Post</button>
   </div>
 </div>
 <div *ngIf="commentSectionVisible">

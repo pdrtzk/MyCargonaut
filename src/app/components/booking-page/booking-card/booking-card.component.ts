@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Post} from '../../../../shared/post.model';
+import {DriveStatus, Post} from '../../../../shared/post.model';
 import {Cargonaut} from '../../../../shared/cargonaut.model';
+import {AccountService} from '../../../services/account.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -11,16 +12,21 @@ export class BookingCardComponent implements OnInit {
 
   @Input() booking: Post;
   @Input() currentUser: Cargonaut;
+  commentSectionAvailable = false;
   commentSectionVisible = false;
 
-  constructor() {
+  constructor(private accountService: AccountService) {
   }
 
   toggleCommentSection(): void {
     this.commentSectionVisible = !this.commentSectionVisible;
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    console.log(this.booking);
+    this.commentSectionAvailable = this.booking.status === DriveStatus.ABGESCHLOSSEN;
+    const cargonaut = await this.accountService.getUser(this.booking.author.id);
+    this.booking.author = cargonaut;
   }
 
 }

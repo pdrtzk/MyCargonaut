@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {Rating} from '../../../shared/rating.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
+import {AccountService} from '../../services/account.service';
 
 @Component({
   selector: 'app-post',
@@ -22,13 +23,13 @@ export class PostComponent implements OnInit {
   supportedPaymentOptions: string[] = ['Bar', 'Karte'];
   vehicles: Vehicle[];
 
-  constructor(private postService: PostService, private route: ActivatedRoute) {
+  constructor(private postService: PostService, private accoutService: AccountService, private route: ActivatedRoute) {
     this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
     console.log(this.postId); // only for debugging
   }
 
   async ngOnInit(): Promise<void> {
-    this.post = await this.postService.getPostById(this.postId);
+    this.post = await this.postService.getSpecificPost(this.postId);
     this.relatedPosts = this.postService.getMorePosts(); // todo
   }
 
