@@ -156,14 +156,20 @@ export function app(): express.Express {
     const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
     const birthday: string = (req.body.birthday).toLocaleString();
-    const data: [string, string, string, string, string] = [
+    const account_holder = req.body.account_holder;
+    const iban = req.body.iban;
+    const bic = req.body.bic;
+    const data: [string, string, string, string, string, string, string, string] = [
       firstname,
       lastname,
       password,
       email,
       birthday,
+      account_holder,
+      iban,
+      bic
     ];
-    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum) VALUES (NULL, ?, ?, ?, ?, ?);';
+    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
     queryPromise(query, data).then(results => {
       res.status(201).send({
         message: 'Neuer Nutzer erstellt!',

@@ -1,4 +1,4 @@
-<div mat-dialog-content class="container" style="flex: 1 1 auto">
+<div class="container" style="flex: 1 1 auto">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group row">
       <label for="firstname">Vorname</label> <br>
@@ -41,6 +41,44 @@
       <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
         <div *ngIf="f.password.errors.required">Passwort wird benötigt</div>
         <div *ngIf="f.password.errors.minlength">Password muss mindestens 6 Zeichen lang sein</div>
+      </div>
+    </div>
+    <hr>
+    <p>Um die von MyCargonaut zur Verfügung gestellten Dienste nutzen zu können erheben wir Gebühren von 0,99 € pro Monat.</p>
+    <div class="form-group row">
+      <label for="account_holder">Kontoinhaber (falls abweichend)</label> <br>
+      <input id="account_holder" type="text" formControlName="account_holder" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.account_holder.errors }"/>
+    </div>
+    <div class="form-group row">
+      <label for="iban">IBAN (DE)</label> <br>
+      <input id="iban" type="text" formControlName="iban" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.iban.errors }"/>
+      <div *ngIf="submitted && f.iban.errors" class="invalid-feedback">
+        <div *ngIf="f.iban.errors.required">IBAN wird benötigt</div>
+        <div *ngIf="f.iban.errors.minlength || f.iban.errors.maxlength">IBAN muss genau 22 Zeichen lang sein</div>
+        <div *ngIf="f.iban.errors.pattern">IBAN besteht aus dem Ländercode (DE), 20 Zahlen und optional nach 4 Zeichen je ein Leerzeichen</div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="bic">BIC (Internationale BLZ)</label> <br>
+      <input id="bic" type="text" formControlName="bic" class="form-control"
+             [ngClass]="{ 'is-invalid': submitted && f.bic.errors }"/>
+      <div *ngIf="submitted && f.bic.errors" class="invalid-feedback">
+        <div *ngIf="f.bic.errors.required">BIC wird benötigt</div>
+        <div *ngIf="f.bic.errors.minlength || f.bic.errors.maxlength">BIC muss genau 11 Zeichen lang sein</div>
+      </div>
+    </div>
+    <div class="form-group form-check row">
+        <input id="consent" type="checkbox" formControlName="consent" class="form-check-input"
+               [ngClass]="{ 'is-invalid': submitted && f.consent.errors }"/>
+        <label for="consent" class="form-check-label">Einverständniserklärung</label> <br>
+        <p class="form-check-inline">
+          Ich ermächtige MyCargonaut, Zahlungen von meinem Konto mittels Lastschrift einzuziehen. Zugleich weise ich
+          mein Kreditinstitut an, die von MyCargonaut auf mein Konto gezogene Lastschrift einzulösen.
+        </p>
+      <div *ngIf="submitted && f.consent.errors" class="invalid-feedback">
+        Einverständniserklärung wird benötigt
       </div>
     </div>
   </form>

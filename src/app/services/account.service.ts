@@ -64,6 +64,10 @@ export class AccountService {
 
   public async register(user: Cargonaut): Promise<void> {
     const http = this.http;
+    if (user.account_holder === '') {
+      user.account_holder = user.firstname + ' ' + user.lastname;
+    }
+    user.iban = user.iban.replace(/\s/g, '');
     return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/cargonaut', user).toPromise().then(() => {
         // this.login(user.email, user.password).then(() => resolve());

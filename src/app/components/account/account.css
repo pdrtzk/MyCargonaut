@@ -6,8 +6,12 @@ button {
   color: #fff;
   font-family: Arial, serif;
 }
-button:hover, a:hover {
+button:hover {
   background-color: #004b43;
+}
+
+a:hover {
+  color: #004b43;
 }
 
 button:focus, .btn-primary:not(:disabled):not(.disabled):active {
@@ -17,6 +21,11 @@ button:focus, .btn-primary:not(:disabled):not(.disabled):active {
 a, label {
   font-family: Arial, serif;
   color: #005b52;
+}
+
+hr {
+  color: #005b52;
+
 }
 
 div {
