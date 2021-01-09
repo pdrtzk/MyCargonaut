@@ -19,7 +19,7 @@ export interface Post {
   price?: number;
   closed?: boolean;
   description?: string;
-  status: DriveStatus;
+  status?: DriveStatus;
 }
 
 export enum PostType {

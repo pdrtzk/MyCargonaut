@@ -1,7 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
+import {BookingPageComponent} from './components/booking-page/booking-page.component';
+import { BookingCardComponent } from './components/booking-page/booking-card/booking-card.component';
+import { BookingListComponent } from './components/booking-page/booking-list/booking-list.component';
 
 import {PostComponent} from './components/post/post.component';
 import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
@@ -28,27 +31,30 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {CommonModule} from '@angular/common';
 
 @NgModule({
   declarations: [
     AppComponent,
+    AlertComponent,
+    HeaderComponent,
+    SidebarRightComponent,
+    BookingPageComponent,
+    BookingCardComponent,
+    BookingListComponent,
     PostComponent,
     PostDisplayCardComponent,
     StarRatingComponent,
     PostVehicleTypeIconComponent,
-    HeaderComponent,
     HomeComponent,
     AlertComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
-    SidebarRightComponent,
     ProfileComponent,
     ProfileRatingComponent,
     ProfileVehicleComponent,
     AddVehicleComponent,
-    EditProfileComponent,
+    EditProfileComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

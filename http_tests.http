@@ -50,6 +50,9 @@ Cookie:
   "birthday": "18-09-1998"
 }
 
+###logout
+DELETE http://localhost:4200/api/cargonaut/30 HTTP/1.1
+
 
 ######################################################
 #                Cargonaut                    #

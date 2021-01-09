@@ -1,0 +1,19 @@
+<div id="booking-card">
+  <div id="booking-card-left">
+    <!-- cargonaut name -->
+    <p id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
+    <!-- status -->
+    <p id="booking-status">
+      {{booking?.closed ?
+        'abgeschlossen ' + booking?.end_time?.toLocaleDateString() + ' ' + booking?.end_time?.toLocaleTimeString()
+        : 'ausstehend'}}
+    </p>
+  </div>
+  <div id="booking-card-right">
+    <!-- message cargonaut -->
+    <button>M</button> <!-- todo use icon --> 
+
+    <!-- view post -->
+    <button>zum Post</button>
+  </div>
+</div>
