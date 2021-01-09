@@ -34,7 +34,8 @@ export class PostComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.post = await this.postService.getSpecificPost(this.postId);
-    this.relatedPosts = this.postService.getMorePosts(); // todo
+    const allPosts: Post[] = await this.postService.getMorePosts();
+    this.relatedPosts = this.getFirstNPosts(allPosts, 3);
     if (this.post?.author?.id) {
       const userData = this.accoutService.getUser(this.post.author.id);
       this.post.author = await userData;
@@ -43,6 +44,16 @@ export class PostComponent implements OnInit {
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
       this.post.vehicle = vehicleData;
     }
+  }
+
+  getFirstNPosts(allPosts: Post[], n: number): Post[] {
+    const posts: Post[] = [];
+    for (let i = 0; i < n; i++) {
+      if (allPosts.length > i) {
+        posts.push(allPosts[i]);
+      }
+    }
+    return posts;
   }
 
   toggleEditMode(): void {
