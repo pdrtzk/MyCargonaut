@@ -74,6 +74,8 @@ export class PostService {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/post/' + postId).toPromise().then((res: any) => {
+        res.post.author = {id: res.post.author};
+        res.post.vehicle = {id: res.post.vehicle};
         resolve(res.post);
       }).catch(error => {
         console.log('Error: ' + error);

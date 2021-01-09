@@ -6,6 +6,7 @@ import {Vehicle} from '../../../shared/vehicle.model';
 import {Rating} from '../../../shared/rating.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
+import {VehicleService} from '../../services/vehicle.service';
 
 @Component({
   selector: 'app-post',
@@ -23,7 +24,10 @@ export class PostComponent implements OnInit {
   supportedPaymentOptions: string[] = ['Bar', 'Karte'];
   vehicles: Vehicle[];
 
-  constructor(private postService: PostService, private accoutService: AccountService, private route: ActivatedRoute) {
+  constructor(private postService: PostService,
+              private accoutService: AccountService,
+              private route: ActivatedRoute,
+              private vehicleService: VehicleService) {
     this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
     console.log(this.postId); // only for debugging
   }
@@ -31,6 +35,14 @@ export class PostComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     this.post = await this.postService.getSpecificPost(this.postId);
     this.relatedPosts = this.postService.getMorePosts(); // todo
+    if (this.post?.author?.id) {
+      const userData = this.accoutService.getUser(this.post.author.id);
+      this.post.author = await userData;
+    }
+    if (this.post?.vehicle?.id) {
+      const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
+      this.post.vehicle = vehicleData;
+    }
   }
 
   toggleEditMode(): void {
@@ -48,7 +60,6 @@ export class PostComponent implements OnInit {
       this.post[propertyName] = value;
     }
   }
-
 
   setLength(val: any) {
     this.post.hold.length = val;

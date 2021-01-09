@@ -84,7 +84,7 @@
           </div>
           <div style="text-align: right;">
             <!-- Fahrzeugtyp -->
-            <p class="post-large-grey-text">{{post?.vehicle?.type?.type}}</p>
+            <p class="post-large-grey-text">{{post?.vehicle?.type?.type || 'n.A.'}}</p>
           </div>
           <div>
             <!-- Sitzplätze -->
@@ -101,7 +101,7 @@
               <p class="post-green-text" style="font-size: 20px">{{post?.startlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-              {{post?.start_time?.toLocaleDateString()}}, {{post?.start_time?.toLocaleTimeString()}}
+              {{post?.start_time}}, {{post?.start_time}}
             </p>
           </div>
           <div>
@@ -111,7 +111,7 @@
               <p class="post-green-text" style="font-size: 20px">{{post?.endlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-              {{post?.end_time?.toLocaleDateString()}}, {{post?.end_time?.toLocaleTimeString()}}
+              {{post?.end_time}}, {{post?.end_time}}
             </p>
           </div>
         </div>
