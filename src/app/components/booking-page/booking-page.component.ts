@@ -26,7 +26,7 @@ export class BookingPageComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.currentUser = await this.accountService.user;
-    this.inbox = await this.bookingService.getInboxBookings(this.currentUser.id);
+    this.inbox = await this.bookingService.getInboxBookings(this.currentUser?.id);
     this.outbox = this.bookingService.getOutboxBookings();
   }
 

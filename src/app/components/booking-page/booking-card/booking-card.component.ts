@@ -25,6 +25,9 @@ export class BookingCardComponent implements OnInit {
   async ngOnInit(): Promise<void> {
     console.log(this.booking);
     this.commentSectionAvailable = this.booking.status === DriveStatus.ABGESCHLOSSEN;
+    if (!this.booking?.author?.id) {
+      return;
+    }
     const cargonaut = await this.accountService.getUser(this.booking.author.id);
     this.booking.author = cargonaut;
   }
