@@ -24,8 +24,10 @@ export class PostComponent implements OnInit {
   supportedPaymentOptions: string[] = ['Bar', 'Karte'];
   vehicles: Vehicle[];
 
+  averageUserRating = 0;
+
   constructor(private postService: PostService,
-              private accoutService: AccountService,
+              private accountService: AccountService,
               private route: ActivatedRoute,
               private vehicleService: VehicleService) {
     this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
@@ -37,12 +39,18 @@ export class PostComponent implements OnInit {
     const allPosts: Post[] = await this.postService.getMorePosts();
     this.relatedPosts = this.getFirstNPosts(allPosts, 3);
     if (this.post?.author?.id) {
-      const userData = this.accoutService.getUser(this.post.author.id);
+      const id = this.post.author.id;
+      const userData = this.accountService.getUser(this.post.author.id);
       this.post.author = await userData;
+      this.post.author.id = id;
     }
     if (this.post?.vehicle?.id) {
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
       this.post.vehicle = vehicleData;
+    }
+    if (this.post?.author?.id) {
+      const averageUserRating = await this.accountService.getAverageUserRating(this.post.author.id);
+      this.averageUserRating = Math.round(averageUserRating);
     }
   }
 

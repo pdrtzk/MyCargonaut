@@ -1,4 +1,4 @@
-<div class="post-displayCard" routerLink="/post/{{relPost.id}}">
+<div class="post-displayCard" routerLink="/post/{{relPost?.id}}">
   <app-post-vehicle-type-icon [type]="relPost?.vehicle?.type?.type" [style]="style"></app-post-vehicle-type-icon>
   <p class="post-displayCard-title" style="font-weight: bold; margin-top: -15px">{{relPost?.type}} von {{relPost?.author?.firstname}} {{relPost?.author?.lastname}}</p>
   <p class="post-displayCard-text">{{relPost?.start_time?.toLocaleString()}} - {{relPost?.end_time?.toLocaleTimeString() }}</p>

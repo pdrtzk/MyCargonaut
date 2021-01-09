@@ -89,4 +89,16 @@ export class AccountService {
       });
     });
   }
+
+  public async getAverageUserRating(userId: number): Promise<number> {
+    const http = this.http;
+    return new Promise<number>(async (resolve, reject) => {
+      await http.get('http://localhost:4200/api/avgBewertung/' + userId).toPromise().then((res: any) => {
+        resolve(res.avgBewertung.avg);
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
 }
