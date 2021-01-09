@@ -27,7 +27,6 @@ export class AccountService {
         resolve(true);
       }).catch(error => {
         this.userSubject.next(null);
-        console.log('Error: ' + error.message);
         resolve(false);
       });
     });

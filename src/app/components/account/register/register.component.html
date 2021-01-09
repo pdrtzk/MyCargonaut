@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="form-group row">
-      <label for="email">Email-Adresse</label> <br>
+      <label for="email">Email</label> <br>
       <input id="email" type="email" formControlName="email" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.email.errors }"/>
       <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
