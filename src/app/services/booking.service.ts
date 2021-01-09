@@ -16,7 +16,7 @@ export class BookingService {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
-        let bookings: Post[] = [];
+        const bookings: Post[] = [];
         console.log('bookings:');
         console.log(res.buchungen);
         res.buchungen.forEach(booking => bookings.push({
