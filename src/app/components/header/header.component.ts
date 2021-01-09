@@ -9,15 +9,13 @@ import {AccountService} from '../../services/account.service';
 
 })
 export class HeaderComponent implements OnInit {
-  userLoggedIn = false; // todo: get actual login status in ngOnInit
+  userLoggedIn = false;
   navbarOpen = false;
 
 
   constructor(
-    private dialog: MatDialog,
     private accountService: AccountService
-  ) {
-  }
+  ) {  }
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.userLoggedIn = !!value);
