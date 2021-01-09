@@ -27,10 +27,6 @@ export class AccountService {
         resolve(true);
       }).catch(error => {
         this.userSubject.next(null);
-<<<<<<< HEAD
-        // console.log('Error: ' + error.message);
-=======
->>>>>>> account_service
         resolve(false);
       });
     });
@@ -128,7 +124,7 @@ export class AccountService {
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
         await http.delete('http://localhost:4200/api/cargonaut/' + user.id).toPromise().then((res: any) => {
-          this.isLoggedIn();
+          this.logout();
           console.log(res.message);
           resolve();
         }).catch(error => {

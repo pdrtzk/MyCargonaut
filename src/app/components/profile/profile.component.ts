@@ -201,6 +201,12 @@ export class ProfileComponent implements OnInit {
     }
   }
 
+  deleteUserConfirm() {
+    if ( confirm('Soll dieser Account wirklich permanent gelöscht werden?')) {
+      this.deleteUser();
+    }
+  }
+
   deleteUser() {
     this.accountService.delete(this.myuser).then(() => {
       this.alertService.success('Cargonaut wurde gelöscht.', {keepAfterRouteChange: true});
