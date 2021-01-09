@@ -13,6 +13,7 @@ import {VehicleService} from '../../services/vehicle.service';
 import {RatingService} from '../../services/rating.service';
 import {AlertService} from '../alert/alert.service';
 import {Router} from '@angular/router';
+import {UpdatePasswordComponent} from '../profileComponents/update-password/update-password.component';
 
 
 @Component({
@@ -205,6 +206,16 @@ export class ProfileComponent implements OnInit {
     if ( confirm('Soll dieser Account wirklich permanent gelöscht werden?')) {
       this.deleteUser();
     }
+  }
+
+  openUpdatePWDialog(){
+    const test = this.dialog.open(UpdatePasswordComponent);
+    const sub = test.componentInstance.submitCallback.subscribe((result: string) => {
+      this.changePassword(result);
+      test.close();
+    });
+    test.afterClosed().subscribe(() => {
+    });
   }
 
   deleteUser() {

@@ -31,6 +31,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     ProfileRatingComponent,
     ProfileVehicleComponent,
     AddVehicleComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
