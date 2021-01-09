@@ -11,14 +11,18 @@ import {ActivatedRoute} from '@angular/router';
 export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
-  private readonly postId: number;
+  private postId: number;
 
   constructor(private postService: PostService, private route: ActivatedRoute) {
-    this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
-    console.log(this.postId); // only for debugging
+    this.route.queryParams.subscribe(params => {
+     this.postId = params.id;
+     console.log(this.postId); // only for debugging
+    });
+    console.log('after');
   }
 
   ngOnInit(): void {
+    console.log('ngOnInit here');
     this.post = this.postService.getPostById(1); // TODO: use this.postId as id
     this.relatedPosts = this.postService.getMorePosts();
   }
