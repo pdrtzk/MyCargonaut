@@ -14,28 +14,8 @@ describe('RegisterComponent', () => {
   let fixture: ComponentFixture<RegisterComponent>;
   let router: Router;
   let location: Location;
-  const correctData = {
-    firstname: 'Firstname',
-    lastname: 'Lastname',
-    birthday: '00-00-0000',
-    email: 'firstname@lastname.com',
-    password: '123456',
-    account_holder: 'Account Holder', // does not matter, no Validator
-    iban: 'DE12 3456 7890 1234 5678 90',
-    bic: 'A1234567890',
-    consent: true
-  };
-  const incorrectData = {
-    firstname: '', // empty
-    lastname: '', // empty
-    birthday: null, // empty
-    email: 'email', // no email pattern
-    password: '12345', // not min 6 chars long
-    account_holder: null, // does not matter, no Validator
-    iban: 'AB12 3456 7890 1234 5678 90', // no DE at beginning
-    bic: '1234567890', // not 11 chars long
-    consent: false // ,ust be checked (true)
-  };
+  let correctData;
+  let incorrectData;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,14 +32,38 @@ describe('RegisterComponent', () => {
     })
       .compileComponents();
   });
+  beforeEach(() => {
+    // both needs to be set in beforeEach, in beforeAll or in describe or global does NOT work sometimes!
+    correctData = {
+      firstname: 'Firstname',
+      lastname: 'Lastname',
+      birthday: '01-01-0000',
+      email: 'firstname@lastname.com',
+      password: '123456',
+      account_holder: 'Account Holder', // does not matter, no Validator
+      iban: 'DE12 3456 7890 1234 5678 90',
+      bic: 'A1234567890',
+      consent: true
+    };
+    incorrectData = {
+      firstname: '', // empty
+      lastname: '', // empty
+      birthday: null, // empty
+      email: 'email', // no email pattern
+      password: '12345', // not min 6 chars long
+      account_holder: null, // does not matter, no Validator
+      iban: 'AB12 3456 7890 1234 5678 90', // no DE at beginning
+      bic: '1234567890', // not 11 chars long
+      consent: false // must be checked (true)
+    };
+  });
 
   beforeEach(async () => {
     router = TestBed.inject(Router);
     location = TestBed.inject(Location);
     fixture = TestBed.createComponent(RegisterComponent);
-    router.initialNavigation();
     fixture.ngZone.run(() => router.initialNavigation());
-    await router.navigateByUrl('/register');
+    await fixture.ngZone.run(async () => await router.navigateByUrl('/register'));
     component = fixture.componentInstance;
     component.ngOnInit();
     fixture.detectChanges();
@@ -101,43 +105,39 @@ describe('RegisterComponent', () => {
     expect(component.form.valid).toBeFalse();
   });
 
-  // is correct if run alone, fails sometimes if not (but whyyy?)
-  xit('should set form valid if all input is provided.', () => {
-    component.form.reset();
-    component.form.setValue(correctData);
+  it('should set form valid if all input is provided.', () => {
+    component.form.reset(correctData); // is correct if run alone, fails sometimes if not (but whyyy?)
+    console.log(component.form.value);
+    console.log(correctData);
     expect(component.form.invalid).toBeFalse();
     expect(component.form.valid).toBeTrue();
   });
 
   it('should set form invalid if #consent is not checked.', () => {
-    component.form.reset();
     const data = correctData;
     data.consent = false;
-    component.form.setValue(data);
+    component.form.reset(data);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
   });
 
   it('should set form invalid if only wrong input is provided.', () => {
-    component.form.reset();
-    component.form.setValue(incorrectData);
+    component.form.reset(incorrectData);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
   });
 
   it('should set form invalid if some wrong input is provided.', () => {
     // Incorrect email
-    component.form.reset();
     let data = correctData;
     data.email = incorrectData.email;
-    component.form.setValue(data);
+    component.form.reset(data);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
     // Incorrect iban
-    component.form.reset();
     data = correctData;
     data.iban = incorrectData.iban;
-    component.form.setValue(data);
+    component.form.reset(data);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
   });
