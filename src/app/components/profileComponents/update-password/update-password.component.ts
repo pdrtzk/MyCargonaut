@@ -30,6 +30,8 @@ export class UpdatePasswordComponent implements OnInit {
       return;
     }
     this.submitCallback.emit(this.updatePasswordForm.controls.password.value);
+    this.updatePasswordForm.reset();
+    this.dialogRef.close();
   }
 
 }

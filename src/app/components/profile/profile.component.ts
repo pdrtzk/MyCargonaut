@@ -201,10 +201,12 @@ export class ProfileComponent implements OnInit {
   onSelectFile(event) { // called each time file input changes
     if (event.target.files && event.target.files[0]) {
       const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
+      reader.readAsDataURL(event.target.files[0]);
+
       // tslint:disable-next-line:no-shadowed-variable
-      reader.onload = (event) => { // called once readAsDataURL is completed
+      reader.onload = (event) => {
         this.picsrc = event.target.result;
+        console.log(event.target.result);
       };
     }
   }
@@ -219,7 +221,6 @@ export class ProfileComponent implements OnInit {
     const test = this.dialog.open(UpdatePasswordComponent);
     const sub = test.componentInstance.submitCallback.subscribe((result: string) => {
       this.changePassword(result);
-      test.close();
     });
     test.afterClosed().subscribe(() => {
     });
