@@ -66,7 +66,6 @@ export function app(): express.Express {
   }
 
 
-
   /*****************************************************************************
    *           Authentication - Login / logout / Register       *
    *****************************************************************************/
@@ -84,6 +83,7 @@ export function app(): express.Express {
       }
     };
   }
+
   // checks if User is allowed to use action
   function isPrivileged(permissionId: number) {
     return (req: Request, res: Response, next) => {
@@ -97,6 +97,7 @@ export function app(): express.Express {
       }
     };
   }
+
 // check if logged in
   server.get('/api/login', isLoggedIn(), (req: Request, res: Response) => {
     res.status(200).send({
@@ -119,7 +120,10 @@ export function app(): express.Express {
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
-          birthday: rows[0].geburtsdatum
+          birthday: rows[0].geburtsdatum,
+          account_holder: rows[0].kontoinhaber,
+          iban: rows[0].iban,
+          bic: rows[0].bic
         };
         // @ts-ignore
         req.session.user = user;
@@ -155,14 +159,20 @@ export function app(): express.Express {
     const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
     const birthday: string = (req.body.birthday).toLocaleString();
-    const data: [string, string, string, string, string] = [
+    const account_holder = req.body.account_holder;
+    const iban = req.body.iban;
+    const bic = req.body.bic;
+    const data: [string, string, string, string, string, string, string, string] = [
       firstname,
       lastname,
       password,
       email,
       birthday,
+      account_holder,
+      iban,
+      bic
     ];
-    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum) VALUES (NULL, ?, ?, ?, ?, ?);';
+    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
     queryPromise(query, data).then(results => {
       res.status(201).send({
         message: 'Neuer Nutzer erstellt!',
@@ -176,6 +186,31 @@ export function app(): express.Express {
     );
   });
 
+// Change Password
+  server.put('/api/password/:cargonaut', async (req: Request, res: Response) => {
+    const id: number = Number(req.params.cargonaut);
+    const password: string = cryptoJS.SHA512(req.body.password).toString();
+    const data: [string, number] = [
+      password,
+      id,
+    ];
+    const query = 'UPDATE cargonaut SET password = ? WHERE id = ?;';
+    queryPromise(query, data).then(result => {
+      if (result.affectedRows > 0) {
+        res.status(200).send({
+          message: `Updated Password for user ${id}`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'Keinen User zum bearbeiten gefunden.',
+        });
+      }
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Der User konnte nicht bearbeitet werden.',
+      });
+    });
+  });
 
   /*****************************************************************************
    *           Cargonaut       *
@@ -250,6 +285,29 @@ export function app(): express.Express {
   });
 
 
+  server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const query = 'DELETE FROM cargonaut WHERE id = ?;';
+
+    queryPromise(query, [id]).then(result => {
+      // Check if database response contains at least one entry
+      if (result.affectedRows === 1) {
+        res.status(200).send({
+          message: `User gelöscht`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    }).catch(err => {
+      // Database operation has failed
+      res.status(500).send({
+        message: 'Datenbank Fehler: ' + err
+      });
+    });
+  });
+
   /*****************************************************************************
    *           Fahrzeuge       *
    *****************************************************************************/
@@ -286,7 +344,6 @@ export function app(): express.Express {
           modell,
           kommentar
         ];
-
         const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
         queryPromise(query, data).then(results => {
           res.status(201).send({
@@ -294,7 +351,7 @@ export function app(): express.Express {
             createdVehicle: results.insertId,
           });
         }).catch(() => {
-          res.status(400).send({
+            res.status(400).send({
               message: 'Fehler beim Erstellen eines Fahrzeugs.',
             });
           }
@@ -398,8 +455,53 @@ export function app(): express.Express {
       });
     });
   });
+  // Update vehicle
+  server.put('/api/vehicle/:vehicle', (req: Request, res: Response) => {
+    // Read data from request body
+    const id: number = Number(req.params.vehicle);
+    const art: string = req.body.type;
+    const anzahlSitzplaetze: number = req.body.seats;
+    const laenge: number = req.body.length;
+    const breite: number = req.body.width;
+    const hoehe: number = req.body.height;
+    const kommentar: string = req.body.comment;
+    const modell: string = req.body.model;
+    let ladeflaeche: number;
+    const dataLade: [number, number, number] = [
+      laenge,
+      breite,
+      hoehe,
+    ];
+    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+    queryPromise(queryLade, dataLade).then(result => {
+      ladeflaeche = result.insertId;
+      const data: [string, number, number, string, string, number] = [
+        art,
+        anzahlSitzplaetze,
+        ladeflaeche,
+        modell,
+        kommentar,
+        id
+      ];
+      const query = 'UPDATE fahrzeug SET art = ?, anzahl_sitzplaetze = ?, ladeflaeche = ?, modell = ?, kommentar = ? WHERE id = ?;';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Fahrzeug aktualisiert!',
+          createdVehicle: results.insertId,
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Updaten des Fahrzeugs.',
+          });
+        }
+      );
 
-
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Aktualisieren des Laderaums.',
+      });
+    });
+  });
   /*****************************************************************************
    *           Post       * //
    *****************************************************************************/
@@ -761,7 +863,35 @@ export function app(): express.Express {
       });
     });
   });
-  // Durchschnittsbewertung eines Cargonauten
+  // get bewertungen -> Alle Bewertungen, die zu einem Post gehören
+  server.get('/api/bewertungen/:post', (req: Request, res: Response) => {
+    const post: number = Number(req.params.post);
+    const data: [number] = [
+      post,
+    ];
+    const query = 'SELECT * FROM bewertung WHERE fahrt = ?';
+    queryPromise(query, data).then(results => {
+      const ratings: Rating [] = [];
+      for (const result of results) {
+        const rating: Rating = {
+          id: result.id,
+          author: result.verfasser,
+          trip: result.fahrt,
+          ratingStars: result.punktzahl,
+          comment: result.kommentar
+        };
+        ratings.push(rating);
+      }
+      res.status(200).send({
+        ratings,
+      });
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim getten der Bewertungen!',
+      });
+    });
+  });
+// Durchschnittsbewertung eines Cargonauten
   server.get('/api/avgBewertung/:cargonaut', (req: Request, res: Response) => {
     const cargonaut: number = Number(req.params.cargonaut);
     const data: [number] = [

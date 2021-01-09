@@ -7,7 +7,7 @@ import {first} from 'rxjs/operators';
 import {AlertService} from 'src/app/components/alert/alert.service';
 import {AccountService} from '../../../services/account.service';
 
-@Component({templateUrl: 'register.component.html', selector: 'app-register', styleUrls: ['register.component.css']})
+@Component({templateUrl: 'register.component.html', selector: 'app-register', styleUrls: ['../account.css']})
 export class RegisterComponent implements OnInit {
   form: FormGroup;
   loading = false;
@@ -34,7 +34,14 @@ export class RegisterComponent implements OnInit {
       lastname: ['', Validators.required],
       birthday: ['', Validators.required], // Validators.pattern('([1-9]|0[1-9]|1[0-9]|2[0-9]|3[01])\\.([1-9]|0[1-9]|1[012])\\.[0-9]{4})')
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      account_holder: [''],
+      iban: ['', [
+        Validators.required, Validators.minLength(22),
+        Validators.pattern('DE[ ]*[0-9]{2}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{2}[ ]*')
+      ]],
+      bic: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+      consent: [false, Validators.requiredTrue]
     });
   }
 

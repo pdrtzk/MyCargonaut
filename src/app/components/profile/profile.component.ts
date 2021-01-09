@@ -12,6 +12,7 @@ import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.
 import {VehicleService} from '../../services/vehicle.service';
 import {RatingService} from '../../services/rating.service';
 import {AlertService} from '../alert/alert.service';
+import {Router} from '@angular/router';
 
 
 @Component({
@@ -40,7 +41,9 @@ export class ProfileComponent implements OnInit {
     private ratingsService: RatingService,
     private alertService: AlertService,
     private dialog: MatDialog,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
+
   ) {
   }
 
@@ -196,5 +199,22 @@ export class ProfileComponent implements OnInit {
         this.picsrc = event.target.result;
       };
     }
+  }
+
+  deleteUser() {
+    this.accountService.delete(this.myuser).then(() => {
+      this.alertService.success('Cargonaut wurde gelöscht.', {keepAfterRouteChange: true});
+      this.router.navigate(['/']);
+    }, error => {
+      this.alertService.error('Cargonaut konnte nicht gelöscht werden.');
+    });
+  }
+
+  changePassword(password: string) {
+    this.accountService.updatePassword(this.myuser, password).then(() => {
+      this.alertService.success('Passwort erfolgreich geändert.');
+    }, error => {
+      this.alertService.error('Passwort konnte nicht geändert werden.');
+    });
   }
 }
