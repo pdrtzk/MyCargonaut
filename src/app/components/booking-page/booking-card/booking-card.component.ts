@@ -22,14 +22,19 @@ export class BookingCardComponent implements OnInit {
     this.commentSectionVisible = !this.commentSectionVisible;
   }
 
+  isCommentSectionAvailable(booking: Post) {
+    return booking?.status === DriveStatus.ABGESCHLOSSEN;
+  }
+
   async ngOnInit(): Promise<void> {
     console.log(this.booking);
-    this.commentSectionAvailable = this.booking.status === DriveStatus.ABGESCHLOSSEN;
-    if (!this.booking?.author?.id) {
-      return;
+    this.commentSectionAvailable = this.isCommentSectionAvailable(this.booking);
+    if (this.booking?.author?.id) {
+      const cargonaut = await this.accountService.getUser(this.booking.author.id);
+      this.booking.author = cargonaut;
+    } else {
+      console.log('No author id!');
     }
-    const cargonaut = await this.accountService.getUser(this.booking.author.id);
-    this.booking.author = cargonaut;
   }
 
 }
