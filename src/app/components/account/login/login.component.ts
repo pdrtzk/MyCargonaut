@@ -10,10 +10,6 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
-  @Output()
-  registerClick: EventEmitter<void> = new EventEmitter<void>();
-  @Output()
-  closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,19 +51,14 @@ export class LoginComponent implements OnInit {
         this.loading = false;
         const returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
         this.router.navigateByUrl(returnUrl, {replaceUrl: true});
-        this.alertService.success('Angemeldet.');
-        this.closeEvent.emit(true);
+        // this.alertService.success('Angemeldet.');
       },
       error => {
         /* TODO: Error message für Benutzer verständlich ausgeben + Fehlermeldung im Pop up nicht im Hintergrund */
-        this.alertService.error(error);
+        this.alertService.error(error.message);
         this.loading = false;
       });
     console.log('Login: ' + user?.email);
-  }
-
-  showRegister() {
-    this.registerClick.emit();
   }
 
 

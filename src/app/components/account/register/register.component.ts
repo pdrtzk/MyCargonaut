@@ -12,8 +12,6 @@ export class RegisterComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
-  @Output()
-  loginClick: EventEmitter<void> = new EventEmitter<void>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -66,16 +64,12 @@ export class RegisterComponent implements OnInit {
     this.accountService.register(this.form.value).then(
       () => {
         this.alertService.success('Registrierung erfolgreich. Sie können sich nun anmelden.', {keepAfterRouteChange: true});
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login']).then();
       },
       error => {
         // TODO: Fehler für Benutzer verständlich ausgeben
-        this.alertService.error(error);
+        this.alertService.error(error.message);
         this.loading = false;
       });
-  }
-
-  showLogin() {
-    this.loginClick.emit();
   }
 }
