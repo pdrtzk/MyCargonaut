@@ -72,7 +72,7 @@
         <div class="post-top-row" style="justify-content: space-between">
           <!-- weitere Vorschläge (content) -->
           <div *ngFor="let relPost of relatedPosts">
-            <app-post-display-card [relPost]="relPost"></app-post-display-card>
+            <app-post-display-card [relPost]="relPost" style="width: 15%"></app-post-display-card>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
               <p class="post-green-text" style="font-size: 20px">{{post?.startlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-              {{post?.start_time}}, {{post?.start_time}}
+              {{post?.start_time?.toLocaleString()}}
             </p>
           </div>
           <div>
@@ -111,7 +111,7 @@
               <p class="post-green-text" style="font-size: 20px">{{post?.endlocation}}</p>
             </div>
             <p class="post-value" style="font-size: 20px; margin-top: -20px; text-align: right">
-              {{post?.end_time}}, {{post?.end_time}}
+              {{post?.end_time?.toLocaleString()}}
             </p>
           </div>
         </div>
