@@ -12,7 +12,7 @@ export class BookingService {
 
   // todo query data for 1 specific cargonaut
 
-  getInboxBookings(cargonautId: number): Promise<Post[]> {
+  getBookingsForCargonaut(cargonautId: number): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
@@ -47,10 +47,6 @@ export class BookingService {
         reject(error);
       });
     });
-  }
-
-  getOutboxBookings( /*cargonaut: Cargonaut */): Post[] {
-    return [];
   }
 
 }

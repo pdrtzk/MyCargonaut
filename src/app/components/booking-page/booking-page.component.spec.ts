@@ -3,6 +3,7 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 
 import {BookingPageComponent} from './booking-page.component';
 import {HttpClient} from '@angular/common/http';
+import {Post} from '../../../shared/post.model';
 
 describe('BookingPageComponent', () => {
   let component: BookingPageComponent;
@@ -30,5 +31,11 @@ describe('BookingPageComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should correctly filter Outbox Bookings', () => {
+    const testBookings: Post[] = [{author: {id: 1}}, {author: {id: 2}}];
+    expect(component.filterOutboxBookings(testBookings, 1)).toContain(testBookings[0]);
+    expect(component.filterOutboxBookings(testBookings, 1)).not.toContain(testBookings[1]);
   });
 });

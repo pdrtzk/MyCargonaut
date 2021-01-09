@@ -26,8 +26,21 @@ export class BookingPageComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.currentUser = await this.accountService.user;
-    this.inbox = await this.bookingService.getInboxBookings(this.currentUser?.id);
-    this.outbox = this.bookingService.getOutboxBookings();
+    if (this.currentUser?.id) {
+      const bookings = await this.bookingService.getBookingsForCargonaut(this.currentUser?.id);
+      this.inbox = this.filterInboxBookings(bookings, this.currentUser.id);
+      this.outbox = this.filterOutboxBookings(bookings, this.currentUser.id);
+    } else {
+      console.log('no current user!');
+    }
+  }
+
+  filterInboxBookings(bookings: Post[], customerId): Post[] {
+    return []; // todo
+  }
+
+  filterOutboxBookings(bookings: Post[], authorId: number): Post[] {
+    return bookings.filter(booking => booking.author.id === authorId);
   }
 
 }
