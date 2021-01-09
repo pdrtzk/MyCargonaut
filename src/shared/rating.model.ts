@@ -7,4 +7,5 @@ export class Rating {
   trip?: Post;
   ratingStars?: number;
   comment?: string;
+
 }

@@ -11,6 +11,7 @@ import {AccountService} from '../../services/account.service';
 export class HeaderComponent implements OnInit {
   userLoggedIn = false;
   navbarOpen = false;
+  userId: number;
 
 
   constructor(
@@ -30,4 +31,8 @@ export class HeaderComponent implements OnInit {
     await this.accountService.logout();
   }
 
+  getUserId(){
+    this.userId = this.accountService.user.id;
+    return this.userId;
+  }
 }

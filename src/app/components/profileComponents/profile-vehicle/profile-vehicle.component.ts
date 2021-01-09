@@ -24,7 +24,7 @@ export class ProfileVehicleComponent implements OnInit {
     this.editVehicleForm = this.formBuilder.group({
       type: [this.getVehicleType(), Validators.required],
       model: [this.vehicle.type.description, Validators.required], // description
-      seats: [this.vehicle.seats, Validators.required],
+      seats: [this.vehicle.seats, [Validators.required, Validators.min(1)]],
       comment: [this.vehicle.comment],
       length: [this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.length : 0],
       width: [this.vehicle.type.type !== VehicleTypeType.PKW ? this.vehicle.hold.width : 0],

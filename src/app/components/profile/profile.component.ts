@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Rating} from '../../../shared/rating.model';
 import {Vehicle} from '../../../shared/vehicle.model';
-import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
-import {Hold} from '../../../shared/hold.model';
 import {DatePipe} from '@angular/common';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
@@ -16,6 +15,7 @@ import {AlertService} from '../alert/alert.service';
 
 
 @Component({
+ // encapsulation: ViewEncapsulation.ShadowDom,
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
@@ -23,8 +23,8 @@ import {AlertService} from '../alert/alert.service';
 })
 
 export class ProfileComponent implements OnInit {
-  user: Cargonaut; // the user to whom the profile belongs to - get through id from service later on
-  myuser: Cargonaut; // the logged in user - get from service later
+  user: Cargonaut = {}; // the user to whom the profile belongs to - get through id from service later on
+  myuser: Cargonaut = {}; // the logged in user - get from service later
   ratingsUser: Rating [] = [];
   vehiclesUser: Vehicle [] = [];
   ownProfile: boolean;
@@ -39,35 +39,32 @@ export class ProfileComponent implements OnInit {
     private vehicleService: VehicleService,
     private ratingsService: RatingService,
     private alertService: AlertService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
-    this.accountService.isLoggedIn(); // get newest user after
+    console.log(this.accountService.isLoggedIn()); // get newest user after
     this.myuser = this.accountService.user;
-    this.user = this.myuser; // todo: remove
-    this.ownProfile = true; // or false, depending on id
-    this.getVehiclesForUser();
-    // this.getRatingsForUser();
+    this.route.paramMap.subscribe( paramMap => {
+      this.user.id = parseFloat(paramMap.get('id'));
+      console.log(this.user.id);
+      this.getProfileUser().then();
+      this.getVehiclesForUser().then();
+      this.getRatingsForUser().then();
+    });
+  }
 
-
-    let rating1: Rating;
-    rating1 = {
-      ratingStars: 4,
-      comment: 'Guter Preis, aber kam etwas später als vereinbart.',
-      author: this.user
-    };
-
-    let rating2: Rating;
-    rating2 = {
-      ratingStars: 2,
-      comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
-      author: this.user
-    };
-
-    this.ratingsUser = [rating1, rating2];
+  async getProfileUser(): Promise<void> {
+    if (this.user.id === this.myuser.id) {
+      this.user = this.myuser;
+      this.ownProfile = true;
+    } else {
+      this.ownProfile = false;
+      this.user = await this.accountService.get(this.user.id);
+    }
   }
 
   async getVehiclesForUser(): Promise<void> {
@@ -87,7 +84,7 @@ export class ProfileComponent implements OnInit {
   }
 
   async getRatingsForUser(): Promise<void> {
-    let tempRatings: Rating[];
+    let tempRatings: Rating[] = [];
     this.ratingsUser.length = 0; // deletes all elements
     await this.ratingsService.getRatingsForUser(this.user.id).then(
       res => {
@@ -95,8 +92,9 @@ export class ProfileComponent implements OnInit {
       }
     );
     tempRatings.forEach(async elem => {
-      // todo: get author from id through accountservice
-      // await this.accountService.getUser(elem.author.id);
+      const temp = elem.author.id;
+      elem.author = await this.accountService.get(elem.author.id).then();
+      elem.author.id = temp;
       this.ratingsUser.push(elem);
     });
   }
@@ -140,10 +138,8 @@ export class ProfileComponent implements OnInit {
 
   submitEditUser(user: Cargonaut): void {
     // todo: error
-    console.log(user);
     this.accountService.update(user).then(() => {
       this.user = user;
-      console.log('ok');
       document.getElementById('editProfileForm').style.display = 'none';
       document.getElementById('user-info').style.display = 'block';
       this.alertService.success('Profil wurde erfolgreich bearbeitet.');

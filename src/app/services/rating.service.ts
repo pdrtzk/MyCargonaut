@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Vehicle} from '../../shared/vehicle.model';
 import {Rating} from '../../shared/rating.model';
+import {Cargonaut} from '../../shared/cargonaut.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +13,22 @@ export class RatingService {
 
   getRatingsForUser(cargonautId: number): Promise<any>{
     const http = this.http;
-    return new Promise<Vehicle[]>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/bewertungen/' + cargonautId.toString(), {
+    return new Promise<Rating[]>(async (resolve, reject) => {
+      await http.get('http://localhost:4200/api/bewertungen/' + cargonautId.toString(), {
       }).toPromise().then((res: any) => {
-        res.bewertungen.forEach(elem => {
-          const r: Rating = new Rating();
-          r.author.id = elem.verfasser;
-          r.comment = elem.kommentar;
-          r.ratingStars = parseFloat(elem.punktzahl);
+        const tempRatings: Rating[] =  [];
+        res.ratings.forEach(elem => {
+          const r: Rating = {
+            id: elem.id,
+            author: {
+              id: elem.author
+            },
+            ratingStars: parseFloat(elem.ratingStars),
+            comment: elem.comment
+          };
+          tempRatings.push(r);
           });
-        console.log(res);
-        resolve(res.bewertungen);
+        resolve(tempRatings);
       }).catch(error => {
         console.log('Error: ' + error);
         reject(error);

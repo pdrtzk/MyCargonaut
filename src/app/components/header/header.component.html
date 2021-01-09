@@ -11,7 +11,7 @@
       <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']">LOGIN</a></div>
       <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']">REGISTRIEREN</a></div>
       <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']">BUCHUNGEN</a></div>
-      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile']">PROFIL</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile/'+getUserId()]">PROFIL</a></div>
     </div>
   </div>
 
@@ -22,7 +22,7 @@
         <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']">LOGIN</a></div>
         <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']">REGISTRIEREN</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']">BUCHUNGEN</a></div>
-        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile']">PROFIL</a></div>
+        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile/'+getUserId()]">PROFIL</a></div>
         <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['home']" (click)="onLogout()">LOGOUT</a></div>
       </div>
     </div>

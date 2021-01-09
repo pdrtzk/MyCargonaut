@@ -739,7 +739,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -757,7 +757,7 @@ export function app(): express.Express {
       });
     }).catch(() => {
       res.status(400).send({
-        message: 'Fehler beim getten der Bewertungen!',
+        message: 'Fehler beim Getten der Bewertungen!',
       });
     });
   });

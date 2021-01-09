@@ -1,3 +1,7 @@
+@import "../../../../node_modules/bootstrap/dist/css/bootstrap.css";
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+
 .logo {
   height: auto;
   max-width: 350px;

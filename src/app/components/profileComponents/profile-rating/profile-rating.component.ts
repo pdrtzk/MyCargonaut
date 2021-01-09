@@ -14,6 +14,7 @@ export class ProfileRatingComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('in post-rating:' + this.rating.author.id);
   }
 
 }
