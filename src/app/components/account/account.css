@@ -1,0 +1,29 @@
+button {
+  background-color: #005b52;
+  border-style: none;
+  padding: 8px;
+  margin: 8px;
+  color: #fff;
+  font-family: Arial, serif;
+}
+button:hover, a:hover {
+  background-color: #004b43;
+}
+
+button:focus, .btn-primary:not(:disabled):not(.disabled):active {
+  background-color: #003d38;
+}
+
+a, label {
+  font-family: Arial, serif;
+  color: #005b52;
+}
+
+div {
+  font-family: Arial, serif;
+}
+
+.btn-link {
+  padding: 8px;
+  margin: 8px;
+}
