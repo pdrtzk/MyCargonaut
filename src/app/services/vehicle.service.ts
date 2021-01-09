@@ -46,7 +46,6 @@ export class VehicleService {
     return new Promise<Vehicle>(async (resolve, reject) => {
       await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {
       }).toPromise().then((res: any) => {
-        console.log(res);
         ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
         ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
         ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
@@ -59,13 +58,14 @@ export class VehicleService {
   }
 
   // update vehicle - no backend right now
-  public async updateVehicle(vehicle: Vehicle): Promise<Vehicle> {
+  public async updateVehicle(vehicle: Vehicle): Promise<string> {
     const http = this.http;
-    return new Promise<Cargonaut>(async (resolve, reject) => {
+    return new Promise<string>(async (resolve, reject) => {
       await http.put('http://localhost:4200/api/vehicle/' + vehicle.id.toString(), {
         vehicle
       }).toPromise().then((res: any) => {
-        resolve(res);
+        console.log(res);
+        resolve(res.message);
       }).catch(error => {
         console.log('Error: ' + error.message);
         reject(error);
@@ -103,12 +103,10 @@ export class VehicleService {
 
   // remove vehicle
   public async deleteVehicle(vehicleId: number): Promise<boolean> {
-    console.log('delete vehicle');
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
       await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {
       }).toPromise().then((res: any) => {
-        console.log(res);
         resolve(true);
       }).catch(error => {
         console.log('Error: ' + error);

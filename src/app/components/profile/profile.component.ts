@@ -155,8 +155,8 @@ export class ProfileComponent implements OnInit {
   submitEditVehicle(car: Vehicle): void {
     this.vehicleService.updateVehicle(car).then(
       res => {
-        const index = this.vehiclesUser.findIndex(s => s.id === res.id);
-        this.vehiclesUser[index] = res;
+        const index = this.vehiclesUser.findIndex(s => s.id === car.id);
+        this.vehiclesUser[index] = car;
         this.alertService.success('Fahrzeug wurde erfolgreich bearbeitet.');
       },
       error => {
