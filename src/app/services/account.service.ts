@@ -119,4 +119,43 @@ export class AccountService {
    * @returns resolved Promise<void> if user is deleted or rejected error otherwise
    *
    */
+  public async delete(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.delete('http://localhost:4200/api/cargonaut/' + user.id).toPromise().then((res: any) => {
+          this.isLoggedIn();
+          console.log(res.message);
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+  public async updatePassword(user: Cargonaut, password: string): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.put('http://localhost:4200/api/password/' + user.id, {password}).toPromise().then((res: any) => {
+          // this.isLoggedIn();
+          console.log(res.message);
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
 }
