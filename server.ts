@@ -120,7 +120,10 @@ export function app(): express.Express {
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
-          birthday: rows[0].geburtsdatum
+          birthday: rows[0].geburtsdatum,
+          account_holder: rows[0].kontoinhaber,
+          iban: rows[0].iban,
+          bic: rows[0].bic
         };
         // @ts-ignore
         req.session.user = user;
