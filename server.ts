@@ -154,36 +154,45 @@ export function app(): express.Express {
 
 // Registrieren
   server.post('/api/cargonaut', async (req: Request, res: Response) => {
-    const firstname: string = req.body.firstname;
-    const lastname: string = req.body.lastname;
-    const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
-    const birthday: string = (req.body.birthday).toLocaleString();
-    const account_holder = req.body.account_holder;
-    const iban = req.body.iban;
-    const bic = req.body.bic;
-    const data: [string, string, string, string, string, string, string, string] = [
-      firstname,
-      lastname,
-      password,
-      email,
-      birthday,
-      account_holder,
-      iban,
-      bic
-    ];
-    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
-    queryPromise(query, data).then(results => {
-      res.status(201).send({
-        message: 'Neuer Nutzer erstellt!',
-        createdUser: results.insertId,
-      });
-    }).catch(() => {
-        res.status(400).send({
+    const emailQuery = 'SELECT * FROM cargonaut where email = ?;';
+    queryPromise(emailQuery, [email]).then(rows => {
+      if (rows.length > 0) {
+        res.status(409).send({
           message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
         });
+      } else {
+        const firstname: string = req.body.firstname;
+        const lastname: string = req.body.lastname;
+        const password: string = cryptoJS.SHA512(req.body.password).toString();
+        const birthday: string = (req.body.birthday).toLocaleString();
+        const account_holder = req.body.account_holder;
+        const iban = req.body.iban;
+        const bic = req.body.bic;
+        const data: [string, string, string, string, string, string, string, string] = [
+          firstname,
+          lastname,
+          password,
+          email,
+          birthday,
+          account_holder,
+          iban,
+          bic
+        ];
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
+        queryPromise(query, data).then(results => {
+          res.status(201).send({
+            message: 'Neuer Nutzer erstellt!',
+            createdUser: results.insertId,
+          });
+        }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Nutzers.',
+            });
+          }
+        );
       }
-    );
+    });
   });
 
 // Change Password
