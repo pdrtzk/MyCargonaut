@@ -69,7 +69,7 @@ export function app(): express.Express {
     // @ts-ignore
     if (req.session.user) {
       // @ts-ignore
-      req.session.cookie.maxAge = 5 * 60 * 1000;
+      req.session.cookie.maxAge = req.session.cookie.maxAge + (5 * 60 * 1000); // 1 Minute
     }
     next();
   }
