@@ -140,8 +140,8 @@
         Fahrzeugtyp
       </p>
       <select> <!-- todo change -->
-        <option selected value="{{post?.vehicle?.type}}">{{post?.vehicle?.type?.type?.toString()}}</option>
-        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.type?.toString()}}</option>
+        <option selected value="{{post?.vehicle?.type}}">{{post?.vehicle?.type?.type?.toString()}}: {{post.vehicle.id}}</option>
+        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.type?.toString()}}: {{vehicle.id}}</option>
       </select>
     </div>
     <div class="post-edit">
@@ -149,28 +149,6 @@
         freie Sitze
       </p>
       <input value="{{post.seats}}" #seatsInput (change)="updatePostProperty('seats', seatsInput.value )"/>
-    </div>
-    <div class="post-edit">
-      <p>
-        freie Ladefläche (L*B*H)
-      </p>
-      <div style="display: flex; flex-direction: row;">
-        <input #holdLengthInput value="{{post?.hold?.length}}" (change)="setLength(holdLengthInput.value)"/>
-        <input #holdWidthInput value="{{post?.hold?.width}}" (change)="setWidth(holdWidthInput.value)"/>
-        <input #holdHeightInput value="{{post?.hold?.height}}" (change)="setHeight(holdHeightInput.value)"/>
-      </div>
-    </div>
-    <div class="post-edit">
-      <p>
-        Abfahrtsort
-      </p>
-      <input #startLocationInput value="{{post?.startlocation}}" (change)="startLocationInput.value"/>
-    </div>
-    <div class="post-edit">
-      <p>
-        Zielort
-      </p>
-      <input #endLocationInput value="{{post?.endlocation}}" (change)="endLocationInput.value"/>
     </div>
     <div class="post-edit">
       <p>

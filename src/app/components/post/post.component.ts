@@ -49,6 +49,10 @@ export class PostComponent implements OnInit {
       const userData = this.accountService.getUser(this.post.author.id);
       this.post.author = await userData;
       this.post.author.id = id;
+      // get author's vehicles (for editing)
+      if (this.loggedInUserIsOwner) {
+        this.vehicles = await this.vehicleService.getAllVehicles(id);
+      }
     }
     if (this.post?.vehicle?.id) {
       // get vehicle data
