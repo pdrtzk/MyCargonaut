@@ -10,6 +10,14 @@ import {Subject} from 'rxjs';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Location} from '@angular/common';
 
+const loggedInCargonaut: Cargonaut = {
+  id: 12,
+  firstname: 'Test',
+  lastname: 'Cargonaut',
+  birthday: new Date('1990-12-12'),
+  email: 'test@test.de'
+};
+
 const accountServiceStub  = {
   logout(): Promise<void> {
     return new Promise<void>(resolve => resolve());
@@ -17,7 +25,10 @@ const accountServiceStub  = {
   isLoggedIn(): Promise<boolean> {
     return new Promise<boolean>(resolve => resolve(true));
   },
-  userSubject: new Subject<Cargonaut>()
+  userSubject: new Subject<Cargonaut>(),
+  get user() {
+    return loggedInCargonaut;
+  }
 };
 
 const routes: Routes = [

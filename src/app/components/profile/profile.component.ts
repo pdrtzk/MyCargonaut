@@ -25,8 +25,8 @@ import {UpdatePasswordComponent} from '../profileComponents/update-password/upda
 })
 
 export class ProfileComponent implements OnInit {
-  user: Cargonaut = {}; // the user to whom the profile belongs to - get through id from service later on
-  myuser: Cargonaut = {}; // the logged in user - get from service later
+  user: Cargonaut = {}; // the profile owner
+  myuser: Cargonaut = {}; // the logged in user
   ratingsUser: Rating [] = [];
   vehiclesUser: Vehicle [] = [];
   ownProfile: boolean;
@@ -54,7 +54,6 @@ export class ProfileComponent implements OnInit {
     this.myuser = this.accountService.user;
     this.route.paramMap.subscribe( paramMap => {
       this.user.id = parseFloat(paramMap.get('id'));
-      console.log(this.user.id);
       this.getProfileUser().then();
       this.getVehiclesForUser().then();
       this.getRatingsForUser().then();

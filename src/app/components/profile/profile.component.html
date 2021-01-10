@@ -5,16 +5,16 @@
 
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
-      <button class="editButton" type="button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
-      <button class="editButton bot-row" type="button">Meine Nachrichten</button>
+      <button class="editButton" type="button" id="addVehicle-button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
+      <button class="editButton bot-row" id="messages-button" type="button">Meine Nachrichten</button>
       <button class="editButton bot-row" type="button" id="picButton" (click)="editPic()">Profilbild ändern</button>
       <div id="edit-profile-pic">
         <input type='file' name="pic" id="pic" accept="image/*" (change)="onSelectFile($event)">
         <label class="pick-pic form-button" for="pic">Datei wählen</label>
         <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Bestätigen</button>
       </div>
-      <button class="editButton bot-row" type="button" (click)="openUpdatePWDialog()">Passwort ändern</button>
-      <button class="editButton bot-row" type="button" (click)="deleteUserConfirm()">Nutzer entfernen</button>
+      <button class="editButton bot-row" type="button" id="updatePW-button" (click)="openUpdatePWDialog()">Passwort ändern</button>
+      <button class="editButton bot-row" type="button" id="deleteuser-button" (click)="deleteUserConfirm()">Nutzer entfernen</button>
     </ng-template>
   </div>
 
