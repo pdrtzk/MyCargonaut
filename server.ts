@@ -65,6 +65,14 @@ export function app(): express.Express {
     });
   }
 
+  function updateCookie(req: Request, res: Response, next: any){
+    // @ts-ignore
+    if (req.session.user) {
+      // @ts-ignore
+      req.session.cookie.maxAge = req.session.cookie.maxAge + (5 * 60 * 1000); // 1 Minute
+    }
+    next();
+  }
 
   /*****************************************************************************
    *           Authentication - Login / logout / Register       *
@@ -77,8 +85,8 @@ export function app(): express.Express {
       if (req.session.user) {
         next();
       } else {
-        res.status(401).send({
-          message: 'User nicht mehr eingeloggt. Erneut anmelden!',
+        res.status(200).send({
+          message: 'User nicht mehr eingeloggt. Bitte anmelden!',
         });
       }
     };
@@ -88,10 +96,10 @@ export function app(): express.Express {
   function isPrivileged(permissionId: number) {
     return (req: Request, res: Response, next) => {
       // @ts-ignore
-      if (permissionId === Number(req.session.cookie.user.id)) {
+      if (permissionId === Number(req.session.user.id)) {
         next();
       } else {
-        res.status(403).send({
+        res.status(200).send({
           message: 'You have no Permission to do this.',
         });
       }
@@ -904,12 +912,12 @@ export function app(): express.Express {
 // Example Express Rest API endpoints
 // server.get('/api/**', (req, res) => { });
 // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
+  server.get('*.*', updateCookie, express.static(distFolder, {
     maxAge: '1y'
   }));
 
 // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
+  server.get('*', updateCookie, (req, res) => {
     res.render(indexHtml, {req, providers: [{provide: APP_BASE_HREF, useValue: req.baseUrl}]});
   });
 
