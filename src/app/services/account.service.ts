@@ -8,7 +8,7 @@ import {Subject} from 'rxjs';
 })
 export class AccountService {
 
-  constructor(private http: HttpClient) {
+  constructor(private readonly http: HttpClient) {
     this.userSubject.subscribe(value => this.authenticatedUser = value);
   }
 
@@ -27,7 +27,6 @@ export class AccountService {
         resolve(true);
       }).catch(error => {
         this.userSubject.next(null);
-        console.log('Error: ' + error);
         resolve(false);
       });
     });
@@ -44,7 +43,7 @@ export class AccountService {
         this.userSubject.next(res.user);
         resolve(res.user);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -57,7 +56,7 @@ export class AccountService {
         this.userSubject.next(null);
         resolve();
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -65,28 +64,98 @@ export class AccountService {
 
   public async register(user: Cargonaut): Promise<void> {
     const http = this.http;
+    if (user.account_holder === '') {
+      user.account_holder = user.firstname + ' ' + user.lastname;
+    }
+    user.iban = user.iban.replace(/\s/g, '');
     return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/cargonaut', user).toPromise().then(() => {
         // this.login(user.email, user.password).then(() => resolve());
         resolve();
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
 
-  public async getUser(id: number): Promise<Cargonaut> {
+  /**
+   * @returns a Cargonaut object with id, firstname and lastname of the specified cargonaut id.
+   * @param userId: the id of the wanted user (Cargonaut)
+   */
+  public async get(userId: number): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/cargonaut/' + id).toPromise().then((res: any) => {
-        console.log('cargonaut: ' + res);
-        const user: Cargonaut = {};
-        resolve(user);
+      await http.get('http://localhost:4200/api/cargonaut/' + userId).toPromise().then((res: any) => {
+        resolve(res.user);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
+    });
+  }
+
+  public async update(user: Cargonaut): Promise<void> { // TODO: check if logged in user is updates user
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.put('http://localhost:4200/api/cargonaut/' + user.id, user).toPromise().then((res: any) => {
+          this.isLoggedIn();
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+  /**
+   * TODO
+   * @returns resolved Promise<void> if user is deleted or rejected error otherwise
+   *
+   */
+  public async delete(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.delete('http://localhost:4200/api/cargonaut/' + user.id).toPromise().then((res: any) => {
+          this.logout();
+          console.log(res.message);
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+  public async updatePassword(user: Cargonaut, password: string): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.put('http://localhost:4200/api/password/' + user.id, {password}).toPromise().then((res: any) => {
+          // this.isLoggedIn();
+          console.log(res.message);
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
     });
   }
 }

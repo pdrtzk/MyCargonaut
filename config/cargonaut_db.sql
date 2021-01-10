@@ -80,25 +80,28 @@ CREATE TABLE `cargonaut` (
   `lastname` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `password` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `email` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-  `geburtsdatum` date NOT NULL
+  `geburtsdatum` date NOT NULL,
+  `kontoinhaber` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+  `iban` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+  `bic` varchar(255) COLLATE latin1_german1_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
 
 --
 -- Daten für Tabelle `cargonaut`
 --
 
-INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `geburtsdatum`) VALUES
-(5, 'Admin', 'Admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'admin@admin.de', '0000-00-00'),
-(8, '', '', 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e', 'test@teston.de', '0000-00-00'),
-(13, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@test.de', '0000-00-00'),
-(18, 'Berta', 'Besispiel', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'berta@beispiel.de', '1960-01-01'),
-(19, 'Max', 'Mustermann', 'test', 'max@mustermann.de', '1990-01-12'),
-(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19'),
-(21, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasd.de', '0000-00-00'),
-(22, 'etest', 'tsetdf', 'bbe96aa2ce1149882f168249a4542c8cc3d2972945d25bddeb4e37f8353896c50ef84e69e91d8ecdc0e45bd6e025cee994365f7dc31d92d7411ab4da53f61c59', 'testestets@weaeas.de', '2021-01-20'),
-(24, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@tefghstasd.de', '0000-00-00'),
-(30, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasdfsd.de', '0000-00-00'),
-(31, 'sdfsdf', 'sdfsdfsdf', 'a4faf47676918074799a3c3bb60be7aefd65e4c42db1726846e363f3f3f4f89dc564ae90be19ca66ba711abd4419c3ed4d292b29d7f9e855f1a640312399e826', 'sdfds@wqa.de', '2021-01-27');
+INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `geburtsdatum`, `kontoinhaber`, `iban`, `bic`) VALUES
+(5, 'Admin', 'Admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'admin@admin.de', '0000-00-00', '', '', ''),
+(8, '', '', 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e', 'test@teston.de', '0000-00-00', '', '', ''),
+(13, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@test.de', '0000-00-00', '', '', ''),
+(18, 'Berta', 'Besispiel', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'berta@beispiel.de', '1960-01-01', '', '', ''),
+(19, 'Max', 'Mustermann', 'test', 'max@mustermann.de', '1990-01-12', '', '', ''),
+(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19', '', '', ''),
+(21, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasd.de', '0000-00-00', '', '', ''),
+(22, 'etest', 'tsetdf', 'bbe96aa2ce1149882f168249a4542c8cc3d2972945d25bddeb4e37f8353896c50ef84e69e91d8ecdc0e45bd6e025cee994365f7dc31d92d7411ab4da53f61c59', 'testestets@weaeas.de', '2021-01-20', '', '', ''),
+(24, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@tefghstasd.de', '0000-00-00', '', '', ''),
+(30, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasdfsd.de', '0000-00-00', '', '', ''),
+(31, 'sdfsdf', 'sdfsdfsdf', 'a4faf47676918074799a3c3bb60be7aefd65e4c42db1726846e363f3f3f4f89dc564ae90be19ca66ba711abd4419c3ed4d292b29d7f9e855f1a640312399e826', 'sdfds@wqa.de', '2021-01-27', '', '', '');
 
 -- --------------------------------------------------------
 

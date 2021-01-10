@@ -18,7 +18,6 @@ import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
 import {AlertComponent} from './components/alert/alert.component';
-import {AccountComponent} from './components/account/account.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ProfileComponent} from './components/profile/profile.component';
@@ -32,6 +31,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +47,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     StarRatingComponent,
     PostVehicleTypeIconComponent,
     HomeComponent,
-    AccountComponent,
+    AlertComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
@@ -55,7 +55,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     ProfileRatingComponent,
     ProfileVehicleComponent,
     AddVehicleComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

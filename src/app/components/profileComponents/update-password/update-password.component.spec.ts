@@ -1,13 +1,15 @@
 import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import { AddVehicleComponent } from './add-vehicle.component';
+import { UpdatePasswordComponent } from './update-password.component';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {of} from 'rxjs';
+import {MatDialogModule, MatDialogRef} from '@angular/material/dialog';
 
-describe('AddVehicleComponent', () => {
-  let component: AddVehicleComponent;
-  let fixture: ComponentFixture<AddVehicleComponent>;
+
+
+
+describe('UpdatePasswordComponent', () => {
+  let component: UpdatePasswordComponent;
+  let fixture: ComponentFixture<UpdatePasswordComponent>;
 
   const matDialogRefMock = {
     close: () => { }
@@ -15,8 +17,8 @@ describe('AddVehicleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddVehicleComponent ],
-      imports: [FormsModule, ReactiveFormsModule, MatDialogModule],
+      declarations: [ UpdatePasswordComponent ],
+      imports: [FormsModule, ReactiveFormsModule,  MatDialogModule],
       providers: [
         FormBuilder,
         { provide: MatDialogRef, useValue:  matDialogRefMock },
@@ -26,35 +28,29 @@ describe('AddVehicleComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddVehicleComponent);
+    fixture = TestBed.createComponent(UpdatePasswordComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
-
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('form is invalid when not edited', () => {
-    expect(component.addVehicleForm.valid).toBeFalsy();
-  });
-
-
-  it('#addVehicleCancelBtn should call #onCancel', fakeAsync (() => {
+  it('#updatePWCancelBtn should call #onCancel', fakeAsync (() => {
     const compiled = fixture.debugElement.nativeElement;
     spyOn(component, 'onCancel');
-    const button = compiled.querySelector('#addVehicleCancelBtn');
+    const button = compiled.querySelector('#updatePWCancelBtn');
     button.click();
     tick();
     fixture.detectChanges();
     expect(component.onCancel).toHaveBeenCalled();
   }));
 
-  it('#addVehicleSubmitBtn should call #onSubmit', fakeAsync (() => {
+  it('#updatePWSubmitBtn should call #onSubmit', fakeAsync (() => {
     const compiled = fixture.debugElement.nativeElement;
     spyOn(component, 'onSubmit');
-    const button = compiled.querySelector('#addVehicleSubmitBtn');
+    const button = compiled.querySelector('#updatePWSubmitBtn');
     button.click();
     tick();
     fixture.detectChanges();
@@ -71,20 +67,16 @@ describe('AddVehicleComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     const dialogRefSpy = spyOn(component.dialogRef, 'close');
     component.onSubmit();
-    expect(compiled.querySelector('#errorAddVehicle')).toBeTruthy();
+    expect(compiled.querySelector('#errorUpdatePW')).toBeTruthy();
     expect(dialogRefSpy).not.toHaveBeenCalled();
   });
 
-  it('if filled out correctly, dialog should be closed and callback to parent should be emitted', () => {
+  it('if filled out correctly, callback to parent should be emitted', () => {
     const dialogRefSpy = spyOn(component.dialogRef, 'close');
     const eventEmitterSpy = spyOn(component.submitCallback, 'emit');
-    component.addVehicleForm.controls.type.setValue('pkw');
-    component.addVehicleForm.controls.seats.setValue(2);
-    component.addVehicleForm.controls.model.setValue('Audi A21');
-    component.addVehicleForm.controls.comment.setValue('Kein Kommentar.');
+    component.updatePasswordForm.controls.password.setValue('password12');
     component.onSubmit();
     expect(eventEmitterSpy).toHaveBeenCalled();
     expect(dialogRefSpy).toHaveBeenCalled();
   });
-
 });

@@ -1,11 +1,11 @@
-import {Component, EventEmitter, Inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '../../alert/alert.service';
 import {AccountService} from '../../../services/account.service';
 import {Cargonaut} from '../../../../shared/cargonaut.model';
 
-@Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.component.css']})
+@Component({templateUrl: 'login.component.html', selector: 'app-login', styleUrls: ['../account.css']})
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
@@ -22,6 +22,11 @@ export class LoginComponent implements OnInit {
     private accountService: AccountService,
     private alertService: AlertService
   ) {
+    this.accountService.isLoggedIn().then(() => {
+      if (this.accountService.user) {
+      this.router.navigate(['/']).then();
+    }
+    });
   }
 
   ngOnInit() {

@@ -12,11 +12,11 @@ import {DatePipe} from '@angular/common';
 export class EditProfileComponent implements OnInit {
   editProfileForm: FormGroup;
   @Input() user: Cargonaut;
-   @Output() submitCallback: EventEmitter<any> = new EventEmitter();
+  @Output() submitCallback: EventEmitter<any> = new EventEmitter();
 
   submitted: boolean;
 
-  constructor(private formBuilder: FormBuilder, public datepipe: DatePipe) {
+  constructor(public formBuilder: FormBuilder, public datepipe: DatePipe) {
   }
 
   ngOnInit(): void {
@@ -41,11 +41,13 @@ export class EditProfileComponent implements OnInit {
       document.getElementById('error').innerText = 'Alle Felder müssen ausgefüllt werden.';
       return;
     }
-    this.user.firstname = this.editProfileForm.controls.firstName.value;
-    this.user.lastname = this.editProfileForm.controls.lastName.value;
-    this.user.birthday = this.editProfileForm.controls.birthday.value;
+    const newUser = Object.assign({}, this.user);
+    newUser.firstname = this.editProfileForm.controls.firstName.value;
+    newUser.lastname = this.editProfileForm.controls.lastName.value;
+    newUser.birthday = this.editProfileForm.controls.birthday.value;
     document.getElementById('error').innerText = '';
-    this.submitCallback.emit(this.user);
+    this.submitCallback.emit(newUser);
+
   }
 
   getBirthday(): string {

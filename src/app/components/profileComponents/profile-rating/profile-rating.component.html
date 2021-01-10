@@ -8,11 +8,11 @@
 
     <div class="row">
       <div class="col-md-2">
-        <p class="ratingAuthor">
-          {{rating.author.firstname}} {{rating.author.lastname}}
+        <p id="ratingAuthor">
+          <a id="ratingAuthorLink" [routerLink]="['/profile/'+rating.author.id]">{{rating.author.firstname}} {{rating.author.lastname}}</a>
         </p>
       </div>
-      <div class="col-md-10">
+      <div class="col-md-10" id="ratingComment">
         {{rating.comment}}
       </div>
     </div>
