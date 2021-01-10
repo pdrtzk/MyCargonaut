@@ -90,7 +90,13 @@ export class PostService {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
       await http.put('http://localhost:4200/api/post/' + postId, {
-        post
+        startzeit : post.start_time.toISOString(),
+        ankunftZeit: post.end_time.toISOString(),
+        bezahlungsart: post.payment,
+        vehicle: post.vehicle.id,
+        anzahlSitzplaetze: post.seats,
+        beschreibung: post.description,
+        price: post.price
       }).toPromise().then((res: any) => {
         resolve(res.post);
       }).catch(error => {

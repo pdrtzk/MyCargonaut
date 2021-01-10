@@ -35,20 +35,28 @@ export class PostComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.post = await this.postService.getSpecificPost(this.postId);
+    if (this.postId) {
+      this.post = await this.postService.getSpecificPost(this.postId);
+    }
     const allPosts: Post[] = await this.postService.getMorePosts();
     this.relatedPosts = this.getFirstNPosts(allPosts, 3);
+
+    this.loggedInUserIsOwner = (this.post?.author?.id === this.accountService?.user?.id);
+
     if (this.post?.author?.id) {
+      // get authors user data
       const id = this.post.author.id;
       const userData = this.accountService.getUser(this.post.author.id);
       this.post.author = await userData;
       this.post.author.id = id;
     }
     if (this.post?.vehicle?.id) {
+      // get vehicle data
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
       this.post.vehicle = vehicleData;
     }
     if (this.post?.author?.id) {
+      // get users average rating
       const averageUserRating = await this.accountService.getAverageUserRating(this.post.author.id);
       this.averageUserRating = Math.round(averageUserRating);
     }
