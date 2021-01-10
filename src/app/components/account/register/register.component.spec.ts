@@ -106,9 +106,7 @@ describe('RegisterComponent', () => {
   });
 
   it('should set form valid if all input is provided.', () => {
-    component.form.reset(correctData); // is correct if run alone, fails sometimes if not (but whyyy?)
-    console.log(component.form.value);
-    console.log(correctData);
+    component.form.reset(correctData);
     expect(component.form.invalid).toBeFalse();
     expect(component.form.valid).toBeTrue();
   });
