@@ -1,11 +1,10 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {first} from 'rxjs/operators';
 
-// import { AccountService, AlertService } from '@app/_services';
 import {AlertService} from 'src/app/components/alert/alert.service';
 import {AccountService} from '../../../services/account.service';
+import {WhitespaceValidator} from '../../../helpers/whitespace.validator';
 
 @Component({templateUrl: 'register.component.html', selector: 'app-register', styleUrls: ['../account.css']})
 export class RegisterComponent implements OnInit {
@@ -28,8 +27,8 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {
     this.form = this.formBuilder.group({
-      firstname: ['', Validators.required],
-      lastname: ['', Validators.required],
+      firstname: ['', [Validators.required, WhitespaceValidator.cannotBeWhitespace]],
+      lastname: ['', [Validators.required, WhitespaceValidator.cannotBeWhitespace]],
       birthday: ['', Validators.required], // Validators.pattern('([1-9]|0[1-9]|1[0-9]|2[0-9]|3[01])\\.([1-9]|0[1-9]|1[012])\\.[0-9]{4})')
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
@@ -38,7 +37,8 @@ export class RegisterComponent implements OnInit {
         Validators.required, Validators.minLength(22),
         Validators.pattern('DE[ ]*[0-9]{2}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{2}[ ]*')
       ]],
-      bic: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11)]],
+      bic: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11),
+                  WhitespaceValidator.cannotBeWhitespace, Validators.pattern('[0-9A-Z]{11}')]],
       consent: [false, Validators.requiredTrue]
     });
   }
@@ -57,6 +57,8 @@ export class RegisterComponent implements OnInit {
 
     // stop here if form is invalid
     if (this.form.invalid) {
+      this.alertService.error('Nicht alle Felder ausgefüllt.');
+      window.scrollTo(0, 0);
       return;
     }
 
@@ -67,8 +69,12 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/login']).then();
       },
       error => {
-        // TODO: Fehler für Benutzer verständlich ausgeben
-        this.alertService.error(error.message);
+        if (error.status === 409 && error.error.message === 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.') {
+          this.alertService.error('Ein Cargonaut unter dieser Email Adresse ist bereits registriert.');
+        } else {
+          this.alertService.error('Hier ist wohl etwas schief gelaufen');
+        }
+        window.scrollTo(0, 0);
         this.loading = false;
       });
   }

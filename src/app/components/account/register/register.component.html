@@ -5,7 +5,7 @@
       <input id="firstname" type="text" formControlName="firstname" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.firstname.errors }"/>
       <div *ngIf="submitted && f.firstname.errors" class="invalid-feedback">
-        <div *ngIf="f.firstname.errors.required">Vorname wird benötigt</div>
+        <div *ngIf="f.firstname.errors.required || f.firstname.errors.cannotBeWhitespace">Vorname wird benötigt</div>
       </div>
     </div>
     <div class="form-group">
@@ -13,7 +13,7 @@
       <input id="lastname" type="text" formControlName="lastname" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.lastname.errors }"/>
       <div *ngIf="submitted && f.lastname.errors" class="invalid-feedback">
-        <div *ngIf="f.lastname.errors.required">Nachname wird benötigt</div>
+        <div *ngIf="f.lastname.errors.required || f.lastname.errors.cannotBeWhitespace">Nachname wird benötigt</div>
       </div>
     </div>
     <div class="form-group">
@@ -65,8 +65,9 @@
       <input id="bic" type="text" formControlName="bic" class="form-control"
              [ngClass]="{ 'is-invalid': submitted && f.bic.errors }"/>
       <div *ngIf="submitted && f.bic.errors" class="invalid-feedback">
-        <div *ngIf="f.bic.errors.required">BIC wird benötigt</div>
-        <div *ngIf="f.bic.errors.minlength || f.bic.errors.maxlength">BIC muss genau 11 Zeichen lang sein</div>
+        <div *ngIf="f.bic.errors.required || f.bic.errors.cannotBeWhitespace">BIC wird benötigt</div>
+        <div *ngIf="(f.bic.errors.minlength || f.bic.errors.maxlength || f.bic.errors.pattern) && !(f.bic.errors.required || f.bic.errors.cannotBeWhitespace)">
+          BIC muss aus genau 11 Zahlen und/oder Großbuchstaben bestehen und darf keine Leerzeichen enthalten</div>
       </div>
     </div>
     <div class="form-group form-check">
