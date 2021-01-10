@@ -26,7 +26,7 @@
         </button>
       </div>
       <div>
-        <button class="post-button" *ngIf="!loggedInUserIsOwner">Buchen</button>
+        <button class="post-button" *ngIf="!loggedInUserIsOwner" (click)="addBooking()">Buchen</button>
       </div>
     </div>
   </div>

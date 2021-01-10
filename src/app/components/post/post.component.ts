@@ -7,6 +7,8 @@ import {Rating} from '../../../shared/rating.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
+import {BookingService} from '../../services/booking.service';
+import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
 
 @Component({
   selector: 'app-post',
@@ -29,6 +31,7 @@ export class PostComponent implements OnInit {
   constructor(private postService: PostService,
               private accountService: AccountService,
               private route: ActivatedRoute,
+              private bookingService: BookingService,
               private vehicleService: VehicleService) {
     this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
     console.log(this.postId); // only for debugging
@@ -92,16 +95,11 @@ export class PostComponent implements OnInit {
     }
   }
 
-  setLength(val: any) {
-    this.post.hold.length = val;
-  }
-
-  setWidth(val: any) {
-    this.post.hold.length = val;
-  }
-
-  setHeight(val: any) {
-    this.post.hold.length = val;
+  async addBooking(): Promise<void> {
+    const currentUser = this.accountService.user;
+    if (currentUser.id && this.postId) {
+      await this.bookingService.addBooking(this.postId, currentUser.id);
+    }
   }
 
 }

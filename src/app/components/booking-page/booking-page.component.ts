@@ -36,7 +36,7 @@ export class BookingPageComponent implements OnInit {
   }
 
   filterInboxBookings(bookings: Post[], customerId): Post[] {
-    return []; // todo
+    return bookings.filter(booking => booking.author.id !== customerId);
   }
 
   filterOutboxBookings(bookings: Post[], authorId: number): Post[] {

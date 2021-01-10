@@ -49,4 +49,22 @@ export class BookingService {
     });
   }
 
+  async addBooking(postID: number, customerID: number): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      await http.post('http://localhost:4200/api/buchung/' + customerID.toString(), {
+        length: 1, // todo
+        width: 1, // todo
+        height: 1, // todo
+        seats: 1, // todo
+        post: postID
+      }).toPromise().then((res: any) => {
+        resolve();
+      }).catch(error => {
+        console.log('Error :' + error);
+        reject(error);
+      });
+    });
+  }
+
 }
