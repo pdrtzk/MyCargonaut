@@ -9,7 +9,7 @@ import {AccountService} from '../../services/account.service';
 
 })
 export class HeaderComponent implements OnInit {
-  userLoggedIn = false; // todo: get actual login status in ngOnInit
+  userLoggedIn = false;
   navbarOpen = false;
 
 

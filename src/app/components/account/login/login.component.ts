@@ -20,8 +20,8 @@ export class LoginComponent implements OnInit {
   ) {
     this.accountService.isLoggedIn().then(() => {
       if (this.accountService.user) {
-      this.router.navigate(['/']).then();
-    }
+        this.router.navigate(['/']).then();
+      }
     });
   }
 
@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       return;
     }
-    console.log('valid? ' +  this.form.valid);
     this.loading = true;
     let user: Cargonaut;
     await this.accountService.login(this.f.email.value, this.f.password.value).then(

@@ -11,7 +11,7 @@ import {RegisterComponent} from './components/account/register/register.componen
 
 export const routes: Routes = [
   // tslint:disable-next-line:max-line-length
-  {path: '', component: HomeComponent, /*canActivate: [AuthGuard]*/}, // TODO: canActivate here only for demo. Add it to every protected route
+  {path: '', component: HomeComponent},
   {path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'post', component: PostComponent},
   {path: 'login', component: LoginComponent},

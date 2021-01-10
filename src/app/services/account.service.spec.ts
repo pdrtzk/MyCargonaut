@@ -99,4 +99,11 @@ describe('AccountService', () => {
     req.error(new ErrorEvent('Der User konnte nicht gefunden werden!'), {status: 400});
   });
 
+  /* TODO:
+   * Login fails
+   * Register
+   * Update
+   * Update Password
+   * Delete
+   */
 });
