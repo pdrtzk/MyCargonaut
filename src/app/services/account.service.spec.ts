@@ -90,13 +90,18 @@ describe('AccountService', () => {
   });
 
   it('should reject get of not existing user', () => {
+    const errorMessage = 'Der User konnte nicht gefunden werden!';
     service.get(dummyUser.id).then((res) => {
-      expect(res).toBeFalsy();
+     // should never get here
+      throw Error('Test failed');
+    }, error => {
+      expect(error).toBeTruthy();
+      // expect(error.message).toEqual(errorMessage);
     });
 
     const req = httpMock.expectOne('http://localhost:4200/api/cargonaut/' + dummyUser.id, 'call to api');
     expect(req.request.method).toBe('GET');
-    req.error(new ErrorEvent('Der User konnte nicht gefunden werden!'), {status: 400});
+    req.error(new ErrorEvent(errorMessage), {status: 400});
   });
 
   /* TODO:
