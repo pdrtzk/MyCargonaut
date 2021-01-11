@@ -12,7 +12,8 @@
     "serve:ssr": "node dist/MyCargonaut/server/main.js",
     "build:ssr": "ng build --prod && ng run MyCargonaut:server:production",
     "prerender": "ng run MyCargonaut:prerender",
-    "start:heroku": "npm run build:ssr"
+    "start:heroku": "npm run serve:ssr",
+    "postinstall": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
