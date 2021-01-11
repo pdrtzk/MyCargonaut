@@ -33,7 +33,10 @@ export class PostComponent implements OnInit {
               private route: ActivatedRoute,
               private bookingService: BookingService,
               private vehicleService: VehicleService) {
-    this.postId = parseInt(route.snapshot.paramMap.get('id'), 10);
+    route.paramMap.subscribe(params => {
+      this.postId = parseInt( params.get('id'), 10);
+      this.ngOnInit();
+    });
     console.log(this.postId); // only for debugging
   }
 
