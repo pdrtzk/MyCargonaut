@@ -52,6 +52,7 @@ export class ProfileComponent implements OnInit {
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
     this.getVehiclesForUser();
+    this.accountService.getImage(this.myuser.id).then((res) => this.picsrc = res);
     // this.getRatingsForUser();
 
 
@@ -195,12 +196,23 @@ export class ProfileComponent implements OnInit {
 
   onSelectFile(event) { // called each time file input changes
     if (event.target.files && event.target.files[0]) {
+      const file: File = event.target.files[0];
       const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]); // read file as data url
-      // tslint:disable-next-line:no-shadowed-variable
-      reader.onload = (event) => { // called once readAsDataURL is completed
-        this.picsrc = event.target.result;
-      };
+      console.log(file.type);
+      if (file.type.startsWith('image')) {
+        this.accountService.uploadImage(file, this.myuser).then(() => {
+          // tslint:disable-next-line:no-shadowed-variable
+          reader.onload = (event) => { // called once readAsDataURL is completed
+            this.picsrc = event.target.result;
+          };
+          this.cancelPic();
+          reader.readAsDataURL(file); // read file as data url
+          this.alertService.success('Profilbild erfolgreich geändert.');
+        });
+      } else {
+        this.alertService.error('Ausgewählte Datei war kein Bild.');
+        window.scrollTo(0, 0);
+      }
     }
   }
 

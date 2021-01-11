@@ -83,7 +83,8 @@ CREATE TABLE `cargonaut` (
   `geburtsdatum` date NOT NULL,
   `kontoinhaber` varchar(255) COLLATE latin1_german1_ci NOT NULL,
   `iban` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-  `bic` varchar(255) COLLATE latin1_german1_ci NOT NULL
+  `bic` varchar(255) COLLATE latin1_german1_ci NOT NULL,
+  `image` varchar(255) COLLATE latin1_german1_ci,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
 
 --

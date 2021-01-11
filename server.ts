@@ -20,6 +20,28 @@ import {Cargonaut} from 'src/shared/cargonaut.model';
 import {Vehicle} from './src/shared/vehicle.model';
 import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
+import * as multer from 'multer';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/tmp/uploads');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `${file.fieldname}-${uniqueSuffix}-${file.originalname}`);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb('Please upload only images.', false);
+  }
+};
+
+const upload = multer({storage, fileFilter});
+
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -293,7 +315,7 @@ export function app(): express.Express {
     });
   });
 
-
+  // Delete Cargonaut
   server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const query = 'DELETE FROM cargonaut WHERE id = ?;';
@@ -314,6 +336,56 @@ export function app(): express.Express {
       res.status(500).send({
         message: 'Datenbank Fehler: ' + err
       });
+    });
+  });
+
+  // Upload Profile Image
+  server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    console.log('save to: ' + req.file.path);
+    const data: [string, number] = [
+      req.file.path,
+      id
+    ];
+    const query = 'UPDATE cargonaut SET image = ? WHERE id = ?;';
+    queryPromise(query, data).then( result => {
+      // Check if database response contains at least one entry
+      if (result.affectedRows === 1) {
+        res.status(200).send({
+          message: `Bild gespeichert.`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'Bild konnte nicht gespeichert werden!',
+        });
+      }
+    }).catch(err => {
+      // Database operation has failed
+      res.status(500).send({
+        message: 'Datenbank Fehler: ' + err
+      });
+    });
+  });
+
+  // Get Profile image of Cargonaut
+  server.get('/api/cargonaut/:id/image', (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    const data: [string] = [
+      id,
+    ];
+    const query = 'SELECT image FROM cargonaut WHERE id = ?;';
+    queryPromise(query, data).then(rows => {
+      if (rows.length === 1) {
+        // cut off 'server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path forbidden)
+        const indexCutOff = __dirname.lastIndexOf('dist/MyCargonaut/server');
+        const rootDir = __dirname.substring(0, indexCutOff);
+        console.log('load from: ' + rootDir + rows[0].image);
+        res.sendFile(rows[0].image, {root: rootDir});
+      } else {
+        res.status(404).send({
+          message: 'Kein Bild gefunden.',
+        });
+      }
     });
   });
 

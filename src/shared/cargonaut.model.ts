@@ -1,5 +1,3 @@
-
-
 export interface Cargonaut {
   id?: number;
   firstname?: string;
@@ -11,4 +9,5 @@ export interface Cargonaut {
   account_holder?: string;
   iban?: string;
   bic?: string;
+  image?: string | ArrayBuffer; // use for ratings if wanted
 }
