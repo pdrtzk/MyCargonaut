@@ -9,6 +9,7 @@ import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
 import {BookingService} from '../../services/booking.service';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
+import {AlertService} from '../alert/alert.service';
 
 @Component({
   selector: 'app-post',
@@ -32,7 +33,8 @@ export class PostComponent implements OnInit {
               private accountService: AccountService,
               private route: ActivatedRoute,
               private bookingService: BookingService,
-              private vehicleService: VehicleService) {
+              private vehicleService: VehicleService,
+              private alertService: AlertService) {
     route.paramMap.subscribe(params => {
       this.postId = parseInt( params.get('id'), 10);
       this.ngOnInit();
@@ -102,6 +104,7 @@ export class PostComponent implements OnInit {
     const currentUser = this.accountService.user;
     if (currentUser.id && this.postId) {
       await this.bookingService.addBooking(this.postId, currentUser.id);
+      this.alertService.success('Buchung erfolgreich!');
     }
   }
 
