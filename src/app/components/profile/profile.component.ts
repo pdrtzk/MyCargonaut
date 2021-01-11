@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit {
       this.ownProfile = false;
       this.user = await this.accountService.get(this.user.id);
     }
-    this.accountService.getImage(this.myuser.id).then((res) => {
+    this.accountService.getImage(this.user.id).then((res) => {
       if (res) {
         this.picsrc = res;
       }
