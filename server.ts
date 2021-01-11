@@ -44,7 +44,9 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({storage, fileFilter});
 
 // cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
-const rootDir = __dirname.substring(0, __dirname.lastIndexOf('dist/MyCargonaut/server'));
+const tmp = __dirname.lastIndexOf('dist/MyCargonaut/server');
+const onWindows = tmp === -1;
+const rootDir = __dirname.substring(0, onWindows ? __dirname.lastIndexOf('dist\\MyCargonaut\\server') : tmp);
 
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -347,6 +349,7 @@ export function app(): express.Express {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
         if (imageFile) {
+          imageFile = onWindows ? imageFile.replace('/', '\\') : imageFile;
           fs.unlink(rootDir + imageFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + imageFile);
@@ -395,6 +398,7 @@ export function app(): express.Express {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
         if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
@@ -432,7 +436,8 @@ export function app(): express.Express {
         console.log('load from: ' + rootDir + rows[0].image);
         res.setHeader('Cache-Control', 'no-cache');
         if (rows[0].image) {
-          res.sendFile(rows[0].image, {root: rootDir});
+          const imageFile = onWindows ? rows[0].image.replace('/', '\\') : rows[0].image;
+          res.sendFile(imageFile, {root: rootDir});
         } else {
           res.sendStatus(204);
         }
@@ -463,6 +468,7 @@ export function app(): express.Express {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
         if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
