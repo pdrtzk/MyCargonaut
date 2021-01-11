@@ -36,3 +36,9 @@ div {
   padding: 8px;
   margin: 8px;
 }
+
+input {
+  max-width: 500px;
+}
+
+

@@ -1,4 +1,4 @@
-<div mat-dialog-content>
+<div>
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label for="email">Email</label> <br>
@@ -19,11 +19,11 @@
     </div>
   </form>
 </div>
-<div mat-dialog-actions>
+<div>
   <button (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     Anmelden
   </button>
-  <a [routerLink]="['/register']" class="btn-link">Registrieren</a>
+  <a id="register" [routerLink]="['/register']" class="btn-link">Registrieren</a>
 </div>
 

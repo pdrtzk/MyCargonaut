@@ -228,7 +228,7 @@ export class ProfileComponent implements OnInit {
   deleteUser() {
     this.accountService.delete(this.myuser).then(() => {
       this.alertService.success('Cargonaut wurde gelöscht.', {keepAfterRouteChange: true});
-      this.router.navigate(['/']);
+      this.router.navigate(['/']).then();
     }, error => {
       this.alertService.error('Cargonaut konnte nicht gelöscht werden.');
     });

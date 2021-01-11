@@ -38,12 +38,13 @@ export class AccountService {
       await http.post('http://localhost:4200/api/login', {
         email,
         password
-      }).toPromise().then((res: any) => {
-        this.authenticatedUser = res.user;
-        this.userSubject.next(res.user);
-        resolve(res.user);
+      }, { observe: 'response' }).toPromise().then((res: any) => {
+        console.log(res);
+        // this.authenticatedUser = res.body.user;
+        this.userSubject.next(res.body.user);
+        resolve(res.body.user);
       }).catch(error => {
-        console.log('Error: ' + error.message);
+        console.log(`Error: ${error.message} as "${error.error.message}"`);
         reject(error);
       });
     });
@@ -64,16 +65,21 @@ export class AccountService {
 
   public async register(user: Cargonaut): Promise<void> {
     const http = this.http;
+    user.firstname = user.firstname.trim();
+    user.lastname = user.lastname.trim();
+    user.email = user.email.trim();
+    user.account_holder = user.account_holder.trim().replace(/[ ]+/g, ' ');
+    user.iban = user.iban.trim().replace(/\s/g, '');
+    user.bic = user.bic.trim();
     if (user.account_holder === '') {
       user.account_holder = user.firstname + ' ' + user.lastname;
     }
-    user.iban = user.iban.replace(/\s/g, '');
+    console.log(user.account_holder);
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/cargonaut', user).toPromise().then(() => {
-        // this.login(user.email, user.password).then(() => resolve());
+      await http.post('http://localhost:4200/api/cargonaut', user, { observe: 'response' }).toPromise().then(() => {
         resolve();
       }).catch(error => {
-        console.log('Error: ' + error.message);
+        console.log(`Error: ${error.message} as "${error.error.message}"`);
         reject(error);
       });
     });
