@@ -16,14 +16,16 @@ export class RatingService {
     const http = this.http;
     return new Promise<Rating[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/bewertungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
-        res.bewertungen.forEach(elem => {
+        const tempRatings: Rating[] = [];
+        res.ratings.forEach(elem => {
+          console.log(elem.author);
           const r: Rating = new Rating();
-          r.author = {id: elem.verfasser};
-          r.comment = elem.kommentar;
-          r.ratingStars = parseFloat(elem.punktzahl);
+          r.author = {id: elem.author};
+          r.comment = elem.comment;
+          r.ratingStars = parseFloat(elem.ratingStars);
+          tempRatings.push(r);
         });
-        console.log(res);
-        resolve(res.bewertungen);
+        resolve(tempRatings);
       }).catch(error => {
         console.log('Error: ' + error);
         reject(error);
