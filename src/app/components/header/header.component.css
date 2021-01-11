@@ -37,6 +37,7 @@
 
 .navbar-toggler {
   margin: 0.8rem;
+  margin-right: 2rem;
 }
 
 
@@ -72,6 +73,7 @@
 @media (max-width: 767px) {
   .navbar-toggler {
     display: block;
+    margin-right: 1.5rem;
   }
 
   .navbar-large {

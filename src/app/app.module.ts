@@ -32,6 +32,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
+import { ChatListComponent } from './components/chat-list/chat-list.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { UpdatePasswordComponent } from './components/profileComponents/update-p
     ProfileVehicleComponent,
     AddVehicleComponent,
     EditProfileComponent,
-    UpdatePasswordComponent
+    UpdatePasswordComponent,
+    ChatListComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
