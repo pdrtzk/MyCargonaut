@@ -22,7 +22,7 @@ export class AccountService {
   public async isLoggedIn(): Promise<boolean> {
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/login').toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/login').toPromise().then((res: any) => {
         this.userSubject.next(res.user);
         resolve(true);
       }).catch(error => {
@@ -35,7 +35,7 @@ export class AccountService {
   public async login(email: string, password: string): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/login', {
+      await http.post('https://mycargonaut.herokuapp.com/api/login', {
         email,
         password
       }, {observe: 'response'}).toPromise().then((res: any) => {
@@ -53,7 +53,7 @@ export class AccountService {
   public async logout(): Promise<void> {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/logout', {}).toPromise().then(() => {
+      await http.post('https://mycargonaut.herokuapp.com/api/logout', {}).toPromise().then(() => {
         this.userSubject.next(null);
         resolve();
       }).catch(error => {
@@ -76,7 +76,7 @@ export class AccountService {
     }
     console.log(user.account_holder);
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/cargonaut', user, {observe: 'response'}).toPromise().then(() => {
+      await http.post('https://mycargonaut.herokuapp.com/api/cargonaut', user, {observe: 'response'}).toPromise().then(() => {
         resolve();
       }).catch(error => {
         console.log(`Error: ${error.message} as "${error.error.message}"`);
@@ -92,7 +92,7 @@ export class AccountService {
   public async get(userId: number): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/cargonaut/' + userId).toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/cargonaut/' + userId).toPromise().then((res: any) => {
         resolve(res.user);
       }).catch(error => {
         console.log('Error: ' + error.message);
@@ -105,7 +105,7 @@ export class AccountService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        await http.put('http://localhost:4200/api/cargonaut/' + user.id, user).toPromise().then((res: any) => {
+        await http.put('https://mycargonaut.herokuapp.com/api/cargonaut/' + user.id, user).toPromise().then((res: any) => {
           this.isLoggedIn();
           resolve();
         }).catch(error => {
@@ -129,7 +129,7 @@ export class AccountService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        await http.delete('http://localhost:4200/api/cargonaut/' + user.id).toPromise().then((res: any) => {
+        await http.delete('https://mycargonaut.herokuapp.com/api/cargonaut/' + user.id).toPromise().then((res: any) => {
           this.isLoggedIn();
           console.log(res.message);
           resolve();
@@ -149,7 +149,7 @@ export class AccountService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        await http.put('http://localhost:4200/api/password/' + user.id, {password}).toPromise().then((res: any) => {
+        await http.put('https://mycargonaut.herokuapp.com/api/password/' + user.id, {password}).toPromise().then((res: any) => {
           // this.isLoggedIn();
           console.log(res.message);
           resolve();
@@ -171,7 +171,7 @@ export class AccountService {
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
         console.log('going to post to upload route');
-        await this.http.post(`/api/cargonaut/${user.id}/upload`, formData).toPromise().then((res: any) => {
+        await this.http.post(`https://mycargonaut.herokuapp.com/api/cargonaut/${user.id}/upload`, formData).toPromise().then((res: any) => {
             resolve();
           }
         ).catch(error => {
@@ -187,10 +187,13 @@ export class AccountService {
   }
 
   public getImage(userId: number): Promise<string | ArrayBuffer> {
-      const reader = new FileReader();
-      return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
+    const reader = new FileReader();
+    return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
       console.log('going to post to upload route');
-      await this.http.get(`/api/cargonaut/${userId}/image`, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
+      await this.http.get(`https://mycargonaut.herokuapp.com/api/cargonaut/${userId}/image`, {
+        responseType: 'blob',
+        observe: 'response'
+      }).toPromise().then((res: any) => {
         reader.addEventListener('load', () => {
           resolve(reader.result);
         }, false);
