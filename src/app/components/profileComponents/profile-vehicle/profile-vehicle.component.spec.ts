@@ -149,14 +149,14 @@ describe('ProfileVehicleComponent', () => {
 
 
   // *************display-part*************
-  it('clicking the edit button, #editVehicle should be called and form should be displayed', fakeAsync (() => {
+  it('clicking the edit button, #editVehicle should be called', fakeAsync (() => {
     const compiled = fixture.debugElement.nativeElement;
     const button = compiled.querySelector('#editVehicleBtn');
+    const editVehSpy = spyOn(component, 'editVehicle');
     button.click();
     tick();
     fixture.detectChanges();
-    expect(compiled.querySelector('#editVehicleForm-143').style.display).toEqual('block');
-    expect(compiled.querySelector('#vehicleInfo-143').style.display).toEqual('none');
+    expect(editVehSpy).toHaveBeenCalled();
   }));
 
   it('if own profile, edit and delete buttons should be visible', fakeAsync(() => {
