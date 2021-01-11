@@ -13,7 +13,7 @@ import {A} from '@angular/cdk/keycodes';
 
 export const routes: Routes = [
   // tslint:disable-next-line:max-line-length
-  {path: '', component: HomeComponent, /*canActivate: [AuthGuard]*/}, // TODO: canActivate here only for demo. Add it to every protected route
+  {path: '', component: HomeComponent},
   {path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'post/:id', component: PostComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},

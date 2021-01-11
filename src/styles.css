@@ -3,7 +3,7 @@
 @import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 .mat-dialog-container {
-  background: #eeeeee; /* TODO: change light grey background */
+  background: #eeeeee;
   height: max-content;
 }
 

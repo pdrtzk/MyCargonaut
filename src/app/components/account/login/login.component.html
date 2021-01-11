@@ -20,10 +20,10 @@
   </form>
 </div>
 <div>
-  <button (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
+  <button id="submit" (click)="onSubmit()" [disabled]="loading" class="btn btn-primary">
     <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
     Anmelden
   </button>
-  <a id="register" [routerLink]="['/register']" class="btn-link">Registrieren</a>
+  <a id="register" routerLink="/register" class="btn-link">Registrieren</a>
 </div>
 

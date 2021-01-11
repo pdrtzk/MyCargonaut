@@ -133,7 +133,6 @@ export class AccountService {
   }
 
   /**
-   * TODO
    * @returns resolved Promise<void> if user is deleted or rejected error otherwise
    *
    */
