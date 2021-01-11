@@ -6,7 +6,7 @@
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" id="addVehicle-button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
-      <button class="editButton bot-row" id="messages-button" type="button">Meine Nachrichten</button>
+      <button class="editButton bot-row" id="messages-button" type="button" (click)="navigateToChat()">Meine Nachrichten</button>
       <button class="editButton bot-row" type="button" id="picButton" (click)="editPic()">Profilbild ändern</button>
       <div id="edit-profile-pic">
         <input type='file' name="pic" id="pic" accept="image/*" (change)="onSelectFile($event)">

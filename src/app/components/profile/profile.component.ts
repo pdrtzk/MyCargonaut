@@ -241,4 +241,8 @@ export class ProfileComponent implements OnInit {
       this.alertService.error('Passwort konnte nicht geändert werden.');
     });
   }
+
+  navigateToChat(){
+    this.router.navigate(['/chats']);
+  }
 }

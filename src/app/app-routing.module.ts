@@ -7,6 +7,7 @@ import {BookingPageComponent} from './components/booking-page/booking-page.compo
 import {PostComponent} from './components/post/post.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
+import {ChatListComponent} from './components/chat-list/chat-list.component';
 
 
 export const routes: Routes = [
@@ -15,6 +16,8 @@ export const routes: Routes = [
   {path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'post/:id', component: PostComponent},
   {path: 'login', component: LoginComponent},
+  {path: 'chats', component: ChatListComponent, canActivate: [AuthGuard]},
+  {path: 'chat/:id', component: ChatListComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'bookings', component: BookingPageComponent},
   {path: '**', redirectTo: ''}
