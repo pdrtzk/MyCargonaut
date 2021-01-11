@@ -45,7 +45,7 @@ const upload = multer({storage, fileFilter});
 
 // cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
 const tmp = __dirname.lastIndexOf('dist/MyCargonaut/server');
-const onWindows = tmp === 0;
+const onWindows = tmp === -1;
 const rootDir = __dirname.substring(0, onWindows ? __dirname.lastIndexOf('dist\\MyCargonaut\\server') : tmp);
 
 
