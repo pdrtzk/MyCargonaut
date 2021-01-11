@@ -56,7 +56,7 @@ export class ChatListComponent implements OnInit {
     };
 
     const chat2: Chat = {
-      id: 1,
+      id: 2,
       fstMember: this.myuser,
       sndMember: partner2,
       messages: [message2]
@@ -89,7 +89,9 @@ export class ChatListComponent implements OnInit {
 
   removeChat(c: Chat){
     // todo: remove from server
+    console.log(c.id);
     const index = this.chats.findIndex(s => s.id === c.id);
+    console.log(index);
     if (index > -1) {
       this.chats.splice(index, 1);
     }
