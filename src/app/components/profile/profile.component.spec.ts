@@ -83,7 +83,7 @@ describe('ProfileComponent', () => {
       return Promise.resolve(user);
     },
     getImage(userId: number){
-      return null;
+      return Promise.resolve('str');
     }
   };
 
