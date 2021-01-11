@@ -9,16 +9,16 @@ import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ChatListComponent} from './components/chat-list/chat-list.component';
 import {A} from '@angular/cdk/keycodes';
+import {ChatComponent} from './components/chat/chat.component';
 
 
 export const routes: Routes = [
-  // tslint:disable-next-line:max-line-length
   {path: '', component: HomeComponent},
   {path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]},
   {path: 'post/:id', component: PostComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'chats', component: ChatListComponent, canActivate: [AuthGuard]},
-  {path: 'chat/:id', component: ChatListComponent, canActivate: [AuthGuard]},
+  {path: 'chat/:id', component: ChatComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'bookings', component: BookingPageComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: ''}

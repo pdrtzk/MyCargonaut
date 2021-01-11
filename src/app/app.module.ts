@@ -35,6 +35,7 @@ import {CommonModule} from '@angular/common';
 import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
 import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     EditProfileComponent,
     AddRatingComponent,
     UpdatePasswordComponent,
-    ChatListComponent
+    ChatListComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

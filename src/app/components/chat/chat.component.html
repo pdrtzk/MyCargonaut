@@ -1,0 +1,6 @@
+<p class="name">{{getSndMember()}}</p>
+<div *ngFor="let msg of chat.messages">
+  <div class="row">
+    {{msg.message}} {{msg.sentAt}}
+  </div>
+</div>
