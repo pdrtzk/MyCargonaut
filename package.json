@@ -3,15 +3,17 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "npm run serve:ssr",
-    "build": "npm run build:ssr",
+    "start": "ng serve",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "dev:ssr": "ng run MyCargonaut:serve-ssr",
     "serve:ssr": "node dist/MyCargonaut/server/main.js",
     "build:ssr": "ng build --prod && ng run MyCargonaut:server:production",
-    "prerender": "ng run MyCargonaut:prerender"
+    "prerender": "ng run MyCargonaut:prerender",
+    "start:heroku": "npm run serve:ssr",
+    "postinstall": "npm run build:ssr"
   },
   "private": true,
   "dependencies": {
