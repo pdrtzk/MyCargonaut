@@ -8,18 +8,19 @@ import {PostComponent} from './components/post/post.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ChatListComponent} from './components/chat-list/chat-list.component';
+import {A} from '@angular/cdk/keycodes';
 
 
 export const routes: Routes = [
   // tslint:disable-next-line:max-line-length
   {path: '', component: HomeComponent, /*canActivate: [AuthGuard]*/}, // TODO: canActivate here only for demo. Add it to every protected route
   {path: 'profile/:id', component: ProfileComponent, canActivate: [AuthGuard]},
-  {path: 'post/:id', component: PostComponent},
+  {path: 'post/:id', component: PostComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
   {path: 'chats', component: ChatListComponent, canActivate: [AuthGuard]},
   {path: 'chat/:id', component: ChatListComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
-  {path: 'bookings', component: BookingPageComponent},
+  {path: 'bookings', component: BookingPageComponent, canActivate: [AuthGuard]},
   {path: '**', redirectTo: ''}
 ];
 

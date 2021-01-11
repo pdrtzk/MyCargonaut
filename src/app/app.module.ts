@@ -31,6 +31,8 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {CommonModule} from '@angular/common';
+import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
 import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 
@@ -57,6 +59,7 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     ProfileVehicleComponent,
     AddVehicleComponent,
     EditProfileComponent,
+    AddRatingComponent,
     UpdatePasswordComponent,
     ChatListComponent
   ],

@@ -606,7 +606,7 @@ export function app(): express.Express {
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
         author: result.verfasser,
-        price: result.ladeflaeche,
+        price: result.preis,
         closed: result.gebucht,
         description: result.beschreibung,
         status: null // TODO: get status from db

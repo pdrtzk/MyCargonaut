@@ -1,5 +1,5 @@
 <div id="booking-list-view">
   <div id="booking-card" *ngFor="let booking of bookings">
-    <app-booking-card [booking]="booking"></app-booking-card>
+    <app-booking-card [booking]="booking" [currentUser]="currentUser"></app-booking-card>
   </div>
 </div>

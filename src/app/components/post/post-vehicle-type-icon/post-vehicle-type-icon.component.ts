@@ -11,6 +11,9 @@ export class PostVehicleTypeIconComponent implements OnInit {
   @Input() style: string;
 
   getIconName(): string {
+    if (!this.type) {
+      return 'help';
+    }
     if (this.type === 'pkw') {
       return 'directions_car';
     } else if (this.type === 'lkw') {

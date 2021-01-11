@@ -100,3 +100,20 @@
   color: grey;
   margin-top: 200px;
 }
+
+.post-edit {
+  font-family: Calibri;
+  padding: 5px;
+}
+
+.post-edit p {
+  font-size: 15px;
+  color: #005B52;
+  margin-bottom: 0px;
+}
+
+.post-edit select, input, textarea {
+  padding: 10px;
+  font-size: 20px;
+  width: 100%;
+}
