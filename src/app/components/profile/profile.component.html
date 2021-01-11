@@ -11,8 +11,9 @@
 
       <div id="edit-profile-pic">
         <input type='file' name="pic" id="pic" accept="image/*" (change)="onSelectFile($event)">
-        <label class="pick-pic form-button" for="pic">Datei wählen</label>
-        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Bestätigen</button>
+        <label class="pick-pic form-button" for="pic">Bild wählen</label>
+        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Abbrechen</button>
+        <button (click)="deleteImage()">Bild zurücksetzen</button>
       </div>
 
       <button class="editButton bot-row" type="button">Passwort ändern</button>
