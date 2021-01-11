@@ -38,7 +38,7 @@ export class AccountService {
       await http.post('http://localhost:4200/api/login', {
         email,
         password
-      }, { observe: 'response' }).toPromise().then((res: any) => {
+      }, {observe: 'response'}).toPromise().then((res: any) => {
         console.log(res);
         // this.authenticatedUser = res.body.user;
         this.userSubject.next(res.body.user);
@@ -76,7 +76,7 @@ export class AccountService {
     }
     console.log(user.account_holder);
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/cargonaut', user, { observe: 'response' }).toPromise().then(() => {
+      await http.post('http://localhost:4200/api/cargonaut', user, {observe: 'response'}).toPromise().then(() => {
         resolve();
       }).catch(error => {
         console.log(`Error: ${error.message} as "${error.error.message}"`);
@@ -175,4 +175,70 @@ export class AccountService {
       }
     });
   }
+
+  public uploadImage(image: File, user: Cargonaut): Promise<void> {
+    const formData = new FormData();
+    formData.append('image', image);
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        console.log('going to post to upload route');
+        await this.http.post(`/api/cargonaut/${user.id}/upload`, formData).toPromise().then((res: any) => {
+            resolve();
+          }
+        ).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+  public getImage(userId: number): Promise<string | ArrayBuffer> {
+      const reader = new FileReader();
+      return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
+      console.log('going to post to upload route');
+      await this.http.get(`/api/cargonaut/${userId}/image`, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
+        if (res.status === 204) {
+          console.log(`User with id ${userId} has no image`);
+          resolve(null); // no image set
+        } else {
+          reader.addEventListener('load', () => {
+            resolve(reader.result);
+          }, false);
+          reader.readAsDataURL(res.body);
+        }
+      }).catch(error => {
+        if (error.status === 404) {
+          resolve(null); // no image found
+        } else {
+          console.log('Error in getImage: ' + error.message);
+          reject(error);
+        }
+      });
+    });
+  }
+
+  public async deleteImage(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.delete(`http://localhost:4200/api/cargonaut/${user.id}/image`).toPromise().then((res: any) => {
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
+
+
 }
