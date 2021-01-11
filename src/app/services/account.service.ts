@@ -22,7 +22,7 @@ export class AccountService {
   public async isLoggedIn(): Promise<boolean> {
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.get('https://mycargonaut.herokuapp.com/api/login').toPromise().then((res: any) => {
+      await http.get('/api/login').toPromise().then((res: any) => {
         this.userSubject.next(res.user);
         resolve(true);
       }).catch(error => {
