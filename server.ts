@@ -376,10 +376,11 @@ export function app(): express.Express {
     const query = 'SELECT image FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(rows => {
       if (rows.length === 1) {
-        // cut off 'server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path forbidden)
+        // cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
         const indexCutOff = __dirname.lastIndexOf('dist/MyCargonaut/server');
         const rootDir = __dirname.substring(0, indexCutOff);
         console.log('load from: ' + rootDir + rows[0].image);
+        res.setHeader('Cache-Control', 'no-cache');
         res.sendFile(rows[0].image, {root: rootDir});
       } else {
         res.status(404).send({
