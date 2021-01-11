@@ -30,7 +30,7 @@ export class BookingCardComponent implements OnInit {
     console.log(this.booking);
     this.commentSectionAvailable = this.isCommentSectionAvailable(this.booking);
     if (this.booking?.author?.id) {
-      const cargonaut = await this.accountService.getUser(this.booking.author.id);
+      const cargonaut = await this.accountService.get(this.booking.author.id);
       this.booking.author = cargonaut;
     } else {
       console.log('No author id!');
