@@ -52,7 +52,11 @@ export class ProfileComponent implements OnInit {
     this.user = this.myuser; // todo: remove
     this.ownProfile = true; // or false, depending on id
     this.getVehiclesForUser();
-    this.accountService.getImage(this.myuser.id).then((res) => this.picsrc = res);
+    this.accountService.getImage(this.myuser.id).then((res) => {
+      if (res) {
+        this.picsrc = res;
+      }
+    });
     // this.getRatingsForUser();
 
 
@@ -210,7 +214,7 @@ export class ProfileComponent implements OnInit {
           this.alertService.success('Profilbild erfolgreich geändert.');
         });
       } else {
-        this.alertService.error('Ausgewählte Datei war kein Bild.');
+        this.alertService.error('Ausgewählte Datei iat kein Bild.');
         window.scrollTo(0, 0);
       }
     }
@@ -231,5 +235,15 @@ export class ProfileComponent implements OnInit {
     }, error => {
       this.alertService.error('Passwort konnte nicht geändert werden.');
     });
+  }
+
+  deleteImage() {
+    this.accountService.deleteImage(this.myuser).then(() => {
+      this.picsrc = '../../../assets/images/person-placeholder.jpg';
+      this.alertService.success('Bild zurückgesetzt.');
+      },
+      error => {
+        this.alertService.error('Hier ist etwas schief gelaufen.');
+      });
   }
 }

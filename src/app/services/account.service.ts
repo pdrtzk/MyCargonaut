@@ -191,14 +191,41 @@ export class AccountService {
       return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
       console.log('going to post to upload route');
       await this.http.get(`/api/cargonaut/${userId}/image`, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
-        reader.addEventListener('load', () => {
-          resolve(reader.result);
-        }, false);
-        reader.readAsDataURL(res.body);
+        if (res.status === 204) {
+          console.log(`User with id ${userId} has no image`);
+          resolve(null); // no image set
+        } else {
+          reader.addEventListener('load', () => {
+            resolve(reader.result);
+          }, false);
+          reader.readAsDataURL(res.body);
+        }
       }).catch(error => {
-        console.log('Error in getImage: ' + error.message);
-        reject(error);
+        if (error.status === 404) {
+          resolve(null); // no image found
+        } else {
+          console.log('Error in getImage: ' + error.message);
+          reject(error);
+        }
       });
+    });
+  }
+
+  public async deleteImage(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.delete(`http://localhost:4200/api/cargonaut/${user.id}/image`).toPromise().then((res: any) => {
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
     });
   }
 
