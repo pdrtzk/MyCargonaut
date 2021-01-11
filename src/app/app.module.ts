@@ -18,7 +18,6 @@ import {HeaderComponent} from './components/header/header.component';
 import {HomeComponent} from './components/home/home.component';
 import {SidebarRightComponent} from './components/sidebar-right/sidebar-right.component';
 import {AlertComponent} from './components/alert/alert.component';
-import {AccountComponent} from './components/account/account.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ProfileComponent} from './components/profile/profile.component';
@@ -34,6 +33,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
 import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
+import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +49,7 @@ import {AddRatingComponent} from './components/post/add-rating/add-rating.compon
     StarRatingComponent,
     PostVehicleTypeIconComponent,
     HomeComponent,
-    AccountComponent,
+    AlertComponent,
     LoginComponent,
     RegisterComponent,
     HomeComponent,
@@ -59,6 +59,7 @@ import {AddRatingComponent} from './components/post/add-rating/add-rating.compon
     AddVehicleComponent,
     EditProfileComponent,
     AddRatingComponent,
+    UpdatePasswordComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

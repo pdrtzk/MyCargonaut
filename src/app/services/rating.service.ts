@@ -14,11 +14,11 @@ export class RatingService {
 
   getRatingsForUser(cargonautId: number): Promise<any> {
     const http = this.http;
-    return new Promise<Vehicle[]>(async (resolve, reject) => {
+    return new Promise<Rating[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/bewertungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         res.bewertungen.forEach(elem => {
           const r: Rating = new Rating();
-          r.author.id = elem.verfasser;
+          r.author = {id: elem.verfasser};
           r.comment = elem.kommentar;
           r.ratingStars = parseFloat(elem.punktzahl);
         });

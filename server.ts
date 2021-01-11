@@ -128,7 +128,10 @@ export function app(): express.Express {
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
-          birthday: rows[0].geburtsdatum
+          birthday: rows[0].geburtsdatum,
+          account_holder: rows[0].kontoinhaber,
+          iban: rows[0].iban,
+          bic: rows[0].bic
         };
         // @ts-ignore
         req.session.user = user;
@@ -164,14 +167,20 @@ export function app(): express.Express {
     const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
     const birthday: string = (req.body.birthday).toLocaleString();
-    const data: [string, string, string, string, string] = [
+    const account_holder = req.body.account_holder;
+    const iban = req.body.iban;
+    const bic = req.body.bic;
+    const data: [string, string, string, string, string, string, string, string] = [
       firstname,
       lastname,
       password,
       email,
       birthday,
+      account_holder,
+      iban,
+      bic
     ];
-    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum) VALUES (NULL, ?, ?, ?, ?, ?);';
+    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
     queryPromise(query, data).then(results => {
       res.status(201).send({
         message: 'Neuer Nutzer erstellt!',
@@ -211,6 +220,8 @@ export function app(): express.Express {
     });
   });
 
+
+
   /*****************************************************************************
    *           Cargonaut       *
    *****************************************************************************/
@@ -222,14 +233,15 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM cargonaut WHERE id = ?;';
+    const query = 'SELECT firstname, lastname FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(results => {
       if (results.length > 0) {
         const user: Cargonaut = {
+          id: results[0].id,
           firstname: results[0].firstname,
           lastname: results[0].lastname,
-          email: results[0].email,
-          birthday: results[0].geburtsdatum,
+          // email: results[0].email,
+          // birthday: results[0].geburtsdatum,
         };
         res.status(200).send({
           user,
@@ -246,23 +258,27 @@ export function app(): express.Express {
     });
   });
 
-// Put Cargonaut
+// Put Cargonaut // TODO: Check if logged in user is same as user id in request + birthday?
   server.put('/api/cargonaut/:id', async (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const firstname: string = req.body.firstname;
     const lastname: string = req.body.lastname;
-    const email: string = req.body.email;
-    const password: string = cryptoJS.SHA512(req.body.password).toString();
-    const data: [string, string, string, string, number] = [
+    const birthday: string = req.body.birthday;
+    const data: [string, string, string, number] = [
       firstname,
       lastname,
-      email,
-      password,
-      id,
+      birthday,
+      id
     ];
-    const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, email = ?, password = ? WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, geburtsdatum = ? WHERE id = ?;';
     queryPromise(query, data).then(result => {
       if (result.affectedRows > 0) {
+        // @ts-ignore
+        req.session.user.firstname = firstname;
+        // @ts-ignore
+        req.session.user.lastname = lastname;
+        // @ts-ignore
+        req.session.user.birthday = birthday;
         res.status(200).send({
           message: `Updated user ${id}`,
         });
@@ -449,17 +465,18 @@ export function app(): express.Express {
       });
     });
   });
+
   // Update vehicle
   server.put('/api/vehicle/:vehicle', (req: Request, res: Response) => {
     // Read data from request body
     const id: number = Number(req.params.vehicle);
-    const art: string = req.body.type;
-    const anzahlSitzplaetze: number = req.body.seats;
-    const laenge: number = req.body.length;
-    const breite: number = req.body.width;
-    const hoehe: number = req.body.height;
-    const kommentar: string = req.body.comment;
-    const modell: string = req.body.model;
+    const art: string = req.body.vehicle.type.type;
+    const anzahlSitzplaetze: number = req.body.vehicle.seats;
+    const laenge: number = req.body.vehicle.hold.length;
+    const breite: number = req.body.vehicle.hold.width;
+    const hoehe: number = req.body.vehicle.hold.height;
+    const kommentar: string = req.body.vehicle.comment;
+    const modell: string = req.body.vehicle.type.description;
     let ladeflaeche: number;
     const dataLade: [number, number, number] = [
       laenge,
@@ -835,7 +852,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -853,7 +870,7 @@ export function app(): express.Express {
       });
     }).catch(() => {
       res.status(400).send({
-        message: 'Fehler beim getten der Bewertungen!',
+        message: 'Fehler beim Getten der Bewertungen!',
       });
     });
   });

@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
-import {AccountComponent} from '../account/account.component';
 import {AccountService} from '../../services/account.service';
-import {Observable, Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -11,15 +9,14 @@ import {Observable, Subscription} from 'rxjs';
 
 })
 export class HeaderComponent implements OnInit {
-  userLoggedIn = false; // todo: get actual login status in ngOnInit
+  userLoggedIn = false;
   navbarOpen = false;
+  userId: number;
 
 
   constructor(
-    private dialog: MatDialog,
     private accountService: AccountService
-  ) {
-  }
+  ) {  }
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.userLoggedIn = !!value);
@@ -34,4 +31,8 @@ export class HeaderComponent implements OnInit {
     await this.accountService.logout();
   }
 
+  getUserId(){
+    this.userId = this.accountService.user.id;
+    return this.userId;
+  }
 }

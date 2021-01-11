@@ -14,7 +14,7 @@ export class AddVehicleComponent implements OnInit {
   addVehicleForm: FormGroup;
   vehicle: Vehicle;
 
-  constructor(private formBuilder: FormBuilder, private dialogRef: MatDialogRef<AddVehicleComponent>) {
+  constructor(private formBuilder: FormBuilder, public dialogRef: MatDialogRef<AddVehicleComponent>) {
     this.vehicle = new Vehicle();
   }
 
@@ -22,7 +22,7 @@ export class AddVehicleComponent implements OnInit {
     this.addVehicleForm = this.formBuilder.group({
       type: [this.getVehicleStringFromType(VehicleTypeType.PKW), Validators.required],
       model: ['', Validators.required], // description
-      seats: [0, Validators.required],
+      seats: [1, [Validators.required, Validators.min(1)]],
       comment: [''],
       length: [0],
       width: [0],
@@ -32,7 +32,7 @@ export class AddVehicleComponent implements OnInit {
 
 
   onSubmit(): void{
-    if (this.addVehicleForm.invalid){
+    if (this.addVehicleForm.invalid || this.addVehicleForm.controls.seats.value <= 0){
       document.getElementById('errorAddVehicle').innerText = 'Fahrzeugtyp, Model und Sitzanzahl müssen angegeben werden.';
       return;
     }
@@ -51,7 +51,7 @@ export class AddVehicleComponent implements OnInit {
     }
     this.submitCallback.emit(this.vehicle);
 
-    this.addVehicleForm.reset();
+    this.resetForm();
     this.vehicle = new Vehicle();
     document.getElementById('errorAddVehicle').innerText = '';
 
@@ -59,6 +59,11 @@ export class AddVehicleComponent implements OnInit {
   }
 
   onCancel(): void {
+   this.resetForm();
+   this.dialogRef.close();
+  }
+
+  resetForm(): void {
     this.addVehicleForm.reset({
       type: this.getVehicleStringFromType(VehicleTypeType.PKW),
       model: '',
@@ -68,10 +73,7 @@ export class AddVehicleComponent implements OnInit {
       height: 0,
       width: 0
     });
-
-    this.dialogRef.close();
   }
-
 
   getVehicleStringFromType(type: VehicleTypeType): string {
     switch (type){

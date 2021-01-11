@@ -18,7 +18,7 @@ import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagno
 export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
-  private readonly postId: number;
+  private postId: number;
 
   loggedInUserIsOwner = false; // todo
   editModeOn = false;
@@ -49,7 +49,7 @@ export class PostComponent implements OnInit {
     if (this.post?.author?.id) {
       // get authors user data
       const id = this.post.author.id;
-      const userData = this.accountService.getUser(this.post.author.id);
+      const userData = this.accountService.get(this.post.author.id);
       this.post.author = await userData;
       this.post.author.id = id;
       // get author's vehicles (for editing)

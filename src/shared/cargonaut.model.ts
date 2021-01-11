@@ -8,4 +8,7 @@ export interface Cargonaut {
   password?: string;
   birthday?: Date;
   avgRating?: number;
+  account_holder?: string;
+  iban?: string;
+  bic?: string;
 }
