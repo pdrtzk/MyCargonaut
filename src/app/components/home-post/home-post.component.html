@@ -1,6 +1,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<div class="container shadow" id="post" *ngIf="post && !post.closed">
-  <div class="row justify-content-between">
+<div class="container shadow postHover" id="post" *ngIf="post && !post.closed" [routerLink]="['/post/', post.id]">
+  <div class="row justify-content-between pointer">
     <div class="col-lg-6 col-md-12">
       <div class="row">
         <div class="col-xl-7 col-lg-12">
@@ -13,8 +13,8 @@
               [ngStyle]="{'color': post?.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type ? post.type : 'Gesuch'}}</h3>
         </div>
       </div>
-      <div class="row justify-content-start">
-        <div class="col col-md-7 margin-1">
+      <div class="row justify-content-between">
+        <div class="col-8 col-md-7 margin-1">
           <h4 class="bold">
             {{post?.start_time ? post.start_time.getDate() : 'undefined'}}
             .{{post?.start_time ? (post.start_time.getMonth() + 1) : 'undefined'}}
@@ -23,6 +23,11 @@
             {{post?.start_time ? post?.start_time.getHours() : 'undefined'}}
             : {{post?.start_time ? (post?.start_time.getMinutes().toString().length == 1 ? ('0' + post?.start_time.getMinutes()) : post?.start_time.getMinutes()) : 'undefined'}}
             Uhr
+          </h4>
+        </div>
+        <div class="col-4 col-md-5 margin-1">
+          <h4 class="bold">
+            {{post.price}}€ über {{post.payment}}
           </h4>
         </div>
       </div>

@@ -26,6 +26,10 @@
   border-radius: 2px;
 }
 
+.showModalBtn:focus, .showModalBtn:hover, .showModalBtn:active {
+  fill: #b3cecb;
+}
+
 .dropdown > button:focus {
   box-shadow: 0 0 0 0.2rem #b3cecb;
   border-radius: 2px;
@@ -47,4 +51,8 @@
 
 .searchCol {
   padding: 0;
+}
+
+.pointer {
+  cursor: pointer;
 }
