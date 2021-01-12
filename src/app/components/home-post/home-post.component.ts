@@ -29,7 +29,7 @@ export class HomePostComponent implements OnInit {
   }
 
   getAuthor(id: number): Promise<void> {
-    return this.accountService.getUser(id).then(result => {
+    return this.accountService.get(id).then(result => {
         this.post.author = result;
         this.post.author.firstname = result.firstname;
         this.post.author.lastname = result.lastname;
