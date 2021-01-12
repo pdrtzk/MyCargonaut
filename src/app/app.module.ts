@@ -35,8 +35,10 @@ import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HomePostComponent} from './components/home-post/home-post.component';
 import {FormsModule} from '@angular/forms';
 import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
-import {UpdatePasswordComponent} from './components/profileComponents/update-password/update-password.component';
-import {ChatListComponent} from './components/chat-list/chat-list.component';
+import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
+import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat/chat.component';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -66,7 +68,8 @@ import {ChatListComponent} from './components/chat-list/chat-list.component';
     ChatListComponent,
     SidebarRightComponent,
     NewPostModalComponent,
-    HomePostComponent
+    HomePostComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'serverApp'}),
@@ -77,6 +80,7 @@ import {ChatListComponent} from './components/chat-list/chat-list.component';
     AppRoutingModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatButtonModule,
     NgbModule,
     FormsModule,
   ],

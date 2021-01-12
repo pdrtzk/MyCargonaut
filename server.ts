@@ -1017,7 +1017,6 @@ export function app(): express.Express {
 
 // get bewertungen -> Alle Bewertungen, die zu Fahrten eines bestimmten Cargonauten geschrieben wurden
   server.get('/api/bewertungen/:cargonaut', (req: Request, res: Response) => {
-    console.log(__dirname);
     const cargonaut: number = Number(req.params.cargonaut);
     const data: [number] = [
       cargonaut,
