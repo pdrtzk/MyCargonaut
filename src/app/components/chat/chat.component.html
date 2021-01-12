@@ -1,30 +1,36 @@
-<p class="name">{{getSndMember().firstname}}{{getSndMember().lastname}}</p>
-<div *ngFor="let msg of chat.messages">
-  <div class="row chat-row">
-    <div *ngIf="isAuthorOwn(msg)" class="col-lg-6">
-    </div>
-    <div class="col-lg-6 {{getColAlignment(msg)}}">
-      <div class="msg-container {{getAlignment(msg)}}">
-        <div class="author">{{msg.author.firstname}} {{msg.author.lastname}}</div>
-        <div class=" msg-div">{{msg.message}}</div>
-        <div class=" msg-div"><i class="time">{{getTime(msg)}}</i></div>
+<div *ngIf="loaded === false">
+  <mat-spinner color="#005b52"></mat-spinner>
+</div>
+<div *ngIf="loaded">
+  <a class="name" [routerLink]="['/profile/'+getSndMember().id]">{{getSndMember().firstname}} {{getSndMember().lastname}}</a>
+
+  <div *ngIf="chat.messages.length <= 0">In dieser Unterhaltung wurden noch keine Nachrichten versendet.</div>
+
+  <div *ngFor="let msg of chat.messages">
+    <div class="row chat-row">
+      <div *ngIf="isAuthorOwn(msg)" class="col-lg-6">
+      </div>
+      <div class="col-lg-6 {{getColAlignment(msg)}}">
+        <div class="msg-container {{getAlignment(msg)}}">
+          <div class="author">{{msg.author.firstname}} {{msg.author.lastname}}</div>
+          <div class=" msg-div">{{msg.message}}</div>
+          <div class=" msg-div"><i class="time">{{getTime(msg)}}</i></div>
+        </div>
+      </div>
+      <div *ngIf="isAuthorOwn(msg) == false" class="col-lg-6">
       </div>
     </div>
-    <div *ngIf="isAuthorOwn(msg) == false" class="col-lg-6">
+  </div>
+  <div class="row align-items-center" id="chat-bot">
+    <div class="col-md-10">
+      <input class="form-control" id="chat-input" type="text"/>
+    </div>
+    <div class="col-md-2">
+      <!--
+      <button mat-icon-button id="send-msg-btn" (click)="sendMessage()"><mat-icon>send</mat-icon></button>
+      -->
+      <button id="send-msg-btn" (click)="sendMessage()">Senden</button>
     </div>
   </div>
-</div>
-<div class="row align-items-center" id="chat-bot">
-  <div class="col-md-10">
-    <input class="form-control" id="chat-input" type="text"/>
-  </div>
-  <div class="col-md-2">
-    <!--
-    <button mat-icon-button id="send-msg-btn" (click)="sendMessage()"><mat-icon>send</mat-icon></button>
-    -->
-    <button id="send-msg-btn" (click)="sendMessage()">Senden</button>
-  </div>
-
-
 
 </div>

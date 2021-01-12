@@ -1,8 +1,8 @@
 <div class="row">
-  <div class="col-sm-3 text-center ">
+  <div class="col-md-3 text-center ">
     <img class="img-responsive" [src]="picsrc">
 
-    <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
+    <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button" (click)="contact()">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" id="addVehicle-button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
       <button class="editButton bot-row" id="messages-button" type="button" (click)="navigateToChat()">Meine Nachrichten</button>
@@ -10,16 +10,18 @@
 
       <div id="edit-profile-pic">
         <input type='file' name="pic" id="pic" accept="image/*" (change)="onSelectFile($event)">
-        <label class="pick-pic form-button" for="pic">Bild wählen</label>
-        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Abbrechen</button>
-        <button (click)="deleteImage()">Bild zurücksetzen</button>
+        <div class="row justify-content-around" id="picRow">
+          <label class="pick-pic bot-row form-button" id="labelPic" for="pic">Bild wählen</label>
+          <button class="pick-pic bot-row form-button" type="button" id="resetPic" (click)="deleteImage()">Bild zurücksetzen</button>
+          <button class="pick-pic bot-row form-button" type="button" id="cancelPickPic" (click)="cancelPic()">Abbrechen</button>
+        </div>
       </div>
       <button class="editButton bot-row" type="button" id="updatePW-button" (click)="openUpdatePWDialog()">Passwort ändern</button>
       <button class="editButton bot-row" type="button" id="deleteuser-button" (click)="deleteUserConfirm()">Nutzer entfernen</button>
     </ng-template>
   </div>
 
-  <div class="col-sm-9">
+  <div class="col-md-9">
     <p class="error" id="profileErrorAdd"></p>
     <p class="error" id="profileErrorEdit"></p>
     <div class="row" id="user-info">

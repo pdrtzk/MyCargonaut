@@ -67,11 +67,11 @@ export class AddVehicleComponent implements OnInit {
     this.addVehicleForm.reset({
       type: this.getVehicleStringFromType(VehicleTypeType.PKW),
       model: '',
-      seats: 0,
+      seats: 1,
       comment: '',
-      length: 0,
-      height: 0,
-      width: 0
+      length: 1,
+      height: 1,
+      width: 1
     });
   }
 

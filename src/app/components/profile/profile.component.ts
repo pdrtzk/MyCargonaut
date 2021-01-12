@@ -14,6 +14,7 @@ import {RatingService} from '../../services/rating.service';
 import {AlertService} from '../alert/alert.service';
 import {Router} from '@angular/router';
 import {UpdatePasswordComponent} from '../profileComponents/update-password/update-password.component';
+import {ChatService} from '../../services/chat.service';
 
 
 @Component({
@@ -40,6 +41,7 @@ export class ProfileComponent implements OnInit {
     private accountService: AccountService,
     private vehicleService: VehicleService,
     private ratingsService: RatingService,
+    private chatService: ChatService,
     private alertService: AlertService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
@@ -66,8 +68,10 @@ export class ProfileComponent implements OnInit {
       this.user = this.myuser;
       this.ownProfile = true;
     } else {
+      const tmp = this.user.id;
       this.ownProfile = false;
       this.user = await this.accountService.get(this.user.id);
+      this.user.id = tmp;
     }
     this.accountService.getImage(this.user.id).then((res) => {
       if (res) {
@@ -269,5 +273,12 @@ export class ProfileComponent implements OnInit {
       error => {
         this.alertService.error('Hier ist etwas schief gelaufen.');
       });
+  }
+
+  async contact(){
+    let id;
+    id = await this.chatService.getChatIdFromCargonauts(this.user.id, this.myuser.id);
+    const uri = '/chat/' + id.toString();
+    await this.router.navigateByUrl(uri);
   }
 }

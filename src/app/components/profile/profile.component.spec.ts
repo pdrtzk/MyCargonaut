@@ -18,6 +18,7 @@ import {Rating} from '../../../shared/rating.model';
 import {AddVehicleComponent} from '../profileComponents/add-vehicle/add-vehicle.component';
 import {ProfileVehicleComponent} from '../profileComponents/profile-vehicle/profile-vehicle.component';
 import {ProfileRatingComponent} from '../profileComponents/profile-rating/profile-rating.component';
+import {ChatService} from '../../services/chat.service';
 
 
 class MockRatingService extends RatingService {
@@ -122,6 +123,7 @@ describe('ProfileComponent', () => {
         { provide: AccountService, useValue: accStub },
         { provide: VehicleService, useValue: vehicleStub },
         { provide: RatingService, useValue: ratingStub },
+        { provide: ChatService, useValue: {}},
         {provide: ActivatedRoute,   useValue: {  paramMap: of({ get: (id) => '12' })
          }}
       ]

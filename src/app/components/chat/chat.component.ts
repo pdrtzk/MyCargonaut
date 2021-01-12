@@ -5,6 +5,7 @@ import {Cargonaut} from '../../../shared/cargonaut.model';
 import {ChatMessage} from '../../../shared/chat-message.model';
 import {AccountService} from '../../services/account.service';
 import {DatePipe} from '@angular/common';
+import {ChatService} from '../../services/chat.service';
 
 @Component({
   selector: 'app-chat',
@@ -13,12 +14,14 @@ import {DatePipe} from '@angular/common';
   providers: [DatePipe]
 })
 export class ChatComponent implements OnInit {
-  chat: Chat;
+  chat: Chat = {};
   myuser: Cargonaut;
+  loaded = false;
 
   constructor(
     private route: ActivatedRoute,
     private accountService: AccountService,
+    private chatService: ChatService,
     private datepipe: DatePipe
   ) {
   }
@@ -28,61 +31,48 @@ export class ChatComponent implements OnInit {
     this.myuser = this.accountService.user;
     this.route.paramMap.subscribe( paramMap => {
       this.chat.id = parseFloat(paramMap.get('id'));
+      this.getChat().then();
     });
+  }
 
-    const partner1: Cargonaut = {
-      id: 14,
-      firstname: 'Chatty',
-      lastname: 'McChat',
-    };
+  async getChat(){
+    this.chatService.getChat(this.chat.id).then(
+      res => {
+        this.chat = res;
+        if (this.chat.fstMember.id !== this.myuser.id){
+          this.chat.sndMember = this.myuser;
+          const tmp1 = this.chat.fstMember.id;
+          this.accountService.get(this.chat.fstMember.id).then(
+            res2 => {
+              this.chat.fstMember = res2;
+              this.chat.fstMember.id = tmp1;
+              this.assignAuthors();
+            }
+          );
+        } else {
+          const tmp2 = this.chat.sndMember.id;
+          this.chat.fstMember = this.myuser;
+          this.accountService.get(this.chat.sndMember.id).then(
+            res3 => {
+              this.chat.sndMember = res3;
+              this.chat.sndMember.id = tmp2;
+              this.assignAuthors();
+            }
+          );
+        }
+        this.loaded = true;
+      }
+    );
+  }
 
-    const message1: ChatMessage = {
-      id: 1,
-      author: partner1,
-      sentAt: new Date('2021-01-07T11:09:25+0100'),
-      message: 'Hallo, ist das Angebot immer noch verfügbar?'
-    };
-
-    const message2: ChatMessage = {
-      id: 2,
-      author: this.myuser,
-      sentAt: new Date('2021-01-07T11:13:25+0100'),
-      message: 'Ja, welche Uhrzeit würde Sie interessieren?'
-    };
-
-    const message3: ChatMessage = {
-      id: 3,
-      author: partner1,
-      sentAt: new Date('2021-01-07T11:15:25+0100'),
-      message: 'Passt Ihnen 16 Uhr?'
-    };
-
-    const message4: ChatMessage = {
-      id: 4,
-      author: this.myuser,
-      sentAt: new Date('2021-01-07T11:19:25+0100'),
-      message: 'Ja, wäre ok.'
-    };
-
-    const message5: ChatMessage = {
-      id: 5,
-      author: partner1,
-      sentAt: new Date('2021-01-07T11:21:25+0100'),
-      message: 'Sehr gut, ich schicke Ihnen in Kürze meine Adresse.' +
-          ' Dies ist eine sehr lange Nachricht. Wir müssen viel besprechen.' +
-          ' Darum schreibe ich eine lange Nachricht. Aus keinem anderen Grund, wie zum Beispiel die Zeilenumbrüche zu testen.' +
-          'Nichts läge mir ferner.'
-    };
-
-    const chat1: Chat = {
-      id: 1,
-      fstMember: this.myuser,
-      sndMember: partner1,
-      messages: [message1, message2, message3, message4, message5]
-    };
-
-    this.chat = chat1;
-    // todo: get chat from server
+  assignAuthors() {
+    this.chat.messages.forEach(msg => {
+      if (msg.author.id === this.chat.fstMember.id){
+        msg.author = this.chat.fstMember;
+      } else {
+        msg.author = this.chat.sndMember;
+      }
+    });
   }
 
   getSndMember(){
@@ -121,16 +111,19 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  sendMessage(): void {
+  async sendMessage(): Promise<void> {
     const msgmsg = (document.getElementById('chat-input') as HTMLInputElement).value;
-    console.log(msgmsg);
     const msg: ChatMessage = {
       message: msgmsg,
       author: this.myuser,
       sentAt: new Date (Date.now()),
       chat: this.chat
     };
-    this.chat.messages.push(msg);
-    // todo: send to server
+    this.chatService.sendMessage(msg).then(
+      res => {
+        this.chat.messages.push(msg);
+      }
+    );
+    (document.getElementById('chat-input') as HTMLInputElement).value = '';
   }
 }
