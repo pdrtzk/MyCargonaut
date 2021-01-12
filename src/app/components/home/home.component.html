@@ -6,7 +6,7 @@
           <form>
             <div class="row">
               <div class=" col-7 col-sm-8 col-md-9 col-lg-10 col-xl-11 searchCol">
-                <input id="searchbar" type="text" placeholder="Search.." name="search" [(ngModel)]="currSearchString"
+                <input id="searchbar" type="text" placeholder="Suche.." name="search" [(ngModel)]="currSearchString"
                        (keyup)="this.filter()">
               </div>
               <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-1 searchCol">
@@ -55,7 +55,8 @@
     </div>
     <div class=" col-md-4 col-lg-3 col-xl-2">
       <a (click)="showModal()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="80%" height="80%" fill="#005B52" class="bi bi-plus-circle-fill"
+        <svg xmlns="http://www.w3.org/2000/svg" width="70%" height="70%" fill="#005B52"
+             class="bi bi-plus-circle-fill pointer showModalBtn"
              viewBox="0 0 16 16">
           <path
             d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
