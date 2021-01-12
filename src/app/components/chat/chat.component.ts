@@ -4,11 +4,13 @@ import {Chat} from '../../../shared/chat.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {ChatMessage} from '../../../shared/chat-message.model';
 import {AccountService} from '../../services/account.service';
+import {DatePipe} from '@angular/common';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrls: ['./chat.component.css']
+  styleUrls: ['./chat.component.css'],
+  providers: [DatePipe]
 })
 export class ChatComponent implements OnInit {
   chat: Chat;
@@ -16,7 +18,8 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private datepipe: DatePipe
   ) {
   }
 
@@ -36,7 +39,7 @@ export class ChatComponent implements OnInit {
     const message1: ChatMessage = {
       id: 1,
       author: partner1,
-      sentAt: new Date('2021-01-07T11:11:25+0100'),
+      sentAt: new Date('2021-01-07T11:09:25+0100'),
       message: 'Hallo, ist das Angebot immer noch verfügbar?'
     };
 
@@ -65,7 +68,10 @@ export class ChatComponent implements OnInit {
       id: 5,
       author: partner1,
       sentAt: new Date('2021-01-07T11:21:25+0100'),
-      message: 'Sehr gut, ich schicke Ihnen in Kürze meine Adresse.'
+      message: 'Sehr gut, ich schicke Ihnen in Kürze meine Adresse.' +
+          ' Dies ist eine sehr lange Nachricht. Wir müssen viel besprechen.' +
+          ' Darum schreibe ich eine lange Nachricht. Aus keinem anderen Grund, wie zum Beispiel die Zeilenumbrüche zu testen.' +
+          'Nichts läge mir ferner.'
     };
 
     const chat1: Chat = {
@@ -87,8 +93,44 @@ export class ChatComponent implements OnInit {
     }
   }
 
-  getTime(){
-
+  getTime(msg: ChatMessage){
+    return this.datepipe.transform(msg.sentAt, 'HH:mm');
   }
 
+  getAlignment(msg: ChatMessage){
+    if (msg.author.id === this.myuser.id){
+      return 'msg-right own';
+    } else {
+      return 'msg-left notown';
+    }
+  }
+
+  getColAlignment(msg: ChatMessage){
+    if (msg.author.id === this.myuser.id){
+      return 'text-right';
+    } else {
+      return '';
+    }
+  }
+
+  isAuthorOwn(msg: ChatMessage){
+    if (msg.author.id === this.myuser.id){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  sendMessage(): void {
+    const msgmsg = (document.getElementById('chat-input') as HTMLInputElement).value;
+    console.log(msgmsg);
+    const msg: ChatMessage = {
+      message: msgmsg,
+      author: this.myuser,
+      sentAt: new Date (Date.now()),
+      chat: this.chat
+    };
+    this.chat.messages.push(msg);
+    // todo: send to server
+  }
 }

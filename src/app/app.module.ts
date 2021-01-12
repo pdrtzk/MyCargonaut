@@ -36,6 +36,7 @@ import {AddRatingComponent} from './components/post/add-rating/add-rating.compon
 import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ChatComponent } from './components/chat/chat.component';
+import {MatButtonModule} from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { ChatComponent } from './components/chat/chat.component';
     AppRoutingModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatButtonModule,
     NgbModule,
   ],
   bootstrap: [AppComponent]
