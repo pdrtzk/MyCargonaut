@@ -16,7 +16,7 @@
   background-color: #005B52;
   border-radius: 2px;
   border-color: #005B52;
-  font-weight: bold;
+  font-family: 'Lato', sans-serif;
 }
 
 .dropdown > button:active, .dropdown > button:hover {

@@ -7,15 +7,15 @@
           <h3
             class="green-color bold">{{post.author?.firstname ? post.author?.firstname : 'undefined'}} {{post.author.lastname ? post.author.lastname : 'undefined'}}</h3>
         </div>
-        <div class="col-xl-5 col-lg-8 post-type text-center"
+        <div class="col-xl-4 col-lg-7 post-type text-center"
              [ngStyle]="{'background-color': post?.type == 'Gesuch' ? '#e5e5e5' : '#005B52'}">
-          <h3 class="bold"
+          <h3 class="post-type"
               [ngStyle]="{'color': post?.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type ? post.type : 'Gesuch'}}</h3>
         </div>
       </div>
       <div class="row justify-content-between">
         <div class="col-8 col-md-7 margin-1">
-          <h4 class="bold">
+          <p class="bold time">
             {{post?.start_time ? post.start_time.getDate() : 'undefined'}}
             .{{post?.start_time ? (post.start_time.getMonth() + 1) : 'undefined'}}
             .{{post?.start_time ? post.start_time.getFullYear() : 'undefined'}}
@@ -23,7 +23,7 @@
             {{post?.start_time ? post?.start_time.getHours() : 'undefined'}}
             : {{post?.start_time ? (post?.start_time.getMinutes().toString().length == 1 ? ('0' + post?.start_time.getMinutes()) : post?.start_time.getMinutes()) : 'undefined'}}
             Uhr
-          </h4>
+          </p>
         </div>
         <div class="col-4 col-md-5 margin-1">
           <h4 class="bold">
