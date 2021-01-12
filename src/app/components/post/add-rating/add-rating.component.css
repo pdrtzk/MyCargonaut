@@ -1,0 +1,42 @@
+* {
+  font-family: Calibri;
+}
+
+textarea {
+  width: 100%;
+  border: 0;
+  padding: 5px;
+  min-height: 100px;
+  min-width: 100%;
+}
+
+#title {
+  font-size: 20px;
+  color: #005B52;
+}
+
+#starRating {
+  padding-bottom: 20px;
+}
+
+#footer {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 10px;
+}
+
+#submitButton {
+  font-size: 20px;
+  background-color: #005B52;
+  color: white;
+  border: 0;
+  padding: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+#submitButton:hover {
+  background-color: #0b9183;
+}

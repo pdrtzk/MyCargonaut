@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AlertService} from '../../alert/alert.service';
@@ -10,10 +10,6 @@ export class LoginComponent implements OnInit {
   form: FormGroup;
   loading = false;
   submitted = false;
-  @Output()
-  registerClick: EventEmitter<void> = new EventEmitter<void>();
-  @Output()
-  closeEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,8 +20,8 @@ export class LoginComponent implements OnInit {
   ) {
     this.accountService.isLoggedIn().then(() => {
       if (this.accountService.user) {
-      this.router.navigate(['/']).then();
-    }
+        this.router.navigate(['/']).then();
+      }
     });
   }
 
@@ -49,25 +45,23 @@ export class LoginComponent implements OnInit {
     }
     this.loading = true;
     let user: Cargonaut;
-    await this.accountService.login(this.f.email.value, this.f.password.value).then(
+    await this.accountService.login(this.f.email.value.trim(), this.f.password.value).then(
       res => {
         user = res;
         this.loading = false;
         const returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
         this.router.navigateByUrl(returnUrl, {replaceUrl: true});
-        this.alertService.success('Angemeldet.');
-        this.closeEvent.emit(true);
+        // this.alertService.success('Angemeldet.');
       },
       error => {
-        /* TODO: Error message für Benutzer verständlich ausgeben + Fehlermeldung im Pop up nicht im Hintergrund */
-        this.alertService.error(error);
+        if (error.status === 401 && error.error.message === 'Login information is not correct!') {
+          this.alertService.error('Ungültige Anmeldedaten.');
+        } else {
+          this.alertService.error('Hier ist wohl etwas schief gelaufen');
+        }
         this.loading = false;
       });
     console.log('Login: ' + user?.email);
-  }
-
-  showRegister() {
-    this.registerClick.emit();
   }
 
 

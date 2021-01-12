@@ -15,11 +15,39 @@ import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
 import {Request, Response} from 'express';
 import * as cryptoJS from 'crypto-js';
+import * as multer from 'multer';
+import * as fs from 'fs';
 
 import {Cargonaut} from 'src/shared/cargonaut.model';
 import {Vehicle} from './src/shared/vehicle.model';
 import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'public/tmp/uploads');
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, `${file.fieldname}-${uniqueSuffix}-${file.originalname}`);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb('Please upload only images.', false);
+  }
+};
+
+const upload = multer({storage, fileFilter});
+
+// cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
+const tmp = __dirname.lastIndexOf('dist/MyCargonaut/server');
+const onWindows = tmp === -1;
+const rootDir = __dirname.substring(0, onWindows ? __dirname.lastIndexOf('dist\\MyCargonaut\\server') : tmp);
+
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
@@ -162,36 +190,45 @@ export function app(): express.Express {
 
 // Registrieren
   server.post('/api/cargonaut', async (req: Request, res: Response) => {
-    const firstname: string = req.body.firstname;
-    const lastname: string = req.body.lastname;
-    const password: string = cryptoJS.SHA512(req.body.password).toString();
     const email: string = req.body.email;
-    const birthday: string = (req.body.birthday).toLocaleString();
-    const account_holder = req.body.account_holder;
-    const iban = req.body.iban;
-    const bic = req.body.bic;
-    const data: [string, string, string, string, string, string, string, string] = [
-      firstname,
-      lastname,
-      password,
-      email,
-      birthday,
-      account_holder,
-      iban,
-      bic
-    ];
-    const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
-    queryPromise(query, data).then(results => {
-      res.status(201).send({
-        message: 'Neuer Nutzer erstellt!',
-        createdUser: results.insertId,
-      });
-    }).catch(() => {
-        res.status(400).send({
+    const emailQuery = 'SELECT * FROM cargonaut where email = ?;';
+    queryPromise(emailQuery, [email]).then(rows => {
+      if (rows.length > 0) {
+        res.status(409).send({
           message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
         });
+      } else {
+        const firstname: string = req.body.firstname;
+        const lastname: string = req.body.lastname;
+        const password: string = cryptoJS.SHA512(req.body.password).toString();
+        const birthday: string = (req.body.birthday).toLocaleString();
+        const account_holder = req.body.account_holder;
+        const iban = req.body.iban;
+        const bic = req.body.bic;
+        const data: [string, string, string, string, string, string, string, string] = [
+          firstname,
+          lastname,
+          password,
+          email,
+          birthday,
+          account_holder,
+          iban,
+          bic
+        ];
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
+        queryPromise(query, data).then(results => {
+          res.status(201).send({
+            message: 'Neuer Nutzer erstellt!',
+            createdUser: results.insertId,
+          });
+        }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Nutzers.',
+            });
+          }
+        );
       }
-    );
+    });
   });
 
 // Change Password
@@ -293,20 +330,160 @@ export function app(): express.Express {
     });
   });
 
-
+  // Delete Cargonaut
   server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    let imageFile = null;
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        imageFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
     const query = 'DELETE FROM cargonaut WHERE id = ?;';
-
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
+        if (imageFile) {
+          imageFile = onWindows ? imageFile.replace('/', '\\') : imageFile;
+          fs.unlink(rootDir + imageFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + imageFile);
+            } else {
+              console.log('File at ' + imageFile + ' deleted.');
+            }
+          });
+        }
         res.status(200).send({
           message: `User gelöscht`,
         });
       } else {
         res.status(400).send({
           message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    }).catch(err => {
+      // Database operation has failed
+      res.status(500).send({
+        message: 'Datenbank Fehler: ' + err
+      });
+    });
+  });
+
+  // Upload Profile Image
+  server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    let oldFile = null;
+    console.log('save to: ' + req.file.path);
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        oldFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
+    const data: [string, number] = [
+      req.file.path,
+      id
+    ];
+    const query = 'UPDATE cargonaut SET image = ? WHERE id = ?;';
+    queryPromise(query, data).then(result => {
+      // Check if database response contains at least one entry
+      if (result.affectedRows === 1) {
+        if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
+          fs.unlink(rootDir + oldFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + oldFile);
+            } else {
+              console.log('File at ' + oldFile + ' deleted.');
+            }
+          });
+        }
+        res.setHeader('Cache-Control', 'no-cache');
+        res.status(200).send({
+          message: `Bild gespeichert.`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'Bild konnte nicht gespeichert werden!',
+        });
+      }
+    }).catch(err => {
+      // Database operation has failed
+      res.status(500).send({
+        message: 'Datenbank Fehler: ' + err
+      });
+    });
+  });
+
+  // Get Profile image of Cargonaut
+  server.get('/api/cargonaut/:id/image', (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    const data: [string] = [
+      id,
+    ];
+    const query = 'SELECT image FROM cargonaut WHERE id = ?;';
+    queryPromise(query, data).then(rows => {
+      if (rows.length === 1) {
+        console.log('load from: ' + rootDir + rows[0].image);
+        res.setHeader('Cache-Control', 'no-cache');
+        if (rows[0].image) {
+          const imageFile = onWindows ? rows[0].image.replace('/', '\\') : rows[0].image;
+          res.sendFile(imageFile, {root: rootDir});
+        } else {
+          res.sendStatus(204);
+        }
+      } else {
+        res.status(404).send({
+          message: 'Kein Bild gefunden.',
+        });
+      }
+    });
+  });
+
+  // Delete image of Cargonaut
+  server.delete('/api/cargonaut/:id/image', (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    let oldFile = null;
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        oldFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
+    const query = 'UPDATE cargonaut SET image = NULL WHERE id = ?;';
+    queryPromise(query, [id]).then(result => {
+      // Check if database response contains at least one entry
+      if (result.affectedRows === 1) {
+        if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
+          fs.unlink(rootDir + oldFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + oldFile);
+            } else {
+              console.log('File at ' + oldFile + ' deleted.');
+            }
+          });
+        }
+        res.setHeader('Cache-Control', 'no-cache');
+        res.status(200).send({
+          message: `Bild gelöscht.`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'Bild konnte nicht gelöscht werden!',
         });
       }
     }).catch(err => {
@@ -606,7 +783,7 @@ export function app(): express.Express {
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
         author: result.verfasser,
-        price: result.ladeflaeche,
+        price: result.preis,
         closed: result.gebucht,
         description: result.beschreibung,
         status: null // TODO: get status from db
@@ -811,6 +988,7 @@ export function app(): express.Express {
 
 // get bewertungen -> Alle Bewertungen, die zu Fahrten eines bestimmten Cargonauten geschrieben wurden
   server.get('/api/bewertungen/:cargonaut', (req: Request, res: Response) => {
+    console.log(__dirname);
     const cargonaut: number = Number(req.params.cargonaut);
     const data: [number] = [
       cargonaut,

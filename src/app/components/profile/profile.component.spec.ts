@@ -81,6 +81,9 @@ describe('ProfileComponent', () => {
     },
     get(cargonautId: number){
       return Promise.resolve(user);
+    },
+    getImage(userId: number){
+      return Promise.resolve('str');
     }
   };
 

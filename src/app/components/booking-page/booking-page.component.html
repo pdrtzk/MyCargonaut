@@ -10,6 +10,6 @@
       <p *ngIf="displayPage!=='inbox'">beauftragt</p>
     </div>
   </div>
-  <app-booking-list *ngIf="displayPage === 'inbox'" [bookings]="inbox"></app-booking-list>
-  <app-booking-list *ngIf="displayPage === 'outbox'" [bookings]="outbox"></app-booking-list>
+  <app-booking-list *ngIf="displayPage === 'inbox'" [bookings]="inbox" [currentUser]="currentUser"></app-booking-list>
+  <app-booking-list *ngIf="displayPage === 'outbox'" [bookings]="outbox" [currentUser]="currentUser"></app-booking-list>
 </div>

@@ -1,4 +1,3 @@
-
 <div class="row">
   <div class="col-sm-3 text-center ">
     <img class="img-responsive" [src]="picsrc">
@@ -6,12 +5,14 @@
     <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" id="addVehicle-button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
-      <button class="editButton bot-row" id="messages-button" type="button">Meine Nachrichten</button>
+      <button class="editButton bot-row" id="messages-button" type="button" (click)="navigateToChat()">Meine Nachrichten</button>
       <button class="editButton bot-row" type="button" id="picButton" (click)="editPic()">Profilbild ändern</button>
+
       <div id="edit-profile-pic">
         <input type='file' name="pic" id="pic" accept="image/*" (change)="onSelectFile($event)">
-        <label class="pick-pic form-button" for="pic">Datei wählen</label>
-        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Bestätigen</button>
+        <label class="pick-pic form-button" for="pic">Bild wählen</label>
+        <button class="bot-row form-button pick-pic" type="button" id="cancelPickPic" (click)="cancelPic()">Abbrechen</button>
+        <button (click)="deleteImage()">Bild zurücksetzen</button>
       </div>
       <button class="editButton bot-row" type="button" id="updatePW-button" (click)="openUpdatePWDialog()">Passwort ändern</button>
       <button class="editButton bot-row" type="button" id="deleteuser-button" (click)="deleteUserConfirm()">Nutzer entfernen</button>
@@ -46,15 +47,26 @@
 
     <app-edit-profile id="editProfileForm" [user]="user" (submitCallback)="submitEditUser($event)"></app-edit-profile>
 
+    <div *ngIf="ownProfile" class="row row-margin-top">
+      <div class="col">
+        <h3>Zahlungsinformationen</h3>
+        <p class="margin-top"><span class="descriptor">Kontoinhaber: </span>{{user.account_holder}}</p>
+        <p><span class="descriptor">IBAN: </span>{{user.iban}}</p>
+        <p><span class="descriptor">BIC: </span>{{user.bic}}</p>
+        <p>Wenn Sie etwas an Ihren Zahlungsinformationen ändern möchten, wenden Sie sich bitte mit einer Nachricht an <a href="mailto:mycargonaut@support.de">mycargonaut@support.de</a>.</p>
+      </div>
+    </div>
+
     <div class="row row-margin-top">
       <div class="col">
         <h3>Fahrzeuge</h3>
         <div *ngFor="let car of vehiclesUser; let i = index">
-          <app-profile-vehicle [vehicle]="car" [ownProfile]="ownProfile" (submitCallback)="submitEditVehicle($event)" (submitDeleteCallback)="submitDeleteVehicle($event)"></app-profile-vehicle>
+          <app-profile-vehicle [vehicle]="car" [ownProfile]="ownProfile" (submitCallback)="submitEditVehicle($event)"
+                               (submitDeleteCallback)="submitDeleteVehicle($event)"></app-profile-vehicle>
           <hr>
         </div>
         <p *ngIf="vehiclesUser == null || vehiclesUser.length <= 0">
-            Dieser Nutzer hat noch keine Fahrzeuge registriert.
+          Dieser Nutzer hat noch keine Fahrzeuge registriert.
         </p>
       </div>
     </div>
