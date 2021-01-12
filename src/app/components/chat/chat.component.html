@@ -1,4 +1,7 @@
 <p class="name">{{getSndMember().firstname}}{{getSndMember().lastname}}</p>
+
+<div *ngIf="chat.messages.length <= 0">In dieser Unterhaltung wurden noch keine Nachrichten versendet.</div>
+
 <div *ngFor="let msg of chat.messages">
   <div class="row chat-row">
     <div *ngIf="isAuthorOwn(msg)" class="col-lg-6">

@@ -13,7 +13,7 @@ import {DatePipe} from '@angular/common';
   providers: [DatePipe]
 })
 export class ChatComponent implements OnInit {
-  chat: Chat;
+  chat: Chat = {};
   myuser: Cargonaut;
 
   constructor(

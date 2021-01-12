@@ -65,7 +65,7 @@ export class ChatListComponent implements OnInit {
     message1.chat = chat1;
     message2.chat = chat2;
 
-    this.chats = [chat1, chat2];
+    this.chats = [];
 
     // todo: sort by date
   }

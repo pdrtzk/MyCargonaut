@@ -68,6 +68,9 @@ app-profile-vehicle {
 .form-button {
   background-color: #005b52;
   border: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .form-button:hover {
   background-color: #0b9183;
@@ -80,10 +83,11 @@ app-profile-vehicle {
 
 .pick-pic {
   background-color: #005b52;
-  padding: 15px;
   border-radius: 10px;
+  padding: 15px;
   color: white;
   min-width: 120px;
+  margin-bottom: 0.5rem;
 }
 
 .pick-pic:hover {
@@ -91,9 +95,6 @@ app-profile-vehicle {
   background-color: #0b9183;
 }
 
-#cancelPickPic {
-  margin-left: 2rem;
-}
 
 #edit-profile-pic {
   display: none;
@@ -106,4 +107,19 @@ app-profile-vehicle {
 
 button a {
   color: white;
+}
+
+#picRow {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#resetPic {
+  color: #005b52;
+  background-color: white;
+  border: 1px solid #005b52;
+}
+
+#resetPic:hover {
+  background-color: #e5e5e5;
 }
