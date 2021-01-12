@@ -84,6 +84,16 @@ app-profile-vehicle {
   border-radius: 10px;
   color: white;
   min-width: 120px;
+  margin: 4px;
+}
+
+.abort-pic {
+  background-color: #828282;
+  padding: 15px;
+  border-radius: 10px;
+  color: white;
+  min-width: 120px;
+  margin: 4px;
 }
 
 .pick-pic:hover {
@@ -92,7 +102,7 @@ app-profile-vehicle {
 }
 
 #cancelPickPic {
-  margin-left: 2rem;
+
 }
 
 #edit-profile-pic {
