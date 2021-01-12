@@ -3,7 +3,7 @@ import {Post} from '../../../shared/post.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
-
+import {VehicleTypeType} from '../../../shared/vehicle-type.model';
 @Component({
   selector: 'app-home-post',
   templateUrl: './home-post.component.html',

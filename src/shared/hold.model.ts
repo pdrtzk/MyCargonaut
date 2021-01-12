@@ -11,7 +11,7 @@ export class Hold {
     this.height = height;
   }
 
-  getSpace(): number {
+  public getSpace(): number {
     return ((this.length / 100) * (this.width / 100) * (this.height / 100));
   }
 }

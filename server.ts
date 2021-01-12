@@ -705,29 +705,28 @@ export function app(): express.Express {
 
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    const startzeit: string = req.body.post.start_time.year + req.body.post.start_time.month + req.body.post.start_time.day;
-    const ankunftZeit: string = req.body.post.end_time.year + req.body.post.end_time.month + req.body.post.end_time.day;
+    console.log(req.body.post.start_time);
+    console.log(req.body.post.end_time);
+    const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
+    const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.end_time.length - 1);
     const bezahlungsart: string = req.body.post.payment;
 
-    const fahrzeug: number = req.body.post.vehicle.id;
-    const anzahlSitzplaetze: number = req.body.post.vehicle.seats;
+    const fahrzeug: number = req.body.post.vehicle?.id;
+    const anzahlSitzplaetze: number = req.body.post?.seats;
     const beschreibung: string = (req.body.post.description ? req.body.post.description : 'no description');
     const typ: string = req.body.post.type; // 'Angebot' oder 'Gesuch'
-    const preis = (req.body.post.price ? req.body.post.price : 'none');
+    const preis = req.body.post.price;
 
     const startlocation: string = req.body.post.startlocation;
     const endlocation: string = req.body.post.endlocation;
-    //const laenge: number = req.body.post.hold.length;
-    const laenge: number = 4;
-    //const breite: number = req.body.post.hold.width;
-    const breite: number = 7;
-    //const hoehe: number = req.body.post.hold.height;
-    const hoehe: number = 4;
+    const laenge: number = req.body.post.hold?.length;
+    const breite: number = req.body.post.hold?.width;
+    const hoehe: number = req.body.post.hold?.height;
     let laderaum: number;
+    const fahrzeugTyp: string = fahrzeug ? null : req.body.post.vehicleType;
 
-    if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
-      fahrzeug && anzahlSitzplaetze && typ && preis && startlocation &&
-      endlocation && laenge && breite && hoehe) {
+    if (cargonaut && startzeit && ankunftZeit && bezahlungsart && typ && preis && startlocation &&
+      endlocation && ((laenge && breite && hoehe) || anzahlSitzplaetze)) {
       // create laderaum
       const dataLaderaum: [number, number, number] = [
         laenge,
@@ -735,43 +734,48 @@ export function app(): express.Express {
         hoehe,
       ];
       console.log('if');
-      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
-      queryPromise(queryLade, dataLaderaum).then(resu => {
-        laderaum = resu.insertId;
-        // create Post
-        const data: [string, string, string, string, string, number, number, number, string, string, number, any] = [
-          startlocation,
-          endlocation,
-          startzeit,
-          ankunftZeit,
-          bezahlungsart,
-          laderaum,
-          fahrzeug,
-          anzahlSitzplaetze,
-          beschreibung,
-          typ,
-          cargonaut,
-          preis,
-        ];
-        console.log('queryLade');
-        const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, DATETIME(?), ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
-        queryPromise(query, data).then(resultPost => {
-          console.log('query');
-          res.status(201).send({
-            message: 'Neuer Post erstellt!',
-            createdVehicle: resultPost.insertId,
-          });
-        }).catch((err) => {
-            console.log('Fehler beim erstellen des Posts');
-            console.log(err);
-          }
-        )
-      }).catch(() => {
-          res.status(400).send({
-            message: 'Fehler beim Erstellen eines Posts.',
+      if (laenge && breite && hoehe) {
+        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        queryPromise(queryLade, dataLaderaum).then(resu => {
+          laderaum = resu.insertId;
+          // create Post
+          console.log('queryLade');
+        }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Posts.',
             });
           }
-
+        );
+      } else {
+        console.log('Kein Laderaum angegeben.');
+      }
+      const data: [string, string, string, string, string, number, number, number, string, string, number, any, string] = [
+        startlocation,
+        endlocation,
+        startzeit,
+        ankunftZeit,
+        bezahlungsart,
+        laderaum ? laderaum : null,
+        fahrzeug ? fahrzeug : null,
+        anzahlSitzplaetze,
+        beschreibung,
+        typ,
+        cargonaut,
+        preis,
+        fahrzeugTyp ? fahrzeugTyp : null
+      ];
+      console.log(data);
+      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?, ?);';
+      queryPromise(query, data).then(resultPost => {
+        console.log('query');
+        res.status(201).send({
+          message: 'Neuer Post erstellt!',
+          createdVehicle: resultPost.insertId,
+        });
+      }).catch((err) => {
+          console.log('Fehler beim erstellen des Posts');
+          console.log(err);
+        }
       );
     } else {
       res.status(400).send({
@@ -797,15 +801,16 @@ export function app(): express.Express {
         start_time: result.startzeit,
         end_time: result.ankunft_zeit,
         payment: result.bezahlungsart,
-        hold: result.laderaum,
-        vehicle: result.fahrzeug,
+        hold: result?.laderaum,
+        vehicle: result?.fahrzeug,
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
         author: result.verfasser,
         price: result.preis,
         closed: result.gebucht,
         description: result.beschreibung,
-        status: result.status
+        status: result.status,
+        vehicleType: result.fahrzeug_typ
       };
       res.status(200).send({
         post
@@ -838,9 +843,9 @@ export function app(): express.Express {
           start_time: result.startzeit,
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
-          hold: result.laderaum,
+          hold: result?.laderaum,
           vehicle: {
-            id: result.fahrzeug
+            id: result?.fahrzeug
           },
           seats: result.anzahl_sitzplaetze,
           type: result.typ,
@@ -850,7 +855,8 @@ export function app(): express.Express {
           price: result.preis,
           closed: result.gebucht,
           description: result.beschreibung,
-          status: result.status
+          status: result.status,
+          vehicleType: result.fahrzeug_typ
         };
         posts.push(post);
       }
@@ -864,7 +870,7 @@ export function app(): express.Express {
     });
   });
 
-// Update post
+// Update post - TODO
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);

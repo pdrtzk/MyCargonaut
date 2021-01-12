@@ -48,20 +48,21 @@
             </div>
           </div>
         </div>
-        <div class="col-xl-7 col-lg-12" *ngIf="post.vehicle.type?.type">
-          <div *ngIf="post.vehicle.type.type == 'PKW'">
+        <div class="col-xl-7 col-lg-12" *ngIf="post.vehicleType">
+          <div *ngIf="post.vehicleType == 'PKW'">
+            <script>alert(yay)</script>
             <mat-icon [inline]="true" class="car_icon"> directions_car</mat-icon>
           </div>
-          <div *ngIf="post.vehicle.type.type == 'LKW'">
+          <div *ngIf="post.vehicleType == 'LKW'">
             <mat-icon [inline]="true" class="car_icon">local_shipping</mat-icon>
           </div>
-          <div *ngIf="post.vehicle.type.type == 'Transporter'">
+          <div *ngIf="post.vehicleType == 'Transporter'">
             <mat-icon [inline]="true" class="car_icon">directions_bus</mat-icon>
           </div>
-          <div *ngIf="post.vehicle.type.type == 'Flugzeug'">
+          <div *ngIf="post.vehicleType == 'Flugzeug'">
             <mat-icon [inline]="true" class="car_icon">local_airport</mat-icon>
           </div>
-          <div *ngIf="post.vehicle.type.type == 'Schiff'">
+          <div *ngIf="post.vehicleType == 'Schiff'">
             <mat-icon [inline]="true" class="car_icon">directions_boat</mat-icon>
           </div>
         </div>

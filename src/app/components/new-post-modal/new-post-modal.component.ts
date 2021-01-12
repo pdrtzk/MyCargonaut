@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
-import {DriveStatus, Post, PostType} from '../../../shared/post.model';
+import {Post, PostType} from '../../../shared/post.model';
 import {VehicleService} from '../../services/vehicle.service';
 import {VehicleTypeType} from '../../../shared/vehicle-type.model';
 import {AccountService} from '../../services/account.service';
@@ -15,7 +15,7 @@ import {Hold} from '../../../shared/hold.model';
 export class NewPostModalComponent implements OnInit {
 
 
-  posttype: boolean; // Angebot: false, Gesuch: true
+  posttype = true; // Angebot: true, Gesuch: false
   vehicles: Vehicle[];
   cities: string[];
   startCity: string;
@@ -97,9 +97,12 @@ export class NewPostModalComponent implements OnInit {
 
     const todayDate = this.calendar.getToday();
 
-    if (this.posttype && this.currVehicle && this.startDate && this.startDate >= todayDate && this.endDate
+    console.log(this.startDate);
+    console.log(this.startTime);
+
+    if (/*this.currVehicle && */this.startDate && this.startDate >= todayDate && this.endDate
       && this.endDate >= this.startDate && this.startCity && this.endCity && this.startTime && this.endTime
-      && this.currHold.height && this.currHold.width && this.currHold.length && this.currSeats && this.currPayment
+      && ((this.currHold.height && this.currHold.width && this.currHold.length) || this.currSeats) && this.currPayment
       && this.price) {
 
       this.filledForm = true;
@@ -110,42 +113,36 @@ export class NewPostModalComponent implements OnInit {
       this.filledForm = false;
     }
 
-    this.startCity = undefined;
-    this.endCity = undefined;
-    this.currVehicle = undefined;
+    // this.startCity = undefined;
+    // this.endCity = undefined;
+    // this.currVehicle = undefined;
   }
 
   closeModal() {
     this.newPost = {
       startlocation: this.startCity,
       endlocation: this.endCity,
-      start_time: this.startDate + this.startTime,
-      end_time: this.endDate + this.endTime,
+      start_time: new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day, this.startTime.hour,
+        this.startTime.minute, this.startTime.second),
+      end_time: new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day, this.endTime.hour,
+        this.endTime.minute, this.endTime.second),
       payment: this.currPayment,
-      hold: {
-        length: this.currHold.length,
-        width: this.currHold.width,
-        height: this.currHold.height,
-        getSpace(): number {
-          return this.length * this.width * this.height;
-        }
-      },
       vehicle: {
-        id: this.currVehicle.id,
-        type: this.currVehicle.type,
-        seats: this.currSeats,
-        comment: this.currVehicle.comment,
+        id: this.currVehicle?.id,
       },
+      seats: this.currSeats ? this.currSeats : 0,
       type: (this.returnType(this.posttype)),
       price: this.price,
-
+      hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
+        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : undefined,
       description: this.description,
+      vehicleType: VehicleTypeType.PKW // TODO: get real vehicle type either from choose vehicle TYPE (searching) or vehicle(offer)
     };
     this.activeModal.close(this.newPost);
   }
 
   returnType(type: boolean): PostType {
-    return type === true ? PostType.OFFER : PostType.SEARCHING;
+    return type ? PostType.OFFER : PostType.SEARCHING;
   }
 
 }

@@ -12,14 +12,14 @@
           <div class="row">
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#b3cecb'}"
-                      (click)="this.posttype = !this.posttype">Angebot
+                      [ngStyle]="{'background-color': posttype ? '#b3cecb' : '#005B52'}"
+                      (click)="this.posttype = true">Angebot
               </button>
             </div>
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': posttype ? '#b3cecb' : '#005B52'}"
-                      (click)="this.posttype = !this.posttype">Gesuch
+                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#b3cecb'}"
+                      (click)="this.posttype = false">Gesuch
               </button>
             </div>
           </div>

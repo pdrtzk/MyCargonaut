@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
               private vehicleService: VehicleService,
               private accountService: AccountService,
               private alertService: AlertService) {
-    this.getAllPosts();
+    // this.getAllPosts();
     this.testCargo = {
       id: 20,
       firstname: 'Maxine',
@@ -83,8 +83,6 @@ export class HomeComponent implements OnInit {
         console.log('success im modal');
         console.log(result);
         this.addNewPost(result, authUser);
-        await this.getAllPosts();
-        this.alertService.success('Sie haben erfolgreich einen neuen Post angelegt.');
       }).catch((error) => {
         console.log('Windowclosed: ' + error);
       });
@@ -97,10 +95,10 @@ export class HomeComponent implements OnInit {
     console.log('im post');
     this.postService.createPost(cargo, post).then(async () => {
         await this.getAllPosts();
-        console.log('Successful new Post');
+        this.alertService.success('Sie haben erfolgreich einen neuen Post angelegt.');
       }
     ).catch(err => {
-        console.log('HomeComponent AddNewPost ');
+        this.alertService.error('Es konnte kein neuer Post angelegt werden.');
         console.log(err);
       }
     );
