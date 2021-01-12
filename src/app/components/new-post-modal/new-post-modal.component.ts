@@ -1,6 +1,11 @@
 import {Component, OnInit} from '@angular/core';
 import {NgbActiveModal, NgbCalendar} from '@ng-bootstrap/ng-bootstrap';
-import {Post} from "../../../shared/post.model";
+import {DriveStatus, Post, PostType} from '../../../shared/post.model';
+import {VehicleService} from '../../services/vehicle.service';
+import {VehicleTypeType} from '../../../shared/vehicle-type.model';
+import {AccountService} from '../../services/account.service';
+import {Vehicle} from '../../../shared/vehicle.model';
+import {Hold} from '../../../shared/hold.model';
 
 @Component({
   selector: 'app-new-post-modal',
@@ -11,18 +16,26 @@ export class NewPostModalComponent implements OnInit {
 
 
   posttype: boolean; // Angebot: false, Gesuch: true
-  vehicles: string [];
+  vehicles: Vehicle[];
   cities: string[];
   startCity: string;
   endCity: string;
-  currVehicle: string;
+  currVehicle: Vehicle;
   startDate: any;
+  startTime: any;
   endDate: any;
+  endTime: any;
   description: string;
   filledForm: boolean;
   newPost: Post;
+  payment: string[];
+  currPayment: string;
+  price: number;
+  currHold: any;
+  currSeats: number;
 
-  constructor(private calendar: NgbCalendar, public activeModal: NgbActiveModal) {
+  constructor(private calendar: NgbCalendar, public activeModal: NgbActiveModal,
+              private vehicleService: VehicleService, private accountService: AccountService) {
   }
 
 
@@ -47,25 +60,42 @@ export class NewPostModalComponent implements OnInit {
       'Kiel',
       'Erfurt'
     ];
+    this.payment = [
+      'EC-Karte',
+      'Kreditkarte',
+      'PayPal',
+      'Bar'
+    ];
     this.startCity = undefined;
     this.endCity = undefined;
     this.currVehicle = undefined;
     this.startDate = this.calendar.getToday();
     this.endDate = this.calendar.getToday();
     this.filledForm = true;
+    this.posttype = false;
+    this.currHold = {
+      height: undefined,
+      length: undefined,
+      width: undefined
+    };
 
-    this.getAllVehicleTypes();
+    this.getVehicles();
 
   }
 
-  getAllVehicleTypes(): void {
-    // use vehicle-Service to get Vehicletypes
-    this.vehicles = [
-      'PKW',
-      'LKW',
-      'Fahrrad',
-      'Anhänger'
-    ];
+  getVehicles(): void {
+    // const currUser = this.accountService.user;
+    const currUser = {
+      id: 5
+    };
+    this.vehicleService.getAllVehicles(currUser.id).then(
+      result => {
+        this.vehicles = result;
+      }
+    ).catch(err => {
+      console.log('NewPostModal GetVehicles Err');
+      console.log(err);
+    });
   }
 
   savePost(): void {
@@ -73,18 +103,12 @@ export class NewPostModalComponent implements OnInit {
     const todayDate = this.calendar.getToday();
 
     if (this.posttype && this.currVehicle && this.startDate && this.startDate >= todayDate && this.endDate
-      && this.endDate >= this.startDate && this.startCity && this.endCity) {
+      && this.endDate >= this.startDate && this.startCity && this.endCity && this.startTime && this.endTime
+      && this.currHold.height && this.currHold.width && this.currHold.length && this.currSeats && this.currPayment
+      && this.price) {
 
       this.filledForm = true;
       // Post erstellen mit werten
-
-      console.log('Posttype: ' + this.posttype);
-      console.log('Vehicletype: ' + this.currVehicle);
-      console.log('Startdate: ' + JSON.stringify(this.startDate));
-      console.log('Enddate: ' + JSON.stringify(this.endDate));
-      console.log('StartCity: ' + this.startCity);
-      console.log('EndCity: ' + this.endCity);
-      console.log('Description: ' + this.description);
 
       this.closeModal();
     } else {
@@ -98,24 +122,37 @@ export class NewPostModalComponent implements OnInit {
 
   closeModal() {
     this.newPost = {
-      type: this.returnType(this.posttype),
-      vehicle: {
-        type: {
-          type: this.currVehicle
-        }
-      },
+      startlocation: this.startCity,
+      endlocation: this.endCity,
       start_time: this.startDate,
       end_time: this.endDate,
+      payment: this.currPayment,
+      hold: {
+        length: this.currHold.length,
+        width: this.currHold.width,
+        height: this.currHold.height,
+        getSpace(): number {
+          return this.length * this.width * this.height;
+        }
+      },
+      vehicle: this.currVehicle,
+
+      seats: this.currSeats,
+      type: (this.returnType(this.posttype)),
       author: {
-        firstname: 'Tina',
-        lastname: 'Turner'
-      }
-    }
+        firstname: 'Maxine',
+        lastname: 'Musterfrau'
+      },
+      price: this.price,
+
+      description: this.description,
+      status: DriveStatus.AUFGETRAGEN
+    };
     this.activeModal.close(this.newPost);
   }
 
-  returnType(type: boolean): string {
-    return type == true ? 'Gesuch' : 'Angebot'
+  returnType(type: boolean): PostType {
+    return type === true ? PostType.OFFER : PostType.SEARCHING;
   }
 
 }

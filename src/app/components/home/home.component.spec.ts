@@ -1,8 +1,10 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {HomeComponent} from './home.component';
-import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HttpClient, HttpClientModule} from "@angular/common/http";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -10,9 +12,9 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NgbModule],
+      imports: [NgbModule, HttpClientTestingModule],
       declarations: [HomeComponent],
-      providers: []
+      providers: [HttpClientModule]
     })
     .compileComponents();
   });

@@ -5,7 +5,7 @@
       <span aria-hidden="true">X</span>
     </button>
   </div>
-  <div class="modal-body">
+  <div class="modal-body" id="modalBody">
     <div class="container">
       <div class="row justify-content-around">
         <div class="col-md-6 col-sm-12">
@@ -46,6 +46,12 @@
             </div>
           </div>
           <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">um</h5></div>
+            <div class="col-10">
+              <ngb-timepicker [(ngModel)]="startTime"></ngb-timepicker>
+            </div>
+          </div>
+          <div class="row justify-content-between">
             <div class="col-1"><h5 class="green-color">bis</h5></div>
             <div class="col-10">
               <div class="input-group">
@@ -65,18 +71,56 @@
               </div>
             </div>
           </div>
+          <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">um</h5></div>
+            <div class="col-10">
+              <ngb-timepicker id="timePicker" [(ngModel)]="endTime"></ngb-timepicker>
+            </div>
+          </div>
         </div>
         <div class="col-md-5 col-sm-12">
           <div class="row">
             <div class="col">
               <div ngbDropdown class="dropdown shadow">
                 <button class="btn btn-primary button-styled button-wide"
-                        ngbDropdownToggle>{{this.currVehicle ? this.currVehicle : 'Fahrzeugtyp'}}</button>
+                        ngbDropdownToggle>{{this.currVehicle ? this.currVehicle.comment : 'Fahrzeugtyp'}}</button>
                 <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                   <button ngbDropdownItem *ngFor="let vehicle of vehicles"
-                          (click)="this.currVehicle = vehicle">{{vehicle}}</button>
+                          (click)="this.currVehicle = vehicle">{{vehicle.comment}}</button>
                 </div>
               </div>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-3">
+              <h6 class="green-color">Höhe</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Höhe" name="höhe" type="number"
+                     [(ngModel)]="currHold.height">
+            </div>
+            <div class="col-3">
+              <h6 class="green-color">Breite</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Breite" name="breite" type="number"
+                     [(ngModel)]="currHold.width">
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-3">
+              <h6 class="green-color">Länge</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Länge" name="länge" type="number"
+                     [(ngModel)]="currHold.length">
+            </div>
+            <div class="col-3">
+              <h6 class="green-color">Sitzplätze</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Anzahl" name="sitzplätze" type="number"
+                     [(ngModel)]="currSeats">
             </div>
           </div>
           <div class="row">
@@ -103,24 +147,45 @@
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
           <div class="row">
-            <div class="col">
-              <h5 class="green-color">Beschreibung</h5>
+            <div class="col-4"><h5 class="green-color">Bezahlart</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.currPayment ? this.currPayment : 'Bezahlart'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let pay of payment" (click)="this.currPayment = pay">{{pay}}</button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="row">
-            <div class="col">
-              <textarea class="description-input" rows="6" [(ngModel)]="description"></textarea>
+            <div class="col-4"><h5 class="green-color">Preis</h5></div>
+            <div class="col-8">
+              <input class="form-control" placeholder="Euro" name="price" type="number"
+                     [(ngModel)]="price">
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <h5 class="green-color">Beschreibung</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <textarea class="description-input" rows="6" [(ngModel)]="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+
   <div class="modal-footer">
     <p style="color: red" *ngIf="!this.filledForm">Bitte füllen sie alle Felder korrekt aus!</p>
     <button type="button" class="btn btn-primary button-styled" (click)="savePost()">Speichern</button>

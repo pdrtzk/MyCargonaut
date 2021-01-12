@@ -10,6 +10,11 @@
   width: 100%;
 }
 
+.ngb-tp-chevron {
+  background-color: #005B52;
+  color: #005B52;
+}
+
 .button-styled {
   background-color: #005B52;
   border-radius: 2px;
@@ -52,4 +57,13 @@ input {
 
 .form-control:disabled {
   background-color: white;
+}
+
+#modalBody {
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+#timePicker > .btn-link {
+  color: #005B52 !important;
 }

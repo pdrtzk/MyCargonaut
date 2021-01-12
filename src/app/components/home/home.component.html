@@ -5,49 +5,55 @@
         <div class="col searchbar">
           <form>
             <div class="row">
-              <div class="col-11">
-                <input id="searchbar" type="text" placeholder="Search.." name="search">
-
+              <div class=" col-7 col-sm-8 col-md-9 col-lg-10 col-xl-11 searchCol">
+                <input id="searchbar" type="text" placeholder="Search.." name="search" [(ngModel)]="currSearchString"
+                       (keyup)="this.filter()">
               </div>
-              <div class="col-1">
-                <button type="submit" class="btn search-button"><i class="fa fa-search"></i></button>
+              <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-1 searchCol">
+                <button class="btn search-button" disabled><i class="fa fa-search"></i></button>
               </div>
             </div>
           </form>
         </div>
       </div>
       <div class="row">
-        <div class="col-4 dropdown-col">
+        <div class="col-md-12 col-xl-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
             <button class="btn btn-primary" ngbDropdownToggle>{{this.startCity ? this.startCity : 'Stadt'}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem *ngFor="let city of cities" (click)="this.startCity = city">{{city}}</button>
+              <button ngbDropdownItem (click)="this.startCity = undefined; this.filter()">Alle Städte</button>
+              <button ngbDropdownItem *ngFor="let city of cities"
+                      (click)="this.startCity = city; this.filter()">{{city}}</button>
             </div>
           </div>
         </div>
-        <div class="col-4 dropdown-col">
+        <div class="col-md-12 col-xl-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
             <button class="btn btn-primary"
                     ngbDropdownToggle>{{this.currPostType ? this.currPostType : 'Angebotstyp' }}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button ngbDropdownItem (click)="this.currPostType = 'Angebot'">Angebot</button>
-              <button ngbDropdownItem (click)="this.currPostType = 'Gesuch'">Gesuch</button>
+              <button ngbDropdownItem (click)="this.currPostType = undefined; this.filter()">Alle Angebotstypen</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Angebot'; this.filter()">Angebot</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Gesuch'; this.filter()">Gesuch</button>
             </div>
           </div>
         </div>
-        <div class="col-4 dropdown-col">
+        <div class="col-md-12 col-xl-4 dropdown-col">
           <div ngbDropdown class="dropdown shadow">
             <button class="btn btn-primary"
                     ngbDropdownToggle>{{this.currVehicle ? this.currVehicle : 'Fahrzeugtyp'}}</button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem
+                      (click)="this.currVehicle = undefined; this.filter()">Alle Fahrzeugtypen
+              </button>
               <button ngbDropdownItem *ngFor="let vehicle of vehicles"
-                      (click)="this.currVehicle = vehicle">{{vehicle}}</button>
+                      (click)="this.currVehicle = vehicle; this.filter()">{{vehicle}}</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-2">
+    <div class=" col-md-4 col-lg-3 col-xl-2">
       <a (click)="showModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="80%" height="80%" fill="#005B52" class="bi bi-plus-circle-fill"
              viewBox="0 0 16 16">
@@ -58,7 +64,8 @@
     </div>
   </div>
 </div>
-<app-home-post *ngFor="let post of postArray" [post]="post"></app-home-post>
-
+<div *ngIf="this.postArray">
+  <app-home-post *ngFor="let post of filteredPostArray" [post]="post"></app-home-post>
+</div>
 
 

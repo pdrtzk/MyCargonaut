@@ -80,9 +80,8 @@ export class AccountService {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/cargonaut/' + id).toPromise().then((res: any) => {
-        console.log('cargonaut: ' + res);
-        const user: Cargonaut = {};
-        resolve(user);
+        // const user: Cargonaut = {};
+        resolve(res.user);
       }).catch(error => {
         console.log('Error: ' + error);
         reject(error);

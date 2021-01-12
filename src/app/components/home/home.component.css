@@ -32,6 +32,7 @@
 }
 
 .dropdown-col {
+  margin-top: 0.4rem;
   padding-left: 0.2rem;
   padding-right: 0.2rem;
 }
@@ -42,4 +43,8 @@
 
 #searchbar {
   width: 100%
+}
+
+.searchCol {
+  padding: 0;
 }

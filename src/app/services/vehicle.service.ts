@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
-import {Subject} from 'rxjs';
 import {Vehicle} from '../../shared/vehicle.model';
 import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
@@ -127,11 +126,26 @@ ladeflaeche: 8
 
   getVehicleType(type: string): VehicleTypeType {
     switch (type) {
-      case('PKW') : return VehicleTypeType.PKW;
-      case('LKW') : return VehicleTypeType.LKW;
-      case('Transporter') : return VehicleTypeType.BUS;
-      case('Flugzeug') : return VehicleTypeType.PLANE;
-      case('Schiff') : return VehicleTypeType.BOAT;
+      case('PKW') :
+        return VehicleTypeType.PKW;
+      case('LKW') :
+        return VehicleTypeType.LKW;
+      case('Transporter') :
+        return VehicleTypeType.BUS;
+      case('Flugzeug') :
+        return VehicleTypeType.PLANE;
+      case('Schiff') :
+        return VehicleTypeType.BOAT;
     }
+  }
+
+  getAllVehicleTypes(): VehicleTypeType[] {
+    return [
+      VehicleTypeType.PKW,
+      VehicleTypeType.LKW,
+      VehicleTypeType.BUS,
+      VehicleTypeType.PLANE,
+      VehicleTypeType.BOAT
+    ];
   }
 }

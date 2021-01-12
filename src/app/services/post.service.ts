@@ -52,7 +52,8 @@ export class PostService {
         console.log('Success: ' + res.message);
         resolve(res.createdVehicle);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error in CreatePost PostService: ');
+        console.log(error);
         reject(error);
       });
     });

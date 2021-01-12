@@ -2,6 +2,7 @@ import 'zone.js/dist/zone-node';
 
 import {ngExpressEngine} from '@nguniversal/express-engine';
 import * as express from 'express';
+import {Request, Response} from 'express';
 import {join} from 'path';
 
 import {AppServerModule} from './src/main.server';
@@ -13,7 +14,6 @@ import * as mysql from 'mysql';
 import {Connection, MysqlError} from 'mysql';
 import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
-import {Request, Response} from 'express';
 import * as cryptoJS from 'crypto-js';
 
 import {Cargonaut} from 'src/shared/cargonaut.model';
@@ -66,7 +66,6 @@ export function app(): express.Express {
   }
 
 
-
   /*****************************************************************************
    *           Authentication - Login / logout / Register       *
    *****************************************************************************/
@@ -84,6 +83,7 @@ export function app(): express.Express {
       }
     };
   }
+
   // checks if User is allowed to use action
   function isPrivileged(permissionId: number) {
     return (req: Request, res: Response, next) => {
@@ -97,6 +97,7 @@ export function app(): express.Express {
       }
     };
   }
+
 // check if logged in
   server.get('/api/login', isLoggedIn(), (req: Request, res: Response) => {
     res.status(200).send({
@@ -290,8 +291,8 @@ export function app(): express.Express {
           });
         }).catch(() => {
           res.status(400).send({
-              message: 'Fehler beim Erstellen eines Fahrzeugs.',
-            });
+            message: 'Fehler beim Erstellen eines Fahrzeugs.',
+          });
           }
         );
 
@@ -353,7 +354,9 @@ export function app(): express.Express {
       for (const result of results) {
         const vehicle: Vehicle = {
           id: result.id,
-          type: result.art,
+          type: {
+            type: result.art
+          },
           seats: result.anzahl_sitzplaetze,
           hold: result.ladeflaeche,
           owner: result.besitzer
@@ -402,34 +405,43 @@ export function app(): express.Express {
 
 // create Post
   server.post('/api/post/:cargonaut', async (req: Request, res: Response) => {
+    console.log('POST IM SERVER');
+    console.log(req.body);
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    const startzeit: string = req.body.post.start_time;
-    const ankunftZeit: string = req.body.post.end_time;
+    const startzeit: string = (req.body.post.start_time ? req.body.post.start_time : '8');
+    const ankunftZeit: string = (req.body.post.end_time ? req.body.post.end_time : '8');
     const bezahlungsart: string = req.body.post.payment;
 
     const fahrzeug: number = req.body.post.vehicle.id;
-    const anzahlSitzplaetze: number = req.body.post.seats;
-    const beschreibung: string = req.body.post.description;
+    const anzahlSitzplaetze: number = req.body.post.vehicle.seats;
+    const beschreibung: string = (req.body.post.description ? req.body.post.description : 'no description');
     const typ: string = req.body.post.type; // 'Angebot' oder 'Gesuch'
-    const preis = req.body.post.price;
+    const preis = (req.body.post.price ? req.body.post.price : 'none');
 
-    const strasse: string = req.body.post.startlocation.street;
-    const hausnr: string = req.body.post.startlocation.housenumber;
-    const plz: string = req.body.post.startlocation.plz;
-    const ort: string = req.body.post.startlocation.city;
+    // const strasse: string = req.body.post.startlocation.street;
+    const strasse = 'none';
+    // const hausnr: string = req.body.post.startlocation.housenumber;
+    const hausnr = 'none';
+    // const plz: string = req.body.post.startlocation.plz;
+    const plz = 'none';
+    const ort: string = req.body.post.startlocation;
 
-    const zielStrasse: string = req.body.post.endlocation.street;
-    const zielHausnr: string = req.body.post.endlocation.housenumber;
-    const zielPlz: string = req.body.post.endlocation.plz;
-    const zielStadt: string = req.body.post.endlocation.city;
+    // const zielStrasse: string = req.body.post.endlocation.street;
+    const zielStrasse = 'none';
+    // const zielHausnr: string = req.body.post.endlocation.housenumber;
+    const zielHausnr = 'none';
+    // const zielPlz: string = req.body.post.endlocation.plz;
+    const zielPlz = 'none';
+    const zielStadt: string = req.body.post.endlocation;
     const laenge: number = req.body.post.hold.length;
     const breite: number = req.body.post.hold.width;
     const hoehe: number = req.body.post.hold.height;
+
     let standort: number;
     let zielort: number;
     let laderaum: number;
-    // create startort
+
     if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
       fahrzeug && anzahlSitzplaetze && typ && preis && strasse &&
       hausnr && plz && ort && zielStrasse && zielHausnr && zielPlz &&
@@ -442,67 +454,69 @@ export function app(): express.Express {
       ];
       const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
       queryPromise(queryAdress, dataAdress).then(result => {
-        standort = result.insertId;
-        // create Zielort
-        const zielDataAdress: [string, string, string, string] = [
-          zielStrasse,
-          zielHausnr,
-          zielPlz,
-          zielStadt,
-        ];
-        const queryZielAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
-        queryPromise(queryZielAdress, zielDataAdress).then(results => {
-          zielort = results.insertId;
-          // create laderaum
-          const dataLaderaum: [number, number, number] = [
-            laenge,
-            breite,
-            hoehe,
+          standort = result.insertId;
+          // create Zielort
+          const zielDataAdress: [string, string, string, string] = [
+            zielStrasse,
+            zielHausnr,
+            zielPlz,
+            zielStadt,
           ];
-          const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
-          queryPromise(queryLade, dataLaderaum).then(resu => {
-            laderaum = resu.insertId;
-            // create Post
-            const data: [number, number, string, string, string, number, number, number, string, string, number, any] = [
-              standort,
-              zielort,
-              startzeit,
-              ankunftZeit,
-              bezahlungsart,
-              laderaum,
-              fahrzeug,
-              anzahlSitzplaetze,
-              beschreibung,
-              typ,
-              cargonaut,
-              preis,
+          const queryZielAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
+          queryPromise(queryZielAdress, zielDataAdress).then(results => {
+            zielort = results.insertId;
+            // create laderaum
+            const dataLaderaum: [number, number, number] = [
+              laenge,
+              breite,
+              hoehe,
             ];
-            const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
-            queryPromise(query, data).then(resultPost => {
-              res.status(201).send({
-                message: 'Neuer Post erstellt!',
-                createdVehicle: resultPost.insertId,
+            const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+            queryPromise(queryLade, dataLaderaum).then(resu => {
+              laderaum = resu.insertId;
+              // create Post
+              const data: [number, number, string, string, string, number, number, number, string, string, number, any] = [
+                standort,
+                zielort,
+                startzeit,
+                ankunftZeit,
+                bezahlungsart,
+                laderaum,
+                fahrzeug,
+                anzahlSitzplaetze,
+                beschreibung,
+                typ,
+                cargonaut,
+                preis,
+              ];
+              const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+              queryPromise(query, data).then(resultPost => {
+                res.status(201).send({
+                  message: 'Neuer Post erstellt!',
+                  createdVehicle: resultPost.insertId,
+                });
               });
-            });
-          }).catch(() => {
-              res.status(400).send({
-                message: 'Fehler beim Erstellen eines Zielortes.',
-              });
-            }
-          );
+            }).catch(() => {
+                res.status(400).send({
+                  message: 'Fehler beim Erstellen eines Zielortes.',
+                });
+              }
+            );
 
-        }).catch(() => {
-          res.status(400).send({
-            message: 'Fehler beim Erstellen eines Standorts.',
+          }).catch(() => {
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Standorts.',
+            });
           });
-        });
-      });
+        }
+      );
     } else {
       res.status(400).send({
         message: 'Nicht alle Felder ausgefüllt.',
       });
     }
   });
+
 
 // get specific Post -> Alle Infos zu speziellem Post
   server.get('/api/post/:id', (req: Request, res: Response) => {
@@ -533,7 +547,7 @@ export function app(): express.Express {
       res.status(200).send({
         post
       });
-    }).catch(() => {
+    }).catch((err) => {
       res.status(400).send({
         message: 'Fehler beim getten des Posts!',
       });
@@ -562,10 +576,14 @@ export function app(): express.Express {
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
           hold: result.laderaum,
-          vehicle: result.fahrzeug,
+          vehicle: {
+            id: result.fahrzeug
+          },
           seats: result.anzahl_sitzplaetze,
           type: result.typ,
-          author: result.verfasser,
+          author: {
+            id: result.verfasser
+          },
           price: result.ladeflaeche,
           closed: result.gebucht,
           description: result.beschreibung,
