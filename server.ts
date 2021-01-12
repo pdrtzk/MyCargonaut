@@ -22,6 +22,8 @@ import {Cargonaut} from 'src/shared/cargonaut.model';
 import {Vehicle} from './src/shared/vehicle.model';
 import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
+import {Chat} from './src/shared/chat.model';
+import {ChatMessage} from './src/shared/chat-message.model';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -756,9 +758,8 @@ export function app(): express.Express {
       }).catch(() => {
           res.status(400).send({
             message: 'Fehler beim Erstellen eines Posts.',
-            });
-          }
-
+          });
+        }
       );
     } else {
       res.status(400).send({
@@ -1069,6 +1070,131 @@ export function app(): express.Express {
       });
     });
   });
+  /*****************************************************************************
+   *           Chat        * //
+   *****************************************************************************/
+  server.get('/api/chats/:cargonaut', (req, res) => {
+    const cargonaut: number = Number(req.params.cargonaut);
+    const data: [number, number] = [
+      cargonaut,
+      cargonaut
+    ];
+    const query = 'SELECT * FROM `chat` WHERE cargonaut_1 = ? OR cargonaut_2 = ?';
+    queryPromise(query, data).then(results => {
+      const chats: Chat [] = [];
+      for (const result of results) {
+        const chat: Chat = {id: result.id, fstMember: result.cargonaut_1, sndMember: result.cargonaut_2};
+        chats.push(chat);
+      }
+      res.status(200).send({
+        chats,
+      });
+    });
+  });
+
+  server.post('/api/message/:verfasser', (req: Request, res: Response) => {
+    // Read data from request body
+    const verfasser: number = Number(req.params.verfasser);
+    const chat: number = req.body.chat;
+    const message: number = req.body.message;
+    if (verfasser && chat && message) {
+      const data: [number, number, number] = [
+        verfasser,
+        chat,
+        message,
+      ];
+      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht) VALUES (NULL, ?, ?, ?);';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Chatnachricht gesendet!'
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim abgeben der Bewertung.',
+          });
+        }
+      );
+    } else {
+      res.status(400).send({
+        message: 'Nicht alle Felder ausgefüllt.',
+      });
+    }
+  });
+
+  server.post('/api/getOrCreateChat', (req: Request, res: Response) => {
+    // Read data from request body
+    const cargonaut1: number = Number(req.body.cargonaut1);
+    const cargonaut2: number = Number(req.body.cargonaut2);
+    if (cargonaut1 && cargonaut2) {
+      const data: [number, number, number, number] = [
+        cargonaut1,
+        cargonaut2,
+        cargonaut1,
+        cargonaut2
+      ];
+      const query = 'SELECT * FROM `chat` WHERE (cargonaut_1 = ? AND cargonaut_2 = ?) OR (cargonaut_2 = ? AND cargonaut_1 = ?)';
+      queryPromise(query, data).then(results => {
+        if (results.length > 0) {
+          const result = results[0];
+          res.status(200).send({
+            chatId: result.id
+          });
+        } else {
+          const innerData: [number, number] = [
+            cargonaut1,
+            cargonaut2
+          ];
+          const innerQuery = 'INSERT INTO `chat` (`id`, `cargonaut_1`, `cargonaut_2`) VALUES (NULL, ?, ?)';
+          queryPromise(innerQuery, innerData).then(createdChat => {
+            res.status(201).send({
+              chatId: createdChat.insertId
+            });
+          });
+        }
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim abgeben der Bewertung.',
+          });
+        }
+      );
+    } else {
+      res.status(400).send({
+        message: 'Nicht alle Felder ausgefüllt.',
+      });
+    }
+  });
+  server.get('/api/chat/:id', (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const query = 'SELECT * FROM `chat` WHERE id = ?';
+    queryPromise(query, [id]).then(results => {
+      const chat: Chat = {id: results[0].id, fstMember: results[0].cargonaut_1, sndMember: results[0].cargonaut_2};
+      res.status(200).send({
+        chat
+      });
+    });
+  });
+  server.get('/api/chatMessages/:chatId', (req: Request, res: Response) => {
+    const id: number = Number(req.params.chatId);
+    const messages: ChatMessage [] = [];
+    const query = 'SELECT * FROM `chatnachricht` WHERE chat = ?';
+    queryPromise(query, [id]).then(results => {
+      for (const result of results) {
+        const message: ChatMessage = {
+          author: result.verfasser,
+          chat: result.chat,
+          id: result.id,
+          message: result.nachricht,
+          sentAt: result.zeit
+        };
+        messages.push(message);
+      }
+      res.status(200).send({
+        messages
+      });
+    });
+  });
+
+
   /*****************************************************************************
    *           Angular        * //
    *****************************************************************************/
