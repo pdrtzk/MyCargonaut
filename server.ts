@@ -127,7 +127,7 @@ export function app(): express.Express {
       if (permissionId === Number(req.session.user.id)) {
         next();
       } else {
-        res.status(200).send({
+        res.status(401).send({
           message: 'You have no Permission to do this.',
         });
       }
@@ -792,7 +792,7 @@ export function app(): express.Express {
         price: result.preis,
         closed: result.gebucht,
         description: result.beschreibung,
-        status: null // TODO: get status from db
+        status: result.status
       };
       res.status(200).send({
         post
@@ -834,10 +834,10 @@ export function app(): express.Express {
           author: {
             id: result.verfasser
           },
-          price: result.ladeflaeche,
+          price: result.preis,
           closed: result.gebucht,
           description: result.beschreibung,
-          status: null // TODO: get status from db
+          status: result.status
         };
         posts.push(post);
       }
