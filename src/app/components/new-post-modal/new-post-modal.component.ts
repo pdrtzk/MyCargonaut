@@ -33,14 +33,16 @@ export class NewPostModalComponent implements OnInit {
   price: number;
   currHold: any;
   currSeats: number;
+  currVehicleType: VehicleTypeType;
+  vehicleTypes: VehicleTypeType[] = [VehicleTypeType.PKW, VehicleTypeType.LKW, VehicleTypeType.BUS, VehicleTypeType.PLANE,
+    VehicleTypeType.BOAT];
 
   constructor(private calendar: NgbCalendar, public activeModal: NgbActiveModal,
               private vehicleService: VehicleService, private accountService: AccountService) {
   }
 
 
-  async ngOnInit(): Promise<void> {
-    this.posttype = false;
+  ngOnInit() {
 
     this.cities = [
       'Stuttgart',
@@ -72,20 +74,23 @@ export class NewPostModalComponent implements OnInit {
     this.startDate = this.calendar.getToday();
     this.endDate = this.calendar.getToday();
     this.filledForm = true;
-    this.posttype = false;
     this.currHold = {
       height: undefined,
       length: undefined,
       width: undefined
     };
-    await this.getVehicles();
+    this.getVehicles();
   }
 
   getVehicles(): void {
+    console.log('should get vehicles');
     const currUser = this.accountService.user;
+    console.log(currUser);
     this.vehicleService.getAllVehicles(currUser.id).then(
       result => {
+        console.log('halleluja');
         this.vehicles = result;
+        console.log(this.vehicles);
       }
     ).catch(err => {
       console.log('NewPostModal GetVehicles Err');
@@ -100,10 +105,10 @@ export class NewPostModalComponent implements OnInit {
     console.log(this.startDate);
     console.log(this.startTime);
 
-    if (/*this.currVehicle && */this.startDate && this.startDate >= todayDate && this.endDate
+    if (this.startDate && this.startDate >= todayDate && this.endDate
       && this.endDate >= this.startDate && this.startCity && this.endCity && this.startTime && this.endTime
       && ((this.currHold.height && this.currHold.width && this.currHold.length) || this.currSeats) && this.currPayment
-      && this.price) {
+      && this.price && this.currVehicleType) {
 
       this.filledForm = true;
       // Post erstellen mit werten
@@ -136,13 +141,20 @@ export class NewPostModalComponent implements OnInit {
       hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
         new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : undefined,
       description: this.description,
-      vehicleType: VehicleTypeType.PKW // TODO: get real vehicle type either from choose vehicle TYPE (searching) or vehicle(offer)
+      vehicleType: this.currVehicleType
     };
     this.activeModal.close(this.newPost);
   }
 
   returnType(type: boolean): PostType {
     return type ? PostType.OFFER : PostType.SEARCHING;
+  }
+
+  vehicleChosen(vehicle: Vehicle) {
+    this.currVehicle = vehicle;
+    this.currVehicleType = vehicle.type.type;
+    this.currHold = vehicle.hold;
+    this.currSeats = vehicle.seats;
   }
 
 }

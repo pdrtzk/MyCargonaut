@@ -12,13 +12,13 @@
           <div class="row">
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': posttype ? '#b3cecb' : '#005B52'}"
+                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#666666', 'border-style': 'none'}"
                       (click)="this.posttype = true">Angebot
               </button>
             </div>
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
-                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#b3cecb'}"
+                      [ngStyle]="{'background-color': posttype ? '#666666' : '#005B52', 'border-style': 'none'}"
                       (click)="this.posttype = false">Gesuch
               </button>
             </div>
@@ -81,12 +81,26 @@
         <div class="col-md-5 col-sm-12">
           <div class="row">
             <div class="col">
-              <div ngbDropdown class="dropdown shadow">
+              <div *ngIf="posttype" ngbDropdown class="dropdown shadow">
                 <button class="btn btn-primary button-styled button-wide"
-                        ngbDropdownToggle>{{this.currVehicle ? this.currVehicle.comment : 'Fahrzeugtyp'}}</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        ngbDropdownToggle>{{this.currVehicle ?
+                  (currVehicle.type.description ? currVehicle.type.description + ' (' + currVehicle.type.type + ')' :
+                    currVehicle.type.type) : 'Fahrzeug'}}</button>
+                <div *ngIf="vehicles.length > 0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
                   <button ngbDropdownItem *ngFor="let vehicle of vehicles"
-                          (click)="this.currVehicle = vehicle">{{vehicle.comment}}</button>
+                          (click)="vehicleChosen(vehicle)">{{vehicle.type.description ? vehicle.type.description +
+                    ' (' + vehicle.type.type + ')' : vehicle.type.type}}</button>
+                </div>
+                <div *ngIf="vehicles.length <= 0" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem> Noch kein Fahrzeug vorhanden, bitte erst im Profil eins anlegen.</button>
+                </div>
+              </div>
+              <div *ngIf="!posttype" ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.currVehicleType ? this.currVehicleType : 'Fahrzeugtyp'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let vehicleType of vehicleTypes"
+                          (click)="this.currVehicleType = vehicleType">{{vehicleType}}</button>
                 </div>
               </div>
             </div>
