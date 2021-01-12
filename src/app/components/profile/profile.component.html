@@ -2,7 +2,7 @@
   <div class="col-md-3 text-center ">
     <img class="img-responsive" [src]="picsrc">
 
-    <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button">Kontaktieren</button>
+    <button *ngIf="ownProfile == false; else elseOwnButton" id="contact-button" type="button" (click)="contact()">Kontaktieren</button>
     <ng-template #elseOwnButton>
       <button class="editButton" type="button" id="addVehicle-button" (click)="addVehicle()">Fahrzeug hinzufügen</button>
       <button class="editButton bot-row" id="messages-button" type="button" (click)="navigateToChat()">Meine Nachrichten</button>

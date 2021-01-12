@@ -1096,21 +1096,23 @@ export function app(): express.Express {
     // Read data from request body
     const verfasser: number = Number(req.params.verfasser);
     const chat: number = req.body.chat;
-    const message: number = req.body.message;
+    const message: string = req.body.message;
+    const zeit: string = (req.body.zeit).slice(0, -1);
     if (verfasser && chat && message) {
-      const data: [number, number, number] = [
+      const data: [number, number, string, string] = [
         verfasser,
         chat,
         message,
+        zeit
       ];
-      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht) VALUES (NULL, ?, ?, ?);';
+      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (NULL, ?, ?, ?, TIMESTAMP(?));';
       queryPromise(query, data).then(results => {
         res.status(201).send({
           message: 'Chatnachricht gesendet!'
         });
       }).catch(() => {
           res.status(400).send({
-            message: 'Fehler beim abgeben der Bewertung.',
+            message: 'Fehler beim Senden der Chatnachricht.',
           });
         }
       );
@@ -1153,7 +1155,7 @@ export function app(): express.Express {
         }
       }).catch(() => {
           res.status(400).send({
-            message: 'Fehler beim abgeben der Bewertung.',
+            message: 'error creating or getting the chat.',
           });
         }
       );
@@ -1163,6 +1165,7 @@ export function app(): express.Express {
       });
     }
   });
+
   server.get('/api/chat/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const query = 'SELECT * FROM `chat` WHERE id = ?';
@@ -1173,6 +1176,7 @@ export function app(): express.Express {
       });
     });
   });
+
   server.get('/api/chatMessages/:chatId', (req: Request, res: Response) => {
     const id: number = Number(req.params.chatId);
     const messages: ChatMessage [] = [];

@@ -39,6 +39,7 @@ import { UpdatePasswordComponent } from './components/profileComponents/update-p
 import { ChatListComponent } from './components/chat-list/chat-list.component';
 import { ChatComponent } from './components/chat/chat.component';
 import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,7 @@ import {MatButtonModule} from '@angular/material/button';
     ReactiveFormsModule,
     MatDialogModule,
     MatButtonModule,
+    MatProgressSpinnerModule,
     NgbModule,
     FormsModule,
   ],

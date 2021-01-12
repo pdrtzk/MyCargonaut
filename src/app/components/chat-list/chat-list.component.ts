@@ -4,6 +4,7 @@ import {AccountService} from '../../services/account.service';
 import {Chat} from '../../../shared/chat.model';
 import {ChatMessage} from '../../../shared/chat-message.model';
 import {Router} from '@angular/router';
+import {ChatService} from '../../services/chat.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -13,61 +14,38 @@ import {Router} from '@angular/router';
 export class ChatListComponent implements OnInit {
   myuser: Cargonaut = {}; // the logged in user
   chats: Chat[] = [];
+  loaded = false;
 
-  constructor(private accountService: AccountService, private router: Router) { }
+  constructor(private accountService: AccountService, private router: Router, private chatService: ChatService) { }
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
     console.log(this.accountService.isLoggedIn()); // get newest user after
     this.myuser = this.accountService.user;
-    // todo: get chats for this user
+    this.getChats().then();
+    this.loaded = true;
+  }
 
-    const partner1: Cargonaut = {
-      id: 14,
-      firstname: 'Chatty',
-      lastname: 'McChat',
-    };
-
-    const partner2: Cargonaut = {
-      id: 16,
-      firstname: 'Chad',
-      lastname: 'Chadding'
-    };
-
-    const message1: ChatMessage = {
-      id: 1,
-      author: partner1,
-      sentAt: new Date('2021-01-01T08:44:29+0100'),
-      message: 'Hallo'
-    };
-
-    const message2: ChatMessage = {
-      id: 2,
-      author: partner2,
-      sentAt: new Date('2021-01-07T11:13:25+0100'),
-      message: 'Hi, ist das Angebot immer noch verfügbar?'
-    };
-
-    const chat1: Chat = {
-      id: 1,
-      fstMember: this.myuser,
-      sndMember: partner1,
-      messages: [message1]
-    };
-
-    const chat2: Chat = {
-      id: 2,
-      fstMember: this.myuser,
-      sndMember: partner2,
-      messages: [message2]
-    };
-
-    message1.chat = chat1;
-    message2.chat = chat2;
-
-    this.chats = [];
-
-    // todo: sort by date
+  async getChats() {
+    let tempChats: Chat[] = [];
+    this.chatService.getAllChatsForUser(this.myuser.id).then(
+      res => {
+        tempChats = res;
+        tempChats.forEach(elem => {
+          if (elem.fstMember.id !== this.myuser.id){
+            this.accountService.get(elem.fstMember.id).then(
+              res2 => elem.fstMember = res2
+            );
+          } else {
+            this.accountService.get(elem.sndMember.id).then(
+              res2 => elem.fstMember = res2
+            );
+          }
+          this.chats.push(elem);
+        }
+      );
+      }
+    );
   }
 
   getLastMessage(c: Chat): string{
@@ -75,7 +53,6 @@ export class ChatListComponent implements OnInit {
   }
 
   getLastMessageInOrOut(c: Chat): boolean {
-    // true if received, false if sent
     return c.messages[c.messages.length - 1].author.id === this.myuser.id;
   }
 
