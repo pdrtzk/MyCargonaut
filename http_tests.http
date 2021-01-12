@@ -133,25 +133,25 @@ Content-Type: application/json
 Cookie:
 
 {
-  "startzeit": "0",
-  "ankunftZeit": "0",
-  "bezahlungsart": "Bar",
-  "vehicle": 4,
-  "anzahlSitzplaetze": 1,
-  "beschreibung": "Testeetsttetsetestse esr tsetset e t t etset",
-  "typ": "Angebot",
-  "price": 23.99,
-  "street": "Teststreet",
-  "number": "123",
-  "plz": "123332",
-  "city": "teststadt",
-  "zielStreet": "Testsasdw",
-  "zielNumber": "123",
-  "zielPlz": "123332",
-  "zielCity": "teststadt",
-  "length": "123",
-  "width": "123332",
-  "height": "teststadt"
+  "post": {
+    "start_time": "0",
+    "end_time": "0",
+    "payment": "Bar",
+    "vehicle": {
+      "id": 4
+    },
+    "seats": 1,
+    "description": "Testeetsttetsetestse esr tsetset e t t etset",
+    "type": "Angebot",
+    "price": 23.99,
+    "startlocation": "Testort1",
+    "endlocation": "Testort2",
+    "hold":{
+      "length": 123,
+      "width": 123,
+      "height": 56
+    }
+  }
 }
 
 ### get post
