@@ -279,7 +279,6 @@ export class ProfileComponent implements OnInit {
     let id;
     id = await this.chatService.getChatIdFromCargonauts(this.user.id, this.myuser.id);
     const uri = '/chat/' + id.toString();
-    console.log(uri);
     await this.router.navigateByUrl(uri);
   }
 }
