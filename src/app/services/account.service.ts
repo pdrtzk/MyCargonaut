@@ -92,8 +92,8 @@ export class AccountService {
   public async get(userId: number): Promise<Cargonaut> {
     const http = this.http;
     return new Promise<Cargonaut>(async (resolve, reject) => {
-  await http.get('http://localhost:4200/api/cargonaut/' + userId).toPromise().then((res: any) => {
-    resolve(res.user);
+      await http.get('http://localhost:4200/api/cargonaut/' + userId).toPromise().then((res: any) => {
+        resolve(res.user);
       }).catch(error => {
         console.log('Error: ' + error);
         reject(error);
@@ -198,8 +198,8 @@ export class AccountService {
   }
 
   public getImage(userId: number): Promise<string | ArrayBuffer> {
-      const reader = new FileReader();
-      return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
+    const reader = new FileReader();
+    return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
       console.log('going to post to upload route');
       await this.http.get(`/api/cargonaut/${userId}/image`, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
         if (res.status === 204) {
@@ -239,6 +239,4 @@ export class AccountService {
       }
     });
   }
-
-
 }

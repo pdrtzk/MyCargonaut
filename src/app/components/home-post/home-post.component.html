@@ -1,0 +1,71 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="container shadow" id="post" *ngIf="post && !post.closed">
+  <div class="row justify-content-between">
+    <div class="col-lg-6 col-md-12">
+      <div class="row">
+        <div class="col-xl-7 col-lg-12">
+          <h3
+            class="green-color bold">{{post.author?.firstname ? post.author?.firstname : 'undefined'}} {{post.author.lastname ? post.author.lastname : 'undefined'}}</h3>
+        </div>
+        <div class="col-xl-5 col-lg-8 post-type text-center"
+             [ngStyle]="{'background-color': post?.type == 'Gesuch' ? '#e5e5e5' : '#005B52'}">
+          <h3 class="bold"
+              [ngStyle]="{'color': post?.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{post.type ? post.type : 'Gesuch'}}</h3>
+        </div>
+      </div>
+      <div class="row justify-content-start">
+        <div class="col col-md-7 margin-1">
+          <h4 class="bold">
+            {{post?.start_time ? post.start_time.getDate() : 'undefined'}}
+            .{{post?.start_time ? (post.start_time.getMonth() + 1) : 'undefined'}}
+            .{{post?.start_time ? post.start_time.getFullYear() : 'undefined'}}
+            um
+            {{post?.start_time ? post?.start_time.getHours() : 'undefined'}}
+            : {{post?.start_time ? (post?.start_time.getMinutes().toString().length == 1 ? ('0' + post?.start_time.getMinutes()) : post?.start_time.getMinutes()) : 'undefined'}}
+            Uhr
+          </h4>
+        </div>
+      </div>
+      <div class="row justify-content-start">
+        <div class="col-6">
+          <h6
+            class="bold">{{post.seats ? post.seats : 'undefined'}} {{post.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</h6>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-4 col-md-12">
+      <div class="row">
+        <div class="col-xl-5 col-lg-12 align-items-start">
+          <div class="row">
+            <div class="col-3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="#005B52"
+                   class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
+              </svg>
+            </div>
+            <div class="col-9">
+              <h3 class="green-color bold">{{post.startlocation ? post.startlocation : 'Gießen'}}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-7 col-lg-12" *ngIf="post.vehicle.type?.type">
+          <div *ngIf="post.vehicle.type.type == 'PKW'">
+            <mat-icon [inline]="true" class="car_icon"> directions_car</mat-icon>
+          </div>
+          <div *ngIf="post.vehicle.type.type == 'LKW'">
+            <mat-icon [inline]="true" class="car_icon">local_shipping</mat-icon>
+          </div>
+          <div *ngIf="post.vehicle.type.type == 'Transporter'">
+            <mat-icon [inline]="true" class="car_icon">directions_bus</mat-icon>
+          </div>
+          <div *ngIf="post.vehicle.type.type == 'Flugzeug'">
+            <mat-icon [inline]="true" class="car_icon">local_airport</mat-icon>
+          </div>
+          <div *ngIf="post.vehicle.type.type == 'Schiff'">
+            <mat-icon [inline]="true" class="car_icon">directions_boat</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,7 +2,6 @@ import {Hold} from './hold.model';
 import {Vehicle} from './vehicle.model';
 import {Cargonaut} from './cargonaut.model';
 
-
 export interface Post {
   id?: number;
   startlocation?: string;
@@ -12,7 +11,7 @@ export interface Post {
   payment?: string;
   hold?: Hold;
   vehicle?: Vehicle;
-  bookedBy?: Cargonaut [];
+  bookedBy?: Cargonaut[];
   seats?: number;
   type?: PostType; // 'Angebot' oder 'Gesuch'
   author?: Cargonaut;

@@ -1,0 +1,193 @@
+<div id="modal">
+  <div class="modal-header">
+    <h1 class="modal-title" id="modal-basic-title">Post erstellen</h1>
+    <button type="button" class="close" aria-label="Close" (click)="activeModal.dismiss()">
+      <span aria-hidden="true">X</span>
+    </button>
+  </div>
+  <div class="modal-body" id="modalBody">
+    <div class="container">
+      <div class="row justify-content-around">
+        <div class="col-md-6 col-sm-12">
+          <div class="row">
+            <div class="col-6">
+              <button class="btn btn-primary button-styled button-wide"
+                      [ngStyle]="{'background-color': posttype ? '#005B52' : '#b3cecb'}"
+                      (click)="this.posttype = !this.posttype">Angebot
+              </button>
+            </div>
+            <div class="col-6">
+              <button class="btn btn-primary button-styled button-wide"
+                      [ngStyle]="{'background-color': posttype ? '#b3cecb' : '#005B52'}"
+                      (click)="this.posttype = !this.posttype">Gesuch
+              </button>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1">
+              <h5 class="green-color">von</h5>
+            </div>
+            <div class="col-10">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp1="ngbDatepicker"
+                       [readOnly]="true" [(ngModel)]="startDate">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary shadow" (click)="dp1.toggle()" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                      <path
+                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                      <path
+                        d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">um</h5></div>
+            <div class="col-10">
+              <ngb-timepicker [(ngModel)]="startTime"></ngb-timepicker>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">bis</h5></div>
+            <div class="col-10">
+              <div class="input-group">
+                <input class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp2="ngbDatepicker"
+                       [readOnly]="true" [(ngModel)]="endDate">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary input" (click)="dp2.toggle()" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-calendar4-week" viewBox="0 0 16 16">
+                      <path
+                        d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v1h14V3a1 1 0 0 0-1-1H2zm13 3H1v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V5z"/>
+                      <path
+                        d="M11 7.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-2 3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1zm-3 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-1z"/>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-1"><h5 class="green-color">um</h5></div>
+            <div class="col-10">
+              <ngb-timepicker id="timePicker" [(ngModel)]="endTime"></ngb-timepicker>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-sm-12">
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.currVehicle ? this.currVehicle.comment : 'Fahrzeugtyp'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let vehicle of vehicles"
+                          (click)="this.currVehicle = vehicle">{{vehicle.comment}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-3">
+              <h6 class="green-color">Höhe</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Höhe" name="höhe" type="number"
+                     [(ngModel)]="currHold.height">
+            </div>
+            <div class="col-3">
+              <h6 class="green-color">Breite</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Breite" name="breite" type="number"
+                     [(ngModel)]="currHold.width">
+            </div>
+          </div>
+          <div class="row justify-content-between">
+            <div class="col-3">
+              <h6 class="green-color">Länge</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Länge" name="länge" type="number"
+                     [(ngModel)]="currHold.length">
+            </div>
+            <div class="col-3">
+              <h6 class="green-color">Sitzplätze</h6>
+            </div>
+            <div class="col-3">
+              <input class="form-control" placeholder="Anzahl" name="sitzplätze" type="number"
+                     [(ngModel)]="currSeats">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Standort</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.startCity ? this.startCity : 'Standort'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let city of cities" (click)="this.startCity = city">{{city}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Zielort</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.endCity ? this.endCity : 'Zielort'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let city of cities" (click)="this.endCity = city">{{city}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Bezahlart</h5></div>
+            <div class="col-8">
+              <div ngbDropdown class="dropdown shadow">
+                <button class="btn btn-primary button-styled button-wide"
+                        ngbDropdownToggle>{{this.currPayment ? this.currPayment : 'Bezahlart'}}</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button ngbDropdownItem *ngFor="let pay of payment" (click)="this.currPayment = pay">{{pay}}</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-4"><h5 class="green-color">Preis</h5></div>
+            <div class="col-8">
+              <input class="form-control" placeholder="Euro" name="price" type="number"
+                     [(ngModel)]="price">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col">
+            <h5 class="green-color">Beschreibung</h5>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <textarea class="description-input" rows="6" [(ngModel)]="description"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <p style="color: red" *ngIf="!this.filledForm">Bitte füllen sie alle Felder korrekt aus!</p>
+    <button type="button" class="btn btn-primary button-styled" (click)="savePost()">Speichern</button>
+  </div>
+</div>

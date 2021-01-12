@@ -1,0 +1,69 @@
+#modal {
+  border-radius: 10px;
+}
+
+.modal-dialog {
+  max-width: 100em;
+}
+
+.button-wide {
+  width: 100%;
+}
+
+.ngb-tp-chevron {
+  background-color: #005B52;
+  color: #005B52;
+}
+
+.button-styled {
+  background-color: #005B52;
+  border-radius: 2px;
+  border-color: #005B52;
+  font-weight: bold;
+  font-stretch: ultra-expanded;
+  box-shadow: 2px 5px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.button-styled:active, .button-styled:hover, .btn-primary.dropdown-toggle:active, .btn-primary.dropdown-toggle:focus, .btn-primary.dropdown-toggle:hover {
+  background-color: #b3cecb;
+  color: #fffff5;
+  border-color: #b3cecb;
+  border-radius: 2px;
+}
+
+.button-styled:focus {
+  box-shadow: 0 0 0 0.2rem #b3cecb;
+  border-radius: 2px;
+}
+
+.row {
+  margin-top: 1.5rem;
+}
+
+.green-color {
+  color: #005B52;
+}
+
+.description-input {
+  resize: none;
+  width: 100%;
+  height: 100%;
+}
+
+input {
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.form-control:disabled {
+  background-color: white;
+}
+
+#modalBody {
+  padding-left: 3em;
+  padding-right: 3em;
+}
+
+#timePicker > .btn-link {
+  color: #005B52 !important;
+}

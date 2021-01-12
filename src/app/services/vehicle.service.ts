@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
-import {Subject} from 'rxjs';
 import {Vehicle} from '../../shared/vehicle.model';
 import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
@@ -23,7 +22,7 @@ export class VehicleService {
     const http = this.http;
     return new Promise<Vehicle[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/vehicles/' + cargonautId.toString(), {
-      headers: headersY
+        headers: headersY
       }).toPromise().then((res: any) => {
         res.vehicles.forEach(elem => {
           const v: Vehicle = new Vehicle();
@@ -44,8 +43,7 @@ export class VehicleService {
 
   public async getVehicleHold(ve: Vehicle): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
-      await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {
-      }).toPromise().then((res: any) => {
+      await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {}).toPromise().then((res: any) => {
         ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
         ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
         ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
@@ -72,11 +70,12 @@ export class VehicleService {
       });
     });
   }
+
   // add new vehicle
   public async addVehicle(cargonautId: number, vehicle: Vehicle): Promise<number> {
-    const type =  vehicle.type.type;
+    const type = vehicle.type.type;
     const model = vehicle.type.description;
-    const length =  vehicle.hold.length;
+    const length = vehicle.hold.length;
     const height = vehicle.hold.height;
     const width = vehicle.hold.width;
     const seats = vehicle.seats;
@@ -105,8 +104,7 @@ export class VehicleService {
   public async deleteVehicle(vehicleId: number): Promise<boolean> {
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {
-      }).toPromise().then((res: any) => {
+      await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {}).toPromise().then((res: any) => {
         resolve(true);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -118,11 +116,16 @@ export class VehicleService {
 
   getVehicleType(type: string): VehicleTypeType {
     switch (type) {
-      case('PKW') : return VehicleTypeType.PKW;
-      case('LKW') : return VehicleTypeType.LKW;
-      case('Transporter') : return VehicleTypeType.BUS;
-      case('Flugzeug') : return VehicleTypeType.PLANE;
-      case('Schiff') : return VehicleTypeType.BOAT;
+      case('PKW') :
+        return VehicleTypeType.PKW;
+      case('LKW') :
+        return VehicleTypeType.LKW;
+      case('Transporter') :
+        return VehicleTypeType.BUS;
+      case('Flugzeug') :
+        return VehicleTypeType.PLANE;
+      case('Schiff') :
+        return VehicleTypeType.BOAT;
     }
   }
 
@@ -141,5 +144,15 @@ export class VehicleService {
         reject(error);
       });
     });
+  }
+
+  getAllVehicleTypes(): VehicleTypeType[] {
+    return [
+      VehicleTypeType.PKW,
+      VehicleTypeType.LKW,
+      VehicleTypeType.BUS,
+      VehicleTypeType.PLANE,
+      VehicleTypeType.BOAT
+    ];
   }
 }

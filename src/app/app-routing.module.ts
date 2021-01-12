@@ -10,6 +10,7 @@ import {RegisterComponent} from './components/account/register/register.componen
 import {ChatListComponent} from './components/chat-list/chat-list.component';
 import {A} from '@angular/cdk/keycodes';
 
+import {NewPostModalComponent} from './components/new-post-modal/new-post-modal.component';
 
 export const routes: Routes = [
   // tslint:disable-next-line:max-line-length
@@ -21,11 +22,13 @@ export const routes: Routes = [
   {path: 'chat/:id', component: ChatListComponent, canActivate: [AuthGuard]},
   {path: 'register', component: RegisterComponent},
   {path: 'bookings', component: BookingPageComponent, canActivate: [AuthGuard]},
+  {path: 'addpost', component: NewPostModalComponent},
   {path: '**', redirectTo: ''}
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload', initialNavigation: 'enabled' })],
+  declarations: [],
   exports: [RouterModule]
 })
 export class AppRoutingModule {

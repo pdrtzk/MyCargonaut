@@ -3,8 +3,8 @@ import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {BookingPageComponent} from './components/booking-page/booking-page.component';
-import { BookingCardComponent } from './components/booking-page/booking-card/booking-card.component';
-import { BookingListComponent } from './components/booking-page/booking-list/booking-list.component';
+import {BookingCardComponent} from './components/booking-page/booking-card/booking-card.component';
+import {BookingListComponent} from './components/booking-page/booking-list/booking-list.component';
 
 import {PostComponent} from './components/post/post.component';
 import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
@@ -30,11 +30,15 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
+import {NewPostModalComponent} from './components/new-post-modal/new-post-modal.component';
+import {NgbActiveModal, NgbDatepicker, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HomePostComponent} from './components/home-post/home-post.component';
+import {FormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {CommonModule} from '@angular/common';
 import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
-import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
-import { ChatListComponent } from './components/chat-list/chat-list.component';
+import {UpdatePasswordComponent} from './components/profileComponents/update-password/update-password.component';
+import {ChatListComponent} from './components/chat-list/chat-list.component';
 
 @NgModule({
   declarations: [
@@ -62,9 +66,12 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     AddRatingComponent,
     UpdatePasswordComponent,
     ChatListComponent
+    SidebarRightComponent,
+    NewPostModalComponent,
+    HomePostComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({appId: 'serverApp'}),
     AppRoutingModule,
     MatIconModule,
     BrowserAnimationsModule,
@@ -73,7 +80,9 @@ import { ChatListComponent } from './components/chat-list/chat-list.component';
     ReactiveFormsModule,
     MatDialogModule,
     NgbModule,
+    FormsModule,
   ],
+  providers: [NgbActiveModal],
   bootstrap: [AppComponent]
 })
 export class AppModule {
