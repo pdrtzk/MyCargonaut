@@ -2,7 +2,7 @@ import {TestBed} from '@angular/core/testing';
 
 import {VehicleService} from './vehicle.service';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('VehicleService', () => {
   let service: VehicleService;

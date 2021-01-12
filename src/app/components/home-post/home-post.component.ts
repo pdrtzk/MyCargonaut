@@ -20,8 +20,8 @@ export class HomePostComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.post.start_time = new Date(this.post.start_time);
-    this.post.end_time = new Date(this.post.end_time);
+    this.post.start_time = new Date(this.post?.start_time);
+    this.post.end_time = new Date(this.post?.end_time);
     await this.getVehicles(this.post.author.id);
     await this.getAuthor(this.post.author.id);
   }

@@ -2,8 +2,8 @@ import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import {NewPostModalComponent} from './new-post-modal.component';
 import {NgbActiveModal, NgbDatepicker, NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import {HttpClientModule} from "@angular/common/http";
-import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {HttpClientModule} from '@angular/common/http';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('NewPostModalComponent', () => {
   let component: NewPostModalComponent;
