@@ -11,7 +11,7 @@
   background-color: #005b52;
   padding: 0rem;
   color: white;
-  font-family: "MS Gothic";
+  font-family: 'Raleway', sans-serif;
 }
 
 .navbar-brand {
@@ -47,7 +47,7 @@
 
 
 
-@media (max-width: 969px){
+@media (max-width: 1109px){
 
   @media(min-width: 768px){
     .nav-link {
@@ -56,7 +56,7 @@
   }
 }
 
-@media (min-width: 768px) {
+@media (min-width: 850px) {
   .navbar-toggler {
     display: none;
   }
@@ -70,7 +70,7 @@
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 849px) {
   .navbar-toggler {
     display: block;
     margin-right: 1.5rem;
