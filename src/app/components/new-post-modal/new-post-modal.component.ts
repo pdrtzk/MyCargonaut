@@ -39,7 +39,7 @@ export class NewPostModalComponent implements OnInit {
   }
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.posttype = false;
 
     this.cities = [
@@ -78,16 +78,11 @@ export class NewPostModalComponent implements OnInit {
       length: undefined,
       width: undefined
     };
-
-    this.getVehicles();
-
+    await this.getVehicles();
   }
 
   getVehicles(): void {
-    // const currUser = this.accountService.user;
-    const currUser = {
-      id: 5
-    };
+    const currUser = this.accountService.user;
     this.vehicleService.getAllVehicles(currUser.id).then(
       result => {
         this.vehicles = result;
@@ -124,8 +119,8 @@ export class NewPostModalComponent implements OnInit {
     this.newPost = {
       startlocation: this.startCity,
       endlocation: this.endCity,
-      start_time: this.startDate,
-      end_time: this.endDate,
+      start_time: this.startDate + this.startTime,
+      end_time: this.endDate + this.endTime,
       payment: this.currPayment,
       hold: {
         length: this.currHold.length,
@@ -135,18 +130,16 @@ export class NewPostModalComponent implements OnInit {
           return this.length * this.width * this.height;
         }
       },
-      vehicle: this.currVehicle,
-
-      seats: this.currSeats,
-      type: (this.returnType(this.posttype)),
-      author: {
-        firstname: 'Maxine',
-        lastname: 'Musterfrau'
+      vehicle: {
+        id: this.currVehicle.id,
+        type: this.currVehicle.type,
+        seats: this.currSeats,
+        comment: this.currVehicle.comment,
       },
+      type: (this.returnType(this.posttype)),
       price: this.price,
 
       description: this.description,
-      status: DriveStatus.AUFGETRAGEN
     };
     this.activeModal.close(this.newPost);
   }

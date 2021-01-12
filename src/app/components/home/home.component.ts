@@ -51,8 +51,8 @@ export class HomeComponent implements OnInit {
     this.currPostType = undefined;
     this.currSearchString = undefined;
 
-    this.getAllVehicleTypes();
-    this.getAllCitis();
+    await this.getAllVehicleTypes();
+    await this.getAllCitis();
 
     await this.getAllPosts();
   }
@@ -79,11 +79,11 @@ export class HomeComponent implements OnInit {
     const authUser = this.accountService.user;
     if (this.accountService.user) {
       const modalReference = this.modalService.open(NewPostModalComponent, {size: 'xl'});
-      modalReference.result.then((result: Post) => {
+      modalReference.result.then(async (result: Post) => {
         console.log('success im modal');
         console.log(result);
         this.addNewPost(result, authUser);
-        this.getAllPosts();
+        await this.getAllPosts();
         this.alertService.success('Sie haben erfolgreich einen neuen Post angelegt.');
       }).catch((error) => {
         console.log('Windowclosed: ' + error);
@@ -95,7 +95,8 @@ export class HomeComponent implements OnInit {
 
   addNewPost(post: Post, cargo: Cargonaut): void {
     console.log('im post');
-    this.postService.createPost(cargo, post).then(() => {
+    this.postService.createPost(cargo, post).then(async () => {
+        await this.getAllPosts();
         console.log('Successful new Post');
       }
     ).catch(err => {

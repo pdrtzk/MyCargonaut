@@ -45,6 +45,7 @@ export class HomePostComponent implements OnInit {
   getVehicles(authorID: number): Promise<void> {
     return this.vehicleService.getAllVehicles(authorID).then(result => {
       this.post.vehicle = result.filter(ve => ve.id === this.post.vehicle.id)[0];
+      console.log(this.post.vehicle);
     }).catch(
       err => {
         console.log('getVehicle HomePost');

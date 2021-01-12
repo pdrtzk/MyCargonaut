@@ -700,10 +700,13 @@ export function app(): express.Express {
   server.post('/api/post/:cargonaut', async (req: Request, res: Response) => {
     console.log('POST IM SERVER');
     console.log(req.body);
+    console.log(req.body.hold);
+    console.log(req.body.post.type);
+
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    const startzeit: string = (req.body.post.start_time ? req.body.post.start_time : '8');
-    const ankunftZeit: string = (req.body.post.end_time ? req.body.post.end_time : '8');
+    const startzeit: string = req.body.post.start_time.year + req.body.post.start_time.month + req.body.post.start_time.day;
+    const ankunftZeit: string = req.body.post.end_time.year + req.body.post.end_time.month + req.body.post.end_time.day;
     const bezahlungsart: string = req.body.post.payment;
 
     const fahrzeug: number = req.body.post.vehicle.id;
@@ -714,9 +717,12 @@ export function app(): express.Express {
 
     const startlocation: string = req.body.post.startlocation;
     const endlocation: string = req.body.post.endlocation;
-    const laenge: number = req.body.post.hold.length;
-    const breite: number = req.body.post.hold.width;
-    const hoehe: number = req.body.post.hold.height;
+    //const laenge: number = req.body.post.hold.length;
+    const laenge: number = 4;
+    //const breite: number = req.body.post.hold.width;
+    const breite: number = 7;
+    //const hoehe: number = req.body.post.hold.height;
+    const hoehe: number = 4;
     let laderaum: number;
 
     if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
@@ -728,6 +734,7 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
+      console.log('if');
       const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
       queryPromise(queryLade, dataLaderaum).then(resu => {
         laderaum = resu.insertId;
@@ -746,13 +753,19 @@ export function app(): express.Express {
           cargonaut,
           preis,
         ];
-        const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
+        console.log('queryLade');
+        const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, DATETIME(?), ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
         queryPromise(query, data).then(resultPost => {
+          console.log('query');
           res.status(201).send({
             message: 'Neuer Post erstellt!',
             createdVehicle: resultPost.insertId,
           });
-        });
+        }).catch((err) => {
+            console.log('Fehler beim erstellen des Posts');
+            console.log(err);
+          }
+        )
       }).catch(() => {
           res.status(400).send({
             message: 'Fehler beim Erstellen eines Posts.',
