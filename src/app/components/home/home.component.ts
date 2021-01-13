@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit {
 
     // Nach Art des Autos filtern
     if (this.currVehicle && this.currVehicle.trim().length) {
-      this.filteredPostArray = this.filteredPostArray.filter(post => post.vehicle.type.type === this.currVehicle);
+      this.filteredPostArray = this.filteredPostArray.filter(post => post.vehicleType === this.currVehicle);
     }
 
     // Allgemein nach Wort filtern
