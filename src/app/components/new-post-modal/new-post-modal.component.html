@@ -13,13 +13,13 @@
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
                       [ngStyle]="{'background-color': posttype ? '#005B52' : '#666666', 'border-style': 'none'}"
-                      (click)="this.posttype = true">Angebot
+                      (click)="switch(true)">Angebot
               </button>
             </div>
             <div class="col-6">
               <button class="btn btn-primary button-styled button-wide"
                       [ngStyle]="{'background-color': posttype ? '#666666' : '#005B52', 'border-style': 'none'}"
-                      (click)="this.posttype = false">Gesuch
+                      (click)="switch(false)">Gesuch
               </button>
             </div>
           </div>
@@ -107,14 +107,14 @@
           </div>
           <div class="row justify-content-between">
             <div class="col-3">
-              <h6 class="green-color">Höhe</h6>
+              <h6 class="green-color">Höhe in cm</h6>
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Höhe" name="höhe" type="number"
                      [(ngModel)]="currHold.height">
             </div>
             <div class="col-3">
-              <h6 class="green-color">Breite</h6>
+              <h6 class="green-color">Breite in cm</h6>
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Breite" name="breite" type="number"
@@ -123,7 +123,7 @@
           </div>
           <div class="row justify-content-between">
             <div class="col-3">
-              <h6 class="green-color">Länge</h6>
+              <h6 class="green-color">Länge in cm</h6>
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Länge" name="länge" type="number"

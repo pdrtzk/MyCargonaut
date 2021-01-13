@@ -44,9 +44,11 @@ export class VehicleService {
   public async getVehicleHold(ve: Vehicle): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
       await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {}).toPromise().then((res: any) => {
-        ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
-        ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
-        ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
+        if (ve.hold) {
+          ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
+          ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
+          ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
+        }
         resolve(ve);
       }).catch(error => {
         console.log('Error: ' + error.message);

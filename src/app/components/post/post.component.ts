@@ -1,7 +1,7 @@
 import {Component, OnInit, Input} from '@angular/core';
 import {Post} from 'src/shared/post.model';
 import {PostService} from '../../services/post.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {Vehicle} from '../../../shared/vehicle.model';
 import {Rating} from '../../../shared/rating.model';
 import {Cargonaut} from '../../../shared/cargonaut.model';
@@ -9,6 +9,8 @@ import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
 import {BookingService} from '../../services/booking.service';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
+import {Hold} from '../../../shared/hold.model';
+import {ChatService} from '../../services/chat.service';
 
 @Component({
   selector: 'app-post',
@@ -32,12 +34,13 @@ export class PostComponent implements OnInit {
               private accountService: AccountService,
               private route: ActivatedRoute,
               private bookingService: BookingService,
-              private vehicleService: VehicleService) {
+              private vehicleService: VehicleService,
+              private chatService: ChatService,
+              private router: Router) {
     route.paramMap.subscribe(params => {
-      this.postId = parseInt( params.get('id'), 10);
+      this.postId = parseInt(params.get('id'), 10);
       this.ngOnInit();
     });
-    console.log(this.postId); // only for debugging
   }
 
   async ngOnInit(): Promise<void> {
@@ -63,7 +66,11 @@ export class PostComponent implements OnInit {
     if (this.post?.vehicle?.id) {
       // get vehicle data
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
+      console.log(vehicleData);
+      console.log('Hold: ' + this.post.hold);
       this.post.vehicle = vehicleData;
+    } else if (this.post?.vehicleType) {
+      this.post.vehicle = {type: {type: this.vehicleService.getVehicleType(this.post.vehicleType)}};
     }
     if (this.post?.author?.id) {
       // get users average rating
@@ -105,4 +112,20 @@ export class PostComponent implements OnInit {
     }
   }
 
+  getSpace(hold: Hold): number {
+    return ((hold?.length / 100) * (hold?.width / 100) * (hold?.height / 100));
+  }
+
+  async contact(){
+    let id;
+    console.log(this.post.author.id, this.accountService?.user?.id);
+    id = await this.chatService.getChatIdFromCargonauts(this.post.author.id, this.accountService?.user?.id);
+    const uri = '/chat/' + id.toString();
+    await this.router.navigateByUrl(uri);
+  }
+
+  goToProfile() {
+    console.log(this.post.author.id);
+    this.router.navigateByUrl('/profile/' + this.post.author.id);
+  }
 }

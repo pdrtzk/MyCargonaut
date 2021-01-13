@@ -725,7 +725,7 @@ export function app(): express.Express {
     const breite: number = req.body.post.hold?.width;
     const hoehe: number = req.body.post.hold?.height;
     let laderaum: number;
-    const fahrzeugTyp: string = fahrzeug ? null : req.body.post.vehicleType;
+    const fahrzeugTyp: string = req.body.post.vehicleType;
 
     if (cargonaut && startzeit && ankunftZeit && bezahlungsart && typ && preis && startlocation &&
       endlocation && ((laenge && breite && hoehe) || anzahlSitzplaetze)) {
@@ -788,7 +788,7 @@ export function app(): express.Express {
   });
 
 
-// get specific Post -> Alle Infos zu speziellem Post
+// get specific Post -> Alle Infos zu speziellem Post // TODO get hold
   server.get('/api/post/:id', (req: Request, res: Response) => {
     const id: string = req.params.id;
     const data: [string] = [

@@ -10,7 +10,7 @@
         <p class="post-type-label post-gesuch">Gesuch</p>
       </div>
       <!-- cargonaut name -->
-      <div><p class="post-name-title">{{post?.author?.firstname}} {{post?.author?.lastname}}</p></div>
+      <div (click)="goToProfile()"><p class="post-name-title">{{post?.author?.firstname}} {{post?.author?.lastname}}</p></div>
     </div>
     <div class="post-top-row">
       <!-- Buttons -->
@@ -21,7 +21,7 @@
         <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="saveChanges()">
           <mat-icon>save</mat-icon>
         </button>
-        <button class="post-button">
+        <button *ngIf="!loggedInUserIsOwner" (click)="contact()" class="post-button">
           <mat-icon>email</mat-icon>
         </button>
       </div>
@@ -62,7 +62,7 @@
           </div>
           <div class="post-top-row">
             <!-- text / comment -->
-            <p class="post-comment-text">{{post?.description}}</p>
+            <p class="post-comment-text">{{post?.description == 'no description'? 'Keine Beschreibung vorhanden.' : post?.description}}</p>
           </div>
         </div>
         <div class="post-top-row" style="margin-top: 150px">
@@ -80,7 +80,22 @@
         <!-- right -->
         <div style="padding-left: 50px">
           <div style="margin-bottom: -100px">
-            <mat-icon style="font-size: 180px; color: #005B52">directions_car</mat-icon>  <!-- todo dynamic icon -->
+            <div *ngIf="post?.vehicleType == 'PKW'">
+              <script>alert(yay)</script>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon"> directions_car</mat-icon>
+            </div>
+            <div *ngIf="post?.vehicleType == 'LKW'">
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_shipping</mat-icon>
+            </div>
+            <div *ngIf="post?.vehicleType == 'Transporter'">
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_bus</mat-icon>
+            </div>
+            <div *ngIf="post?.vehicleType == 'Flugzeug'">
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_airport</mat-icon>
+            </div>
+            <div *ngIf="post?.vehicleType == 'Schiff'">
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_boat</mat-icon>
+            </div>
           </div>
           <div style="text-align: right;">
             <!-- Fahrzeugtyp -->
@@ -92,7 +107,7 @@
           </div>
           <div>
             <!-- Gepäckstücke -->
-            <p class="post-green-text post-right-align-narrow">{{post?.vehicle?.hold || 0}} Ladeplätze</p>
+            <p class="post-green-text post-right-align-narrow">{{getSpace(post?.hold) || 0}} m² Ladefläche</p>
           </div>
           <div>
             <!-- Standort -->

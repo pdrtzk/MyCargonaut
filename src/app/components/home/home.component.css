@@ -17,6 +17,7 @@
   border-radius: 2px;
   border-color: #005B52;
   font-family: 'Lato', sans-serif;
+  font-weight: 400;
 }
 
 .dropdown > button:active, .dropdown > button:hover {
@@ -46,7 +47,8 @@
 }
 
 #searchbar {
-  width: 100%
+  width: 100%;
+  margin: 2px;
 }
 
 .searchCol {

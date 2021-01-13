@@ -14,15 +14,15 @@ export class PostVehicleTypeIconComponent implements OnInit {
     if (!this.type) {
       return 'help';
     }
-    if (this.type === 'pkw') {
+    if (this.type === 'PKW') {
       return 'directions_car';
-    } else if (this.type === 'lkw') {
+    } else if (this.type === 'LKW') {
       return 'local_shipping';
-    } else if (this.type === 'bus') {
+    } else if (this.type === 'Transporter') {
       return 'directions_bus';
-    } else if (this.type === 'boat') {
+    } else if (this.type === 'Schiff') {
       return 'directions_boat';
-    } else if (this.type === 'plane') {
+    } else if (this.type === 'Flugzeug') {
       return 'local_airport';
     } else {
       return 'help';

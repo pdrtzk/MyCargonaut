@@ -8,7 +8,6 @@ import {PostComponent} from './components/post/post.component';
 import {LoginComponent} from './components/account/login/login.component';
 import {RegisterComponent} from './components/account/register/register.component';
 import {ChatListComponent} from './components/chat-list/chat-list.component';
-import {A} from '@angular/cdk/keycodes';
 import {ChatComponent} from './components/chat/chat.component';
 
 import {NewPostModalComponent} from './components/new-post-modal/new-post-modal.component';

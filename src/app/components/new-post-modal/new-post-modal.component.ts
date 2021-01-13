@@ -16,7 +16,7 @@ export class NewPostModalComponent implements OnInit {
 
 
   posttype = true; // Angebot: true, Gesuch: false
-  vehicles: Vehicle[];
+  vehicles: Vehicle[] = [];
   cities: string[];
   startCity: string;
   endCity: string;
@@ -89,8 +89,18 @@ export class NewPostModalComponent implements OnInit {
     this.vehicleService.getAllVehicles(currUser.id).then(
       result => {
         console.log('halleluja');
-        this.vehicles = result;
-        console.log(this.vehicles);
+        if (result.length > 0) {
+          result.forEach(async elem => {
+            await this.vehicleService.getVehicleHold(elem).then(
+              res => {
+                this.vehicles.push(res);
+                console.log(res);
+              });
+          });
+          console.log(this.vehicles);
+        } else {
+          this.vehicles = [];
+        }
       }
     ).catch(err => {
       console.log('NewPostModal GetVehicles Err');
@@ -141,7 +151,7 @@ export class NewPostModalComponent implements OnInit {
       hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
         new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : undefined,
       description: this.description,
-      vehicleType: this.currVehicleType
+      vehicleType: this.currVehicle?.type?.type ? this.currVehicle.type.type : this.currVehicleType
     };
     this.activeModal.close(this.newPost);
   }
@@ -153,8 +163,21 @@ export class NewPostModalComponent implements OnInit {
   vehicleChosen(vehicle: Vehicle) {
     this.currVehicle = vehicle;
     this.currVehicleType = vehicle.type.type;
+    console.log(this.currVehicleType);
     this.currHold = vehicle.hold;
     this.currSeats = vehicle.seats;
+  }
+
+  switch(isOffer: boolean) {
+    this.posttype = isOffer;
+    this.currVehicleType = undefined;
+    this.currVehicle = undefined;
+    this.currHold = {
+      height: undefined,
+      length: undefined,
+      width: undefined
+    };
+    this.currSeats = undefined;
   }
 
 }
