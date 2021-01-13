@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 06. Jan 2021 um 15:16
--- Server-Version: 10.1.38-MariaDB
--- PHP-Version: 7.3.4
+-- Erstellungszeit: 12. Jan 2021 um 20:38
+-- Server-Version: 10.4.17-MariaDB
+-- PHP-Version: 8.0.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Datenbank: `cargonaut_db`
+-- Datenbank: `cargonaut_new`
 --
 
 -- --------------------------------------------------------
@@ -54,7 +53,7 @@ INSERT INTO `bewertung` (`id`, `verfasser`, `fahrt`, `punktzahl`, `kommentar`) V
 CREATE TABLE `buchung` (
   `id` int(10) UNSIGNED NOT NULL,
   `gebucht_von` int(255) UNSIGNED NOT NULL,
-  `zeit` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `zeit` timestamp NOT NULL DEFAULT current_timestamp(),
   `ladeflaeche` int(255) NOT NULL,
   `anzahl_sitzplaetze` int(255) NOT NULL,
   `post` int(255) UNSIGNED NOT NULL
@@ -91,18 +90,18 @@ CREATE TABLE `cargonaut` (
 -- Daten für Tabelle `cargonaut`
 --
 
-INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `geburtsdatum`, `kontoinhaber`, `iban`, `bic`) VALUES
-(5, 'Admin', 'Admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'admin@admin.de', '0000-00-00', '', '', ''),
-(8, '', '', 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e', 'test@teston.de', '0000-00-00', '', '', ''),
-(13, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@test.de', '0000-00-00', '', '', ''),
-(18, 'Berta', 'Besispiel', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'berta@beispiel.de', '1960-01-01', '', '', ''),
-(19, 'Max', 'Mustermann', 'test', 'max@mustermann.de', '1990-01-12', '', '', ''),
-(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19', '', '', ''),
-(21, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasd.de', '0000-00-00', '', '', ''),
-(22, 'etest', 'tsetdf', 'bbe96aa2ce1149882f168249a4542c8cc3d2972945d25bddeb4e37f8353896c50ef84e69e91d8ecdc0e45bd6e025cee994365f7dc31d92d7411ab4da53f61c59', 'testestets@weaeas.de', '2021-01-20', '', '', ''),
-(24, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@tefghstasd.de', '0000-00-00', '', '', ''),
-(30, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasdfsd.de', '0000-00-00', '', '', ''),
-(31, 'sdfsdf', 'sdfsdfsdf', 'a4faf47676918074799a3c3bb60be7aefd65e4c42db1726846e363f3f3f4f89dc564ae90be19ca66ba711abd4419c3ed4d292b29d7f9e855f1a640312399e826', 'sdfds@wqa.de', '2021-01-27', '', '', '');
+INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `geburtsdatum`, `kontoinhaber`, `iban`, `bic`, `image`) VALUES
+(5, 'Admin', 'Admin', 'c7ad44cbad762a5da0a452f9e854fdc1e0e7a52a38015f23f3eab1d80b931dd472634dfac71cd34ebc35d16ab7fb8a90c81f975113d6c7538dc69dd8de9077ec', 'admin@admin.de', '0000-00-00', '', '', '', 'public\\tmp\\uploads\\image-1610448745674-788182736-25682.jpg'),
+(8, '', '', 'cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e', 'test@teston.de', '0000-00-00', '', '', '', NULL),
+(13, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@test.de', '0000-00-00', '', '', '', NULL),
+(18, 'Berta', 'Besispiel', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'berta@beispiel.de', '1960-01-01', '', '', '', NULL),
+(19, 'Max', 'Mustermann', 'test', 'max@mustermann.de', '1990-01-12', '', '', '', NULL),
+(20, 'Maxine', 'Musterfrau', 'test', 'maxine@musterfrau.de', '1977-01-19', '', '', '', NULL),
+(21, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasd.de', '0000-00-00', '', '', '', NULL),
+(22, 'etest', 'tsetdf', 'bbe96aa2ce1149882f168249a4542c8cc3d2972945d25bddeb4e37f8353896c50ef84e69e91d8ecdc0e45bd6e025cee994365f7dc31d92d7411ab4da53f61c59', 'testestets@weaeas.de', '2021-01-20', '', '', '', NULL),
+(24, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@tefghstasd.de', '0000-00-00', '', '', '', NULL),
+(30, 'Test', 'Tester', 'ee26b0dd4af7e749aa1a8ee3c10ae9923f618980772e473f8819a5d4940e0db27ac185f8a0e1d5f84f88bc887fd67b143732c304cc5fa9ad8e6f57f50028a8ff', 'test@testasdfsd.de', '0000-00-00', '', '', '', NULL),
+(31, 'sdfsdf', 'sdfsdfsdf', 'a4faf47676918074799a3c3bb60be7aefd65e4c42db1726846e363f3f3f4f89dc564ae90be19ca66ba711abd4419c3ed4d292b29d7f9e855f1a640312399e826', 'sdfds@wqa.de', '2021-01-27', '', '', '', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,6 +115,17 @@ CREATE TABLE `chat` (
   `cargonaut_2` int(11) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
 
+--
+-- Daten für Tabelle `chat`
+--
+
+INSERT INTO `chat` (`id`, `cargonaut_1`, `cargonaut_2`) VALUES
+(2, 5, 22),
+(5, 5, 8),
+(6, 5, 13),
+(7, 5, 18),
+(8, 5, 19);
+
 -- --------------------------------------------------------
 
 --
@@ -125,10 +135,18 @@ CREATE TABLE `chat` (
 CREATE TABLE `chatnachricht` (
   `id` int(255) UNSIGNED NOT NULL,
   `nachricht` varchar(255) COLLATE latin1_german1_ci NOT NULL,
-  `zeit` timestamp(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+  `zeit` timestamp NOT NULL DEFAULT current_timestamp(),
   `verfasser` int(255) UNSIGNED NOT NULL,
   `chat` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_german1_ci;
+
+--
+-- Daten für Tabelle `chatnachricht`
+--
+
+INSERT INTO `chatnachricht` (`id`, `nachricht`, `zeit`, `verfasser`, `chat`) VALUES
+(1, 'wqeqweqwe', '0000-00-00 00:00:00', 5, 2),
+(2, 'Testmessage', '2021-01-12 18:35:04', 5, 2);
 
 -- --------------------------------------------------------
 
@@ -152,7 +170,8 @@ CREATE TABLE `fahrzeug` (
 
 INSERT INTO `fahrzeug` (`id`, `art`, `anzahl_sitzplaetze`, `ladeflaeche`, `besitzer`, `modell`, `kommentar`) VALUES
 (4, 'Kleinwagen', 3, 1, 5, '', ''),
-(5, 'Sprinter', 2, 2, 5, '', '');
+(5, 'Sprinter', 2, 2, 5, '', ''),
+(6, 'Schiff', 2, 10, 5, 'test', 'etstestet');
 
 -- --------------------------------------------------------
 
@@ -179,7 +198,10 @@ INSERT INTO `laderaum` (`id`, `ladeflaeche_laenge_cm`, `ladeflaeche_breite_cm`, 
 (5, 123, 123332, 0),
 (6, 123, 123332, 0),
 (7, 20, 20, 20),
-(8, 200, 100, 100);
+(8, 200, 100, 100),
+(9, 1, 1, 1),
+(10, 500, 200, 200),
+(11, 123, 123, 56);
 
 -- --------------------------------------------------------
 
@@ -213,7 +235,8 @@ INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `b
 (1, '1', '5', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Bar', 1, 4, 0, 1, 'Testbeschreibung', 'Angebot', 5, '', 25),
 (2, '40', '41', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Bar', 4, 4, 0, 1, 'Testeetsttetsetestse esr tsetset e t t etset', 'Angebot', 5, '', 23.99),
 (3, '42', '43', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'EC', 5, 5, 0, 9, 'TESTETSETEST  TEStsettete ste t', 'Angebot', 5, '', 39.99),
-(4, '48', '49', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Bar', 6, 4, 0, 1, 'Testeetsttetsetestse esr tsetset e t t etset', 'Angebot', 5, '', 23.99);
+(4, '48', '49', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Bar', 6, 4, 0, 1, 'Testeetsttetsetestse esr tsetset e t t etset', 'Angebot', 5, '', 23.99),
+(5, 'Testort1', 'Testort2', '0000-00-00 00:00:00', '0000-00-00 00:00:00', 'Bar', 11, 4, 0, 1, 'Testeetsttetsetestse esr tsetset e t t etset', 'Angebot', 5, '', 23.99);
 
 --
 -- Indizes der exportierten Tabellen
@@ -308,31 +331,31 @@ ALTER TABLE `cargonaut`
 -- AUTO_INCREMENT für Tabelle `chat`
 --
 ALTER TABLE `chat`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT für Tabelle `chatnachricht`
 --
 ALTER TABLE `chatnachricht`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT für Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT für Tabelle `laderaum`
 --
 ALTER TABLE `laderaum`
-  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT für Tabelle `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(255) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints der exportierten Tabellen
@@ -358,14 +381,14 @@ ALTER TABLE `buchung`
 --
 ALTER TABLE `chat`
   ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`cargonaut_1`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`cargonaut_2`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `chat_ibfk_3` FOREIGN KEY (`id`) REFERENCES `chatnachricht` (`chat`);
+  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`cargonaut_2`) REFERENCES `cargonaut` (`id`);
 
 --
 -- Constraints der Tabelle `chatnachricht`
 --
 ALTER TABLE `chatnachricht`
-  ADD CONSTRAINT `chatnachricht_ibfk_1` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`);
+  ADD CONSTRAINT `chatnachricht_ibfk_1` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`),
+  ADD CONSTRAINT `chatnachricht_ibfk_2` FOREIGN KEY (`chat`) REFERENCES `chat` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `fahrzeug`
