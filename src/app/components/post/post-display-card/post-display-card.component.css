@@ -11,11 +11,11 @@
 }
 
 .post-displayCard-title {
-  font-family: "MS Gothic";
+  font-family: "Lato", sans-serif;
   color: #005B52;
 }
 
 .post-displayCard-text {
-  font-family: Calibri;
+  font-family: "Lato", sans-serif;
   font-size: 15px;
 }
