@@ -26,9 +26,9 @@
           </p>
         </div>
         <div class="col-4 col-md-5 margin-1">
-          <h4 class="bold">
-            {{post.price}}€ über {{post.payment}}
-          </h4>
+          <p class="bold">
+            {{post.price}}€&nbsp;{{post.payment}}
+          </p>
         </div>
       </div>
       <div class="row justify-content-start">
@@ -43,13 +43,23 @@
         <div class="col-xl-5 col-lg-12 align-items-start">
           <div class="row">
             <div class="col-3">
-              <svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" fill="#005B52"
-                   class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-                <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/>
-              </svg>
+              <mat-icon role="img" class="mat-icon notranslate material-icons mat-icon-no-color"
+                        style="margin-top: 30px; color: #005B52;" aria-hidden="true" data-mat-icon-type="font">location_on
+              </mat-icon>
             </div>
             <div class="col-9">
               <h3 class="green-color bold">{{post.startlocation ? post.startlocation : 'Gießen'}}</h3>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <mat-icon role="img" class="mat-icon notranslate material-icons mat-icon-no-color"
+                        style="margin-top: 30px; color: #005B52;" aria-hidden="true"
+                        data-mat-icon-type="font">flag
+              </mat-icon>
+            </div>
+            <div class="col-9">
+              <h3 class="green-color bold">{{post.endlocation ? post.endlocation : 'Gießen'}}</h3>
             </div>
           </div>
         </div>
