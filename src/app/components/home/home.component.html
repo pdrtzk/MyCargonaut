@@ -4,13 +4,18 @@
       <div class="row">
         <div class="col searchbar">
           <form>
-            <div class="row">
-              <div class=" col-7 col-sm-8 col-md-9 col-lg-10 col-xl-11 searchCol">
-                <input id="searchbar" type="text" placeholder="Suche.." name="search" [(ngModel)]="currSearchString"
-                       (keyup)="this.filter()">
-              </div>
-              <div class="col-5 col-sm-4 col-md-3 col-lg-2 col-xl-1 searchCol">
-                <button class="btn search-button" disabled><i class="fa fa-search"></i></button>
+            <div class="row justify-content-center">
+              <div class="input-group mb-3">
+                <div class=" col-7 col-sm-8 col-md-9 col-lg-10 col-xl-11 searchCol">
+
+                  <input type="text" class="form-control" id="searchbar" placeholder="Suche.." aria-label="search"
+                         aria-describedby="search-input" [(ngModel)]="currSearchString"
+                         (keyup)="this.filter()">
+
+                </div>
+                <div class="input-group-append  col-1 btn-search">
+                  <button class="btn search-button" disabled><i class="fa fa-search"></i></button>
+                </div>
               </div>
             </div>
           </form>

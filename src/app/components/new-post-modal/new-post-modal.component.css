@@ -64,6 +64,6 @@ input {
   padding-right: 3em;
 }
 
-#timePicker > .btn-link {
+::ng-deep .btn-link {
   color: #005B52 !important;
 }
