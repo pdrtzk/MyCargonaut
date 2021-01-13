@@ -1,7 +1,7 @@
 <div id="booking-card">
   <div id="booking-card-left">
     <!-- cargonaut name -->
-    <p id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
+    <p (click)="goToProfile()" id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
     <!-- status -->
     <p id="booking-status">
       {{booking?.status === 2 ? 'abgeschlossen' : 'ausstehend'}}
@@ -9,16 +9,17 @@
   </div>
   <div id="booking-card-right">
     <!-- add rating button -->
-    <button *ngIf="commentSectionAvailable" (click)="toggleCommentSection()">bewerten</button>
+    <button *ngIf="commentSectionAvailable" (click)="toggleCommentSection()">Bewerten</button>
 
     <!-- message cargonaut -->
-    <button>M</button> <!-- todo use icon -->
-
+    <button style="align-content: center" (click)="contact()" class="post-button">
+      <mat-icon>email</mat-icon>
+    </button>
     <!-- view post -->
-    <button routerLink="/post/{{booking?.id}}">zum Post</button>
+    <button routerLink="/post/{{booking?.id}}">Post ansehen</button>
   </div>
 </div>
 <div *ngIf="commentSectionVisible">
   <hr style="margin-top: 20px; margin-bottom: 20px">
-  <app-add-rating [author]="currentUser" *ngIf="commentSectionVisible" [post]="booking"></app-add-rating>
+  <app-add-rating [author]="currentUser" *ngIf="commentSectionVisible" [post]="booking" [postAuthorId]="authorId"></app-add-rating>
 </div>

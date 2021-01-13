@@ -6,8 +6,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
-  font-family: Calibri;
+  border-radius: 3px;
+  font-family: "Lato", sans-serif;
 }
 
 #booking-card:hover{
@@ -21,6 +21,11 @@
 
 #booking-cargonaut-name {
   font-size: 20px;
+}
+
+#booking-cargonaut-name:hover, #booking-cargonaut-name:focus {
+  text-decoration: underline ;
+  border: none;
 }
 
 #booking-status {
