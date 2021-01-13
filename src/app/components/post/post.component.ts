@@ -11,6 +11,7 @@ import {BookingService} from '../../services/booking.service';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
 import {Hold} from '../../../shared/hold.model';
 import {ChatService} from '../../services/chat.service';
+import {AlertService} from '../alert/alert.service';
 
 @Component({
   selector: 'app-post',
@@ -36,6 +37,7 @@ export class PostComponent implements OnInit {
               private bookingService: BookingService,
               private vehicleService: VehicleService,
               private chatService: ChatService,
+              private alertService: AlertService,
               private router: Router) {
     route.paramMap.subscribe(params => {
       this.postId = parseInt(params.get('id'), 10);
@@ -108,6 +110,7 @@ export class PostComponent implements OnInit {
   async addBooking(): Promise<void> {
     const currentUser = this.accountService.user;
     if (currentUser.id && this.postId) {
+      this.alertService.success('Post wurde erfolgreich gebucht. Du findest ihn jetzt unter Buchungen.');
       await this.bookingService.addBooking(this.postId, currentUser.id);
     }
   }
