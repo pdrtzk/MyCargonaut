@@ -780,15 +780,16 @@ export function app(): express.Express {
   });
 
 
-// get specific Post -> Alle Infos zu speziellem Post // TODO get hold
+// get specific Post -> Alle Infos zu speziellem Post
   server.get('/api/post/:id', (req: Request, res: Response) => {
     const id: string = req.params.id;
     const data: [string] = [
       id,
     ];
     const query = 'SELECT * FROM post WHERE id = ?;';
-    queryPromise(query, data).then(results => {
+    queryPromise(query, data).then(async results => {
       const result = results[0];
+      const laderaum = result?.laderaum;
       const post: Post = {
         id: result.id,
         startlocation: result.standort,
@@ -796,7 +797,6 @@ export function app(): express.Express {
         start_time: result.startzeit,
         end_time: result.ankunft_zeit,
         payment: result.bezahlungsart,
-        hold: result?.laderaum,
         vehicle: result?.fahrzeug,
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
@@ -807,6 +807,17 @@ export function app(): express.Express {
         status: result.status,
         vehicleType: result.fahrzeug_typ
       };
+      const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+      if (laderaum) {
+        await queryPromise(holdQuery, [laderaum]).then(r => {
+            const hold = r[0];
+            post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+          }, error => {
+            console.log('Error: ' + error);
+            res.status(400).send({message: 'Fehler beim Laderaum.'});
+          }
+        );
+      }
       res.status(200).send({
         post
       });
@@ -858,7 +869,7 @@ export function app(): express.Express {
           await queryPromise(holdQuery, [laderaum]).then(r => {
               const hold = r[0];
               post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
-              }, error => {
+            }, error => {
               console.log('Error: ' + error);
               res.status(400).send({message: 'Fehler beim Laderaum.'});
             }
@@ -876,7 +887,7 @@ export function app(): express.Express {
     });
   });
 
-// Update post - TODO
+// Update post - FIXME
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);
