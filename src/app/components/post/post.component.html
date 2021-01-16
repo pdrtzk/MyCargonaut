@@ -103,11 +103,11 @@
           </div>
           <div>
             <!-- Sitzplätze -->
-            <p class="post-green-text post-right-align-narrow">{{post?.seats || 0}} Sitzplätze</p>
+            <p class="post-green-text post-right-align-narrow">{{post?.seats || 'Keine'}} {{post?.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</p>
           </div>
           <div>
             <!-- Gepäckstücke -->
-            <p class="post-green-text post-right-align-narrow">{{getSpace(post?.hold) || 0}} m³ Ladeplatz</p>
+            <p class="post-green-text post-right-align-narrow">{{post?.hold ? getSpace(post?.hold) + ' m³' : 'Kein'}}  Laderaum</p>
           </div>
           <div>
             <!-- Standort -->

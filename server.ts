@@ -24,6 +24,7 @@ import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
 import {Chat} from './src/shared/chat.model';
 import {ChatMessage} from './src/shared/chat-message.model';
+import {Hold} from './src/shared/hold.model';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -730,7 +731,7 @@ export function app(): express.Express {
       ];
       if (laenge && breite && hoehe) {
         const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
-        queryPromise(queryLade, dataLaderaum).then(resu => {
+        await queryPromise(queryLade, dataLaderaum).then(resu => {
           laderaum = resu.insertId;
           // create Post
         }).catch(() => {
@@ -777,15 +778,16 @@ export function app(): express.Express {
   });
 
 
-// get specific Post -> Alle Infos zu speziellem Post // TODO get hold
+// get specific Post -> Alle Infos zu speziellem Post
   server.get('/api/post/:id', (req: Request, res: Response) => {
     const id: string = req.params.id;
     const data: [string] = [
       id,
     ];
     const query = 'SELECT * FROM post WHERE id = ?;';
-    queryPromise(query, data).then(results => {
+    queryPromise(query, data).then(async results => {
       const result = results[0];
+      const laderaum = result?.laderaum;
       const post: Post = {
         id: result.id,
         startlocation: result.standort,
@@ -793,7 +795,6 @@ export function app(): express.Express {
         start_time: result.startzeit,
         end_time: result.ankunft_zeit,
         payment: result.bezahlungsart,
-        hold: result?.laderaum,
         vehicle: result?.fahrzeug,
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
@@ -804,6 +805,17 @@ export function app(): express.Express {
         status: result.status,
         vehicleType: result.fahrzeug_typ
       };
+      const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+      if (laderaum) {
+        await queryPromise(holdQuery, [laderaum]).then(r => {
+            const hold = r[0];
+            post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+          }, error => {
+            console.log('Error: ' + error);
+            res.status(400).send({message: 'Fehler beim Laderaum.'});
+          }
+        );
+      }
       res.status(200).send({
         post
       });
@@ -825,9 +837,10 @@ export function app(): express.Express {
     }
   */
     const query = 'SELECT * FROM post WHERE gebucht = ?;';
-    queryPromise(query, [0]).then(results => {
+    queryPromise(query, [0]).then(async results => {
       const posts: Post [] = [];
       for (const result of results) {
+        const laderaum = result?.laderaum;
         const post: Post = {
           id: result.id,
           startlocation: result.standort,
@@ -835,7 +848,6 @@ export function app(): express.Express {
           start_time: result.startzeit,
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
-          hold: result?.laderaum,
           vehicle: {
             id: result?.fahrzeug
           },
@@ -850,6 +862,17 @@ export function app(): express.Express {
           status: result.status,
           vehicleType: result.fahrzeug_typ
         };
+        const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+        if (laderaum) {
+          await queryPromise(holdQuery, [laderaum]).then(r => {
+              const hold = r[0];
+              post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+            }, error => {
+              console.log('Error: ' + error);
+              res.status(400).send({message: 'Fehler beim Laderaum.'});
+            }
+          );
+        }
         posts.push(post);
       }
       res.status(200).send({
@@ -862,7 +885,7 @@ export function app(): express.Express {
     });
   });
 
-// Update post - TODO
+// Update post - FIXME
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);

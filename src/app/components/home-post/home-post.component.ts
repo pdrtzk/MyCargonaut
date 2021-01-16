@@ -4,6 +4,8 @@ import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
 import {VehicleTypeType} from '../../../shared/vehicle-type.model';
+import {Hold} from '../../../shared/hold.model';
+
 @Component({
   selector: 'app-home-post',
   templateUrl: './home-post.component.html',
@@ -45,12 +47,15 @@ export class HomePostComponent implements OnInit {
   getVehicles(authorID: number): Promise<void> {
     return this.vehicleService.getAllVehicles(authorID).then(result => {
       this.post.vehicle = result.filter(ve => ve.id === this.post.vehicle.id)[0];
-      console.log(this.post.vehicle);
     }).catch(
       err => {
         console.log('getVehicle HomePost');
         console.log(err);
       }
     );
+  }
+
+  public getSpace(hold: Hold): number {
+    return ((hold.length / 100) * (hold.width / 100) * (hold.height / 100));
   }
 }
