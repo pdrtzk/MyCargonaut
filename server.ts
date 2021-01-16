@@ -700,15 +700,8 @@ export function app(): express.Express {
 
 // create Post
   server.post('/api/post/:cargonaut', async (req: Request, res: Response) => {
-    console.log('POST IM SERVER');
-    console.log(req.body);
-    console.log(req.body.hold);
-    console.log(req.body.post.type);
-
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    console.log(req.body.post.start_time);
-    console.log(req.body.post.end_time);
     const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
     const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.end_time.length - 1);
     const bezahlungsart: string = req.body.post.payment;
@@ -735,13 +728,11 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
-      console.log('if');
       if (laenge && breite && hoehe) {
         const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
         queryPromise(queryLade, dataLaderaum).then(resu => {
           laderaum = resu.insertId;
           // create Post
-          console.log('queryLade');
         }).catch(() => {
             res.status(400).send({
               message: 'Fehler beim Erstellen eines Posts.',
@@ -766,10 +757,8 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp ? fahrzeugTyp : null
       ];
-      console.log(data);
       const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?, ?);';
       queryPromise(query, data).then(resultPost => {
-        console.log('query');
         res.status(201).send({
           message: 'Neuer Post erstellt!',
           createdVehicle: resultPost.insertId,
@@ -1007,7 +996,7 @@ export function app(): express.Express {
         });
       }).catch(() => {
           res.status(400).send({
-            message: 'Fehler beim abgeben der Bewertung.',
+            message: 'Fehler beim Abgeben der Bewertung.',
           });
         }
       );
