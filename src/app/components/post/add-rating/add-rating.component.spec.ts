@@ -3,6 +3,8 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 
 import { AddRatingComponent } from './add-rating.component';
 import {HttpClient} from '@angular/common/http';
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../../app-routing.module';
 
 describe('AddRatingComponent', () => {
   let component: AddRatingComponent;
@@ -13,7 +15,10 @@ describe('AddRatingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes(routes)
+      ],
       declarations: [ AddRatingComponent ]
     })
     .compileComponents();

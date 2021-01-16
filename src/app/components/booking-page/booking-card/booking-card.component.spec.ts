@@ -4,6 +4,8 @@ import {HttpClientTestingModule, HttpTestingController} from '@angular/common/ht
 import {BookingCardComponent} from './booking-card.component';
 import {HttpClient} from '@angular/common/http';
 import {DriveStatus} from '../../../../shared/post.model';
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../../app-routing.module';
 
 describe('BookingCardComponent', () => {
   let component: BookingCardComponent;
@@ -14,10 +16,13 @@ describe('BookingCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule],
-      declarations: [ BookingCardComponent ]
+      imports: [
+        HttpClientTestingModule,
+        RouterTestingModule.withRoutes(routes)
+      ],
+      declarations: [BookingCardComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     httpClient = TestBed.get(HttpClient);
     httpTestingController = TestBed.get(HttpTestingController);
