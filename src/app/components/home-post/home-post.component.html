@@ -34,7 +34,11 @@
       <div class="row justify-content-start">
         <div class="col-6">
           <h6
-            class="bold">{{post.seats ? post.seats : 'undefined'}} {{post.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</h6>
+            class="bold">{{post.seats ? post.seats : 'Keine'}} {{post.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</h6>
+        </div>
+        <div class="col-6">
+          <h6
+            class="bold">{{post.hold ? getSpace(post.hold) + ' m³' : 'Kein'}}&nbsp;Laderaum</h6>
         </div>
       </div>
     </div>

@@ -24,6 +24,7 @@ import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
 import {Chat} from './src/shared/chat.model';
 import {ChatMessage} from './src/shared/chat-message.model';
+import {Hold} from './src/shared/hold.model';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -700,15 +701,8 @@ export function app(): express.Express {
 
 // create Post
   server.post('/api/post/:cargonaut', async (req: Request, res: Response) => {
-    console.log('POST IM SERVER');
-    console.log(req.body);
-    console.log(req.body.hold);
-    console.log(req.body.post.type);
-
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    console.log(req.body.post.start_time);
-    console.log(req.body.post.end_time);
     const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
     const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.end_time.length - 1);
     const bezahlungsart: string = req.body.post.payment;
@@ -735,13 +729,11 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
-      console.log('if');
       if (laenge && breite && hoehe) {
         const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
-        queryPromise(queryLade, dataLaderaum).then(resu => {
+        await queryPromise(queryLade, dataLaderaum).then(resu => {
           laderaum = resu.insertId;
           // create Post
-          console.log('queryLade');
         }).catch(() => {
             res.status(400).send({
               message: 'Fehler beim Erstellen eines Posts.',
@@ -836,9 +828,10 @@ export function app(): express.Express {
     }
   */
     const query = 'SELECT * FROM post WHERE gebucht = ?;';
-    queryPromise(query, [0]).then(results => {
+    queryPromise(query, [0]).then(async results => {
       const posts: Post [] = [];
       for (const result of results) {
+        const laderaum = result?.laderaum;
         const post: Post = {
           id: result.id,
           startlocation: result.standort,
@@ -846,7 +839,6 @@ export function app(): express.Express {
           start_time: result.startzeit,
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
-          hold: result?.laderaum,
           vehicle: {
             id: result?.fahrzeug
           },
@@ -861,6 +853,17 @@ export function app(): express.Express {
           status: result.status,
           vehicleType: result.fahrzeug_typ
         };
+        const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+        if (laderaum) {
+          await queryPromise(holdQuery, [laderaum]).then(r => {
+              const hold = r[0];
+              post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+              }, error => {
+              console.log('Error: ' + error);
+              res.status(400).send({message: 'Fehler beim Laderaum.'});
+            }
+          );
+        }
         posts.push(post);
       }
       res.status(200).send({

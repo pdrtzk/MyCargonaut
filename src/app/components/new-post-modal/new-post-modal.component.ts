@@ -149,7 +149,7 @@ export class NewPostModalComponent implements OnInit {
       type: (this.returnType(this.posttype)),
       price: this.price,
       hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
-        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : undefined,
+        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : new Hold(1, 2, 3),
       description: this.description,
       vehicleType: this.currVehicle?.type?.type ? this.currVehicle.type.type : this.currVehicleType
     };
