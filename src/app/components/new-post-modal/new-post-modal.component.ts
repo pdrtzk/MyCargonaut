@@ -86,26 +86,28 @@ export class NewPostModalComponent implements OnInit {
     console.log('should get vehicles');
     const currUser = this.accountService.user;
     console.log(currUser);
-    this.vehicleService.getAllVehicles(currUser.id).then(
-      result => {
-        console.log('halleluja');
-        if (result.length > 0) {
-          result.forEach(async elem => {
-            await this.vehicleService.getVehicleHold(elem).then(
-              res => {
-                this.vehicles.push(res);
-                console.log(res);
-              });
-          });
-          console.log(this.vehicles);
-        } else {
-          this.vehicles = [];
+    if (currUser) {
+      this.vehicleService.getAllVehicles(currUser.id).then(
+        result => {
+          console.log('halleluja');
+          if (result.length > 0) {
+            result.forEach(async elem => {
+              await this.vehicleService.getVehicleHold(elem).then(
+                res => {
+                  this.vehicles.push(res);
+                  console.log(res);
+                });
+            });
+            console.log(this.vehicles);
+          } else {
+            this.vehicles = [];
+          }
         }
-      }
-    ).catch(err => {
-      console.log('NewPostModal GetVehicles Err');
-      console.log(err);
-    });
+      ).catch(err => {
+        console.log('NewPostModal GetVehicles Err');
+        console.log(err);
+      });
+    }
   }
 
   savePost(): void {

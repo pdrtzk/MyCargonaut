@@ -6,14 +6,14 @@
       <div id="booking-status">
         {{getStatusToString(booking?.status)}}
       </div>
-      <div *ngIf="authorId === currentUser.id && booking?.status < 2 && booking?.type == 'Angebot' || authorId !== currentUser.id && booking.type == 'Gesuch' && booking?.status < 2" id="next-step-booking">
+      <div *ngIf="authorId === currentUser?.id && booking?.status < 2 && booking?.type == 'Angebot' || authorId !== currentUser?.id && booking?.type == 'Gesuch' && booking?.status < 2" id="next-step-booking">
       <button id = "status-btn" type="button" (click)="updateStatus()">{{booking?.status == 0 ? 'Fahrt beginnen' : 'Fahrt beenden' }}</button>
       </div>
     </div>
     <div class="col-md-4" id="booking-card-right">
-      <button *ngIf="commentSectionAvailable && authorId !== currentUser.id" (click)="toggleCommentSection()">Bewerten</button>
+      <button *ngIf="commentSectionAvailable && authorId !== currentUser?.id" (click)="toggleCommentSection()">Bewerten</button>
       <!-- message cargonaut -->
-      <button *ngIf="authorId !== currentUser.id" style="align-content: center" (click)="contact()" class="post-button">
+      <button *ngIf="authorId !== currentUser?.id" style="align-content: center" (click)="contact()" class="post-button">
         <mat-icon>email</mat-icon>
       </button>
       <!-- view post -->

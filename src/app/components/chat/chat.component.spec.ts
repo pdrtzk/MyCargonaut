@@ -1,6 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ChatComponent } from './chat.component';
+import {ChatComponent} from './chat.component';
+import {RouterTestingModule} from '@angular/router/testing';
+import {routes} from '../../app-routing.module';
+import {HttpClientTestingModule} from '@angular/common/http/testing';
 
 describe('ChatComponent', () => {
   let component: ChatComponent;
@@ -8,9 +11,10 @@ describe('ChatComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChatComponent ]
+      declarations: [ChatComponent],
+      imports: [RouterTestingModule.withRoutes(routes), HttpClientTestingModule]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -19,7 +23,7 @@ describe('ChatComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

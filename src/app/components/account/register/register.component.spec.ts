@@ -70,11 +70,11 @@ describe('RegisterComponent', () => {
     component.form.reset();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should navigate to /login if #login link is clicked.', fakeAsync(() => {
+  it('should navigate to /login if #login link is clicked.', fakeAsync(() => {
     expect(location.path()).toBe('/register');
     const compiled = fixture.debugElement.nativeElement;
     const button = compiled.querySelector('#login');
@@ -84,7 +84,7 @@ describe('RegisterComponent', () => {
     expect(location.path()).toBe('/login');
   }));
 
-  xit('should call onSubmit() if #submit button is clicked.', fakeAsync(() => {
+  it('should call onSubmit() if #submit button is clicked.', fakeAsync(() => {
     const compiled = fixture.debugElement.nativeElement;
     spyOn(component, 'onSubmit');
     const button = compiled.querySelector('#submit');
@@ -95,23 +95,23 @@ describe('RegisterComponent', () => {
     // expect(component.submitted).toBeTrue();
   }));
 
-  xit('should return form.controls if getter f is called.', () => {
+  it('should return form.controls if getter f is called.', () => {
     expect(component.f).toEqual(component.form.controls);
   });
 
-  xit('should set form invalid if no input is provided.', () => {
+  it('should set form invalid if no input is provided.', () => {
     component.form.reset();
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
   });
 
-  xit('should set form valid if all input is provided.', () => {
+  it('should set form valid if all input is provided.', () => {
     component.form.reset(correctData);
     expect(component.form.invalid).toBeFalse();
     expect(component.form.valid).toBeTrue();
   });
 
-  xit('should set form invalid if #consent is not checked.', () => {
+  it('should set form invalid if #consent is not checked.', () => {
     const data = correctData;
     data.consent = false;
     component.form.reset(data);
@@ -119,13 +119,13 @@ describe('RegisterComponent', () => {
     expect(component.form.valid).toBeFalse();
   });
 
-  xit('should set form invalid if only wrong input is provided.', () => {
+  it('should set form invalid if only wrong input is provided.', () => {
     component.form.reset(incorrectData);
     expect(component.form.invalid).toBeTrue();
     expect(component.form.valid).toBeFalse();
   });
 
-  xit('should set form invalid if some wrong input is provided.', () => {
+  it('should set form invalid if some wrong input is provided.', () => {
     // Incorrect email
     let data = correctData;
     data.email = incorrectData.email;
