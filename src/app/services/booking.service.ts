@@ -38,7 +38,8 @@ export class BookingService {
           },
           price: booking.preis,
           closed: booking.gebucht === 1,
-          status: booking.status === 'abgeschlossen' ? DriveStatus.ABGESCHLOSSEN : DriveStatus.UNTERWEGS
+          status: booking.status === 'abgeschlossen' ? DriveStatus.ABGESCHLOSSEN
+            : (booking.status === 'unterwegs' ? DriveStatus.UNTERWEGS : DriveStatus.AUFGETRAGEN)
         }));
         console.log(bookings);
         resolve(bookings);
@@ -65,6 +66,32 @@ export class BookingService {
         reject(error);
       });
     });
+  }
+
+  public async updateStatus(booking: Post): Promise<string> {
+    const http = this.http;
+    const data = { status: this.getStatusToString(booking.status)};
+    console.log(data);
+    return new Promise<string>(async (resolve, reject) => {
+      await http.put('http://localhost:4200/api/buchungen/' + booking.id.toString(), {
+        data
+      }).toPromise().then((res: any) => {
+        console.log(res);
+        resolve(res.message);
+      }).catch(error => {
+        console.log('Error: ' + error.message);
+        reject(error);
+      });
+    });
+  }
+
+  getStatusToString(status: number) {
+    switch (status){
+      case 0: return 'ausstehend';
+      case 1: return 'unterwegs';
+      case 2: return 'abgeschlossen';
+      default: return 'ausstehend';
+    }
   }
 
 }

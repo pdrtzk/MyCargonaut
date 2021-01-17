@@ -992,6 +992,23 @@ export function app(): express.Express {
     });
   });
 
+  server.put('/api/buchungen/:post', (req: Request, res: Response) => {
+    // Read data from request body
+    const id: number = Number(req.params.post);
+    const status: string = req.body.data.status;
+    const data: [string, number] = [status, id];
+    const query = 'UPDATE post SET status= ? WHERE id = ?';
+    queryPromise(query, data).then(results => {
+      res.status(200).send({
+        message: 'Updated!'
+      });
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Aktualisieren des Status!',
+      });
+    });
+  });
+
 
   /*****************************************************************************
    *           Bewertung       * //

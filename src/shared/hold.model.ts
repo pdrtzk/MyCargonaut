@@ -12,6 +12,7 @@ export class Hold {
   }
 
   public getSpace(): number {
-    return ((this.length / 100) * (this.width / 100) * (this.height / 100));
+    const temp = (this.length / 100) * (this.width / 100) * (this.height / 100);
+    return  parseFloat((Math.round(temp * 100) / 100).toFixed(2));
   }
 }

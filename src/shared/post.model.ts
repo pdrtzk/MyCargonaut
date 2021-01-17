@@ -1,7 +1,6 @@
 import {Hold} from './hold.model';
 import {Vehicle} from './vehicle.model';
 import {Cargonaut} from './cargonaut.model';
-import {VehicleType} from './vehicle-type.model';
 
 export interface Post {
   id?: number;
