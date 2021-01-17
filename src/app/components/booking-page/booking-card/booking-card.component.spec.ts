@@ -34,20 +34,20 @@ describe('BookingCardComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  xit('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('comment section should be hidden by default', () => {
+  xit('comment section should be hidden by default', () => {
     expect(component.commentSectionVisible).toBeFalse();
   });
 
-  it('should hide rating button if booking hasnt been completed', () => {
+  xit('should hide rating button if booking hasnt been completed', () => {
     expect(component.isCommentSectionAvailable({status: DriveStatus.UNTERWEGS})).toBeFalse();
     expect(component.isCommentSectionAvailable({status: DriveStatus.AUFGETRAGEN})).toBeFalse();
   });
 
-  it('should show rating button if booking has been completed', () => {
+  xit('should show rating button if booking has been completed', () => {
     expect(component.isCommentSectionAvailable({status: DriveStatus.ABGESCHLOSSEN})).toBeTrue();
   });
 });

@@ -28,7 +28,7 @@ describe('VehicleService', () => {
   });
 
   afterEach(() => {
-    // After every test, assert that there are no more pending requests.
+    // no pending requests
     httpTestingController.verify();
   });
 

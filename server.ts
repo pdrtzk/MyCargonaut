@@ -758,10 +758,8 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp ? fahrzeugTyp : null
       ];
-      console.log(data);
       const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?, ?);';
       queryPromise(query, data).then(resultPost => {
-        console.log('query');
         res.status(201).send({
           message: 'Neuer Post erstellt!',
           createdVehicle: resultPost.insertId,
@@ -996,6 +994,23 @@ export function app(): express.Express {
     });
   });
 
+  server.put('/api/buchungen/:post', (req: Request, res: Response) => {
+    // Read data from request body
+    const id: number = Number(req.params.post);
+    const status: string = req.body.data.status;
+    const data: [string, number] = [status, id];
+    const query = 'UPDATE post SET status= ? WHERE id = ?';
+    queryPromise(query, data).then(results => {
+      res.status(200).send({
+        message: 'Updated!'
+      });
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Aktualisieren des Status!',
+      });
+    });
+  });
+
 
   /*****************************************************************************
    *           Bewertung       * //
@@ -1023,7 +1038,7 @@ export function app(): express.Express {
         });
       }).catch(() => {
           res.status(400).send({
-            message: 'Fehler beim abgeben der Bewertung.',
+            message: 'Fehler beim Abgeben der Bewertung.',
           });
         }
       );

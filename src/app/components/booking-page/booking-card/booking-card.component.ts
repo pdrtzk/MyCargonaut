@@ -4,6 +4,7 @@ import {Cargonaut} from '../../../../shared/cargonaut.model';
 import {AccountService} from '../../../services/account.service';
 import {ChatService} from '../../../services/chat.service';
 import {Router} from '@angular/router';
+import {BookingService} from '../../../services/booking.service';
 
 @Component({
   selector: 'app-booking-card',
@@ -18,7 +19,12 @@ export class BookingCardComponent implements OnInit {
   commentSectionAvailable = false;
   commentSectionVisible = false;
 
-  constructor(private accountService: AccountService, private chatService: ChatService, private  router: Router) {
+
+  constructor(private accountService: AccountService,
+              private bookingService: BookingService,
+              private chatService: ChatService,
+              private  router: Router
+  ) {
   }
 
   toggleCommentSection(): void {
@@ -31,11 +37,9 @@ export class BookingCardComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.authorId = this.booking?.author?.id;
-    console.log(this.booking);
     this.commentSectionAvailable = this.isCommentSectionAvailable(this.booking);
     if (this.booking?.author?.id) {
       const cargonaut: Cargonaut = await this.accountService.get(this.booking.author.id);
-      console.log('cargonaut: ' + cargonaut);
       this.booking.author = cargonaut;
     } else {
       console.log('No author id!');
@@ -50,7 +54,31 @@ export class BookingCardComponent implements OnInit {
   }
 
   goToProfile() {
-    console.log(this.booking?.author?.id);
     this.router.navigateByUrl('/profile/' + this.authorId);
   }
+
+  getStatusToString(status: number) {
+    switch (status){
+      case 0: return 'ausstehend';
+      case 1: return 'unterwegs';
+      case 2: return 'abgeschlossen';
+      default: return 'ausstehend';
+    }
+  }
+
+  updateStatus(){
+    console.log('clicked!');
+    console.log(this.booking.status);
+    switch (this.booking.status){
+      case DriveStatus.AUFGETRAGEN:
+        this.booking.status = DriveStatus.UNTERWEGS;
+        break;
+      case DriveStatus.UNTERWEGS:
+        this.booking.status = DriveStatus.ABGESCHLOSSEN;
+        break;
+    }
+    console.log(this.booking.status);
+    this.bookingService.updateStatus(this.booking).then();
+  }
+
 }

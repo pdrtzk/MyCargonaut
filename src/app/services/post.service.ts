@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
 import {DriveStatus, Post, PostType} from '../../shared/post.model';
 import {VehicleTypeType} from '../../shared/vehicle-type.model';
+import {Vehicle} from '../../shared/vehicle.model';
 
 @Injectable({
   providedIn: 'root'

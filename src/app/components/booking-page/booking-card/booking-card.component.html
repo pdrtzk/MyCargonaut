@@ -1,22 +1,24 @@
 <div id="booking-card">
-  <div id="booking-card-left">
-    <!-- cargonaut name -->
-    <p (click)="goToProfile()" id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
-    <!-- status -->
-    <p id="booking-status">
-      {{booking?.status === 2 ? 'abgeschlossen' : 'ausstehend'}}
-    </p>
-  </div>
-  <div id="booking-card-right">
-    <!-- add rating button -->
-    <button *ngIf="commentSectionAvailable" (click)="toggleCommentSection()">Bewerten</button>
-
-    <!-- message cargonaut -->
-    <button style="align-content: center" (click)="contact()" class="post-button">
-      <mat-icon>email</mat-icon>
-    </button>
-    <!-- view post -->
-    <button routerLink="/post/{{booking?.id}}">Post ansehen</button>
+  <div class="row align-items-center" id="booking-row">
+    <div class="col-md-8" id="booking-card-left">
+      <div (click)="goToProfile()" id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</div>
+      <!-- status -->
+      <div id="booking-status">
+        {{getStatusToString(booking?.status)}}
+      </div>
+      <div *ngIf="authorId === currentUser.id && booking?.status < 2 && booking?.type == 'Angebot' || authorId !== currentUser.id && booking.type == 'Gesuch' && booking?.status < 2" id="next-step-booking">
+      <button id = "status-btn" type="button" (click)="updateStatus()">{{booking?.status == 0 ? 'Fahrt beginnen' : 'Fahrt beenden' }}</button>
+      </div>
+    </div>
+    <div class="col-md-4" id="booking-card-right">
+      <button *ngIf="commentSectionAvailable && authorId !== currentUser.id" (click)="toggleCommentSection()">Bewerten</button>
+      <!-- message cargonaut -->
+      <button *ngIf="authorId !== currentUser.id" style="align-content: center" (click)="contact()" class="post-button">
+        <mat-icon>email</mat-icon>
+      </button>
+      <!-- view post -->
+      <button routerLink="/post/{{booking?.id}}">Post ansehen</button>
+    </div>
   </div>
 </div>
 <div *ngIf="commentSectionVisible">

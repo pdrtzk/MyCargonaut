@@ -18,7 +18,6 @@ export class RatingService {
       await http.get('http://localhost:4200/api/bewertungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         const tempRatings: Rating[] = [];
         res.ratings.forEach(elem => {
-          console.log(elem.author);
           const r: Rating = new Rating();
           r.author = {id: elem.author};
           r.comment = elem.comment;

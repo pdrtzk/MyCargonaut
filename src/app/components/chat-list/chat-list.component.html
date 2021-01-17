@@ -5,7 +5,7 @@
 </div>
 
 <div *ngIf="loaded">
-  <div *ngIf="chats.length <= 0">Momentan haben Sie keine aktiven Unterhaltungen.</div>
+  <div *ngIf="chats.length <= 0" id="chatWarning">Momentan haben Sie keine aktiven Unterhaltungen.</div>
   <div id="chatList" *ngFor="let chat of chats; let i = index">
     <div class="row">
       <div class="col-md-11 my-auto">
