@@ -357,7 +357,6 @@ export function app(): express.Express {
             if (err) {
               console.log('Error: Could not delete file at ' + imageFile);
             } else {
-              console.log('File at ' + imageFile + ' deleted.');
             }
           });
         }
@@ -381,7 +380,6 @@ export function app(): express.Express {
   server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     let oldFile = null;
-    console.log('save to: ' + req.file.path);
     const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
     queryPromise(imageQuery, [id]).then(rows => {
       if (rows.length === 1) {
@@ -405,8 +403,6 @@ export function app(): express.Express {
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
-            } else {
-              console.log('File at ' + oldFile + ' deleted.');
             }
           });
         }
@@ -436,7 +432,6 @@ export function app(): express.Express {
     const query = 'SELECT image FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(rows => {
       if (rows.length === 1) {
-        console.log('load from: ' + rootDir + rows[0].image);
         res.setHeader('Cache-Control', 'no-cache');
         if (rows[0].image) {
           const imageFile = onWindows ? rows[0].image.replace('/', '\\') : rows[0].image;
@@ -475,8 +470,6 @@ export function app(): express.Express {
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
-            } else {
-              console.log('File at ' + oldFile + ' deleted.');
             }
           });
         }

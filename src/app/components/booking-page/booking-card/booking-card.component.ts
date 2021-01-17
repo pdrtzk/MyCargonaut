@@ -41,8 +41,6 @@ export class BookingCardComponent implements OnInit {
     if (this.booking?.author?.id) {
       const cargonaut: Cargonaut = await this.accountService.get(this.booking.author.id);
       this.booking.author = cargonaut;
-    } else {
-      console.log('No author id!');
     }
   }
 
@@ -67,8 +65,6 @@ export class BookingCardComponent implements OnInit {
   }
 
   updateStatus(){
-    console.log('clicked!');
-    console.log(this.booking.status);
     switch (this.booking.status){
       case DriveStatus.AUFGETRAGEN:
         this.booking.status = DriveStatus.UNTERWEGS;
@@ -77,7 +73,6 @@ export class BookingCardComponent implements OnInit {
         this.booking.status = DriveStatus.ABGESCHLOSSEN;
         break;
     }
-    console.log(this.booking.status);
     this.bookingService.updateStatus(this.booking).then();
   }
 

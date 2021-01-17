@@ -52,7 +52,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
-    console.log(this.accountService.isLoggedIn()); // get newest user after
+    this.accountService.isLoggedIn(); // get newest user after
     this.myuser = this.accountService.user;
     this.route.paramMap.subscribe( paramMap => {
       this.user.id = parseFloat(paramMap.get('id'));
@@ -211,7 +211,6 @@ export class ProfileComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file: File = event.target.files[0];
       const reader = new FileReader();
-      console.log(file.type);
       if (file.type.startsWith('image')) {
         this.accountService.uploadImage(file, this.myuser).then(() => {
           // tslint:disable-next-line:no-shadowed-variable

@@ -15,7 +15,6 @@ export class PostDisplayCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.relPost);
   }
 
 }

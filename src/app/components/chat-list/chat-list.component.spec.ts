@@ -74,17 +74,14 @@ describe('ChatListComponent', () => {
       return Promise.resolve(true);
     },
     get(cargonautId: number) {
-      console.log('hep');
       return Promise.resolve(user1);
     },
   };
 
   chatStub = {
     async getAllChatsForUser(cargonautId: number): Promise<Chat[]> {
-      console.log(cargonautId);
       const chats: Chat[] = [];
       chats.push(chat);
-      console.log(chats);
       return Promise.resolve(chats);
     }
   };
@@ -132,9 +129,6 @@ describe('ChatListComponent', () => {
   });
 
   it('should get chats', () => {
-    console.log(component.myuser);
-    console.log(component.loaded);
-    console.log(component.chats);
     expect(component.chats.length).toEqual(0);
   });
 

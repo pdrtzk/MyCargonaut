@@ -138,7 +138,6 @@ describe('ProfileVehicleComponent', () => {
 
   it('after clicking the delete button, #deleteVehicle should be called', fakeAsync(() => {
     const compiled = fixture.debugElement.nativeElement;
-    console.log(component.ownProfile);
     const delVehSpy = spyOn(component, 'deleteVehicle');
     const button = compiled.querySelector('#deleteVehicleBtn');
     button.click();

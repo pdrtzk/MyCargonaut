@@ -39,7 +39,6 @@ export class AccountService {
         email,
         password
       }, {observe: 'response'}).toPromise().then((res: any) => {
-        console.log(res);
         // this.authenticatedUser = res.body.user;
         this.userSubject.next(res.body.user);
         resolve(res.body.user);
@@ -74,7 +73,6 @@ export class AccountService {
     if (user.account_holder === '') {
       user.account_holder = user.firstname + ' ' + user.lastname;
     }
-    console.log(user.account_holder);
     return new Promise<void>(async (resolve, reject) => {
       await http.post('http://localhost:4200/api/cargonaut', user, {observe: 'response'}).toPromise().then(() => {
         resolve();
@@ -142,7 +140,6 @@ export class AccountService {
       if (this.user.id === user.id) {
         await http.delete('http://localhost:4200/api/cargonaut/' + user.id).toPromise().then((res: any) => {
           this.logout();
-          console.log(res.message);
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);
@@ -162,7 +159,6 @@ export class AccountService {
       if (this.user.id === user.id) {
         await http.put('http://localhost:4200/api/password/' + user.id, {password}).toPromise().then((res: any) => {
           // this.isLoggedIn();
-          console.log(res.message);
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);
@@ -181,7 +177,6 @@ export class AccountService {
     formData.append('image', image);
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        console.log('going to post to upload route');
         await this.http.post(`/api/cargonaut/${user.id}/upload`, formData).toPromise().then((res: any) => {
             resolve();
           }
@@ -200,7 +195,6 @@ export class AccountService {
   public getImage(userId: number): Promise<string | ArrayBuffer> {
     const reader = new FileReader();
     return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
-      console.log('going to post to upload route');
       await this.http.get(`/api/cargonaut/${userId}/image`, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
         if (res.status === 204) {
           console.log(`User with id ${userId} has no image`);
@@ -215,7 +209,7 @@ export class AccountService {
         if (error.status === 404) {
           resolve(null); // no image found
         } else {
-          console.log('Error in getImage: ' + error.message);
+          console.log('Error: ' + error.message);
           reject(error);
         }
       });

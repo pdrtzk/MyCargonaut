@@ -50,11 +50,9 @@ export class PostService {
       await http.post('http://localhost:4200/api/post/' + cargonaut.id, {
         post
       }).toPromise().then((res: any) => {
-        console.log('Success: ' + res.message);
         resolve(res.createdVehicle);
       }).catch(error => {
-        console.log('Error in CreatePost PostService: ');
-        console.log(error);
+        console.log('Error: ', error);
         reject(error);
       });
     });
@@ -113,7 +111,6 @@ export class PostService {
       await http.get('http://localhost:4200/api/posts')
         .toPromise().then((res: any) => {
           res.posts.forEach(post => {
-            console.log(post.start_time);
             post.start_time = new Date(post.start_time);
             post.end_time = new Date(post.end_time);
           });

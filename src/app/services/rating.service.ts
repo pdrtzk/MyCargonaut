@@ -41,7 +41,6 @@ export class RatingService {
         })
           .toPromise()
           .then((res: any) => {
-            console.log('Success: ' + res.message);
             resolve();
           })
           .catch(error => {

@@ -77,14 +77,11 @@ export class PostComponent implements OnInit {
         } else {
           this.vehicles = await this.vehicleService.getAllVehicleTypes();
         }
-        console.log('all vehicles: ', this.vehicles);
       }
     }
     if (this.post?.vehicle?.id) {
       // get vehicle data
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
-      console.log(vehicleData);
-      console.log('Hold: ' + this.post.hold);
       this.post.vehicle = vehicleData;
     } else if (this.post?.vehicleType) {
       this.post.vehicle = {type: {type: this.vehicleService.getVehicleType(this.post.vehicleType)}};
@@ -113,7 +110,6 @@ export class PostComponent implements OnInit {
   saveChanges(): void {
     this.updatedPost.start_time = new Date(this.startdate + ' ' + this.starttime);
     this.updatedPost.end_time = new Date(this.enddate + ' ' + this.endtime);
-    console.log(this.updatedPost);
     this.postService.updatePost(this.updatedPost, this.postId).then(() => {
       this.post = this.updatedPost;
       this.post.vehicleType = this.updatedPost.vehicleType;
@@ -150,19 +146,13 @@ export class PostComponent implements OnInit {
 
   async contact() {
     let id;
-    console.log(this.post.author.id, this.accountService?.user?.id);
     id = await this.chatService.getChatIdFromCargonauts(this.post.author.id, this.accountService?.user?.id);
     const uri = '/chat/' + id.toString();
     await this.router.navigateByUrl(uri);
   }
 
   goToProfile() {
-    console.log(this.post.author.id);
     this.router.navigateByUrl('/profile/' + this.post.author.id).then();
-  }
-
-  test(...smth) {
-    console.log(smth);
   }
 
   abort() {

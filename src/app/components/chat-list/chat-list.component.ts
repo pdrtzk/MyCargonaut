@@ -20,7 +20,7 @@ export class ChatListComponent implements OnInit {
 
   ngOnInit(): void {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
-    console.log(this.accountService.isLoggedIn()); // get newest user after
+    this.accountService.isLoggedIn(); // get newest user after
     this.myuser = this.accountService.user;
     this.getChats().then();
     this.loaded = true;

@@ -83,29 +83,23 @@ export class NewPostModalComponent implements OnInit {
   }
 
   getVehicles(): void {
-    console.log('should get vehicles');
     const currUser = this.accountService.user;
-    console.log(currUser);
     if (currUser) {
       this.vehicleService.getAllVehicles(currUser.id).then(
         result => {
-          console.log('halleluja');
           if (result.length > 0) {
             result.forEach(async elem => {
               await this.vehicleService.getVehicleHold(elem).then(
                 res => {
                   this.vehicles.push(res);
-                  console.log(res);
                 });
             });
-            console.log(this.vehicles);
           } else {
             this.vehicles = [];
           }
         }
       ).catch(err => {
-        console.log('NewPostModal GetVehicles Err');
-        console.log(err);
+        console.log('Error: ', err);
       });
     }
   }
@@ -113,9 +107,6 @@ export class NewPostModalComponent implements OnInit {
   savePost(): void {
 
     const todayDate = this.calendar.getToday();
-
-    console.log(this.startDate);
-    console.log(this.startTime);
 
     if (this.startDate && this.startDate >= todayDate && this.endDate
       && this.endDate >= this.startDate && this.startCity && this.endCity && this.startTime && this.endTime
@@ -165,7 +156,6 @@ export class NewPostModalComponent implements OnInit {
   vehicleChosen(vehicle: Vehicle) {
     this.currVehicle = vehicle;
     this.currVehicleType = vehicle.type.type;
-    console.log(this.currVehicleType);
     this.currHold = vehicle.hold;
     this.currSeats = vehicle.seats;
   }

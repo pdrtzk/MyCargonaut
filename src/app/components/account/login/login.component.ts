@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit {
         }
         this.loading = false;
       });
-    console.log('Login: ' + user?.email);
   }
 
 
