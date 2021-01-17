@@ -14,7 +14,10 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 
 # Inhaltsverzeichnis
 
-- [Setup the project](#Setup-the-project)
+- [Das Projekt aufsetzen](#Das-Projekt-aufsetzen)
+- [Paketübersicht](#Verwendete-Pakete)
+- [Testing und CI/CD](#Testing-und-CI/CD)
+- [Funktionalität von MyCargonaut](#Funktionalität-von-MyCargonaut)
 
 
 ## Das Projekt aufsetzen
@@ -28,7 +31,7 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 - Jetzt sollte das Projekt local auf localhost laufen (siehe Konsole).
 
 
-## Used Packages
+## Verwendete Pakete
 
 [![npm](https://img.shields.io/npm/v/npm)](https://www.npmjs.com/package/npm)
 [![npm](https://img.shields.io/npm/v/@angular/cli?label=AngularCLI)](https://www.npmjs.com/package/@angular/cli)
@@ -43,7 +46,7 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 [![npm](https://img.shields.io/npm/v/protractor?color=%23142640&label=tslint)](https://github.com/palantir/tslint)
 [![npm](https://img.shields.io/npm/v/typescript?color=%233178C6&label=typescript)](https://github.com/microsoft/TypeScript)
 
-# Developing
+# Testing und CI/CD
 
 ## Development server
 
@@ -69,3 +72,17 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+# Projektplanung und Konventionen
+
+## Vom Wireframe zum Prototyp
+
+## UML-Klassendiagramm
+
+## Datenbankmodell
+
+## Wichtige Projektkonventionen
+
+
+# Funktionalität von MyCargonaut
