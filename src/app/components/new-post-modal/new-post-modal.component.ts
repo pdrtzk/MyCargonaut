@@ -22,9 +22,9 @@ export class NewPostModalComponent implements OnInit {
   endCity: string;
   currVehicle: Vehicle;
   startDate: any;
-  startTime: any;
+  startTime: any = {hour: 0, minute: 0};
   endDate: any;
-  endTime: any;
+  endTime: any = {hour: 0, minute: 0};
   description: string;
   filledForm: boolean;
   newPost: Post;
@@ -130,10 +130,10 @@ export class NewPostModalComponent implements OnInit {
     this.newPost = {
       startlocation: this.startCity,
       endlocation: this.endCity,
-      start_time: new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day, this.startTime.hour,
-        this.startTime.minute, this.startTime.second),
-      end_time: new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day, this.endTime.hour,
-        this.endTime.minute, this.endTime.second),
+      start_time: new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day, this.startTime.hour + 1,
+        this.startTime.minute),
+      end_time: new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day, this.endTime.hour + 1,
+        this.endTime.minute),
       payment: this.currPayment,
       vehicle: {
         id: this.currVehicle?.id,
@@ -142,7 +142,7 @@ export class NewPostModalComponent implements OnInit {
       type: (this.returnType(this.posttype)),
       price: this.price,
       hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
-        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : new Hold(1, 2, 3),
+        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : null,
       description: this.description,
       vehicleType: this.currVehicle?.type?.type ? this.currVehicle.type.type : this.currVehicleType
     };
