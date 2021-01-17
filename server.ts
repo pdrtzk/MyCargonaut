@@ -758,7 +758,7 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp ? fahrzeugTyp : null
       ];
-      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?, ?);';
+      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'ausstehend\', ?, ?);';
       queryPromise(query, data).then(resultPost => {
         res.status(201).send({
           message: 'Neuer Post erstellt!',
