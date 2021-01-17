@@ -114,13 +114,13 @@
           <div>
             <!-- Sitzplätze -->
             <p
-              class="post-green-text post-right-align-narrow">{{post.seats || 'Keine'}} {{post?.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</p>
+              class="post-green-text post-right-align-narrow">{{post?.seats || 'Keine'}} {{post?.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</p>
           </div>
           <div>
             <!-- Gepäckstücke -->
             <p class="post-green-text post-right-align-narrow">{{post?.hold ? getSpace(post?.hold) + ' m³' : 'Kein'}} Laderaum</p>
-            <p *ngIf="post.hold" class="post-green-text post-right-align-narrow">{{post?.hold.length}}x{{post?.hold.width}}x{{post?.hold.height}} cm </p>
-            <p *ngIf="post.hold" class="post-green-text post-right-align-narrow">(LxBxH)</p>
+            <p *ngIf="post?.hold" class="post-green-text post-right-align-narrow">{{post?.hold.length}}x{{post?.hold.width}}x{{post?.hold.height}} cm </p>
+            <p *ngIf="post?.hold" class="post-green-text post-right-align-narrow">(LxBxH)</p>
           </div>
           <div>
             <!-- Standort -->
