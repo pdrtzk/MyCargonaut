@@ -127,10 +127,11 @@ export class HomeComponent implements OnInit {
 
         // Missing: Author, Endlocation, Preis
         this.filteredPostArray = this.filteredPostArray.filter(
-          post => post.seats.toString().includes(search) ||
-            post.startlocation.toLowerCase().includes(search.toLowerCase())
-            || post.payment.toLowerCase().includes(search.toLowerCase()) ||
-            post.price.toString().includes(search));
+          post => post.seats.toString().includes(search)
+            || post.startlocation.toLowerCase().includes(search.toLowerCase())
+            || post.endlocation.toLowerCase().includes(search.toLowerCase())
+            || post.payment.toLowerCase().includes(search.toLowerCase())
+            || post.price.toString().includes(search));
 
 
         /* this.filteredPostArray = this.filteredPostArray.filter(
@@ -147,7 +148,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.filteredPostArray.length === 0) {
-      this.alertService.info('Zu ihren Sucheinstellungen gibt es leider keine passenden Posts!');
+      this.alertService.info('Zu ihren Sucheinstellungen gibt es leider keine passenden Posts!', {autoClose: true});
     }
 
   }
