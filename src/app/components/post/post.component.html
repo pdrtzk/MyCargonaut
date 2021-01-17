@@ -10,7 +10,8 @@
         <p class="post-type-label post-gesuch">Gesuch</p>
       </div>
       <!-- cargonaut name -->
-      <div (click)="goToProfile()"><p class="post-name-title">{{post?.author?.firstname}} {{post?.author?.lastname}}</p></div>
+      <div (click)="goToProfile()"><p class="post-name-title">{{post?.author?.firstname}} {{post?.author?.lastname}}</p>
+      </div>
     </div>
     <div class="post-top-row">
       <!-- Buttons -->
@@ -20,6 +21,9 @@
         </button>
         <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="saveChanges()">
           <mat-icon>save</mat-icon>
+        </button>
+        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="abort()">
+          <mat-icon>clear</mat-icon>
         </button>
         <button *ngIf="!loggedInUserIsOwner" (click)="contact()" class="post-button">
           <mat-icon>email</mat-icon>
@@ -62,7 +66,8 @@
           </div>
           <div class="post-top-row">
             <!-- text / comment -->
-            <p class="post-comment-text">{{post?.description == 'no description'? 'Keine Beschreibung vorhanden.' : post?.description}}</p>
+            <p
+              class="post-comment-text">{{post?.description == 'no description' ? 'Keine Beschreibung vorhanden.' : post?.description}}</p>
           </div>
         </div>
         <div class="post-top-row" style="margin-top: 150px">
@@ -82,32 +87,40 @@
           <div style="margin-bottom: -100px">
             <div *ngIf="post?.vehicleType == 'PKW'">
               <script>alert(yay)</script>
-              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon"> directions_car</mat-icon>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon"> directions_car
+              </mat-icon>
             </div>
             <div *ngIf="post?.vehicleType == 'LKW'">
-              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_shipping</mat-icon>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_shipping
+              </mat-icon>
             </div>
             <div *ngIf="post?.vehicleType == 'Transporter'">
-              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_bus</mat-icon>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_bus
+              </mat-icon>
             </div>
             <div *ngIf="post?.vehicleType == 'Flugzeug'">
-              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_airport</mat-icon>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">local_airport
+              </mat-icon>
             </div>
             <div *ngIf="post?.vehicleType == 'Schiff'">
-              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_boat</mat-icon>
+              <mat-icon style="font-size: 180px; color: #005B52" [inline]="true" class="car_icon">directions_boat
+              </mat-icon>
             </div>
           </div>
           <div style="text-align: right;">
             <!-- Fahrzeugtyp -->
-            <p class="post-large-grey-text">{{post?.vehicle?.type?.type || 'n.A.'}}</p>
+            <p class="post-large-grey-text">{{post?.vehicleType || 'n.A.'}}</p>
           </div>
           <div>
             <!-- Sitzplätze -->
-            <p class="post-green-text post-right-align-narrow">{{post?.seats || 'Keine'}} {{post?.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</p>
+            <p
+              class="post-green-text post-right-align-narrow">{{post.seats || 'Keine'}} {{post?.seats == 1 ? 'Sitzplatz' : 'Sitzplätze'}}</p>
           </div>
           <div>
             <!-- Gepäckstücke -->
-            <p class="post-green-text post-right-align-narrow">{{post?.hold ? getSpace(post?.hold) + ' m³' : 'Kein'}}  Laderaum</p>
+            <p class="post-green-text post-right-align-narrow">{{post?.hold ? getSpace(post?.hold) + ' m³' : 'Kein'}} Laderaum</p>
+            <p *ngIf="post.hold" class="post-green-text post-right-align-narrow">{{post?.hold.length}}x{{post?.hold.width}}x{{post?.hold.height}} cm </p>
+            <p *ngIf="post.hold" class="post-green-text post-right-align-narrow">(LxBxH)</p>
           </div>
           <div>
             <!-- Standort -->
@@ -136,59 +149,66 @@
   <!-- edit mode on -->
   <div *ngIf="editModeOn">
     <div class="post-edit">
-      <p>
+      <label for="payment">
         Zahlungsart
-      </p>
-      <select #paymentSelect (change)="updatePostProperty('payment', paymentSelect.value)">
-        <option selected value="{{post?.payment}}">{{post?.payment}}</option>
-        <option *ngFor="let payment of supportedPaymentOptions" value="{{payment}}">{{payment}}</option>
+      </label>
+      <select id="payment" [(ngModel)]="updatedPost.payment" name="payment">
+        <option *ngFor="let payment of supportedPaymentOptions" [value]="payment">{{payment}}</option>
       </select>
     </div>
     <div class="post-edit">
-      <p>
+      <label for="price">
         Preis in €
-      </p>
-      <input value="{{post?.price}}" #priceInput (change)="updatePostProperty('price', priceInput.value)"/>
+      </label>
+      <input id="price" type="number" [(ngModel)]="updatedPost.price" name="price" min="0"/>
     </div>
-    <div class="post-edit">
-      <p>
+    <div *ngIf="post.type == 'Gesuch'" class="post-edit">
+      <label for="vehicle-searching">
         Fahrzeugtyp
-      </p>
-      <select> <!-- todo change -->
-        <option selected value="{{post?.vehicle?.type}}">{{post?.vehicle?.type?.type?.toString()}}: {{post.vehicle.id}}</option>
-        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.type?.toString()}}: {{vehicle.id}}</option>
+      </label>
+      <select id="vehicle-searching" [(ngModel)]="updatedPost.vehicleType" name="vehicle">
+        <option *ngFor="let vehicle of vehicles" [value]="vehicle">{{vehicle}}</option>
       </select>
     </div>
+    <!--<div *ngIf="post.type == 'Angebot'" class="post-edit">
+      <label for="vehicle-offer">
+        Fahrzeug
+      </label>
+      <select id="vehicle-offer" [(ngModel)]="updatedPost.vehicle" name="vehicle"> <!- todo fix if wanted ->
+        <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.description}}({{vehicle.type.type}})</option>
+      </select>
+    </div> -->
     <div class="post-edit">
-      <p>
+      <label for="seats">
         freie Sitze
-      </p>
-      <input value="{{post.seats}}" #seatsInput (change)="updatePostProperty('seats', seatsInput.value )"/>
+      </label>
+      <input id="seats" type="number" [(ngModel)]="updatedPost.seats" name="seats" min="0"/>
     </div>
     <div class="post-edit">
-      <p>
+      <label for="starttime">
         Startzeit
-      </p>
+      </label>
       <div style="display: flex; flex-direction: row;">
-        <input type="date" value="{{post?.start_time?.toDateString()}}"/> <!-- todo -->
-        <input type="time" value="{{post?.start_time?.toLocaleTimeString()}}"/>
+        <label for="startdate"></label><input id="startdate" type="date" [(ngModel)]="startdate" name="startdate"/>
+        <!-- todo -->
+        <input id="starttime" type="time" [(ngModel)]="starttime" name="starttime"/>
       </div>
     </div>
     <div class="post-edit">
-      <p>
+      <label for="endtime">
         Ankunftszeit
-      </p>
+      </label>
       <div style="display: flex; flex-direction: row;">
-        <input type="date" value="{{post.end_time.toDateString()}}"/> <!-- todo -->
-        <input type="time" value="{{post.end_time.toLocaleTimeString()}}"/>
+        <label for="enddate"></label><input id="enddate" type="date" [(ngModel)]="enddate" name="enddate"/>
+        <input id="endtime" type="time" [(ngModel)]="endtime" name="endtime"/>
       </div>
     </div>
     <div class="post-edit">
-      <p>
+      <label for="description">
         Beschreibung
-      </p>
+      </label>
       <div style="display: flex; flex-direction: row;">
-        <textarea #descriptionInput (change)="updatePostProperty('description', descriptionInput.value)">{{post?.description}}</textarea>
+        <textarea id="description" [(ngModel)]="updatedPost.description" name="description"></textarea>
       </div>
     </div>
   </div>

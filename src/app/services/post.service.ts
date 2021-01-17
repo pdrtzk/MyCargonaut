@@ -89,15 +89,12 @@ export class PostService {
 
   public async updatePost(post: Post, postId: number): Promise<Post> {
     const http = this.http;
+    if (post.description === '') {
+      post.description = 'no description';
+    }
     return new Promise<Post>(async (resolve, reject) => {
       await http.put('http://localhost:4200/api/post/' + postId, {
-        startzeit : post.start_time.toISOString(),
-        ankunftZeit: post.end_time.toISOString(),
-        bezahlungsart: post.payment,
-        vehicle: post.vehicle.id,
-        anzahlSitzplaetze: post.seats,
-        beschreibung: post.description,
-        price: post.price
+        post
       }).toPromise().then((res: any) => {
         resolve(res.post);
       }).catch(error => {

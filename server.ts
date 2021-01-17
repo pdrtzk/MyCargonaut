@@ -891,30 +891,32 @@ export function app(): express.Express {
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);
-    const startzeit: string = req.body.startzeit;
-    const ankunftZeit: string = req.body.ankunftZeit;
-    const bezahlungsart: string = req.body.bezahlungsart;
-    const fahrzeug: number = req.body.vehicle;
-    const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
-    const beschreibung: string = req.body.beschreibung;
-    const preis = req.body.price;
+    const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
+    const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.start_time.length - 1);
+    const bezahlungsart: string = req.body.post.payment;
+    // const fahrzeug: number = req.body.vehicle;
+    const anzahlSitzplaetze: number = req.body.post.seats;
+    const beschreibung: string = req.body.post.description;
+    const preis = req.body.post.price;
+    const fahrzeugTyp = req.body.post.vehicleType;
 
-    const data: [string, string, string, number, number, string, any, number] = [
+    const data: [string, string, string, number, string, any, string, number] = [
       startzeit,
       ankunftZeit,
       bezahlungsart,
-      fahrzeug,
+      // fahrzeug,
       anzahlSitzplaetze,
       beschreibung,
       preis,
+      fahrzeugTyp,
       id
     ];
-    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, fahrzeug = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ? WHERE id = ?;';
+    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ?, fahrzeug_typ = ? WHERE id = ?;';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: `Updated post ${id}`,
       });
-    }).catch(() => {
+    }).catch((err) => {
       res.status(400).send({
         message: 'Der Post konnte nicht bearbeitet werden.',
       });
