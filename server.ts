@@ -829,7 +829,7 @@ export function app(): express.Express {
         break;
     }
   */
-    const query = 'SELECT * FROM post WHERE gebucht = ?;';
+    const query = 'SELECT * FROM post WHERE gebucht = ? ORDER BY id DESC;';
     queryPromise(query, [0]).then(async results => {
       const posts: Post [] = [];
       for (const result of results) {
@@ -1048,7 +1048,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -1076,7 +1076,7 @@ export function app(): express.Express {
     const data: [number] = [
       post,
     ];
-    const query = 'SELECT * FROM bewertung WHERE fahrt = ?';
+    const query = 'SELECT * FROM bewertung WHERE fahrt = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
