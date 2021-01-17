@@ -5,27 +5,27 @@
 <h2 align="center">My Cargonaut</h2>
 
 <p align="center">
-  My Cargonaut is a Angular-Web-Application for offering or searching private transports and lifts to other customers. The customer, named Cargonaut, can setup an account for *0,99€ per month. After registration cargonauts can access the administration of his vehicles, posts and profile. 
+  Mein Cargonaut ist eine Angular-Web-Applikation um Angebote und Gesuche für private Speditionen und Mitfahrgelegenheiten aufzugeben. Der Kunde, auch Cargonaut genannt, kann für *0,99€ monatlich das Angebot nutzen. Nach der Registrierung können Cargonauten ihr Profil, Fahrzeuge und ihre Posts verwalten.
 </p>
 
-*_Hinweis: This is a fictional project the class "Konzepte moderner Softwareentwicklung". No costs will be charged._
+*_Hinweis: Dies ist ein fiktionales Projekt des Moduks 'Konzepte moderner Softwareentwicklung'. Es werden keine Kosten erhoben._
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
+Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angular-cli) version 11.0.4.
 
-# Table of contents
+# Inhaltsverzeichnis
 
 - [Setup the project](#Setup-the-project)
 
 
-## Setup the project
-- [Fork the project](https://github.com/Dxree/MyCargonaut)
-- Install [node.js](https://github.com/nodejs)
-- Import [the SQL-Database](https://github.com/Dxree/MyCargonaut/blob/main/config/cargonaut_new.sql) into a preferred SQL-Webserver-Application.
-- You won't need to compile the [server.ts](https://github.com/Dxree/MyCargonaut/blob/main/server.ts)
-- Look up the [config.skeleton](https://github.com/Dxree/MyCargonaut/blob/main/config/config.skeleton), generate a new config.ts file, make changes if needed. Then compile your config.ts.
-- Install the [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json) via `npm install`
-- For starting the project with the server type `ng run MyCargonaut:serve-ssr` or start it via the [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json)
-- Now the project should be available at localhost (see command line)
+## Das Projekt aufsetzen
+- [Das Projekt forken](https://github.com/Dxree/MyCargonaut)
+- Installiere [node.js](https://github.com/nodejs)
+- Importiere [die SQL-Datenbank](https://github.com/Dxree/MyCargonaut/blob/main/config/cargonaut_new.sql) into a preferred SQL-Webserver-Application.
+- Du wirst die [server.ts](https://github.com/Dxree/MyCargonaut/blob/main/server.ts) nicht compilieren brauchen.
+- Rufe die [config.skeleton](https://github.com/Dxree/MyCargonaut/blob/main/config/config.skeleton) auf, generiere anhand dieser eine neue config.ts und verändere die Einstellungen falls nötig. Dann kompiliere deine config.ts.
+- Installiere die [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json) via `npm install`
+- Um das Projekt mitsamt des Servers zu starten schreibe `ng run MyCargonaut:serve-ssr` in die Konsole des Projektpfads oder starte es einfach über die [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json).
+- Jetzt sollte das Projekt local auf localhost laufen (siehe Konsole).
 
 
 ## Used Packages
