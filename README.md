@@ -78,11 +78,44 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Vom Wireframe zum Prototyp
 
+## User Stories
+
 ## UML-Klassendiagramm
 
 ## Datenbankmodell
 
 ## Wichtige Projektkonventionen
+
+### Projektplanung
+
+Die Projektplanung erfolgt über User Stories, die in Github Cards geschrieben und in ein [Kanban-Board](https://github.com/Dxree/MyCargonaut/projects/1) eingepflegt.
+Dabei ist wichtig, dass wöchtentlich eine Planung statt findet und Cards entsprechend in ToDo geschoben werden. Jeder Autor muss seine eigenen zugeteilten Cards verschieben. Im wöchentlichen Meeting werden dann auch alle Cards reviewt (siehe "needs review"), bevor sie in Done verschoben werden dürfen oder erneut in den Kanban-Prozess eingepflegt werden müssen.
+
+### Dokumentation
+
+Werden neue Funktionalitäten in MyCargonaut eingepflegt, zusätzliche Pakete oder lizensierte Produkte verwendet, so sind diese entsprechend in der Dokumentation anzugeben.
+
+### Testing
+
+Für genauere Erklärung siehe [Testing und CI/CD](#Testing-und-CI/CD). Für neue Angular-Komponenten oder neue Angular-Services sind in der entsprechenden spec-Datei der Komponente / des Services Tests nach den Konventionen der [Angular-Testing Dokumentation](https://angular.io/guide/testing-services) zu schreiben.
+
+### Farbkonvention
+
+Folgende Farben sind zu verwenden:
+
+<ul>
+  <li style="color: #005b52">Grün: #005b52</li>
+  <li style="color: #005b52">Hell-Grau: #f5f5f5</li>
+  <li style="color: #005b52">Mittleres Grau: #e5e5e5</li>
+  <li style="color: #005b52">Dunkel-Grau: #c4c4c4</li>
+  <li style="color: #005b52">Weiss: #005b52</li>
+</ul>
+
+  
+### Sprachkonvention
+
+### Programmierkonvention
+
 
 
 # Funktionalität von MyCargonaut
