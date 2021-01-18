@@ -119,7 +119,7 @@ Folgende Farben sind zu verwenden:
 
 
 # Funktionalität von MyCargonaut
-##Startseite
+## Startseite
 Auf der Startseite der Anwendung sind aktuelle Posts von anderen Cargonauten zu sehen. Mit verschiedenen Filteroptionen 
 lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um nach Posts mit spezifischen Inhalten zu suchen.
 
@@ -127,7 +127,7 @@ lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um
    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/start.PNG" alt="Startseite von MyCargonaut" width="60%" height="60%">
 </p>
 
-##Authentifizierung
+## Authentifizierung
 Über die Navbar kommt der Nutzer außerdem zur Registrierung oder zur Anmeldung. (siehe Bild oben)
 
 Über den Button "Registrieren" bekommt der Nutzer die Möglichkeit einen neuen Cargonauten auf der Plattform anzulegen und sich anschließend mit diesem anzumelden.
@@ -142,13 +142,13 @@ sowie das persönliche Profil bearbeitet werden.
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/login.PNG" alt="Anmeldefenster von MyCargonaut" width="60%" height="60%">
 </p>
 
-##Persönliches Profil
+## Persönliches Profil
 Nach der Anmeldung ist der Button "Profil" in der Navigationsleiste sichtbar. Dieser führt zum eigenen Profil, welches die bei der Registrierung angegebenen Informationen beinhaltet.
 <p align="center">
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/profil.PNG" alt="Profil von MyCargonaut" width="60%" height="60%">
 </p>
 
-###Fahrzeugverwaltung
+### Fahrzeugverwaltung
 Über den Button "Fahrzeug hinzufügen" kann der Nutzer Fahrzeuge in seinem persönlichem Profil hinterlegen. Hierbei kann er Typ, Modell, Anzahl der 
 Sitzplätze und einen Kommentar eingeben. Die Informationen über die erstellten Fahrzeuge werden direkt im Profil dargestellt und können hier bearbeitet werden. Außerdem kann man Fahrzeuge durch das Lösch-Symbol auch aus der Liste entfernen.
 
@@ -158,14 +158,14 @@ Die Fahrzeuge können beim Erstellen eines Angebots ausgewählt werden, um so di
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/fahrzeug.PNG" alt="Fahzeugverwaltung von MyCargonaut" width="60%" height="60%">
 </p>
 
-###Bewertungen
+### Bewertungen
 Unter dem Abschnitt Bewertungen befinden sich alle Bewertungen, die der Cargonaut zu seinen Fahrten erhalten hat. Mit klcik auf einen Namen lässt sich auch das Profil des Cargonauten einsehen, der die Bewertung geschrieben hat. Eine Bewertung besteht aus einer Punkt/Sternzahl und einem Kommentar.
 
-###Profil bearbeiten
+### Profil bearbeiten
 Durch klick auf das Bearbeitungssymbol lassen sich die Nutzerinformationen jederzeit ändern. Weitere Funktionen zur Bearbeitung bzw. Löschung des Profils bieten die 
 Buttons "Passwort ändern", "Profilbild ändern" und "Nutzer entfernen" unterhalb des Profilbildes.
 
-##Post erstellen
+## Post erstellen
 Über den "+" - Button auf dem Home Bereich lässt sich ein neuer Post erstellen. Zu Beginn muss entschieden werde, ob es sich um ein Angebot oder ein Gesuch handelt. In beiden Fällen müssen die 
 allgemeinen Informationen angegeben werden (Zeit, Startort, Zielort, Bezahlart, Preis, Kommentar). Handelt es sich um ein Angebt, erhält der Nutzer unter "Fahrzeug" eine Liste mit seinen zuvor erstellten Fahrzeugen.
 Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzülätze und der Laderraum in den Post übernommen, können aber auch noch angepasst werden.
@@ -174,7 +174,7 @@ Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzülätze und der Laderraum
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
-##Buchungen
+## Buchungen
 Unter dem Reiter Buchungen in der Navigationsleiste sind alle Angebote und gesuche aufgelistet, die man gebucht hat. Hierüber lässt sich auf den Post zugreifen und über das Nachrichten Symbol eine Nachricht an den Ersteller des Posts schreiben. 
 
 <p align="center">
