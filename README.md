@@ -114,6 +114,8 @@ Folgende Farben sind zu verwenden:
   
 ### Sprachkonvention
 
+Die Dokumentation ist in Deutsch zu verfassen. Der Code, Variablen, Funktionen etc. sind in Englisch anzugeben und die Seitentexte sind auf Deutsch (siehe [Prototyp](#Projektplanung-und-konventionen)).
+
 ### Programmierkonvention
 
 
