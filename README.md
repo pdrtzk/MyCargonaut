@@ -17,6 +17,7 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 - [Das Projekt aufsetzen](#Das-Projekt-aufsetzen)
 - [Paketübersicht](#Verwendete-Pakete)
 - [Testing und CI/CD](#Testing-und-CI/CD)
+- [Projektplanung und Konventionen](#Projektplanung-und-Konventionen
 - [Funktionalität von MyCargonaut](#Funktionalität-von-MyCargonaut)
 
 
