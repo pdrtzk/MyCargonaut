@@ -38,8 +38,7 @@ export class HomePostComponent implements OnInit {
       }
     ).catch(
       err => {
-        console.log('getAuthor');
-        console.log(err);
+        console.log('Error: ', err);
       }
     );
   }
@@ -49,8 +48,7 @@ export class HomePostComponent implements OnInit {
       this.post.vehicle = result.filter(ve => ve.id === this.post.vehicle.id)[0];
     }).catch(
       err => {
-        console.log('getVehicle HomePost');
-        console.log(err);
+        console.log('Error: ', err);
       }
     );
   }

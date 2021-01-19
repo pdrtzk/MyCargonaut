@@ -117,3 +117,8 @@
   font-size: 20px;
   width: 100%;
 }
+
+label {
+  font-family: "Lato", sans-serif;
+  color: #005B52;
+}

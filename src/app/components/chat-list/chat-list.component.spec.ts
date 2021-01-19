@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ChatListComponent } from './chat-list.component';
+import {ChatListComponent} from './chat-list.component';
 import {AccountService} from '../../services/account.service';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Subject} from 'rxjs';
@@ -73,7 +73,7 @@ describe('ChatListComponent', () => {
     isLoggedIn() {
       return Promise.resolve(true);
     },
-    get(cargonautId: number){
+    get(cargonautId: number) {
       return Promise.resolve(user1);
     },
   };
@@ -88,14 +88,14 @@ describe('ChatListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ChatListComponent ],
+      declarations: [ChatListComponent],
       imports: [RouterTestingModule],
       providers: [
-        { provide: AccountService, useValue: accStub },
-        { provide: ChatService, useValue: chatStub },
+        {provide: AccountService, useValue: accStub},
+        {provide: ChatService, useValue: chatStub},
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -103,7 +103,7 @@ describe('ChatListComponent', () => {
     component = fixture.componentInstance;
 
     accService = fixture.debugElement.injector.get(AccountService);
-    componentAccService  = accService;
+    componentAccService = accService;
     accService = TestBed.inject(AccountService);
 
     componentAccService.userSubject = new Subject<Cargonaut>();
@@ -118,7 +118,7 @@ describe('ChatListComponent', () => {
     );
 
     chatService = fixture.debugElement.injector.get(ChatService);
-    componentChatService  = chatService;
+    componentChatService = chatService;
     chatService = TestBed.inject(ChatService);
 
     fixture.detectChanges();

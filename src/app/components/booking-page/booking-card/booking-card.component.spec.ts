@@ -24,8 +24,8 @@ describe('BookingCardComponent', () => {
     })
       .compileComponents();
 
-    httpClient = TestBed.get(HttpClient);
-    httpTestingController = TestBed.get(HttpTestingController);
+    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   beforeEach(() => {
@@ -34,20 +34,20 @@ describe('BookingCardComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('comment section should be hidden by default', () => {
+  it('comment section should be hidden by default', () => {
     expect(component.commentSectionVisible).toBeFalse();
   });
 
-  xit('should hide rating button if booking hasnt been completed', () => {
+  it('should hide rating button if booking hasnt been completed', () => {
     expect(component.isCommentSectionAvailable({status: DriveStatus.UNTERWEGS})).toBeFalse();
     expect(component.isCommentSectionAvailable({status: DriveStatus.AUFGETRAGEN})).toBeFalse();
   });
 
-  xit('should show rating button if booking has been completed', () => {
+  it('should show rating button if booking has been completed', () => {
     expect(component.isCommentSectionAvailable({status: DriveStatus.ABGESCHLOSSEN})).toBeTrue();
   });
 });

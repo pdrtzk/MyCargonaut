@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit {
         this.filteredPostArray = this.postArray;
       }
     ).catch(err => {
-        console.log('HomeComponent GetAllPosts ' + err);
+        console.log('Error: ' + err);
       }
     );
   }
@@ -80,11 +80,9 @@ export class HomeComponent implements OnInit {
     if (this.accountService.user) {
       const modalReference = this.modalService.open(NewPostModalComponent, {size: 'xl'});
       modalReference.result.then(async (result: Post) => {
-        console.log('success im modal');
-        console.log(result);
         this.addNewPost(result, authUser);
       }).catch((error) => {
-        console.log('Windowclosed: ' + error);
+        console.log('Error: ' + error);
       });
     } else {
       this.alertService.error('Um einen eigenen Post erstellen zu können, müssen Sie sich zuerst registrieren oder anmelden.');
@@ -92,14 +90,12 @@ export class HomeComponent implements OnInit {
   }
 
   addNewPost(post: Post, cargo: Cargonaut): void {
-    console.log('im post');
     this.postService.createPost(cargo, post).then(async () => {
         await this.getAllPosts();
         this.alertService.success('Sie haben erfolgreich einen neuen Post angelegt.');
       }
     ).catch(err => {
         this.alertService.error('Es konnte kein neuer Post angelegt werden.');
-        console.log(err);
       }
     );
   }
@@ -131,10 +127,11 @@ export class HomeComponent implements OnInit {
 
         // Missing: Author, Endlocation, Preis
         this.filteredPostArray = this.filteredPostArray.filter(
-          post => post.seats.toString().includes(search) ||
-            post.startlocation.toLowerCase().includes(search.toLowerCase())
-            || post.payment.toLowerCase().includes(search.toLowerCase()) ||
-            post.price.toString().includes(search));
+          post => post.seats.toString().includes(search)
+            || post.startlocation.toLowerCase().includes(search.toLowerCase())
+            || post.endlocation.toLowerCase().includes(search.toLowerCase())
+            || post.payment.toLowerCase().includes(search.toLowerCase())
+            || post.price.toString().includes(search));
 
 
         /* this.filteredPostArray = this.filteredPostArray.filter(
@@ -151,7 +148,7 @@ export class HomeComponent implements OnInit {
     }
 
     if (this.filteredPostArray.length === 0) {
-      this.alertService.info('Zu ihren Sucheinstellungen gibt es leider keine passenden Posts!');
+      this.alertService.info('Zu ihren Sucheinstellungen gibt es leider keine passenden Posts!', {autoClose: true});
     }
 
   }

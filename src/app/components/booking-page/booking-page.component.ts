@@ -30,8 +30,6 @@ export class BookingPageComponent implements OnInit {
       const bookings = await this.bookingService.getBookingsForCargonaut(this.currentUser?.id);
       this.inbox = this.filterInboxBookings(bookings, this.currentUser.id);
       this.outbox = this.filterOutboxBookings(bookings, this.currentUser.id);
-    } else {
-      console.log('no current user!');
     }
   }
 

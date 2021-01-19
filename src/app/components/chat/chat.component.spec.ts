@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
 import { ChatComponent } from './chat.component';
 import {AccountService} from '../../services/account.service';
@@ -8,6 +8,7 @@ import {ChatMessage} from '../../../shared/chat-message.model';
 import {Chat} from '../../../shared/chat.model';
 import {Subject} from 'rxjs';
 import {DatePipe} from '@angular/common';
+
 
 describe('ChatComponent', () => {
   let component: ChatComponent;
@@ -94,7 +95,7 @@ describe('ChatComponent', () => {
         { provide: ChatService, useValue: chatStub },
       ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -124,7 +125,7 @@ describe('ChatComponent', () => {
     fixture.detectChanges();
   });
 
-  xit('should create', () => {
+  it('should create', () => {
     expect(component).toBeTruthy();
   });
 });

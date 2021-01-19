@@ -111,14 +111,14 @@
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Höhe" name="höhe" type="number"
-                     [(ngModel)]="currHold.height">
+                     [(ngModel)]="currHold.height" min="0">
             </div>
             <div class="col-3">
               <h6 class="green-color">Breite in cm</h6>
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Breite" name="breite" type="number"
-                     [(ngModel)]="currHold.width">
+                     [(ngModel)]="currHold.width" min="0">
             </div>
           </div>
           <div class="row justify-content-between">
@@ -127,19 +127,21 @@
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Länge" name="länge" type="number"
-                     [(ngModel)]="currHold.length">
+                     [(ngModel)]="currHold.length" min="0">
             </div>
             <div class="col-3">
               <h6 class="green-color">Sitzplätze</h6>
             </div>
             <div class="col-3">
               <input class="form-control" placeholder="Anzahl" name="sitzplätze" type="number"
-                     [(ngModel)]="currSeats">
+                     [(ngModel)]="currSeats" min="0">
             </div>
           </div>
           <div class="row">
             <div class="col-4"><h5 class="green-color">Standort</h5></div>
             <div class="col-8">
+              <input class="form-control" placeholder="Standort" name="startCity" type="text" [(ngModel)]="startCity">
+              <!--
               <div ngbDropdown class="dropdown shadow">
                 <button class="btn btn-primary button-styled button-wide"
                         ngbDropdownToggle>{{this.startCity ? this.startCity : 'Standort'}}</button>
@@ -147,11 +149,14 @@
                   <button ngbDropdownItem *ngFor="let city of cities" (click)="this.startCity = city">{{city}}</button>
                 </div>
               </div>
+              -->
             </div>
           </div>
           <div class="row">
             <div class="col-4"><h5 class="green-color">Zielort</h5></div>
             <div class="col-8">
+              <input class="form-control" placeholder="Zielort" name="endCity" type="text" [(ngModel)]="endCity">
+              <!--
               <div ngbDropdown class="dropdown shadow">
                 <button class="btn btn-primary button-styled button-wide"
                         ngbDropdownToggle>{{this.endCity ? this.endCity : 'Zielort'}}</button>
@@ -159,6 +164,7 @@
                   <button ngbDropdownItem *ngFor="let city of cities" (click)="this.endCity = city">{{city}}</button>
                 </div>
               </div>
+               -->
             </div>
           </div>
           <div class="row">
@@ -177,7 +183,7 @@
             <div class="col-4"><h5 class="green-color">Preis</h5></div>
             <div class="col-8">
               <input class="form-control" placeholder="Euro" name="price" type="number"
-                     [(ngModel)]="price">
+                     [(ngModel)]="price" min="0">
             </div>
           </div>
         </div>

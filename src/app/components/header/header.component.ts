@@ -9,7 +9,7 @@ import {NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} fr
   styleUrls: ['./header.component.css'],
 
 })
-export class HeaderComponent implements OnInit, OnChanges {
+export class HeaderComponent implements OnInit {
   userLoggedIn = false;
   navbarOpen = false;
   userId: number;
@@ -22,7 +22,6 @@ export class HeaderComponent implements OnInit, OnChanges {
   ) {
     router.events.subscribe((event) => {
       if (event instanceof RouterEvent) {
-        // console.log(event.url);
         if (event.url.includes('home') || event.url === '/') {
           this.active = 'home';
         } else if (event.url.includes('login')) {
@@ -43,10 +42,6 @@ export class HeaderComponent implements OnInit, OnChanges {
     this.accountService.isLoggedIn().then();
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    console.log(this.router.url);
-  }
-
   toggleNavbar(): void {
     this.navbarOpen = !this.navbarOpen;
   }
@@ -62,7 +57,6 @@ export class HeaderComponent implements OnInit, OnChanges {
 
   getActiveStyle(route: string) {
     if (route === this.active) {
-      console.log('styled: ' + route);
       return {
         color: 'white'
       };

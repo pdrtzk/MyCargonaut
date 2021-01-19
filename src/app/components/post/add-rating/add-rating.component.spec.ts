@@ -1,7 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 
-import { AddRatingComponent } from './add-rating.component';
+import {AddRatingComponent} from './add-rating.component';
 import {HttpClient} from '@angular/common/http';
 import {RouterTestingModule} from '@angular/router/testing';
 import {routes} from '../../../app-routing.module';
@@ -19,12 +19,12 @@ describe('AddRatingComponent', () => {
         HttpClientTestingModule,
         RouterTestingModule.withRoutes(routes)
       ],
-      declarations: [ AddRatingComponent ]
+      declarations: [AddRatingComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
-    httpClient = TestBed.get(HttpClient);
-    httpTestingController = TestBed.get(HttpTestingController);
+    httpClient = TestBed.inject(HttpClient);
+    httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   beforeEach(() => {

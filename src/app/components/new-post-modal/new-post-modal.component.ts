@@ -22,9 +22,9 @@ export class NewPostModalComponent implements OnInit {
   endCity: string;
   currVehicle: Vehicle;
   startDate: any;
-  startTime: any;
+  startTime: any = {hour: 0, minute: 0};
   endDate: any;
-  endTime: any;
+  endTime: any = {hour: 0, minute: 0};
   description: string;
   filledForm: boolean;
   newPost: Post;
@@ -83,37 +83,30 @@ export class NewPostModalComponent implements OnInit {
   }
 
   getVehicles(): void {
-    console.log('should get vehicles');
     const currUser = this.accountService.user;
-    console.log(currUser);
-    this.vehicleService.getAllVehicles(currUser.id).then(
-      result => {
-        console.log('halleluja');
-        if (result.length > 0) {
-          result.forEach(async elem => {
-            await this.vehicleService.getVehicleHold(elem).then(
-              res => {
-                this.vehicles.push(res);
-                console.log(res);
-              });
-          });
-          console.log(this.vehicles);
-        } else {
-          this.vehicles = [];
+    if (currUser) {
+      this.vehicleService.getAllVehicles(currUser.id).then(
+        result => {
+          if (result.length > 0) {
+            result.forEach(async elem => {
+              await this.vehicleService.getVehicleHold(elem).then(
+                res => {
+                  this.vehicles.push(res);
+                });
+            });
+          } else {
+            this.vehicles = [];
+          }
         }
-      }
-    ).catch(err => {
-      console.log('NewPostModal GetVehicles Err');
-      console.log(err);
-    });
+      ).catch(err => {
+        console.log('Error: ', err);
+      });
+    }
   }
 
   savePost(): void {
 
     const todayDate = this.calendar.getToday();
-
-    console.log(this.startDate);
-    console.log(this.startTime);
 
     if (this.startDate && this.startDate >= todayDate && this.endDate
       && this.endDate >= this.startDate && this.startCity && this.endCity && this.startTime && this.endTime
@@ -137,10 +130,10 @@ export class NewPostModalComponent implements OnInit {
     this.newPost = {
       startlocation: this.startCity,
       endlocation: this.endCity,
-      start_time: new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day, this.startTime.hour,
-        this.startTime.minute, this.startTime.second),
-      end_time: new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day, this.endTime.hour,
-        this.endTime.minute, this.endTime.second),
+      start_time: new Date(this.startDate.year, this.startDate.month - 1, this.startDate.day, this.startTime.hour + 1,
+        this.startTime.minute),
+      end_time: new Date(this.endDate.year, this.endDate.month - 1, this.endDate.day, this.endTime.hour + 1,
+        this.endTime.minute),
       payment: this.currPayment,
       vehicle: {
         id: this.currVehicle?.id,
@@ -149,7 +142,7 @@ export class NewPostModalComponent implements OnInit {
       type: (this.returnType(this.posttype)),
       price: this.price,
       hold: (this.currHold.length && this.currHold.width && this.currHold.height) ?
-        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : new Hold(1, 2, 3),
+        new Hold(this.currHold.length, this.currHold.width, this.currHold.height) : null,
       description: this.description,
       vehicleType: this.currVehicle?.type?.type ? this.currVehicle.type.type : this.currVehicleType
     };
@@ -163,7 +156,6 @@ export class NewPostModalComponent implements OnInit {
   vehicleChosen(vehicle: Vehicle) {
     this.currVehicle = vehicle;
     this.currVehicleType = vehicle.type.type;
-    console.log(this.currVehicleType);
     this.currHold = vehicle.hold;
     this.currSeats = vehicle.seats;
   }

@@ -64,7 +64,6 @@ export class VehicleService {
       await http.put('http://localhost:4200/api/vehicle/' + vehicle.id.toString(), {
         vehicle
       }).toPromise().then((res: any) => {
-        console.log(res);
         resolve(res.message);
       }).catch(error => {
         console.log('Error: ' + error.message);
@@ -135,7 +134,6 @@ export class VehicleService {
     return new Promise<Vehicle>(async (resolve, reject) => {
       await this.http.get('http://localhost:4200/api/vehicle/' + vehicleId, {
       }).toPromise().then((res: any) => {
-        console.log(res.vehicle.art);
         const vehicleData: Vehicle = {id: vehicleId};
         vehicleData.type = {
           type: res.vehicle.art

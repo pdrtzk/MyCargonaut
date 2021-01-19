@@ -38,7 +38,6 @@ export class ChatService {
           );
           }
         );
-        console.log(chats);
         resolve(chats);
       }).catch(error => {
         console.log('Error: ' + error.message);

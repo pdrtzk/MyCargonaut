@@ -1,14 +1,11 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {Post} from 'src/shared/post.model';
+import {Component, OnInit} from '@angular/core';
+import {Post, PostType} from 'src/shared/post.model';
 import {PostService} from '../../services/post.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Vehicle} from '../../../shared/vehicle.model';
-import {Rating} from '../../../shared/rating.model';
-import {Cargonaut} from '../../../shared/cargonaut.model';
 import {AccountService} from '../../services/account.service';
 import {VehicleService} from '../../services/vehicle.service';
 import {BookingService} from '../../services/booking.service';
-import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
 import {Hold} from '../../../shared/hold.model';
 import {ChatService} from '../../services/chat.service';
 import {AlertService} from '../alert/alert.service';
@@ -22,14 +19,19 @@ export class PostComponent implements OnInit {
   post: Post;
   relatedPosts: Post[];
   private postId: number;
+  updatedPost: Post;
 
   loggedInUserIsOwner = false; // todo
   editModeOn = false;
 
-  supportedPaymentOptions: string[] = ['Bar', 'Karte'];
-  vehicles: Vehicle[];
+  supportedPaymentOptions: string[] = ['Bar', 'Kreditkarte', 'EC-Karte', 'PayPal'];
+  vehicles: Vehicle[] | string[];
 
   averageUserRating = 0;
+  endtime;
+  enddate;
+  starttime;
+  startdate;
 
   constructor(private postService: PostService,
               private accountService: AccountService,
@@ -62,14 +64,24 @@ export class PostComponent implements OnInit {
       this.post.author.id = id;
       // get author's vehicles (for editing)
       if (this.loggedInUserIsOwner) {
-        this.vehicles = await this.vehicleService.getAllVehicles(id);
+        this.updatedPost = JSON.parse(JSON.stringify(this.post)); // easy deep copy for not too large objects
+        this.startdate = this.post.start_time.toISOString().split('T')[0];
+        this.enddate = this.post.end_time.toISOString().split('T')[0];
+        this.starttime = this.post.start_time.toLocaleTimeString();
+        this.endtime = this.post.end_time.toLocaleTimeString();
+        if (this.updatedPost.description === 'no description') {
+          this.updatedPost.description = '';
+        }
+        if (this.post.type === PostType.OFFER) {
+          this.vehicles = await this.vehicleService.getAllVehicles(id);
+        } else {
+          this.vehicles = await this.vehicleService.getAllVehicleTypes();
+        }
       }
     }
     if (this.post?.vehicle?.id) {
       // get vehicle data
       const vehicleData = await this.vehicleService.getVehicleTypeForVehicle(this.post.vehicle.id);
-      console.log(vehicleData);
-      console.log('Hold: ' + this.post.hold);
       this.post.vehicle = vehicleData;
     } else if (this.post?.vehicleType) {
       this.post.vehicle = {type: {type: this.vehicleService.getVehicleType(this.post.vehicleType)}};
@@ -96,9 +108,19 @@ export class PostComponent implements OnInit {
   }
 
   saveChanges(): void {
-    console.log(this.post);
-    this.postService.updatePost(this.post, this.postId).then();
-    this.editModeOn = false;
+    this.updatedPost.start_time = new Date(this.startdate + ' ' + this.starttime);
+    this.updatedPost.end_time = new Date(this.enddate + ' ' + this.endtime);
+    this.postService.updatePost(this.updatedPost, this.postId).then(() => {
+      this.post = this.updatedPost;
+      this.post.vehicleType = this.updatedPost.vehicleType;
+      this.alertService.success('Post wurde erfolgreich bearbeitet.');
+      this.editModeOn = false;
+    }, error => {
+      if (this.updatedPost.description === 'no description') {
+        this.updatedPost.description = '';
+      }
+      this.alertService.error('Post konnte nicht bearbeitet werden.');
+    });
   }
 
   updatePostProperty(propertyName: string, value: any): void {
@@ -110,8 +132,11 @@ export class PostComponent implements OnInit {
   async addBooking(): Promise<void> {
     const currentUser = this.accountService.user;
     if (currentUser.id && this.postId) {
-      this.alertService.success('Post wurde erfolgreich gebucht. Du findest ihn jetzt unter Buchungen.');
-      await this.bookingService.addBooking(this.postId, currentUser.id);
+      await this.bookingService.addBooking(this.postId, currentUser.id).then(() => {
+        this.alertService.success('Post wurde erfolgreich gebucht. Du findest ihn jetzt unter Buchungen.');
+      }, error => {
+        this.alertService.error('Buchung konnte nicht abgeschlossen werden.');
+      });
     }
   }
 
@@ -119,16 +144,18 @@ export class PostComponent implements OnInit {
     return ((hold?.length / 100) * (hold?.width / 100) * (hold?.height / 100));
   }
 
-  async contact(){
+  async contact() {
     let id;
-    console.log(this.post.author.id, this.accountService?.user?.id);
     id = await this.chatService.getChatIdFromCargonauts(this.post.author.id, this.accountService?.user?.id);
     const uri = '/chat/' + id.toString();
     await this.router.navigateByUrl(uri);
   }
 
   goToProfile() {
-    console.log(this.post.author.id);
-    this.router.navigateByUrl('/profile/' + this.post.author.id);
+    this.router.navigateByUrl('/profile/' + this.post.author.id).then();
+  }
+
+  abort() {
+    this.toggleEditMode();
   }
 }

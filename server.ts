@@ -357,7 +357,6 @@ export function app(): express.Express {
             if (err) {
               console.log('Error: Could not delete file at ' + imageFile);
             } else {
-              console.log('File at ' + imageFile + ' deleted.');
             }
           });
         }
@@ -381,7 +380,6 @@ export function app(): express.Express {
   server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     let oldFile = null;
-    console.log('save to: ' + req.file.path);
     const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
     queryPromise(imageQuery, [id]).then(rows => {
       if (rows.length === 1) {
@@ -405,8 +403,6 @@ export function app(): express.Express {
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
-            } else {
-              console.log('File at ' + oldFile + ' deleted.');
             }
           });
         }
@@ -436,7 +432,6 @@ export function app(): express.Express {
     const query = 'SELECT image FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(rows => {
       if (rows.length === 1) {
-        console.log('load from: ' + rootDir + rows[0].image);
         res.setHeader('Cache-Control', 'no-cache');
         if (rows[0].image) {
           const imageFile = onWindows ? rows[0].image.replace('/', '\\') : rows[0].image;
@@ -475,8 +470,6 @@ export function app(): express.Express {
           fs.unlink(rootDir + oldFile, (err) => {
             if (err) {
               console.log('Error: Could not delete file at ' + oldFile);
-            } else {
-              console.log('File at ' + oldFile + ' deleted.');
             }
           });
         }
@@ -758,7 +751,7 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp ? fahrzeugTyp : null
       ];
-      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?, ?);';
+      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'ausstehend\', ?, ?);';
       queryPromise(query, data).then(resultPost => {
         res.status(201).send({
           message: 'Neuer Post erstellt!',
@@ -836,7 +829,7 @@ export function app(): express.Express {
         break;
     }
   */
-    const query = 'SELECT * FROM post WHERE gebucht = ?;';
+    const query = 'SELECT * FROM post WHERE gebucht = ? ORDER BY id DESC;';
     queryPromise(query, [0]).then(async results => {
       const posts: Post [] = [];
       for (const result of results) {
@@ -889,30 +882,32 @@ export function app(): express.Express {
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);
-    const startzeit: string = req.body.startzeit;
-    const ankunftZeit: string = req.body.ankunftZeit;
-    const bezahlungsart: string = req.body.bezahlungsart;
-    const fahrzeug: number = req.body.vehicle;
-    const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
-    const beschreibung: string = req.body.beschreibung;
-    const preis = req.body.price;
+    const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
+    const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.start_time.length - 1);
+    const bezahlungsart: string = req.body.post.payment;
+    // const fahrzeug: number = req.body.vehicle;
+    const anzahlSitzplaetze: number = req.body.post.seats;
+    const beschreibung: string = req.body.post.description;
+    const preis = req.body.post.price;
+    const fahrzeugTyp = req.body.post.vehicleType;
 
-    const data: [string, string, string, number, number, string, any, number] = [
+    const data: [string, string, string, number, string, any, string, number] = [
       startzeit,
       ankunftZeit,
       bezahlungsart,
-      fahrzeug,
+      // fahrzeug,
       anzahlSitzplaetze,
       beschreibung,
       preis,
+      fahrzeugTyp,
       id
     ];
-    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, fahrzeug = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ? WHERE id = ?;';
+    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ?, fahrzeug_typ = ? WHERE id = ?;';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: `Updated post ${id}`,
       });
-    }).catch(() => {
+    }).catch((err) => {
       res.status(400).send({
         message: 'Der Post konnte nicht bearbeitet werden.',
       });
@@ -1053,7 +1048,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -1081,7 +1076,7 @@ export function app(): express.Express {
     const data: [number] = [
       post,
     ];
-    const query = 'SELECT * FROM bewertung WHERE fahrt = ?';
+    const query = 'SELECT * FROM bewertung WHERE fahrt = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {

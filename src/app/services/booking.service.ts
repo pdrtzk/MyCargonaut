@@ -17,8 +17,6 @@ export class BookingService {
     return new Promise<Post[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         const bookings: Post[] = [];
-        console.log('bookings:');
-        console.log(res.buchungen);
         res.buchungen.forEach(booking => bookings.push({
           id: booking.id,
           description: booking.description,
@@ -41,7 +39,6 @@ export class BookingService {
           status: booking.status === 'abgeschlossen' ? DriveStatus.ABGESCHLOSSEN
             : (booking.status === 'unterwegs' ? DriveStatus.UNTERWEGS : DriveStatus.AUFGETRAGEN)
         }));
-        console.log(bookings);
         resolve(bookings);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -71,12 +68,10 @@ export class BookingService {
   public async updateStatus(booking: Post): Promise<string> {
     const http = this.http;
     const data = { status: this.getStatusToString(booking.status)};
-    console.log(data);
     return new Promise<string>(async (resolve, reject) => {
       await http.put('http://localhost:4200/api/buchungen/' + booking.id.toString(), {
         data
       }).toPromise().then((res: any) => {
-        console.log(res);
         resolve(res.message);
       }).catch(error => {
         console.log('Error: ' + error.message);
