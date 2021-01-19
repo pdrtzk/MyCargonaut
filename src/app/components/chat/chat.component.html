@@ -2,9 +2,9 @@
   <mat-spinner color="#005b52"></mat-spinner>
 </div>
 <div *ngIf="loaded">
-  <a class="name" [routerLink]="['/profile/'+getSndMember().id]">{{getSndMember().firstname}} {{getSndMember().lastname}}</a>
+  <a id="name" [routerLink]="['/profile/'+getSndMember().id]">{{getSndMember().firstname}} {{getSndMember().lastname}}</a>
 
-  <div *ngIf="chat.messages.length <= 0">In dieser Unterhaltung wurden noch keine Nachrichten versendet.</div>
+  <div *ngIf="chat.messages.length <= 0" id="noMsg">In dieser Unterhaltung wurden noch keine Nachrichten versendet.</div>
 
   <div *ngFor="let msg of chat.messages">
     <div class="row chat-row">
@@ -26,9 +26,6 @@
       <input class="form-control" id="chat-input" type="text"/>
     </div>
     <div class="col-md-2">
-      <!--
-      <button mat-icon-button id="send-msg-btn" (click)="sendMessage()"><mat-icon>send</mat-icon></button>
-      -->
       <button id="send-msg-btn" (click)="sendMessage()">Senden</button>
     </div>
   </div>
