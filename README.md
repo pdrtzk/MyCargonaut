@@ -78,11 +78,46 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Vom Wireframe zum Prototyp
 
-## User Stories
+Eine Erstellung einer groben Skizze stellt den ersten Schritt zur Websitegestaltung dar. Darauf wurden Wireframes aufgebaut, welche bereits eine grobe Skizzierung der Websitefunktionalität darstellen. Diese wiederum wurden nach der Auswahl von Farb- und Stilkonventionen in einen Prototypen umgesetzt.
+
+<h2 align="center"><a href="<a href="https://github.com/Dxree/MyCargonaut/tree/main/documentation/Skizze">Skizze</a></h2>
+<p align="center">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Skizze/1.jpeg" alt="Screenshot of HomeSite in Skizze" width="60%" height="60%">
+</p>
+
+<h1 align="center">
+  ↓
+</h1>
+
+<h2 align="center"><a href="<a href="https://github.com/Dxree/MyCargonaut/tree/main/documentation/Wireframes">Wireframe</a></h2>
+<p align="center">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Wireframes/Home.png" alt="Screenshot of HomeSite in Wireframes" width="60%" height="60%">
+</p>
+
+<h1 align="center">
+  ↓
+</h1>
+
+<h2 align="center"><a href="<a href="https://www.figma.com/proto/SRY39RYSBVFst1yHjrowCf/KMS-My-Cargonaut?node-id=4%3A18&scaling=min-zoom">Prototyp</a></h2>
+<p align="center">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/prototyp_home.png" alt="Screenshot of HomeSite in Ptrototyp" width="60%" height="60%">
+</p>
 
 ## UML-Klassendiagramm
 
+Es wurde für eine bessere Strukturierung des Projektes ein UML-Klassendiagramm erstellt. Die zentrale Einheit als Nutzer bildet der Cargonaut. Dieser kann Posts erstellen und besitzt Fahrzeuge. Außerdem kann er als Fahrer oder Teilnehmer einer Fahrt ein Fahrzeug nutzen und Bewertung abgeben/erhalten. Zusätzlich kann ein Cargonaut Chatnachrichten in Chats verfassen, welche jeweils immer genau 2 Cargonauten zugeordnet sind.
+
+<p align="center">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/MyCargonautDomains.png" alt="Screenshot of UML" width="60%" height="60%">
+</p>
+
+
 ## Datenbankmodell
+
+<p align="center">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/screenshot_dbmodell.png" alt="Screenshot of DataBase Model" width="60%" height="60%">
+</p>
+
 
 ## Wichtige Projektkonventionen
 
@@ -118,6 +153,9 @@ Die Dokumentation ist in Deutsch zu verfassen. Der Code, Variablen, Funktionen e
 
 ### Programmierkonvention
 
-
+Für Bezeichner aus mehreren Wörtern ist der CamelCase zu verwenden.
+Es ist sind soweit möglich die Programmierkonventionen von [Angular](https://angular.io/guide/property-binding-best-practices) einzuhalten.
+Parallel zur Entwicklung sind entsprechende Tests zu schreibe, siehe [Testing und CI/CD](#Testing-und-CI/CD).
+Die Verwendung von Bootstrap Flexbox und eine dementsprechende Responsivität ist erwartet.
 
 # Funktionalität von MyCargonaut
