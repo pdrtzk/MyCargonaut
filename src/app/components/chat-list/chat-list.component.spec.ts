@@ -74,17 +74,14 @@ describe('ChatListComponent', () => {
       return Promise.resolve(true);
     },
     get(cargonautId: number){
-      console.log('hep');
       return Promise.resolve(user1);
     },
   };
 
   chatStub = {
     async getAllChatsForUser(cargonautId: number): Promise<Chat[]> {
-      console.log(cargonautId);
       const chats: Chat[] = [];
       chats.push(chat);
-      console.log(chats);
       return Promise.resolve(chats);
     }
   };
@@ -131,22 +128,24 @@ describe('ChatListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should get chats', () => {
-    console.log(component.myuser);
-    console.log(component.loaded);
-    console.log(component.chats);
+  it('user should be told if there are no active chats', () => {
+    const compiled = fixture.debugElement.nativeElement;
+    component.chats = [chat];
+    expect(component.chats.length).toEqual(1);
+    fixture.detectChanges();
+    expect(compiled.querySelector('#chatWarning')).toBeNull();
+    component.chats = [];
     expect(component.chats.length).toEqual(0);
+    fixture.detectChanges();
+    expect(compiled.querySelector('#chatWarning')).not.toBeNull();
   });
 
-
-  xit('user should be told if there are no active chats', () => {
+  it('should display chat partner\'s name and latest message', () => {
     const compiled = fixture.debugElement.nativeElement;
-    spyOn(chatService, 'getAllChatsForUser').and.returnValue(Promise.resolve([]));
-    component.getChats();
-    expect(chatService.getAllChatsForUser).toHaveBeenCalled();
+    component.chats = [chat];
     fixture.detectChanges();
-    expect(component.chats.length).toEqual(0);
-    expect(compiled.querySelector('#chatWarning')).not.toBeNull();
+    expect(compiled.querySelector('#chatList').innerHTML).toContain('Chat Partner');
+    expect(compiled.querySelector('#chatList').innerHTML).toContain('Hallo');
   });
 
 });
