@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 16. Jan 2021 um 17:11
+-- Erstellungszeit: 18. Jan 2021 um 14:13
 -- Server-Version: 10.4.17-MariaDB
 -- PHP-Version: 8.0.0
 
@@ -64,8 +64,7 @@ CREATE TABLE `buchung` (
 --
 
 INSERT INTO `buchung` (`id`, `gebucht_von`, `zeit`, `ladeflaeche`, `anzahl_sitzplaetze`, `post`) VALUES
-(5, 37, '2021-01-13 10:08:38', 26, 1, 12),
-(7, 40, '2021-01-13 16:06:44', 30, 1, 10);
+(5, 37, '2021-01-13 10:08:38', 26, 1, 12);
 
 -- --------------------------------------------------------
 
@@ -91,12 +90,11 @@ CREATE TABLE `cargonaut` (
 --
 
 INSERT INTO `cargonaut` (`id`, `firstname`, `lastname`, `password`, `email`, `geburtsdatum`, `kontoinhaber`, `iban`, `bic`, `image`) VALUES
-(34, 'Donald', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'donald@duck.de', '1934-06-09', 'Donald Duck', 'DE93838428382838283223', '13131245687', 'public\\tmp\\uploads\\image-1610530105197-162587911-donald.jpg'),
-(35, 'Daisy', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'daisy@duck.de', '1964-12-10', 'Daisy Duck', 'DE98989898987878787878', '12354678987', 'public\\tmp\\uploads\\image-1610530130759-116138267-daisy.jpg'),
-(36, 'Minnie', 'Mouse', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'minnie@mouse.de', '1940-12-12', 'Minnie Mouse', 'DE98989898987878787878', '12345678989', 'public\\tmp\\uploads\\image-1610530154569-926621777-Minnie.jpg'),
-(37, 'Dagobert', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'dagobert@duck.de', '1934-01-17', 'Dagobert Duck', 'DE98989898987878787878', '12345678998', 'public\\tmp\\uploads\\image-1610530173798-502793960-Dagobert.jpg'),
-(39, 'Mickey', 'Maus', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'mickey@maus.de', '1928-11-19', 'Mickey Maus', 'DE96423223232323232323', '12345678998', NULL),
-(40, 'Gustav', 'Gans', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'test@test.de', '2021-01-08', 'Gustav Gans', 'DE12345678901234567890', '12345678901', 'public\\tmp\\uploads\\image-1610553969834-850206862-Mickey.jpg');
+(34, 'Donald', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'donald@duck.de', '1934-06-09', 'Donald Duck', 'DE93838428382838283223', '13131245687', NULL),
+(35, 'Daisy', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'daisy@duck.de', '1964-12-10', 'Daisy Duck', 'DE98989898987878787878', '12354678987', NULL),
+(36, 'Minnie', 'Mouse', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'minnie@mouse.de', '1940-12-12', 'Minnie Mouse', 'DE98989898987878787878', '12345678989', NULL),
+(37, 'Dagobert', 'Duck', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'dagobert@duck.de', '1934-01-17', 'Dagobert Duck', 'DE98989898987878787878', '12345678998', NULL),
+(39, 'Mickey', 'Mouse', 'ba3253876aed6bc22d4a6ff53d8406c6ad864195ed144ab5c87621b6c233b548baeae6956df346ec8c17f5ea10f35ee3cbc514797ed7ddd3145464e2a0bab413', 'mickey@mouse.de', '1928-11-19', 'Mickey Maus', 'DE96423223232323232323', '12345678998', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,8 +114,7 @@ CREATE TABLE `chat` (
 
 INSERT INTO `chat` (`id`, `cargonaut_1`, `cargonaut_2`) VALUES
 (12, 37, 35),
-(13, 37, 34),
-(15, 37, 40);
+(13, 37, 34);
 
 -- --------------------------------------------------------
 
@@ -143,9 +140,7 @@ INSERT INTO `chatnachricht` (`id`, `nachricht`, `zeit`, `verfasser`, `chat`) VAL
 (8, 'Hallo, kann man am Preis noch was machen?', '2021-01-13 09:55:50', 34, 13),
 (9, 'Nein!', '2021-01-13 09:55:50', 37, 13),
 (10, 'Wirklich nicht?', '2021-01-13 09:55:50', 34, 13),
-(11, 'Nein!', '2021-01-13 09:55:50', 37, 13),
-(14, 'Hallo Dagobert!', '2021-01-13 15:07:03', 40, 15),
-(15, 'Hi!', '2021-01-13 15:08:01', 37, 15);
+(11, 'Nein!', '2021-01-13 09:55:50', 37, 13);
 
 -- --------------------------------------------------------
 
@@ -170,8 +165,7 @@ CREATE TABLE `fahrzeug` (
 INSERT INTO `fahrzeug` (`id`, `art`, `anzahl_sitzplaetze`, `ladeflaeche`, `besitzer`, `modell`, `kommentar`) VALUES
 (9, 'Flugzeug', 60, 18, 37, 'Boeing 747', 'Privatflugzeug'),
 (10, 'Transporter', 2, 19, 37, 'VW T1', 'Für kleinere Transporte'),
-(11, 'PKW', 3, 23, 35, 'Audi A3', '150 PS'),
-(13, 'PKW', 5, 29, 40, 'Audi A2', '');
+(11, 'PKW', 3, 23, 35, 'Audi A3', '150 PS');
 
 -- --------------------------------------------------------
 
@@ -372,45 +366,44 @@ ALTER TABLE `post`
 -- Constraints der Tabelle `bewertung`
 --
 ALTER TABLE `bewertung`
-  ADD CONSTRAINT `bewertung_ibfk_1` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `bewertung_ibfk_2` FOREIGN KEY (`fahrt`) REFERENCES `post` (`id`);
+  ADD CONSTRAINT `bewertung_ibfk_2` FOREIGN KEY (`fahrt`) REFERENCES `post` (`id`),
+  ADD CONSTRAINT `bewertung_ibfk_3` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `buchung`
 --
 ALTER TABLE `buchung`
-  ADD CONSTRAINT `index1` FOREIGN KEY (`gebucht_von`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `index2` FOREIGN KEY (`ladeflaeche`) REFERENCES `laderaum` (`id`),
+  ADD CONSTRAINT `buchung_ibfk_1` FOREIGN KEY (`gebucht_von`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `buchung_ibfk_2` FOREIGN KEY (`ladeflaeche`) REFERENCES `laderaum` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `index3` FOREIGN KEY (`post`) REFERENCES `post` (`id`);
 
 --
 -- Constraints der Tabelle `chat`
 --
 ALTER TABLE `chat`
-  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`cargonaut_1`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`cargonaut_2`) REFERENCES `cargonaut` (`id`);
+  ADD CONSTRAINT `chat_ibfk_1` FOREIGN KEY (`cargonaut_1`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `chat_ibfk_2` FOREIGN KEY (`cargonaut_2`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `chatnachricht`
 --
 ALTER TABLE `chatnachricht`
-  ADD CONSTRAINT `chatnachricht_ibfk_1` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`),
   ADD CONSTRAINT `chatnachricht_ibfk_2` FOREIGN KEY (`chat`) REFERENCES `chat` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `fahrzeug`
 --
 ALTER TABLE `fahrzeug`
-  ADD CONSTRAINT `fahrzeug_ibfk_1` FOREIGN KEY (`besitzer`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `fahrzeug_ibfk_3` FOREIGN KEY (`ladeflaeche`) REFERENCES `laderaum` (`id`);
+  ADD CONSTRAINT `fahrzeug_ibfk_2` FOREIGN KEY (`ladeflaeche`) REFERENCES `laderaum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fahrzeug_ibfk_3` FOREIGN KEY (`besitzer`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints der Tabelle `post`
 --
 ALTER TABLE `post`
-  ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`laderaum`) REFERENCES `laderaum` (`id`),
-  ADD CONSTRAINT `post_ibfk_10` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`),
-  ADD CONSTRAINT `post_ibfk_11` FOREIGN KEY (`fahrzeug`) REFERENCES `fahrzeug` (`id`);
+  ADD CONSTRAINT `post_ibfk_11` FOREIGN KEY (`fahrzeug`) REFERENCES `fahrzeug` (`id`),
+  ADD CONSTRAINT `post_ibfk_12` FOREIGN KEY (`laderaum`) REFERENCES `laderaum` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `post_ibfk_13` FOREIGN KEY (`verfasser`) REFERENCES `cargonaut` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
