@@ -174,9 +174,3 @@ Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzülätze und der Laderraum
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
-## Buchungen
-Unter dem Reiter Buchungen in der Navigationsleiste sind alle Angebote und gesuche aufgelistet, die man gebucht hat. Hierüber lässt sich auf den entsprechenden Post zugreifen, über das Nachrichten Symbol eine Nachricht an den Ersteller des Posts schreiben oder die Fahrt mit einem Kommentar und einer Punktzahl bewerten. 
-
-<p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/buchungen.PNG" alt="Buchungssystem von MyCargonaut" width="60%" height="60%">
-</p>
