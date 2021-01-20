@@ -111,7 +111,7 @@ export class AccountService {
     });
   }
 
-  public async update(user: Cargonaut): Promise<void> { // TODO: check if logged in user is updates user
+  public async update(user: Cargonaut): Promise<void> {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {

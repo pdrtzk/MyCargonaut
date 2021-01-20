@@ -104,11 +104,4 @@ describe('AccountService', () => {
     req.error(new ErrorEvent(errorMessage), {status: 400});
   });
 
-  /* TODO:
-   * Login fails
-   * Register
-   * Update
-   * Update Password
-   * Delete
-   */
 });

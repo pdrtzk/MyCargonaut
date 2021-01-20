@@ -21,7 +21,7 @@ export class PostComponent implements OnInit {
   private postId: number;
   updatedPost: Post;
 
-  loggedInUserIsOwner = false; // todo
+  loggedInUserIsOwner = false;
   editModeOn = false;
 
   supportedPaymentOptions: string[] = ['Bar', 'Kreditkarte', 'EC-Karte', 'PayPal'];
