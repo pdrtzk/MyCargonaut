@@ -114,6 +114,7 @@ Es wurde für eine bessere Strukturierung des Projektes ein UML-Klassendiagramm 
 
 
 ## Datenbankmodell
+Während der Aufbau ähnlich wie beim Klassenmodell ist, wurden bei beim Datenbankmodells die Primär- und Fremdschlüssel ergänzt und diese miteinander verknüpft. Beim Löschen werden verknüfte Einträge ebenfalls gelöscht, um das ansammeln von Datenleichen zu verhindern und trotzdem zu gewährleisten, dass ein Nutzer etwas löschen kann. Außerdem wurde kleinere Anpassungen im Vergleich zum Klassenmodell vorgenommen. Beispielsweise durch die Zwischentablle "buchung".
 
 <p align="center">
    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/screenshot_dbmodell.png" alt="Screenshot of DataBase Model" width="60%" height="60%">
