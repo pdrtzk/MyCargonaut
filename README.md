@@ -161,6 +161,7 @@ Parallel zur Entwicklung sind entsprechende Tests zu schreibe, siehe [Testing un
 Die Verwendung von Bootstrap Flexbox und eine dementsprechende Responsivität ist erwartet.
 
 # Funktionalität von MyCargonaut
+
 ## Startseite
 Auf der Startseite der Anwendung sind aktuelle Posts von anderen Cargonauten zu sehen. Mit verschiedenen Filteroptionen 
 lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um nach Posts mit spezifischen Inhalten zu suchen.
@@ -215,3 +216,60 @@ Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzplätze und der Laderraum 
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
+## Eigene Buchungen einsehen
+
+Angemeldete Benutzer können über den Menüpunkt "Buchungen" aktuelle und vergangene
+Buchungen verwalten. Durch Klicken auf die jeweiligen Tab-Überschriften lässt sich
+zwischen Buchungsein- und Ausgang umschalten: Links befindet sich eine Übersicht 
+aller Buchungen, die zu einem Post gehören, der vom angemeldeten Benutzer erstellt
+wurde. Im rechten Tab sind alle Posts aufgelistet, die vom Cargonauten selbst
+gebucht wurden.
+
+In der Buchungsübersicht sind Buchungsstatus ("aufgetragen", "unterwegs" oder "abgeschlossen")
+und der Name des Postautors angezeigt. Für mehr Informationen muss der Benutzer
+über den entsprechenden Button auf die Post-Detailseite navigieren.
+Die Ansicht in der Postübersicht bietet außerdem einen direkten Link zum Chat mit dem
+Autor des Posts, sowie für abgeschlossene Buchungen die Möglichkeit, eine Buchung zu bewerten.
+
+#### Buchung bewerten
+
+![Buchung bewerten](./documentation/Screenshots/bookings_2.PNG)
+
+Über den Button "Bewerten" öffnet sich ein Akkordionelement, in dem der Benutzer eine
+kurze Bewertung für den Autor des Posts hinterlassen kann. Dazu kann er einen bis fünf
+Sterne vergeben, sowie einen Kommentar im Freitextfeld hinterlassen. Wird eine Bewertung
+abgesendet, folgt eine automatische Weiterleitung auf das Profil des bewerteten Nutzers.
+
+## Post Details
+
+#### Besucher-Ansicht
+
+![Post ansehen](./documentation/Screenshots/post_view.PNG)
+
+ Die Post Seite bietet suchenden Cargonauten einige weitere Informationen zu Fahrtdetails,
+ Fahrzeug und Autor, sowie die Möglichkeit, die Fahrt zu buchen oder mit dem Autor Kontakt aufzunehmen.
+ 
+ Wichtig für den Besucher sind vor allem die Informationen über Start- und Zielort der
+ Fahrt, Preis und bevorzugte Zahlungsart, sowie die Zeiten und noch verfügbaren Plätze im Fahrzeug (hier wird unterschieden zwischen
+ Sitz- und Ladeplätzen). Die Art des gesuchten oder angebotenen Fahrzeugs wird oben rechts
+ zusätzlich als Icon angezeigt, hier sind aktuell die Fahrzeugtypen PKW, LKW, Transporter, 
+ Schiff und Flugzeug möglich.
+ 
+Um den Cargonauten, der den Post erstellt hat, besser einschätzen zu können, wird auf dem
+Post der Durchschnitt aus den bisherigen Bewertungen des Autors angezeigt.
+
+Alle weiteren Informationen müssen aus dem Beschreibungstext entnommen, oder im Chat erfragt
+werden.
+
+#### Autoren-Ansicht
+![Post bearbeiten](./documentation/Screenshots/post_edit.PNG)
+
+Gelangt ein Cargonaut auf einen von ihm selbst verfassten Post, hat er die Möglichkeit,
+einige der Postdetails zu bearbeiten. Bearbeitet werden können Preis und Zahlungsart, 
+freie Sitze, Start- und Endzeitpunkt sowie die Beschreibung. Außerdem kann der Benutzer,
+falls er mehrere Fahrzeuge angelegt hat, über ein Dropdown aus diesen auswählen.
+
+##### Fahrten-Vorschläge
+
+Unter den Postdetails werden drei zufällige weitere Posts aus der Datenbank als 
+Vorschaukarten angezeigt, die dem Benutzer Anregungen für weitere verfügbare oder gesuchte Fahrten geben sollen
