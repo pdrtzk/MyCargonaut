@@ -114,7 +114,7 @@ Es wurde für eine bessere Strukturierung des Projektes ein UML-Klassendiagramm 
 
 
 ## Datenbankmodell
-Während der Aufbau ähnlich wie beim Klassenmodell ist, wurden bei beim Datenbankmodells die Primär- und Fremdschlüssel ergänzt und diese miteinander verknüpft. Beim Löschen werden verknüfte Einträge ebenfalls gelöscht, um das ansammeln von Datenleichen zu verhindern und trotzdem zu gewährleisten, dass ein Nutzer etwas löschen kann. Außerdem wurde kleinere Anpassungen im Vergleich zum Klassenmodell vorgenommen. Beispielsweise durch die Zwischentablle "buchung".
+Während der Aufbau ähnlich wie beim Klassenmodell ist, wurden beim Datenbankmodell die Primär- und Fremdschlüssel ergänzt und diese miteinander verknüpft. Beim Löschen werden verknüpfte Einträge ebenfalls gelöscht, um das Ansammeln von Datenleichen zu verhindern und trotzdem zu gewährleisten, dass ein Nutzer etwas löschen kann. Außerdem wurden kleinere Anpassungen im Vergleich zum Klassenmodell vorgenommen. Beispielsweise durch die Zwischentablle "buchung".
 
 <p align="center">
    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/screenshot_dbmodell.png" alt="Screenshot of DataBase Model" width="60%" height="60%">
@@ -172,7 +172,7 @@ lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um
 ## Authentifizierung
 Über die Navbar kommt der Nutzer außerdem zur Registrierung oder zur Anmeldung. (siehe Bild oben)
 
-Über den Button "Registrieren" bekommt der Nutzer die Möglichkeit einen neuen Cargonauten auf der Plattform anzulegen und sich anschließend mit diesem anzumelden.
+Über den Button "Registrieren" bekommt der Nutzer die Möglichkeit, einen neuen Cargonauten auf der Plattform anzulegen und sich anschließend mit diesem anzumelden.
 <p align="center">
    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/registrieren.PNG" alt="Registrierungsfenster von MyCargonaut" width="60%" height="60%">
 </p>
@@ -191,8 +191,8 @@ Nach der Anmeldung ist der Button "Profil" in der Navigationsleiste sichtbar. Di
 </p>
 
 ### Fahrzeugverwaltung
-Über den Button "Fahrzeug hinzufügen" kann der Nutzer Fahrzeuge in seinem persönlichem Profil hinterlegen. Hierbei kann er Typ, Modell, Anzahl der 
-Sitzplätze und einen Kommentar eingeben. Die Informationen über die erstellten Fahrzeuge werden direkt im Profil dargestellt und können hier bearbeitet werden. Außerdem kann man Fahrzeuge durch das Lösch-Symbol auch aus der Liste entfernen.
+Über den Button "Fahrzeug hinzufügen" kann der Nutzer Fahrzeuge in seinem persönlichen Profil hinterlegen. Hierbei kann er Typ, Modell, Anzahl der 
+Sitzplätze und einen Kommentar eingeben. Die Informationen über die erstellten Fahrzeuge werden direkt im Profil dargestellt und können hier bearbeitet werden. Außerdem kann man Fahrzeuge durch das Lösch-Symbol aus der Liste entfernen.
 
 Die Fahrzeuge können beim Erstellen eines Angebots ausgewählt werden, um so die Daten eines Fahrzeugs in einen Post zu übernehmen.
 
@@ -201,16 +201,15 @@ Die Fahrzeuge können beim Erstellen eines Angebots ausgewählt werden, um so di
 </p>
 
 ### Bewertungen
-Unter dem Abschnitt Bewertungen befinden sich alle Bewertungen, die der Cargonaut zu seinen Fahrten erhalten hat. Mit klcik auf einen Namen lässt sich auch das Profil des Cargonauten einsehen, der die Bewertung geschrieben hat. Eine Bewertung besteht aus einer Punkt/Sternzahl und einem Kommentar.
+Unter dem Abschnitt Bewertungen befinden sich alle Bewertungen, die der Cargonaut zu seinen Fahrten erhalten hat. Mit Klick auf einen Namen lässt sich auch das Profil des Cargonauten einsehen, der die Bewertung geschrieben hat. Eine Bewertung besteht aus einer Punkt/Sternzahl und einem Kommentar.
 
 ### Profil bearbeiten
-Durch klick auf das Bearbeitungssymbol lassen sich die Nutzerinformationen jederzeit ändern. Weitere Funktionen zur Bearbeitung bzw. Löschung des Profils bieten die 
-Buttons "Passwort ändern", "Profilbild ändern" und "Nutzer entfernen" unterhalb des Profilbildes.
+Durch einen Klick auf das Bearbeitungssymbol lassen sich die Nutzerinformationen jederzeit ändern. Weitere Funktionen zur Bearbeitung bzw. Löschung des Profils bieten die Buttons "Passwort ändern", "Profilbild ändern" und "Nutzer entfernen" unterhalb des Profilbildes.
 
 ## Post erstellen
 Über den "+" - Button auf dem Home Bereich lässt sich ein neuer Post erstellen. Zu Beginn muss entschieden werde, ob es sich um ein Angebot oder ein Gesuch handelt. In beiden Fällen müssen die 
-allgemeinen Informationen angegeben werden (Zeit, Startort, Zielort, Bezahlart, Preis, Kommentar). Handelt es sich um ein Angebt, erhält der Nutzer unter "Fahrzeug" eine Liste mit seinen zuvor erstellten Fahrzeugen.
-Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzülätze und der Laderraum in den Post übernommen, können aber auch noch angepasst werden.
+allgemeinen Informationen angegeben werden (Zeit, Startort, Zielort, Bezahlart, Preis, Kommentar). Handelt es sich um ein Angebot, erhält der Nutzer unter "Fahrzeug" eine Liste mit seinen zuvor erstellten Fahrzeugen.
+Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzplätze und der Laderraum in den Post übernommen, können aber auch noch angepasst werden.
 
 <p align="center">
     <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
