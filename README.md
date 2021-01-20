@@ -104,6 +104,8 @@ Autor des Posts, sowie für abgeschlossene Buchungen die Möglichkeit, eine Buch
 
 #### Buchung bewerten
 
+![Buchung bewerten](./documentation/Screenshots/bookings_2.PNG)
+
 Über den Button "Bewerten" öffnet sich ein Akkordionelement, in dem der Benutzer eine
 kurze Bewertung für den Autor des Posts hinterlassen kann. Dazu kann er einen bis fünf
 Sterne vergeben, sowie einen Kommentar im Freitextfeld hinterlassen. Wird eine Bewertung
@@ -112,6 +114,8 @@ abgesendet, folgt eine automatische Weiterleitung auf das Profil des bewerteten 
 ## Post Details
 
 #### Besucher-Ansicht
+
+![Post ansehen](./documentation/Screenshots/post_view.PNG)
 
  Die Post Seite bietet suchenden Cargonauten einige weitere Informationen zu Fahrtdetails,
  Fahrzeug und Autor, sowie die Möglichkeit, die Fahrt zu buchen oder mit dem Autor Kontakt aufzunehmen.
@@ -129,6 +133,7 @@ Alle weiteren Informationen müssen aus dem Beschreibungstext entnommen, oder im
 werden.
 
 #### Autoren-Ansicht
+![Post bearbeiten](./documentation/Screenshots/post_edit.PNG)
 
 Gelangt ein Cargonaut auf einen von ihm selbst verfassten Post, hat er die Möglichkeit,
 einige der Postdetails zu bearbeiten. Bearbeitet werden können Preis und Zahlungsart, 
