@@ -16,21 +16,21 @@
     <div class="post-top-row">
       <!-- Buttons -->
       <div>
-        <button class="post-button" *ngIf="loggedInUserIsOwner && !editModeOn" (click)="toggleEditMode()">
+        <button class="post-button" *ngIf="loggedInUserIsOwner && !editModeOn" (click)="toggleEditMode()" id="toggleEditButton">
           <mat-icon>edit</mat-icon>
         </button>
-        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="saveChanges()">
+        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="saveChanges()" id="saveEditButton">
           <mat-icon>save</mat-icon>
         </button>
-        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="abort()">
+        <button class="post-button" *ngIf="loggedInUserIsOwner && editModeOn" (click)="abort()" id="abortEditButton">
           <mat-icon>clear</mat-icon>
         </button>
-        <button *ngIf="!loggedInUserIsOwner" (click)="contact()" class="post-button">
+        <button *ngIf="!loggedInUserIsOwner" (click)="contact()" class="post-button" id="contactAuthorButton">
           <mat-icon>email</mat-icon>
         </button>
       </div>
       <div>
-        <button class="post-button" *ngIf="!loggedInUserIsOwner" (click)="addBooking()">Buchen</button>
+        <button class="post-button" *ngIf="!loggedInUserIsOwner" (click)="addBooking()" id="addBookingButton">Buchen</button>
       </div>
     </div>
   </div>
