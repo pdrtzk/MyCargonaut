@@ -11,37 +11,6 @@ import {Vehicle} from '../../shared/vehicle.model';
 export class PostService {
 
   constructor(private http: HttpClient) {
-    /* const testPayment = {
-      id: 1,
-      type: 'PayPal',
-      description: 'Only Accept PayPal'
-    }
-    const testVehicle = {
-      id: 4,
-      type: 'Kleinwagen',
-      seats: '3',
-
-    }
-    const testPost = {
-      start_location: {
-
-      },
-      end_location: {
-
-      },
-      start_time: new Date(2021, 1, 15, 9, 9, 0, 0),
-      end_time: new Date(2021, 1, 15, 15, 9, 0, 0),
-      payment: testPayment,
-      hold: {
-
-      },
-      vehicle: {
-
-      },
-
-
-    } */
-
   }
 
   public async createPost(cargonaut: Cargonaut, post: Post): Promise<number> {
@@ -102,8 +71,6 @@ export class PostService {
       });
     });
   }
-
-  // todo replace mock data with http request
 
   async getMorePosts(): Promise<Post[]> {
     const http = this.http;
