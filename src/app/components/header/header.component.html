@@ -1,29 +1,44 @@
-<nav class="navbar navbar-fixed-top navbar-dark bg-inverse">
+<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-dark bg-inverse">
   <a class="navbar-brand"><img class="logo" src="../../../assets/images/myCargonaut_logo.png"></a>
 
-  <button class="navbar-toggler" (click)="toggleNavbar()" type="button">
+  <button class="navbar-toggler  ml-auto" (click)="toggleNavbar()" type="button">
     <span class="navbar-toggler-icon"></span>
   </button>
 
+
   <div class="navbar-large">
     <div class="nav" routerLinkActive="active">
-      <div class="nav-item"><a class="nav-link" [routerLink]="['home']">HOME</a></div>
-      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']">LOGIN</a></div>
-      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']">REGISTRIEREN</a></div>
-      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']">BUCHUNGEN</a></div>
-      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile']">PROFIL</a></div>
+      <div class="nav-item">
+        <a class="nav-link" [routerLink]="['home']" [ngClass]="{active: active ==='home'}">HOME</a>
+      </div>
+      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']"
+                                                     [ngClass]="{active: active ==='login'}">LOGIN</a></div>
+      <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']"
+                                                     [ngClass]="{active: active ==='register'}">REGISTRIEREN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']"
+                                                    [ngClass]="{active: active ==='bookings'}">BUCHUNGEN</a></div>
+      <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile/'+getUserId()]"
+                                                    [ngClass]="{active: active ==='profile'}">PROFIL</a></div>
     </div>
   </div>
 
   <div class="navbar-small">
     <div class="collapse navbar-collapse show" [ngClass]="{ 'show': navbarOpen }">
       <div class="navbar-nav mr-auto">
-        <div class="nav-item"><a class="nav-link" [routerLink]="['home']">HOME</a></div>
-        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']">LOGIN</a></div>
-        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']">REGISTRIEREN</a></div>
-        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']">BUCHUNGEN</a></div>
-        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile']">PROFIL</a></div>
-        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['home']" (click)="onLogout()">LOGOUT</a></div>
+        <div class="nav-item">
+          <a class="nav-link" [routerLink]="['home']" [ngClass]="{active: active ==='home'}">HOME</a>
+        </div>
+        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['login']"
+                                                       [ngClass]="{active: active ==='login'}">LOGIN</a></div>
+        <div *ngIf="!userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['register']"
+                                                       [ngClass]="{active: active ==='register'}">REGISTRIEREN</a></div>
+        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['bookings']"
+                                                      [ngClass]="{active: active ==='bookings'}">BUCHUNGEN</a></div>
+        <div *ngIf="userLoggedIn" class="nav-item"><a class="nav-link" [routerLink]="['profile/'+getUserId()]"
+                                                      [ngClass]="{active: active ==='profile'}">PROFIL</a></div>
+        <div *ngIf="userLoggedIn" class="nav-item">
+          <a class="nav-link" [routerLink]="['home']" (click)="onLogout()">LOGOUT</a>
+        </div>
       </div>
     </div>
   </div>

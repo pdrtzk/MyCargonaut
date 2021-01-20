@@ -1,32 +1,35 @@
 #booking-card {
   background-color: white;
   box-shadow: grey 2px 2px 4px;
-  padding: 5px;
+  padding: 15px;
   padding-left: 15px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-
-  font-family: Calibri;
+  border-radius: 3px;
+  font-family: "Lato", sans-serif;
 }
 
-#booking-card:hover{
+#next-step-booking:hover {
+  cursor: pointer;
+  align-self: center;
+}
+
+#booking-card:hover {
   box-shadow: grey 4px 4px 4px;
 }
 
 #booking-card-left {
-  display: flex;
-  flex-direction: row;
 }
 
 #booking-cargonaut-name {
   font-size: 20px;
 }
 
+#booking-cargonaut-name:hover, #booking-cargonaut-name:focus {
+  text-decoration: underline ;
+  border: none;
+}
+
 #booking-status {
   font-size: 15px;
-  margin-left: 20px;
-  align-self: center;
   color: #005b52;
 }
 
@@ -45,4 +48,50 @@
 
 #booking-card-right button:hover {
   background-color: #92bda3;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+#booking-row {
+  width: 100%;
+}
+
+@media (max-width: 769px) {
+  #booking-card-right {
+    text-align: left;
+  }
+}
+
+@media (min-width: 770px) {
+  #booking-card-right {
+    text-align: right;
+  }
+}
+
+#status-btn {
+  background-color: #005b52;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 2px;
+}
+
+#status-btn:hover {
+  background-color: #92bda3;
+}
+
+.booking-type {
+  margin: 0;
+  border-radius: 25px;
+  padding: 4px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  align-content: center;
+}
+
+.post-button {
+  border-radius: 2px;
 }

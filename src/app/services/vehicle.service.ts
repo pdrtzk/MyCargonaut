@@ -1,7 +1,6 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Cargonaut} from '../../shared/cargonaut.model';
-import {Subject} from 'rxjs';
 import {Vehicle} from '../../shared/vehicle.model';
 import {VehicleTypeType} from '../../shared/vehicle-type.model';
 
@@ -15,14 +14,7 @@ export class VehicleService {
 
   constructor(private http: HttpClient) {
   }
-/*
-anzahl_sitzplaetze: 2
-art: "LKW"
-besitzer: 12
-id: 6
-kommentar: "Test"
-ladeflaeche: 8
- */
+
   // get vehicles
   public async getAllVehicles(cargonautId: number): Promise<Vehicle[]> {
     this.allVehiclesUser.length = 0;
@@ -30,7 +22,7 @@ ladeflaeche: 8
     const http = this.http;
     return new Promise<Vehicle[]>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/vehicles/' + cargonautId.toString(), {
-      headers: headersY
+        headers: headersY
       }).toPromise().then((res: any) => {
         res.vehicles.forEach(elem => {
           const v: Vehicle = new Vehicle();
@@ -43,7 +35,7 @@ ladeflaeche: 8
         });
         resolve(this.allVehiclesUser);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
@@ -51,39 +43,40 @@ ladeflaeche: 8
 
   public async getVehicleHold(ve: Vehicle): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
-      await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {
-      }).toPromise().then((res: any) => {
-        console.log(res);
-        ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
-        ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
-        ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
+      await this.http.get('http://localhost:4200/api/vehicle/' + ve.id, {}).toPromise().then((res: any) => {
+        if (ve.hold) {
+          ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
+          ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
+          ve.hold.length = parseFloat(res.hold.ladeflaeche_laenge_cm);
+        }
         resolve(ve);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
 
   // update vehicle - no backend right now
-  public async updateVehicles(cargonautId: number): Promise<Cargonaut> {
-    console.log('update vehicle');
+  public async updateVehicle(vehicle: Vehicle): Promise<string> {
     const http = this.http;
-    return new Promise<Cargonaut>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/vehicle/' + cargonautId.toString(), {
+    return new Promise<string>(async (resolve, reject) => {
+      await http.put('http://localhost:4200/api/vehicle/' + vehicle.id.toString(), {
+        vehicle
       }).toPromise().then((res: any) => {
-        console.log(res);
+        resolve(res.message);
       }).catch(error => {
-        console.log('Error: ' + error);
+        console.log('Error: ' + error.message);
         reject(error);
       });
     });
   }
+
   // add new vehicle
   public async addVehicle(cargonautId: number, vehicle: Vehicle): Promise<number> {
-    const type =  vehicle.type.type;
+    const type = vehicle.type.type;
     const model = vehicle.type.description;
-    const length =  vehicle.hold.length;
+    const length = vehicle.hold.length;
     const height = vehicle.hold.height;
     const width = vehicle.hold.width;
     const seats = vehicle.seats;
@@ -110,12 +103,9 @@ ladeflaeche: 8
 
   // remove vehicle
   public async deleteVehicle(vehicleId: number): Promise<boolean> {
-    console.log('delete vehicle');
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {
-      }).toPromise().then((res: any) => {
-        console.log(res);
+      await http.delete('http://localhost:4200/api/vehicle/' + vehicleId.toString(), {}).toPromise().then((res: any) => {
         resolve(true);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -127,11 +117,42 @@ ladeflaeche: 8
 
   getVehicleType(type: string): VehicleTypeType {
     switch (type) {
-      case('PKW') : return VehicleTypeType.PKW;
-      case('LKW') : return VehicleTypeType.LKW;
-      case('Transporter') : return VehicleTypeType.BUS;
-      case('Flugzeug') : return VehicleTypeType.PLANE;
-      case('Schiff') : return VehicleTypeType.BOAT;
+      case('PKW') :
+        return VehicleTypeType.PKW;
+      case('LKW') :
+        return VehicleTypeType.LKW;
+      case('Transporter') :
+        return VehicleTypeType.BUS;
+      case('Flugzeug') :
+        return VehicleTypeType.PLANE;
+      case('Schiff') :
+        return VehicleTypeType.BOAT;
     }
+  }
+
+  async getVehicleTypeForVehicle(vehicleId: number): Promise<Vehicle> {
+    return new Promise<Vehicle>(async (resolve, reject) => {
+      await this.http.get('http://localhost:4200/api/vehicle/' + vehicleId, {
+      }).toPromise().then((res: any) => {
+        const vehicleData: Vehicle = {id: vehicleId};
+        vehicleData.type = {
+          type: res.vehicle.art
+        };
+        resolve(vehicleData);
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  getAllVehicleTypes(): VehicleTypeType[] {
+    return [
+      VehicleTypeType.PKW,
+      VehicleTypeType.LKW,
+      VehicleTypeType.BUS,
+      VehicleTypeType.PLANE,
+      VehicleTypeType.BOAT
+    ];
   }
 }

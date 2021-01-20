@@ -4,7 +4,7 @@ button {
   padding: 8px;
   margin: 8px;
   color: #fff;
-  font-family: Arial, serif;
+  font-family: 'Lato', sans-serif;
 }
 button:hover {
   background-color: #004b43;
@@ -19,7 +19,7 @@ button:focus, .btn-primary:not(:disabled):not(.disabled):active {
 }
 
 a, label {
-  font-family: Arial, serif;
+  font-family: 'Lato', sans-serif;
   color: #005b52;
 }
 
@@ -29,7 +29,7 @@ hr {
 }
 
 div {
-  font-family: Arial, serif;
+  font-family: 'Lato', sans-serif;
 }
 
 .btn-link {

@@ -1,0 +1,45 @@
+<h2>Aktive Chats</h2>
+
+<div *ngIf="loaded === false">
+  <mat-spinner color="#005b52"></mat-spinner>
+</div>
+
+<div *ngIf="loaded">
+  <div *ngIf="chats.length <= 0" id="chatWarning">Momentan haben Sie keine aktiven Unterhaltungen.</div>
+  <div id="chatList" *ngFor="let chat of chats; let i = index">
+    <div class="row">
+      <div class="col-md-11 my-auto">
+        <div>
+          <a class="name" [routerLink]="['/chat/'+chat.id]">{{getSndMember(chat).firstname}} {{getSndMember(chat).lastname}}</a>
+        </div>
+        <div *ngIf="chat.messages !== undefined && chat.messages.length > 0">
+          <div *ngIf="getLastMessageInOrOut(chat) === true">
+            <i class="fa fa-angle-double-left fa-xs"></i>
+            {{getLastMessage(chat)}}
+          </div>
+          <div *ngIf="getLastMessageInOrOut(chat) === false">
+            <i class="fa fa-angle-double-right fa-xs"></i>
+            {{getLastMessage(chat)}}
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1 my-auto">
+        <!--
+        <button type="button" class="btn" id="removeChatBtn"  (click)="removeChat(chat)">
+          <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill" fill="currentColor"
+               xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd"
+                  d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+          </svg>
+        </button>
+        -->
+      </div>
+    </div>
+    <hr>
+  </div>
+
+
+</div>
+
+
+

@@ -39,7 +39,6 @@ export class AccountService {
         email,
         password
       }, {observe: 'response'}).toPromise().then((res: any) => {
-        console.log(res);
         // this.authenticatedUser = res.body.user;
         this.userSubject.next(res.body.user);
         resolve(res.body.user);
@@ -74,7 +73,6 @@ export class AccountService {
     if (user.account_holder === '') {
       user.account_holder = user.firstname + ' ' + user.lastname;
     }
-    console.log(user.account_holder);
     return new Promise<void>(async (resolve, reject) => {
       await http.post('https://mycargonaut.herokuapp.com/api/cargonaut', user, {observe: 'response'}).toPromise().then(() => {
         resolve();
@@ -94,6 +92,18 @@ export class AccountService {
     return new Promise<Cargonaut>(async (resolve, reject) => {
       await http.get('https://mycargonaut.herokuapp.com/api/cargonaut/' + userId).toPromise().then((res: any) => {
         resolve(res.user);
+      }).catch(error => {
+        console.log('Error: ' + error);
+        reject(error);
+      });
+    });
+  }
+
+  public async getAverageUserRating(userId: number): Promise<number> {
+    const http = this.http;
+    return new Promise<number>(async (resolve, reject) => {
+      await http.get('http://localhost:4200/api/avgBewertung/' + userId).toPromise().then((res: any) => {
+        resolve(res.avgBewertung.avg);
       }).catch(error => {
         console.log('Error: ' + error.message);
         reject(error);
@@ -121,7 +131,6 @@ export class AccountService {
   }
 
   /**
-   * TODO
    * @returns resolved Promise<void> if user is deleted or rejected error otherwise
    *
    */
@@ -130,8 +139,8 @@ export class AccountService {
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
         await http.delete('https://mycargonaut.herokuapp.com/api/cargonaut/' + user.id).toPromise().then((res: any) => {
-          this.isLoggedIn();
-          console.log(res.message);
+          this.logout();
+        }
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);
@@ -151,7 +160,6 @@ export class AccountService {
       if (this.user.id === user.id) {
         await http.put('https://mycargonaut.herokuapp.com/api/password/' + user.id, {password}).toPromise().then((res: any) => {
           // this.isLoggedIn();
-          console.log(res.message);
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);
@@ -170,7 +178,6 @@ export class AccountService {
     formData.append('image', image);
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        console.log('going to post to upload route');
         await this.http.post(`https://mycargonaut.herokuapp.com/api/cargonaut/${user.id}/upload`, formData).toPromise().then((res: any) => {
             resolve();
           }
@@ -189,21 +196,42 @@ export class AccountService {
   public getImage(userId: number): Promise<string | ArrayBuffer> {
     const reader = new FileReader();
     return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
-      console.log('going to post to upload route');
-      await this.http.get(`https://mycargonaut.herokuapp.com/api/cargonaut/${userId}/image`, {
-        responseType: 'blob',
-        observe: 'response'
-      }).toPromise().then((res: any) => {
-        reader.addEventListener('load', () => {
-          resolve(reader.result);
-        }, false);
-        reader.readAsDataURL(res.body);
+      await this.http.get(`\`https://mycargonaut.herokuapp.com/api/cargonaut/${userId}/image\``, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
+        if (res.status === 204) {
+          console.log(`User with id ${userId} has no image`);
+          resolve(null); // no image set
+        } else {
+          reader.addEventListener('load', () => {
+            resolve(reader.result);
+          }, false);
+          reader.readAsDataURL(res.body);
+        }
       }).catch(error => {
-        console.log('Error in getImage: ' + error.message);
-        reject(error);
+        if (error.status === 404) {
+          resolve(null); // no image found
+        } else {
+          console.log('Error: ' + error.message);
+          reject(error);
+        }
       });
     });
   }
 
-
+  public async deleteImage(user: Cargonaut): Promise<void> {
+    const http = this.http;
+    return new Promise<void>(async (resolve, reject) => {
+      if (this.user.id === user.id) {
+        await http.delete(`http://localhost:4200/api/cargonaut/${user.id}/image`).toPromise().then((res: any) => {
+          resolve();
+        }).catch(error => {
+          console.log('Error: ' + error.message);
+          reject(error);
+        });
+      } else {
+        const error = {message: 'Unberechtigter Zugriff'};
+        console.log('Error: ' + error.message);
+        reject(error);
+      }
+    });
+  }
 }

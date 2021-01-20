@@ -1,19 +1,52 @@
 <div id="booking-card">
-  <div id="booking-card-left">
-    <!-- cargonaut name -->
-    <p id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</p>
-    <!-- status -->
-    <p id="booking-status">
-      {{booking?.closed ?
-        'abgeschlossen ' + booking?.end_time?.toLocaleDateString() + ' ' + booking?.end_time?.toLocaleTimeString()
-        : 'ausstehend'}}
-    </p>
+  <div class="row align-items-center" id="booking-row">
+    <div class="col-md-8" id="booking-card-left">
+      <div class="row justify-content-between">
+        <div class="col-6 align-items-center">
+          <div class="row d-flex">
+            <div class="col-lg-6 col-xl-4 col-4 text-align-center" *ngIf="booking?.type">
+              <div class="booking-type text-align-center"
+                   [ngStyle]="{'background-color': booking?.type == 'Gesuch' ? '#e5e5e5' : '#005B52'}">
+                <h3 class="booking-type"
+                    [ngStyle]="{'color': booking?.type == 'Gesuch' ? '#005B52' : '#fffff5'}">{{booking.type ? booking.type : 'Gesuch'}}</h3>
+              </div>
+            </div>
+            <div class="col-lg-12 col-xl-8 col-8">
+              <div (click)="goToProfile()"
+                   id="booking-cargonaut-name">{{booking?.author?.firstname}} {{booking?.author?.lastname}}</div>
+              <!-- status -->
+              <div id="booking-status">
+                {{getStatusToString(booking?.status)}}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div
+            *ngIf="authorId === currentUser?.id && booking?.status < 2 && booking?.type == 'Angebot' || authorId !== currentUser?.id && booking?.type == 'Gesuch' && booking?.status < 2"
+            id="next-step-booking">
+            <button id="status-btn" type="button"
+                    (click)="updateStatus()">{{booking?.status == 0 ? 'Fahrt beginnen' : 'Fahrt beenden' }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" id="booking-card-right">
+      <button *ngIf="commentSectionAvailable && authorId !== currentUser?.id" (click)="toggleCommentSection()">
+        Bewerten
+      </button>
+      <!-- message cargonaut -->
+      <button *ngIf="authorId !== currentUser?.id" style="align-content: center" (click)="contact()"
+              class="post-button">
+        <mat-icon>email</mat-icon>
+      </button>
+      <!-- view post -->
+      <button routerLink="/post/{{booking?.id}}">Post ansehen</button>
+    </div>
   </div>
-  <div id="booking-card-right">
-    <!-- message cargonaut -->
-    <button>M</button> <!-- todo use icon --> 
-
-    <!-- view post -->
-    <button>zum Post</button>
-  </div>
+</div>
+<div *ngIf="commentSectionVisible">
+  <hr style="margin-top: 20px; margin-bottom: 20px">
+  <app-add-rating [author]="currentUser" *ngIf="commentSectionVisible" [post]="booking"
+                  [postAuthorId]="authorId"></app-add-rating>
 </div>

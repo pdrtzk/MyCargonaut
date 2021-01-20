@@ -1,10 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Cargonaut} from '../../../shared/cargonaut.model';
 import {Rating} from '../../../shared/rating.model';
 import {Vehicle} from '../../../shared/vehicle.model';
-import {VehicleType, VehicleTypeType} from '../../../shared/vehicle-type.model';
-import {Hold} from '../../../shared/hold.model';
 import {DatePipe} from '@angular/common';
+import {ActivatedRoute, ParamMap} from '@angular/router';
 
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AccountService} from '../../services/account.service';
@@ -14,9 +13,12 @@ import {VehicleService} from '../../services/vehicle.service';
 import {RatingService} from '../../services/rating.service';
 import {AlertService} from '../alert/alert.service';
 import {Router} from '@angular/router';
+import {UpdatePasswordComponent} from '../profileComponents/update-password/update-password.component';
+import {ChatService} from '../../services/chat.service';
 
 
 @Component({
+ // encapsulation: ViewEncapsulation.ShadowDom,
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.css'],
@@ -24,8 +26,8 @@ import {Router} from '@angular/router';
 })
 
 export class ProfileComponent implements OnInit {
-  user: Cargonaut; // the user to whom the profile belongs to - get through id from service later on
-  myuser: Cargonaut; // the logged in user - get from service later
+  user: Cargonaut = {}; // the profile owner
+  myuser: Cargonaut = {}; // the logged in user
   ratingsUser: Rating [] = [];
   vehiclesUser: Vehicle [] = [];
   ownProfile: boolean;
@@ -39,9 +41,12 @@ export class ProfileComponent implements OnInit {
     private accountService: AccountService,
     private vehicleService: VehicleService,
     private ratingsService: RatingService,
+    private chatService: ChatService,
     private alertService: AlertService,
-    private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+    private router: Router
+
   ) {
   }
 
@@ -49,28 +54,30 @@ export class ProfileComponent implements OnInit {
     this.accountService.userSubject.subscribe(value => this.myuser = value); // get latest user object, in case of update user or logout
     this.accountService.isLoggedIn(); // get newest user after
     this.myuser = this.accountService.user;
-    this.user = this.myuser; // todo: remove
-    this.ownProfile = true; // or false, depending on id
-    this.getVehiclesForUser();
-    this.accountService.getImage(this.myuser.id).then((res) => this.picsrc = res);
-    // this.getRatingsForUser();
+    this.route.paramMap.subscribe( paramMap => {
+      this.user.id = parseFloat(paramMap.get('id'));
+      this.getProfileUser().then();
+      this.getVehiclesForUser().then();
+      this.getRatingsForUser().then();
+    });
+  }
 
 
-    let rating1: Rating;
-    rating1 = {
-      ratingStars: 4,
-      comment: 'Guter Preis, aber kam etwas später als vereinbart.',
-      author: this.user
-    };
-
-    let rating2: Rating;
-    rating2 = {
-      ratingStars: 2,
-      comment: 'Sitze waren dreckig, Fahrer ungepflegt, aber wir sind angekommen.',
-      author: this.user
-    };
-
-    this.ratingsUser = [rating1, rating2];
+  async getProfileUser(): Promise<void> {
+    if (this.user.id === this.myuser.id) {
+      this.user = this.myuser;
+      this.ownProfile = true;
+    } else {
+      const tmp = this.user.id;
+      this.ownProfile = false;
+      this.user = await this.accountService.get(this.user.id);
+      this.user.id = tmp;
+    }
+    this.accountService.getImage(this.user.id).then((res) => {
+      if (res) {
+        this.picsrc = res;
+      }
+    });
   }
 
   async getVehiclesForUser(): Promise<void> {
@@ -90,7 +97,7 @@ export class ProfileComponent implements OnInit {
   }
 
   async getRatingsForUser(): Promise<void> {
-    let tempRatings: Rating[];
+    let tempRatings: Rating[] = [];
     this.ratingsUser.length = 0; // deletes all elements
     await this.ratingsService.getRatingsForUser(this.user.id).then(
       res => {
@@ -98,8 +105,9 @@ export class ProfileComponent implements OnInit {
       }
     );
     tempRatings.forEach(async elem => {
-      // todo: get author from id through accountservice
-      // await this.accountService.getUser(elem.author.id);
+      const temp = elem.author.id;
+      elem.author = await this.accountService.get(elem.author.id).then();
+      elem.author.id = temp;
       this.ratingsUser.push(elem);
     });
   }
@@ -143,10 +151,8 @@ export class ProfileComponent implements OnInit {
 
   submitEditUser(user: Cargonaut): void {
     // todo: error
-    console.log(user);
     this.accountService.update(user).then(() => {
       this.user = user;
-      console.log('ok');
       document.getElementById('editProfileForm').style.display = 'none';
       document.getElementById('user-info').style.display = 'block';
       this.alertService.success('Profil wurde erfolgreich bearbeitet.');
@@ -156,9 +162,16 @@ export class ProfileComponent implements OnInit {
 
   // callback from child form
   submitEditVehicle(car: Vehicle): void {
-    const index = this.vehiclesUser.findIndex(s => s.id === car.id);
-    this.vehiclesUser[index] = car;
-    // todo: submit car via service
+    this.vehicleService.updateVehicle(car).then(
+      res => {
+        const index = this.vehiclesUser.findIndex(s => s.id === car.id);
+        this.vehiclesUser[index] = car;
+        this.alertService.success('Fahrzeug wurde erfolgreich bearbeitet.');
+      },
+      error => {
+        this.alertService.error('Fahrzeug konnte nicht bearbeitet werden.');
+      }
+    );
   }
 
   async submitDeleteVehicle(car: Vehicle): Promise<void> {
@@ -198,7 +211,6 @@ export class ProfileComponent implements OnInit {
     if (event.target.files && event.target.files[0]) {
       const file: File = event.target.files[0];
       const reader = new FileReader();
-      console.log(file.type);
       if (file.type.startsWith('image')) {
         this.accountService.uploadImage(file, this.myuser).then(() => {
           // tslint:disable-next-line:no-shadowed-variable
@@ -210,10 +222,25 @@ export class ProfileComponent implements OnInit {
           this.alertService.success('Profilbild erfolgreich geändert.');
         });
       } else {
-        this.alertService.error('Ausgewählte Datei war kein Bild.');
+        this.alertService.error('Ausgewählte Datei iat kein Bild.');
         window.scrollTo(0, 0);
       }
     }
+  }
+
+  deleteUserConfirm() {
+    if ( confirm('Soll dieser Account wirklich permanent gelöscht werden?')) {
+      this.deleteUser();
+    }
+  }
+
+  openUpdatePWDialog(){
+    const test = this.dialog.open(UpdatePasswordComponent);
+    const sub = test.componentInstance.submitCallback.subscribe((result: string) => {
+      this.changePassword(result);
+    });
+    test.afterClosed().subscribe(() => {
+    });
   }
 
   deleteUser() {
@@ -231,5 +258,26 @@ export class ProfileComponent implements OnInit {
     }, error => {
       this.alertService.error('Passwort konnte nicht geändert werden.');
     });
+  }
+
+  navigateToChat(){
+    this.router.navigate(['/chats']);
+  }
+
+  deleteImage() {
+    this.accountService.deleteImage(this.myuser).then(() => {
+      this.picsrc = '../../../assets/images/person-placeholder.jpg';
+      this.alertService.success('Bild zurückgesetzt.');
+      },
+      error => {
+        this.alertService.error('Hier ist etwas schief gelaufen.');
+      });
+  }
+
+  async contact(){
+    let id;
+    id = await this.chatService.getChatIdFromCargonauts(this.user.id, this.myuser.id);
+    const uri = '/chat/' + id.toString();
+    await this.router.navigateByUrl(uri);
   }
 }

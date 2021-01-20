@@ -1,3 +1,8 @@
+
+div {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 #editProfileForm {
   display: none;
 }
@@ -63,6 +68,9 @@ app-profile-vehicle {
 .form-button {
   background-color: #005b52;
   border: none;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .form-button:hover {
   background-color: #0b9183;
@@ -75,10 +83,21 @@ app-profile-vehicle {
 
 .pick-pic {
   background-color: #005b52;
+  border-radius: 10px;
+  padding: 15px;
+  color: white;
+  min-width: 120px;
+  margin-bottom: 0.5rem;
+  margin: 4px;
+}
+
+.abort-pic {
+  background-color: #828282;
   padding: 15px;
   border-radius: 10px;
   color: white;
   min-width: 120px;
+  margin: 4px;
 }
 
 .pick-pic:hover {
@@ -87,7 +106,7 @@ app-profile-vehicle {
 }
 
 #cancelPickPic {
-  margin-left: 2rem;
+
 }
 
 #edit-profile-pic {
@@ -96,4 +115,24 @@ app-profile-vehicle {
 
 .error {
   color: red;
+}
+
+
+button a {
+  color: white;
+}
+
+#picRow {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+#resetPic {
+  color: #005b52;
+  background-color: white;
+  border: 1px solid #005b52;
+}
+
+#resetPic:hover {
+  background-color: #e5e5e5;
 }

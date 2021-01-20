@@ -2,6 +2,7 @@ import 'zone.js/dist/zone-node';
 
 import {ngExpressEngine} from '@nguniversal/express-engine';
 import * as express from 'express';
+import {Request, Response} from 'express';
 import {join} from 'path';
 
 import {AppServerModule} from './src/main.server';
@@ -13,14 +14,17 @@ import * as mysql from 'mysql';
 import {Connection, MysqlError} from 'mysql';
 import * as session from 'express-session';
 import * as bodyParser from 'body-parser';
-import {Request, Response} from 'express';
 import * as cryptoJS from 'crypto-js';
+import * as multer from 'multer';
+import * as fs from 'fs';
 
 import {Cargonaut} from 'src/shared/cargonaut.model';
 import {Vehicle} from './src/shared/vehicle.model';
 import {Post} from './src/shared/post.model';
 import {Rating} from './src/shared/rating.model';
-import * as multer from 'multer';
+import {Chat} from './src/shared/chat.model';
+import {ChatMessage} from './src/shared/chat-message.model';
+import {Hold} from './src/shared/hold.model';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -41,6 +45,11 @@ const fileFilter = (req, file, cb) => {
 };
 
 const upload = multer({storage, fileFilter});
+
+// cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
+const tmp = __dirname.lastIndexOf('dist/MyCargonaut/server');
+const onWindows = tmp === -1;
+const rootDir = __dirname.substring(0, onWindows ? __dirname.lastIndexOf('dist\\MyCargonaut\\server') : tmp);
 
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -87,6 +96,14 @@ export function app(): express.Express {
     });
   }
 
+  function updateCookie(req: Request, res: Response, next: any) {
+    // @ts-ignore
+    if (req.session.user) {
+      // @ts-ignore
+      req.session.cookie.maxAge = req.session.cookie.maxAge + (5 * 60 * 1000); // 1 Minute
+    }
+    next();
+  }
 
   /*****************************************************************************
    *           Authentication - Login / logout / Register       *
@@ -99,8 +116,8 @@ export function app(): express.Express {
       if (req.session.user) {
         next();
       } else {
-        res.status(401).send({
-          message: 'User nicht mehr eingeloggt. Erneut anmelden!',
+        res.status(200).send({
+          message: 'User nicht mehr eingeloggt. Bitte anmelden!',
         });
       }
     };
@@ -110,10 +127,10 @@ export function app(): express.Express {
   function isPrivileged(permissionId: number) {
     return (req: Request, res: Response, next) => {
       // @ts-ignore
-      if (permissionId === Number(req.session.cookie.user.id)) {
+      if (permissionId === Number(req.session.user.id)) {
         next();
       } else {
-        res.status(403).send({
+        res.status(401).send({
           message: 'You have no Permission to do this.',
         });
       }
@@ -243,6 +260,7 @@ export function app(): express.Express {
     });
   });
 
+
   /*****************************************************************************
    *           Cargonaut       *
    *****************************************************************************/
@@ -318,11 +336,30 @@ export function app(): express.Express {
   // Delete Cargonaut
   server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    let imageFile = null;
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        imageFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
     const query = 'DELETE FROM cargonaut WHERE id = ?;';
-
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
+        if (imageFile) {
+          imageFile = onWindows ? imageFile.replace('/', '\\') : imageFile;
+          fs.unlink(rootDir + imageFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + imageFile);
+            } else {
+            }
+          });
+        }
         res.status(200).send({
           message: `User gelöscht`,
         });
@@ -342,15 +379,34 @@ export function app(): express.Express {
   // Upload Profile Image
   server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    console.log('save to: ' + req.file.path);
+    let oldFile = null;
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        oldFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
     const data: [string, number] = [
       req.file.path,
       id
     ];
     const query = 'UPDATE cargonaut SET image = ? WHERE id = ?;';
-    queryPromise(query, data).then( result => {
+    queryPromise(query, data).then(result => {
       // Check if database response contains at least one entry
       if (result.affectedRows === 1) {
+        if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
+          fs.unlink(rootDir + oldFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + oldFile);
+            }
+          });
+        }
+        res.setHeader('Cache-Control', 'no-cache');
         res.status(200).send({
           message: `Bild gespeichert.`,
         });
@@ -376,17 +432,61 @@ export function app(): express.Express {
     const query = 'SELECT image FROM cargonaut WHERE id = ?;';
     queryPromise(query, data).then(rows => {
       if (rows.length === 1) {
-        // cut off 'dist/MyCargonaut/server' from '../MyCargonaut/dist/MyCargonaut/server' (cause '../' in path is forbidden)
-        const indexCutOff = __dirname.lastIndexOf('dist/MyCargonaut/server');
-        const rootDir = __dirname.substring(0, indexCutOff);
-        console.log('load from: ' + rootDir + rows[0].image);
         res.setHeader('Cache-Control', 'no-cache');
-        res.sendFile(rows[0].image, {root: rootDir});
+        if (rows[0].image) {
+          const imageFile = onWindows ? rows[0].image.replace('/', '\\') : rows[0].image;
+          res.sendFile(imageFile, {root: rootDir});
+        } else {
+          res.sendStatus(204);
+        }
       } else {
         res.status(404).send({
           message: 'Kein Bild gefunden.',
         });
       }
+    });
+  });
+
+  // Delete image of Cargonaut
+  server.delete('/api/cargonaut/:id/image', (req: Request, res: Response) => {
+    const id: string = req.params.id;
+    let oldFile = null;
+    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    queryPromise(imageQuery, [id]).then(rows => {
+      if (rows.length === 1) {
+        oldFile = rows[0].image;
+      } else {
+        res.status(400).send({
+          message: 'User konnte nicht gefunden werden!',
+        });
+      }
+    });
+    const query = 'UPDATE cargonaut SET image = NULL WHERE id = ?;';
+    queryPromise(query, [id]).then(result => {
+      // Check if database response contains at least one entry
+      if (result.affectedRows === 1) {
+        if (oldFile) {
+          oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
+          fs.unlink(rootDir + oldFile, (err) => {
+            if (err) {
+              console.log('Error: Could not delete file at ' + oldFile);
+            }
+          });
+        }
+        res.setHeader('Cache-Control', 'no-cache');
+        res.status(200).send({
+          message: `Bild gelöscht.`,
+        });
+      } else {
+        res.status(400).send({
+          message: 'Bild konnte nicht gelöscht werden!',
+        });
+      }
+    }).catch(err => {
+      // Database operation has failed
+      res.status(500).send({
+        message: 'Datenbank Fehler: ' + err
+      });
     });
   });
 
@@ -497,7 +597,9 @@ export function app(): express.Express {
       for (const result of results) {
         const vehicle: Vehicle = {
           id: result.id,
-          type: result.art,
+          type: {
+            type: result.art
+          },
           seats: result.anzahl_sitzplaetze,
           hold: result.ladeflaeche,
           owner: result.besitzer
@@ -537,17 +639,18 @@ export function app(): express.Express {
       });
     });
   });
+
   // Update vehicle
   server.put('/api/vehicle/:vehicle', (req: Request, res: Response) => {
     // Read data from request body
     const id: number = Number(req.params.vehicle);
-    const art: string = req.body.type;
-    const anzahlSitzplaetze: number = req.body.seats;
-    const laenge: number = req.body.length;
-    const breite: number = req.body.width;
-    const hoehe: number = req.body.height;
-    const kommentar: string = req.body.comment;
-    const modell: string = req.body.model;
+    const art: string = req.body.vehicle.type.type;
+    const anzahlSitzplaetze: number = req.body.vehicle.seats;
+    const laenge: number = req.body.vehicle.hold.length;
+    const breite: number = req.body.vehicle.hold.width;
+    const hoehe: number = req.body.vehicle.hold.height;
+    const kommentar: string = req.body.vehicle.comment;
+    const modell: string = req.body.vehicle.type.description;
     let ladeflaeche: number;
     const dataLade: [number, number, number] = [
       laenge,
@@ -593,105 +696,80 @@ export function app(): express.Express {
   server.post('/api/post/:cargonaut', async (req: Request, res: Response) => {
     // Read data from request body
     const cargonaut: number = Number(req.params.cargonaut);
-    const startzeit: string = req.body.post.start_time;
-    const ankunftZeit: string = req.body.post.end_time;
+    const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
+    const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.end_time.length - 1);
     const bezahlungsart: string = req.body.post.payment;
 
-    const fahrzeug: number = req.body.post.vehicle.id;
-    const anzahlSitzplaetze: number = req.body.post.seats;
-    const beschreibung: string = req.body.post.description;
+    const fahrzeug: number = req.body.post.vehicle?.id;
+    const anzahlSitzplaetze: number = req.body.post?.seats;
+    const beschreibung: string = (req.body.post.description ? req.body.post.description : 'no description');
     const typ: string = req.body.post.type; // 'Angebot' oder 'Gesuch'
     const preis = req.body.post.price;
 
-    const strasse: string = req.body.post.startlocation.street;
-    const hausnr: string = req.body.post.startlocation.housenumber;
-    const plz: string = req.body.post.startlocation.plz;
-    const ort: string = req.body.post.startlocation.city;
-
-    const zielStrasse: string = req.body.post.endlocation.street;
-    const zielHausnr: string = req.body.post.endlocation.housenumber;
-    const zielPlz: string = req.body.post.endlocation.plz;
-    const zielStadt: string = req.body.post.endlocation.city;
-    const laenge: number = req.body.post.hold.length;
-    const breite: number = req.body.post.hold.width;
-    const hoehe: number = req.body.post.hold.height;
-    let standort: number;
-    let zielort: number;
+    const startlocation: string = req.body.post.startlocation;
+    const endlocation: string = req.body.post.endlocation;
+    const laenge: number = req.body.post.hold?.length;
+    const breite: number = req.body.post.hold?.width;
+    const hoehe: number = req.body.post.hold?.height;
     let laderaum: number;
-    // create startort
-    if (cargonaut && startzeit && ankunftZeit && bezahlungsart &&
-      fahrzeug && anzahlSitzplaetze && typ && preis && strasse &&
-      hausnr && plz && ort && zielStrasse && zielHausnr && zielPlz &&
-      zielStadt && laenge && breite && hoehe) {
-      const dataAdress: [string, string, string, string] = [
-        strasse,
-        hausnr,
-        plz,
-        ort,
-      ];
-      const queryAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
-      queryPromise(queryAdress, dataAdress).then(result => {
-        standort = result.insertId;
-        // create Zielort
-        const zielDataAdress: [string, string, string, string] = [
-          zielStrasse,
-          zielHausnr,
-          zielPlz,
-          zielStadt,
-        ];
-        const queryZielAdress = 'INSERT INTO standort (id, strasse, hausnummer, plz, ort) VALUES (NULL, ?, ?, ?, ?);';
-        queryPromise(queryZielAdress, zielDataAdress).then(results => {
-          zielort = results.insertId;
-          // create laderaum
-          const dataLaderaum: [number, number, number] = [
-            laenge,
-            breite,
-            hoehe,
-          ];
-          const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
-          queryPromise(queryLade, dataLaderaum).then(resu => {
-            laderaum = resu.insertId;
-            // create Post
-            const data: [number, number, string, string, string, number, number, number, string, string, number, any] = [
-              standort,
-              zielort,
-              startzeit,
-              ankunftZeit,
-              bezahlungsart,
-              laderaum,
-              fahrzeug,
-              anzahlSitzplaetze,
-              beschreibung,
-              typ,
-              cargonaut,
-              preis,
-            ];
-            const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'\', ?);';
-            queryPromise(query, data).then(resultPost => {
-              res.status(201).send({
-                message: 'Neuer Post erstellt!',
-                createdVehicle: resultPost.insertId,
-              });
-            });
-          }).catch(() => {
-              res.status(400).send({
-                message: 'Fehler beim Erstellen eines Zielortes.',
-              });
-            }
-          );
+    const fahrzeugTyp: string = req.body.post.vehicleType;
 
+    if (cargonaut && startzeit && ankunftZeit && bezahlungsart && typ && preis && startlocation &&
+      endlocation && ((laenge && breite && hoehe) || anzahlSitzplaetze)) {
+      // create laderaum
+      const dataLaderaum: [number, number, number] = [
+        laenge,
+        breite,
+        hoehe,
+      ];
+      if (laenge && breite && hoehe) {
+        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        await queryPromise(queryLade, dataLaderaum).then(resu => {
+          laderaum = resu.insertId;
+          // create Post
         }).catch(() => {
-          res.status(400).send({
-            message: 'Fehler beim Erstellen eines Standorts.',
-          });
+            res.status(400).send({
+              message: 'Fehler beim Erstellen eines Posts.',
+            });
+          }
+        );
+      } else {
+        console.log('Kein Laderaum angegeben.');
+      }
+      const data: [string, string, string, string, string, number, number, number, string, string, number, any, string] = [
+        startlocation,
+        endlocation,
+        startzeit,
+        ankunftZeit,
+        bezahlungsart,
+        laderaum ? laderaum : null,
+        fahrzeug ? fahrzeug : null,
+        anzahlSitzplaetze,
+        beschreibung,
+        typ,
+        cargonaut,
+        preis,
+        fahrzeugTyp ? fahrzeugTyp : null
+      ];
+      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'ausstehend\', ?, ?);';
+      queryPromise(query, data).then(resultPost => {
+        res.status(201).send({
+          message: 'Neuer Post erstellt!',
+          createdVehicle: resultPost.insertId,
         });
-      });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Erstellen eines Posts.',
+          });
+        }
+      );
     } else {
       res.status(400).send({
         message: 'Nicht alle Felder ausgefüllt.',
       });
     }
   });
+
 
 // get specific Post -> Alle Infos zu speziellem Post
   server.get('/api/post/:id', (req: Request, res: Response) => {
@@ -700,8 +778,9 @@ export function app(): express.Express {
       id,
     ];
     const query = 'SELECT * FROM post WHERE id = ?;';
-    queryPromise(query, data).then(results => {
+    queryPromise(query, data).then(async results => {
       const result = results[0];
+      const laderaum = result?.laderaum;
       const post: Post = {
         id: result.id,
         startlocation: result.standort,
@@ -709,20 +788,31 @@ export function app(): express.Express {
         start_time: result.startzeit,
         end_time: result.ankunft_zeit,
         payment: result.bezahlungsart,
-        hold: result.laderaum,
-        vehicle: result.fahrzeug,
+        vehicle: result?.fahrzeug,
         seats: result.anzahl_sitzplaetze,
         type: result.typ,
         author: result.verfasser,
-        price: result.ladeflaeche,
+        price: result.preis,
         closed: result.gebucht,
         description: result.beschreibung,
-        status: null // TODO: get status from db
+        status: result.status,
+        vehicleType: result.fahrzeug_typ
       };
+      const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+      if (laderaum) {
+        await queryPromise(holdQuery, [laderaum]).then(r => {
+            const hold = r[0];
+            post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+          }, error => {
+            console.log('Error: ' + error);
+            res.status(400).send({message: 'Fehler beim Laderaum.'});
+          }
+        );
+      }
       res.status(200).send({
         post
       });
-    }).catch(() => {
+    }).catch((err) => {
       res.status(400).send({
         message: 'Fehler beim getten des Posts!',
       });
@@ -739,10 +829,11 @@ export function app(): express.Express {
         break;
     }
   */
-    const query = 'SELECT * FROM post WHERE gebucht = ?;';
-    queryPromise(query, [0]).then(results => {
+    const query = 'SELECT * FROM post WHERE gebucht = ? ORDER BY id DESC;';
+    queryPromise(query, [0]).then(async results => {
       const posts: Post [] = [];
       for (const result of results) {
+        const laderaum = result?.laderaum;
         const post: Post = {
           id: result.id,
           startlocation: result.standort,
@@ -750,16 +841,31 @@ export function app(): express.Express {
           start_time: result.startzeit,
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
-          hold: result.laderaum,
-          vehicle: result.fahrzeug,
+          vehicle: {
+            id: result?.fahrzeug
+          },
           seats: result.anzahl_sitzplaetze,
           type: result.typ,
-          author: result.verfasser,
-          price: result.ladeflaeche,
+          author: {
+            id: result.verfasser
+          },
+          price: result.preis,
           closed: result.gebucht,
           description: result.beschreibung,
-          status: null // TODO: get status from db
+          status: result.status,
+          vehicleType: result.fahrzeug_typ
         };
+        const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+        if (laderaum) {
+          await queryPromise(holdQuery, [laderaum]).then(r => {
+              const hold = r[0];
+              post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
+            }, error => {
+              console.log('Error: ' + error);
+              res.status(400).send({message: 'Fehler beim Laderaum.'});
+            }
+          );
+        }
         posts.push(post);
       }
       res.status(200).send({
@@ -772,34 +878,36 @@ export function app(): express.Express {
     });
   });
 
-// Update post
+// Update post - FIXME
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);
-    const startzeit: string = req.body.startzeit;
-    const ankunftZeit: string = req.body.ankunftZeit;
-    const bezahlungsart: string = req.body.bezahlungsart;
-    const fahrzeug: number = req.body.vehicle;
-    const anzahlSitzplaetze: number = req.body.anzahlSitzplaetze;
-    const beschreibung: string = req.body.beschreibung;
-    const preis = req.body.price;
+    const startzeit: string = req.body.post.start_time.substring(0, req.body.post.start_time.length - 1);
+    const ankunftZeit: string = req.body.post.end_time.substring(0, req.body.post.start_time.length - 1);
+    const bezahlungsart: string = req.body.post.payment;
+    // const fahrzeug: number = req.body.vehicle;
+    const anzahlSitzplaetze: number = req.body.post.seats;
+    const beschreibung: string = req.body.post.description;
+    const preis = req.body.post.price;
+    const fahrzeugTyp = req.body.post.vehicleType;
 
-    const data: [string, string, string, number, number, string, any, number] = [
+    const data: [string, string, string, number, string, any, string, number] = [
       startzeit,
       ankunftZeit,
       bezahlungsart,
-      fahrzeug,
+      // fahrzeug,
       anzahlSitzplaetze,
       beschreibung,
       preis,
+      fahrzeugTyp,
       id
     ];
-    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, fahrzeug = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ? WHERE id = ?;';
+    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ?, fahrzeug_typ = ? WHERE id = ?;';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: `Updated post ${id}`,
       });
-    }).catch(() => {
+    }).catch((err) => {
       res.status(400).send({
         message: 'Der Post konnte nicht bearbeitet werden.',
       });
@@ -879,6 +987,23 @@ export function app(): express.Express {
     });
   });
 
+  server.put('/api/buchungen/:post', (req: Request, res: Response) => {
+    // Read data from request body
+    const id: number = Number(req.params.post);
+    const status: string = req.body.data.status;
+    const data: [string, number] = [status, id];
+    const query = 'UPDATE post SET status= ? WHERE id = ?';
+    queryPromise(query, data).then(results => {
+      res.status(200).send({
+        message: 'Updated!'
+      });
+    }).catch(() => {
+      res.status(400).send({
+        message: 'Fehler beim Aktualisieren des Status!',
+      });
+    });
+  });
+
 
   /*****************************************************************************
    *           Bewertung       * //
@@ -906,7 +1031,7 @@ export function app(): express.Express {
         });
       }).catch(() => {
           res.status(400).send({
-            message: 'Fehler beim abgeben der Bewertung.',
+            message: 'Fehler beim Abgeben der Bewertung.',
           });
         }
       );
@@ -923,7 +1048,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT * FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -941,7 +1066,7 @@ export function app(): express.Express {
       });
     }).catch(() => {
       res.status(400).send({
-        message: 'Fehler beim getten der Bewertungen!',
+        message: 'Fehler beim Getten der Bewertungen!',
       });
     });
   });
@@ -951,7 +1076,7 @@ export function app(): express.Express {
     const data: [number] = [
       post,
     ];
-    const query = 'SELECT * FROM bewertung WHERE fahrt = ?';
+    const query = 'SELECT * FROM bewertung WHERE fahrt = ? ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const ratings: Rating [] = [];
       for (const result of results) {
@@ -991,6 +1116,135 @@ export function app(): express.Express {
     });
   });
   /*****************************************************************************
+   *           Chat        * //
+   *****************************************************************************/
+  server.get('/api/chats/:cargonaut', (req, res) => {
+    const cargonaut: number = Number(req.params.cargonaut);
+    const data: [number, number] = [
+      cargonaut,
+      cargonaut
+    ];
+    const query = 'SELECT * FROM `chat` WHERE cargonaut_1 = ? OR cargonaut_2 = ?';
+    queryPromise(query, data).then(results => {
+      const chats: Chat [] = [];
+      for (const result of results) {
+        const chat: Chat = {id: result.id, fstMember: result.cargonaut_1, sndMember: result.cargonaut_2};
+        chats.push(chat);
+      }
+      res.status(200).send({
+        chats,
+      });
+    });
+  });
+
+  server.post('/api/message/:verfasser', (req: Request, res: Response) => {
+    // Read data from request body
+    const verfasser: number = Number(req.params.verfasser);
+    const chat: number = req.body.chat;
+    const message: string = req.body.message;
+    const zeit: string = (req.body.zeit).slice(0, -1);
+    if (verfasser && chat && message) {
+      const data: [number, number, string, string] = [
+        verfasser,
+        chat,
+        message,
+        zeit
+      ];
+      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (NULL, ?, ?, ?, TIMESTAMP(?));';
+      queryPromise(query, data).then(results => {
+        res.status(201).send({
+          message: 'Chatnachricht gesendet!'
+        });
+      }).catch(() => {
+          res.status(400).send({
+            message: 'Fehler beim Senden der Chatnachricht.',
+          });
+        }
+      );
+    } else {
+      res.status(400).send({
+        message: 'Nicht alle Felder ausgefüllt.',
+      });
+    }
+  });
+
+  server.post('/api/getOrCreateChat', (req: Request, res: Response) => {
+    // Read data from request body
+    const cargonaut1: number = Number(req.body.cargonaut1);
+    const cargonaut2: number = Number(req.body.cargonaut2);
+    if (cargonaut1 && cargonaut2) {
+      const data: [number, number, number, number] = [
+        cargonaut1,
+        cargonaut2,
+        cargonaut1,
+        cargonaut2
+      ];
+      const query = 'SELECT * FROM `chat` WHERE (cargonaut_1 = ? AND cargonaut_2 = ?) OR (cargonaut_2 = ? AND cargonaut_1 = ?)';
+      queryPromise(query, data).then(results => {
+        if (results.length > 0) {
+          const result = results[0];
+          res.status(200).send({
+            chatId: result.id
+          });
+        } else {
+          const innerData: [number, number] = [
+            cargonaut1,
+            cargonaut2
+          ];
+          const innerQuery = 'INSERT INTO `chat` (`id`, `cargonaut_1`, `cargonaut_2`) VALUES (NULL, ?, ?)';
+          queryPromise(innerQuery, innerData).then(createdChat => {
+            res.status(201).send({
+              chatId: createdChat.insertId
+            });
+          });
+        }
+      }).catch(() => {
+          res.status(400).send({
+            message: 'error creating or getting the chat.',
+          });
+        }
+      );
+    } else {
+      res.status(400).send({
+        message: 'Nicht alle Felder ausgefüllt.',
+      });
+    }
+  });
+
+  server.get('/api/chat/:id', (req: Request, res: Response) => {
+    const id: number = Number(req.params.id);
+    const query = 'SELECT * FROM `chat` WHERE id = ?';
+    queryPromise(query, [id]).then(results => {
+      const chat: Chat = {id: results[0].id, fstMember: results[0].cargonaut_1, sndMember: results[0].cargonaut_2};
+      res.status(200).send({
+        chat
+      });
+    });
+  });
+
+  server.get('/api/chatMessages/:chatId', (req: Request, res: Response) => {
+    const id: number = Number(req.params.chatId);
+    const messages: ChatMessage [] = [];
+    const query = 'SELECT * FROM `chatnachricht` WHERE chat = ?';
+    queryPromise(query, [id]).then(results => {
+      for (const result of results) {
+        const message: ChatMessage = {
+          author: result.verfasser,
+          chat: result.chat,
+          id: result.id,
+          message: result.nachricht,
+          sentAt: result.zeit
+        };
+        messages.push(message);
+      }
+      res.status(200).send({
+        messages
+      });
+    });
+  });
+
+
+  /*****************************************************************************
    *           Angular        * //
    *****************************************************************************/
   server.get('/api/**', (req, res) => {
@@ -1000,12 +1254,12 @@ export function app(): express.Express {
 // Example Express Rest API endpoints
 // server.get('/api/**', (req, res) => { });
 // Serve static files from /browser
-  server.get('*.*', express.static(distFolder, {
+  server.get('*.*', updateCookie, express.static(distFolder, {
     maxAge: '1y'
   }));
 
 // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
+  server.get('*', updateCookie, (req, res) => {
     res.render(indexHtml, {req, providers: [{provide: APP_BASE_HREF, useValue: req.baseUrl}]});
   });
 

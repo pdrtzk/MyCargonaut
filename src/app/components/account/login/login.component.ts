@@ -20,8 +20,8 @@ export class LoginComponent implements OnInit {
   ) {
     this.accountService.isLoggedIn().then(() => {
       if (this.accountService.user) {
-      this.router.navigate(['/']).then();
-    }
+        this.router.navigate(['/']).then();
+      }
     });
   }
 
@@ -61,7 +61,6 @@ export class LoginComponent implements OnInit {
         }
         this.loading = false;
       });
-    console.log('Login: ' + user?.email);
   }
 
 

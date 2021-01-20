@@ -3,8 +3,8 @@ import {NgModule} from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {BookingPageComponent} from './components/booking-page/booking-page.component';
-import { BookingCardComponent } from './components/booking-page/booking-card/booking-card.component';
-import { BookingListComponent } from './components/booking-page/booking-list/booking-list.component';
+import {BookingCardComponent} from './components/booking-page/booking-card/booking-card.component';
+import {BookingListComponent} from './components/booking-page/booking-list/booking-list.component';
 
 import {PostComponent} from './components/post/post.component';
 import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
@@ -30,7 +30,16 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MatDialogModule} from '@angular/material/dialog';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {NewPostModalComponent} from './components/new-post-modal/new-post-modal.component';
+import {NgbActiveModal, NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {HomePostComponent} from './components/home-post/home-post.component';
+import {FormsModule} from '@angular/forms';
+import {AddRatingComponent} from './components/post/add-rating/add-rating.component';
+import { UpdatePasswordComponent } from './components/profileComponents/update-password/update-password.component';
+import { ChatListComponent } from './components/chat-list/chat-list.component';
+import { ChatComponent } from './components/chat/chat.component';
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -54,10 +63,17 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     ProfileRatingComponent,
     ProfileVehicleComponent,
     AddVehicleComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    AddRatingComponent,
+    UpdatePasswordComponent,
+    ChatListComponent,
+    SidebarRightComponent,
+    NewPostModalComponent,
+    HomePostComponent,
+    ChatComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({appId: 'serverApp'}),
     AppRoutingModule,
     MatIconModule,
     BrowserAnimationsModule,
@@ -65,8 +81,12 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     AppRoutingModule,
     ReactiveFormsModule,
     MatDialogModule,
+    MatButtonModule,
+    MatProgressSpinnerModule,
     NgbModule,
+    FormsModule,
   ],
+  providers: [NgbActiveModal],
   bootstrap: [AppComponent]
 })
 export class AppModule {

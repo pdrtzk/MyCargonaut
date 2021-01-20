@@ -1,11 +1,77 @@
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<p>just a placeholder for routing</p>
-<a [routerLink]="['post']" [queryParams] = "{id: 123}">Post hier ansehen</a> <!-- only for debugging of route params -->
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-6">
+      <div class="row">
+        <div class="col searchbar">
+          <form>
+            <div class="row justify-content-center">
+              <div class="input-group mb-3">
+                <div class=" col-7 col-sm-8 col-md-9 col-lg-10 col-xl-11 searchCol">
+
+                  <input type="text" class="form-control" id="searchbar" placeholder="Suche.." aria-label="search"
+                         aria-describedby="search-input" [(ngModel)]="currSearchString" name="search"
+                         (keyup)="this.filter()">
+
+                </div>
+                <div class="input-group-append  col-1 btn-search">
+                  <button class="btn search-button" disabled><i class="fa fa-search"></i></button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-xl-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary" ngbDropdownToggle>{{this.startCity ? this.startCity : 'Stadt'}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="this.startCity = undefined; this.filter()">Alle Städte</button>
+              <button ngbDropdownItem *ngFor="let city of cities"
+                      (click)="this.startCity = city; this.filter()">{{city}}</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-xl-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary"
+                    ngbDropdownToggle>{{this.currPostType ? this.currPostType : 'Angebotstyp' }}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem (click)="this.currPostType = undefined; this.filter()">Alle Angebotstypen</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Angebot'; this.filter()">Angebot</button>
+              <button ngbDropdownItem (click)="this.currPostType = 'Gesuch'; this.filter()">Gesuch</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 col-xl-4 dropdown-col">
+          <div ngbDropdown class="dropdown shadow">
+            <button class="btn btn-primary"
+                    ngbDropdownToggle>{{this.currVehicle ? this.currVehicle : 'Fahrzeugtyp'}}</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button ngbDropdownItem
+                      (click)="this.currVehicle = undefined; this.filter()">Alle Fahrzeugtypen
+              </button>
+              <button ngbDropdownItem *ngFor="let vehicle of vehicles"
+                      (click)="this.currVehicle = vehicle; this.filter()">{{vehicle}}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class=" col-md-4 col-lg-3 col-xl-2">
+      <a (click)="showModal()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="70%" height="70%" fill="#005B52"
+             class="bi bi-plus-circle-fill pointer showModalBtn"
+             viewBox="0 0 16 16">
+          <path
+            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+<div *ngIf="this.postArray">
+  <app-home-post *ngFor="let post of filteredPostArray" [post]="post"></app-home-post>
+</div>
+
+

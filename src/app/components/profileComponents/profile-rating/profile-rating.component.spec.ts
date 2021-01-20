@@ -50,8 +50,8 @@ describe('ProfileRatingComponent', () => {
 
   it('author\'s first name and last name should be displayed in a readable format ', () => {
     const compiled = fixture.debugElement.nativeElement;
-    const authorP = compiled.querySelector('#ratingAuthor');
-    expect(authorP.innerHTML).toEqual(' Test Cargonaut ');
+    const authorP = compiled.querySelector('#ratingAuthorLink');
+    expect(authorP.innerHTML).toEqual('Test Cargonaut');
   });
 
   it('the comment should be displayed ', () => {

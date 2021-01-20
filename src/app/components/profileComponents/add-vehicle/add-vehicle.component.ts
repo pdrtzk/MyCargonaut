@@ -22,7 +22,7 @@ export class AddVehicleComponent implements OnInit {
     this.addVehicleForm = this.formBuilder.group({
       type: [this.getVehicleStringFromType(VehicleTypeType.PKW), Validators.required],
       model: ['', Validators.required], // description
-      seats: [0, Validators.required],
+      seats: [1, [Validators.required, Validators.min(1)]],
       comment: [''],
       length: [0],
       width: [0],
@@ -67,11 +67,11 @@ export class AddVehicleComponent implements OnInit {
     this.addVehicleForm.reset({
       type: this.getVehicleStringFromType(VehicleTypeType.PKW),
       model: '',
-      seats: 0,
+      seats: 1,
       comment: '',
-      length: 0,
-      height: 0,
-      width: 0
+      length: 1,
+      height: 1,
+      width: 1
     });
   }
 

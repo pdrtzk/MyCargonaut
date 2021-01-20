@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {AccountService} from '../../services/account.service';
+import {NavigationEnd, NavigationError, NavigationStart, Router, RouterEvent} from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +10,31 @@ import {AccountService} from '../../services/account.service';
 
 })
 export class HeaderComponent implements OnInit {
-  userLoggedIn = false; // todo: get actual login status in ngOnInit
+  userLoggedIn = false;
   navbarOpen = false;
+  userId: number;
+  public active: string;
 
 
   constructor(
-    private dialog: MatDialog,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private router: Router
   ) {
+    router.events.subscribe((event) => {
+      if (event instanceof RouterEvent) {
+        if (event.url.includes('home') || event.url === '/') {
+          this.active = 'home';
+        } else if (event.url.includes('login')) {
+          this.active = 'login';
+        } else if (event.url.includes('register')) {
+          this.active = 'register';
+        } else if (event.url.includes('profile')) {
+          this.active = 'profile';
+        } else if (event.url.includes('bookings')) {
+          this.active = 'bookings';
+        }
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -32,4 +50,16 @@ export class HeaderComponent implements OnInit {
     await this.accountService.logout();
   }
 
+  getUserId() {
+    this.userId = this.accountService.user.id;
+    return this.userId;
+  }
+
+  getActiveStyle(route: string) {
+    if (route === this.active) {
+      return {
+        color: 'white'
+      };
+    }
+  }
 }

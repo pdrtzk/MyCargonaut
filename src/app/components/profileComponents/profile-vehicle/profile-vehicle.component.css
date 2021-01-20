@@ -32,7 +32,7 @@ h3{
   display: none;
 }
 
-.editVehicleCancelBtn {
+#editVehicleCancelBtn {
   margin-right: 1rem;
 }
 
