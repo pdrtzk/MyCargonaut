@@ -7,7 +7,12 @@
   font-family: "Lato", sans-serif;
 }
 
-#booking-card:hover{
+#next-step-booking:hover {
+  cursor: pointer;
+  align-self: center;
+}
+
+#booking-card:hover {
   box-shadow: grey 4px 4px 4px;
 }
 
@@ -45,6 +50,10 @@
   background-color: #92bda3;
 }
 
+.mat-icon {
+  vertical-align: middle;
+}
+
 #booking-row {
   width: 100%;
 }
@@ -66,8 +75,23 @@
   color: white;
   border: none;
   padding: 5px;
+  border-radius: 2px;
 }
 
 #status-btn:hover {
   background-color: #92bda3;
+}
+
+.booking-type {
+  margin: 0;
+  border-radius: 25px;
+  padding: 4px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  text-align: center;
+  align-content: center;
+}
+
+.post-button {
+  border-radius: 2px;
 }
