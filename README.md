@@ -233,7 +233,9 @@ Autor des Posts, sowie für abgeschlossene Buchungen die Möglichkeit, eine Buch
 
 #### Buchung bewerten
 
-![Buchung bewerten](./documentation/Screenshots/bookings_2.PNG)
+<p align="center">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/bookings_2.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+</p>
 
 Über den Button "Bewerten" öffnet sich ein Akkordionelement, in dem der Benutzer eine
 kurze Bewertung für den Autor des Posts hinterlassen kann. Dazu kann er einen bis fünf
@@ -244,7 +246,11 @@ abgesendet, folgt eine automatische Weiterleitung auf das Profil des bewerteten 
 
 #### Besucher-Ansicht
 
-![Post ansehen](./documentation/Screenshots/post_view.PNG)
+
+<p align="center">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_view.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+</p>
+
 
  Die Post Seite bietet suchenden Cargonauten einige weitere Informationen zu Fahrtdetails,
  Fahrzeug und Autor, sowie die Möglichkeit, die Fahrt zu buchen oder mit dem Autor Kontakt aufzunehmen.
@@ -262,7 +268,10 @@ Alle weiteren Informationen müssen aus dem Beschreibungstext entnommen, oder im
 werden.
 
 #### Autoren-Ansicht
-![Post bearbeiten](./documentation/Screenshots/post_edit.PNG)
+
+<p align="center">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_edit.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+</p>
 
 Gelangt ein Cargonaut auf einen von ihm selbst verfassten Post, hat er die Möglichkeit,
 einige der Postdetails zu bearbeiten. Bearbeitet werden können Preis und Zahlungsart, 
