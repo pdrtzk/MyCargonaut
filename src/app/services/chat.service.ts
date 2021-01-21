@@ -16,7 +16,7 @@ export class ChatService {
     const chats: Chat[] = [];
     const http = this.http;
     return new Promise<Chat[]>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/chats/' + cargonautId.toString(), {
+      await http.get(' https://mycargonaut.herokuapp.com/api/chats/' + cargonautId.toString(), {
       }).toPromise().then((res: any) => {
         res.chats.forEach(elem => {
           chats.push ({
@@ -50,7 +50,7 @@ export class ChatService {
     const messages: ChatMessage[] = [];
     const http = this.http;
     return new Promise<ChatMessage[]>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/chatMessages/' + chat.id.toString(), {
+      await http.get(' https://mycargonaut.herokuapp.com/api/chatMessages/' + chat.id.toString(), {
       }).toPromise().then((res: any) => {
         res.messages.forEach(elem => {
           let test: ChatMessage;
@@ -75,7 +75,7 @@ export class ChatService {
   getChat(chatId: number): Promise<Chat>{
     const http = this.http;
     return new Promise<Chat>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/chat/' + chatId, {
+      await http.get(' https://mycargonaut.herokuapp.com/api/chat/' + chatId, {
       }).toPromise().then((res: any) => {
         const chaty: Chat = {
           id: res.chat.id,
@@ -102,7 +102,7 @@ export class ChatService {
   getChatIdFromCargonauts(cargonaut1: number, cargonaut2: number){
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/getOrCreateChat', {
+      await http.post(' https://mycargonaut.herokuapp.com/api/getOrCreateChat', {
         cargonaut1,
         cargonaut2
       }).toPromise().then((res: any) => {
@@ -120,7 +120,7 @@ export class ChatService {
     const zeit = new Date(msg.sentAt);
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/message/' + msg.author.id, {
+      await http.post(' https://mycargonaut.herokuapp.com/api/message/' + msg.author.id, {
         chat,
         message,
         zeit

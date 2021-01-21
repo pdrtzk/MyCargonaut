@@ -223,7 +223,7 @@ export class AccountService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {
-        await http.delete(`http://localhost:4200/api/cargonaut/${user.id}/image`).toPromise().then((res: any) => {
+        await http.delete(` https://mycargonaut.herokuapp.com/api/cargonaut/${user.id}/image`).toPromise().then((res: any) => {
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);

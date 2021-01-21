@@ -44,7 +44,7 @@ describe('AccountService', () => {
       expect(service.user).toBe(dummyUser);
     });
 
-    const req = httpMock.expectOne(`http://localhost:4200/api/login`, 'call to api');
+    const req = httpMock.expectOne(` https://mycargonaut.herokuapp.com/api/login`, 'call to api');
     expect(req.request.method).toBe('GET');
     req.flush({user: dummyUser});
   });
@@ -55,7 +55,7 @@ describe('AccountService', () => {
       expect(service.user).toBeNull();
     });
 
-    const req = httpMock.expectOne(`http://localhost:4200/api/login`, 'call to api');
+    const req = httpMock.expectOne(` https://mycargonaut.herokuapp.com/api/login`, 'call to api');
     expect(req.request.method).toBe('GET');
     req.error(
       new ErrorEvent('User nicht mehr eingeloggt. Erneut anmelden!'),
@@ -69,7 +69,7 @@ describe('AccountService', () => {
       expect(res).toEqual(dummyUser);
       expect(service.user).toEqual(dummyUser);
     });
-    const req = httpMock.expectOne(`http://localhost:4200/api/login`, 'post to api');
+    const req = httpMock.expectOne(` https://mycargonaut.herokuapp.com/api/login`, 'post to api');
     expect(req.request.method).toBe('POST');
     req.flush({user: dummyUser});
   });
@@ -84,7 +84,7 @@ describe('AccountService', () => {
       expect(res).toBe(dummyUser);
     });
 
-    const req = httpMock.expectOne('http://localhost:4200/api/cargonaut/' + dummyUser.id, 'call to api');
+    const req = httpMock.expectOne(' https://mycargonaut.herokuapp.com/api/cargonaut/' + dummyUser.id, 'call to api');
     expect(req.request.method).toBe('GET');
     req.flush({user: dummyUser});
   });
@@ -99,7 +99,7 @@ describe('AccountService', () => {
       // expect(error.message).toEqual(errorMessage);
     });
 
-    const req = httpMock.expectOne('http://localhost:4200/api/cargonaut/' + dummyUser.id, 'call to api');
+    const req = httpMock.expectOne(' https://mycargonaut.herokuapp.com/api/cargonaut/' + dummyUser.id, 'call to api');
     expect(req.request.method).toBe('GET');
     req.error(new ErrorEvent(errorMessage), {status: 400});
   });

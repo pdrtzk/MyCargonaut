@@ -15,7 +15,7 @@ export class BookingService {
   getBookingsForCargonaut(cargonautId: number): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
+      await http.get(' https://mycargonaut.herokuapp.com/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         const bookings: Post[] = [];
         res.buchungen.forEach(booking => bookings.push({
           id: parseInt(booking.id, 10),
@@ -50,7 +50,7 @@ export class BookingService {
   async addBooking(postID: number, customerID: number): Promise<void> {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
-      await http.post('http://localhost:4200/api/buchung/' + customerID.toString(), {
+      await http.post(' https://mycargonaut.herokuapp.com/api/buchung/' + customerID.toString(), {
         length: 1, // todo
         width: 1, // todo
         height: 1, // todo
@@ -69,7 +69,7 @@ export class BookingService {
     const http = this.http;
     const data = { status: this.getStatusToString(booking.status)};
     return new Promise<string>(async (resolve, reject) => {
-      await http.put('http://localhost:4200/api/buchungen/' + booking.id.toString(), {
+      await http.put(' https://mycargonaut.herokuapp.com/api/buchungen/' + booking.id.toString(), {
         data
       }).toPromise().then((res: any) => {
         resolve(res.message);

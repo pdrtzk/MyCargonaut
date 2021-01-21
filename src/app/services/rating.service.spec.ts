@@ -59,7 +59,7 @@ describe('RatingService', () => {
       res => {
       }
     );
-    const req = httpTestingController.expectOne('http://localhost:4200/api/bewertung/32');
+    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/bewertung/32');
     expect(req.request.method).toEqual('POST');
     req.flush(result);
     httpTestingController.verify();
@@ -75,7 +75,7 @@ describe('RatingService', () => {
         expect(res[0].ratingStars).toEqual(4);
       }
     );
-    const req = httpTestingController.expectOne('http://localhost:4200/api/bewertungen/12');
+    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/bewertungen/12');
     expect(req.request.method).toEqual('GET');
     req.flush(testData);
     httpTestingController.verify();
