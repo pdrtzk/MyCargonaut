@@ -154,7 +154,7 @@ export function app(): express.Express {
     const email: string = req.body.email;
     const password: string = req.body.password;
     const data: [string, string] = [email, cryptoJS.SHA512(password).toString()];
-    const query = 'SELECT * FROM cargonaut WHERE email = $1 and password = $2;';
+    const query = 'SELECT * FROM cargonaut_db.cargonaut WHERE email = $1 and password = $2;';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       if (rows.length === 1) {
@@ -198,7 +198,7 @@ export function app(): express.Express {
 // Registrieren
   server.post('/api/cargonaut', async (req: Request, res: Response) => {
     const email: string = req.body.email;
-    const emailQuery = 'SELECT * FROM cargonaut where email = $1;';
+    const emailQuery = 'SELECT * FROM cargonaut_db.cargonaut where email = $1;';
     queryPromise(emailQuery, [email]).then(result => {
       const rows = result.rows;
       if (rows.length > 0) {
@@ -223,7 +223,7 @@ export function app(): express.Express {
           iban,
           bic
         ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (nextval(\'cargonaut_id_seq\'), $1, $2, $3, $4, $5, $6, $7, $8);';
+        const query = 'INSERT INTO cargonaut_db.cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (nextval(\'cargonaut_id_seq\'), $1, $2, $3, $4, $5, $6, $7, $8);';
         queryPromise(query, data).then(() => {
           res.status(201).send({
             message: 'Neuer Nutzer erstellt!'
@@ -246,7 +246,7 @@ export function app(): express.Express {
       password,
       id,
     ];
-    const query = 'UPDATE cargonaut SET password = $1 WHERE id = $2;';
+    const query = 'UPDATE cargonaut_db.cargonaut SET password = $1 WHERE id = $2;';
     queryPromise(query, data).then(result => {
       if (result.rowCount > 0) {
         res.status(200).send({
@@ -276,7 +276,7 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT id, firstname, lastname FROM cargonaut WHERE id = $1;';
+    const query = 'SELECT id, firstname, lastname FROM cargonaut_db.cargonaut WHERE id = $1;';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       if (rows.length > 0) {
@@ -314,7 +314,7 @@ export function app(): express.Express {
       birthday,
       id
     ];
-    const query = 'UPDATE cargonaut SET firstname = $1, lastname = $2, geburtsdatum = $3 WHERE id = $4;';
+    const query = 'UPDATE cargonaut_db.cargonaut SET firstname = $1, lastname = $2, geburtsdatum = $3 WHERE id = $4;';
     queryPromise(query, data).then(result => {
       if (result.rowCount > 0) {
         // @ts-ignore
@@ -341,7 +341,7 @@ export function app(): express.Express {
   // Delete Cargonaut
   server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
+    const imageQuery = 'SELECT image from cargonaut_db.cargonaut WHERE id = $1';
     let imageFile = null;
     queryPromise(imageQuery, [id]).then(result => {
       const rows = result.rows;
@@ -353,7 +353,7 @@ export function app(): express.Express {
         });
       }
     });
-    const query = 'DELETE FROM cargonaut WHERE id = $1;';
+    const query = 'DELETE cargonaut_db.FROM cargonaut_db.cargonaut WHERE id = $1;';
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
       if (result.rowCount === 1) {
@@ -386,7 +386,7 @@ export function app(): express.Express {
   server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     let oldFile = null;
-    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
+    const imageQuery = 'SELECT image from cargonaut_db.cargonaut WHERE id = $1';
     queryPromise(imageQuery, [id]).then(result => {
       const rows = result.rows;
       if (rows.length === 1) {
@@ -401,7 +401,7 @@ export function app(): express.Express {
       req.file.path,
       id
     ];
-    const query = 'UPDATE cargonaut SET image = $1 WHERE id = $2;';
+    const query = 'UPDATE cargonaut_db.cargonaut SET image = $1 WHERE id = $2;';
     queryPromise(query, data).then(result => {
       // Check if database response contains at least one entry
       if (result.rowCount === 1) {
@@ -436,7 +436,7 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT image FROM cargonaut WHERE id = $1;';
+    const query = 'SELECT image FROM cargonaut_db.cargonaut WHERE id = $1;';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       if (rows.length === 1) {
@@ -459,7 +459,7 @@ export function app(): express.Express {
   server.delete('/api/cargonaut/:id/image', (req: Request, res: Response) => {
     const id: string = req.params.id;
     let oldFile = null;
-    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
+    const imageQuery = 'SELECT image from cargonaut_db.cargonaut WHERE id = $1';
     queryPromise(imageQuery, [id]).then(result => {
       const rows = result.rows;
       if (rows.length === 1) {
@@ -470,7 +470,7 @@ export function app(): express.Express {
         });
       }
     });
-    const query = 'UPDATE cargonaut SET image = NULL WHERE id = $1;';
+    const query = 'UPDATE cargonaut_db.cargonaut SET image = NULL WHERE id = $1;';
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
       if (result.rowCount === 1) {
@@ -524,7 +524,7 @@ export function app(): express.Express {
         hoehe,
       ];
 
-      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.rows[0].id;
         const data: [string, number, number, string, string, string] = [
@@ -535,7 +535,7 @@ export function app(): express.Express {
           modell,
           kommentar
         ];
-        const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (nextval(\'fahrzeug_id_seq\'), $1, $2, $3, $4, $5, $6) RETURNING id;';
+        const query = 'INSERT INTO cargonaut_db.fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (nextval(\'fahrzeug_id_seq\'), $1, $2, $3, $4, $5, $6) RETURNING id;';
         queryPromise(query, data).then(results => {
           res.status(201).send({
             message: 'Neues Fahrzeug erstellt!',
@@ -567,8 +567,8 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM fahrzeug WHERE id = $1;';
-    const query2 = 'SELECT * FROM laderaum WHERE id =$1;';
+    const query = 'SELECT * FROM cargonaut_db.fahrzeug WHERE id = $1;';
+    const query2 = 'SELECT * FROM cargonaut_db.laderaum WHERE id =$1;';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       if (rows.length > 0) {
@@ -602,7 +602,7 @@ export function app(): express.Express {
     const data: [string] = [
       cargonaut,
     ];
-    const query = 'SELECT * FROM fahrzeug WHERE besitzer = $1;';
+    const query = 'SELECT * FROM cargonaut_db.fahrzeug WHERE besitzer = $1;';
     queryPromise(query, data).then(results => {
       const rows = results.rows;
       const vehicles: Vehicle [] = [];
@@ -631,7 +631,7 @@ export function app(): express.Express {
 // delete vehicle
   server.delete('/api/vehicle/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const query = 'DELETE FROM fahrzeug WHERE id = $1;';
+    const query = 'DELETE FROM cargonaut_db.fahrzeug WHERE id = $1;';
 
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
@@ -669,7 +669,7 @@ export function app(): express.Express {
       breite,
       hoehe,
     ];
-    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+    const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
     queryPromise(queryLade, dataLade).then(result => {
       ladeflaeche = result.rows[0].id;
       const data: [string, number, number, string, string, number] = [
@@ -680,7 +680,7 @@ export function app(): express.Express {
         kommentar,
         id
       ];
-      const query = 'UPDATE fahrzeug SET art = $1, anzahl_sitzplaetze = $2, ladeflaeche = $3, modell = $4, kommentar = $5 WHERE id = $6 RETURNING id;';
+      const query = 'UPDATE cargonaut_db.fahrzeug SET art = $1, anzahl_sitzplaetze = $2, ladeflaeche = $3, modell = $4, kommentar = $5 WHERE id = $6 RETURNING id;';
       queryPromise(query, data).then(results => {
         res.status(201).send({
           message: 'Fahrzeug aktualisiert!',
@@ -736,7 +736,7 @@ export function app(): express.Express {
         hoehe,
       ];
       if (laenge && breite && hoehe) {
-        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+        const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
         await queryPromise(queryLade, dataLaderaum).then(resu => {
           laderaum = resu.rows[0].id;
           // create Post
@@ -764,7 +764,7 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp
       ];
-      const query = 'INSERT INTO  post  ( id ,  standort ,  zielort ,  startzeit ,  ankunft_zeit ,  bezahlungsart ,  laderaum ,  fahrzeug ,  gebucht ,  anzahl_sitzplaetze ,  beschreibung ,  typ ,  verfasser ,  status ,  preis , fahrzeug_typ) VALUES (nextval(\'post_id_seq\'), $1, $2, $3, $4, $5, $6, $7, false, $8, $9, $10, $11, \'ausstehend\', $12, $13) RETURNING id;';
+      const query = 'INSERT INTO cargonaut_db.post  ( id ,  standort ,  zielort ,  startzeit ,  ankunft_zeit ,  bezahlungsart ,  laderaum ,  fahrzeug ,  gebucht ,  anzahl_sitzplaetze ,  beschreibung ,  typ ,  verfasser ,  status ,  preis , fahrzeug_typ) VALUES (nextval(\'post_id_seq\'), $1, $2, $3, $4, $5, $6, $7, false, $8, $9, $10, $11, \'ausstehend\', $12, $13) RETURNING id;';
       queryPromise(query, data).then(resultPost => {
         res.status(201).send({
           message: 'Neuer Post erstellt!',
@@ -791,7 +791,7 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM post WHERE id = $1;';
+    const query = 'SELECT * FROM cargonaut_db.post WHERE id = $1;';
     queryPromise(query, data).then(async results => {
       const result = results.rows[0];
       const laderaum = result?.laderaum;
@@ -812,7 +812,7 @@ export function app(): express.Express {
         status: result.status,
         vehicleType: result.fahrzeug_typ
       };
-      const holdQuery = 'SELECT * FROM laderaum WHERE id = $1;';
+      const holdQuery = 'SELECT * FROM cargonaut_db.laderaum WHERE id = $1;';
       if (laderaum) {
         await queryPromise(holdQuery, [laderaum]).then(r => {
             const hold = r.rows[0];
@@ -844,7 +844,7 @@ export function app(): express.Express {
         break;
     }
   */
-    const query = 'SELECT * FROM post WHERE gebucht = $1 ORDER BY id DESC;';
+    const query = 'SELECT * FROM cargonaut_db.post WHERE gebucht = $1 ORDER BY id DESC;';
     queryPromise(query, [false]).then(async results => {
       const rows = results.rows;
       const posts: Post [] = [];
@@ -871,7 +871,7 @@ export function app(): express.Express {
           status: result.status,
           vehicleType: result.fahrzeug_typ
         };
-        const holdQuery = 'SELECT * FROM laderaum WHERE id = $1;';
+        const holdQuery = 'SELECT * FROM cargonaut_db.laderaum WHERE id = $1;';
         if (laderaum) {
           await queryPromise(holdQuery, [laderaum]).then(r => {
               const hold = r.rows[0];
@@ -919,7 +919,7 @@ export function app(): express.Express {
       fahrzeugTyp,
       id
     ];
-    const query = 'UPDATE post SET startzeit = $1, ankunft_zeit = $2, bezahlungsart = $3, anzahl_sitzplaetze = $4, beschreibung = $5, preis = $6, fahrzeug_typ = $7 WHERE id = $8;';
+    const query = 'UPDATE cargonaut_db.post SET startzeit = $1, ankunft_zeit = $2, bezahlungsart = $3, anzahl_sitzplaetze = $4, beschreibung = $5, preis = $6, fahrzeug_typ = $7 WHERE id = $8;';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: `Updated post ${id}`,
@@ -953,7 +953,7 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
-      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.rows[0].id;
         const data: [number, number, number, number] = [
@@ -962,9 +962,9 @@ export function app(): express.Express {
           anzahlSitzplaetze,
           post,
         ];
-        const query = 'INSERT INTO buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (nextval(\'buchung_id_seq\'), $1, $2, $3, $4);';
+        const query = 'INSERT INTO cargonaut_db.buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (nextval(\'buchung_id_seq\'), $1, $2, $3, $4);';
         queryPromise(query, data).then(() => {
-          queryPromise('UPDATE post SET gebucht = true WHERE id = $1;', [post]).then(() => {
+          queryPromise('UPDATE cargonaut_db.post SET gebucht = true WHERE id = $1;', [post]).then(() => {
             res.status(201).send({
               message: 'Gebucht!'
             });
@@ -997,7 +997,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut
     ];
-    const query = 'SELECT * FROM buchung, post WHERE buchung.post = post.id AND (buchung.gebucht_von = $1 OR post.verfasser = $1)';
+    const query = 'SELECT * FROM cargonaut_db.buchung, cargonaut_db.post WHERE buchung.post = post.id AND (buchung.gebucht_von = $1 OR post.verfasser = $1)';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       res.status(200).send({
@@ -1015,7 +1015,7 @@ export function app(): express.Express {
     const id: number = Number(req.params.post);
     const status: string = req.body.data.status;
     const data: [string, number] = [status, id];
-    const query = 'UPDATE post SET status= $1 WHERE id = $2';
+    const query = 'UPDATE cargonaut_db.post SET status= $1 WHERE id = $2';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: 'Updated!'
@@ -1047,7 +1047,7 @@ export function app(): express.Express {
         punktzahl,
         kommentar,
       ];
-      const query = 'INSERT INTO bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (nextval(\'bewertung_id_seq\'), $1, $2, $3, $4);';
+      const query = 'INSERT INTO cargonaut_db.bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (nextval(\'bewertung_id_seq\'), $1, $2, $3, $4);';
       queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Bewertung abgegeben!'
@@ -1071,7 +1071,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = $1 ORDER BY id DESC';
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM cargonaut_db.bewertung, cargonaut_db.post WHERE cargonaut_db.bewertung.fahrt = post.id AND post.verfasser = $1 ORDER BY id DESC';
     queryPromise(query, data).then(result => {
       const rows = result.rows;
       const ratings: Rating [] = [];
@@ -1100,7 +1100,7 @@ export function app(): express.Express {
     const data: [number] = [
       post,
     ];
-    const query = 'SELECT * FROM bewertung WHERE fahrt = $1 ORDER BY id DESC';
+    const query = 'SELECT * FROM cargonaut_db.bewertung WHERE fahrt = $1 ORDER BY id DESC';
     queryPromise(query, data).then(results => {
       const rows = results.rows;
       const ratings: Rating [] = [];
@@ -1129,7 +1129,7 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT AVG(punktzahl) AS avg FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = $1';
+    const query = 'SELECT AVG(punktzahl) AS avg FROM cargonaut_db.bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = $1';
     queryPromise(query, data).then(results => {
       const rows = results.rows;
       res.status(200).send({
@@ -1152,7 +1152,7 @@ export function app(): express.Express {
       cargonaut,
       cargonaut
     ];
-    const query = 'SELECT * FROM chat WHERE cargonaut_1 = $1 OR cargonaut_2 = $2';
+    const query = 'SELECT * FROM cargonaut_db.chat WHERE cargonaut_1 = $1 OR cargonaut_2 = $2';
     queryPromise(query, data).then(results => {
       const rows = results.rows;
       const chats: Chat [] = [];
@@ -1179,7 +1179,7 @@ export function app(): express.Express {
         message,
         zeit
       ];
-      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (nextval(\'chatnachricht_id_seq\'), $1, $2, $3, $4);';
+      const query = 'INSERT INTO cargonaut_db.chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (nextval(\'chatnachricht_id_seq\'), $1, $2, $3, $4);';
       queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Chatnachricht gesendet!'
@@ -1206,7 +1206,7 @@ export function app(): express.Express {
         cargonaut1,
         cargonaut2
       ];
-      const query = 'SELECT * FROM chat WHERE (cargonaut_1 = $1 AND cargonaut_2 = $2) OR (cargonaut_2 = $1 AND cargonaut_1 = $2)';
+      const query = 'SELECT * FROM cargonaut_db.chat WHERE (cargonaut_1 = $1 AND cargonaut_2 = $2) OR (cargonaut_2 = $1 AND cargonaut_1 = $2)';
       queryPromise(query, data).then(results => {
         const rows = results.rows;
         if (rows.length > 0) {
@@ -1219,7 +1219,7 @@ export function app(): express.Express {
             cargonaut1,
             cargonaut2
           ];
-          const innerQuery = 'INSERT INTO chat (id, cargonaut_1, cargonaut_2) VALUES (nextval(\'chat_id_seq\'), $1, $2) RETURNING id';
+          const innerQuery = 'INSERT INTO cargonaut_db.chat (id, cargonaut_1, cargonaut_2) VALUES (nextval(\'chat_id_seq\'), $1, $2) RETURNING id';
           queryPromise(innerQuery, innerData).then(createdChat => {
             res.status(201).send({
               chatId: parseInt(createdChat.rows[0].id, 10)
@@ -1241,7 +1241,7 @@ export function app(): express.Express {
 
   server.get('/api/chat/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const query = 'SELECT * FROM chat WHERE id = $1';
+    const query = 'SELECT * FROM cargonaut_db.chat WHERE id = $1';
     queryPromise(query, [id]).then(results => {
       const rows = results.rows;
       const chat: Chat = {id: parseInt(rows[0].id, 10), fstMember: rows[0].cargonaut_1, sndMember: rows[0].cargonaut_2};
@@ -1254,7 +1254,7 @@ export function app(): express.Express {
   server.get('/api/chatMessages/:chatId', (req: Request, res: Response) => {
     const id: number = Number(req.params.chatId);
     const messages: ChatMessage [] = [];
-    const query = 'SELECT * FROM chatnachricht WHERE chat = $1';
+    const query = 'SELECT * FROM cargonaut_db.chatnachricht WHERE chat = $1';
     queryPromise(query, [id]).then(results => {
       const rows = results.rows;
       for (const result of rows) {
