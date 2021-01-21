@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/MyCargonaut_Logo.svg" alt="Logo von MyCargonaut" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/MyCargonaut_Logo.svg?raw=true" alt="Logo von MyCargonaut" width="60%" height="60%">
 </p>
 
 <h2 align="center">My Cargonaut</h2>
@@ -157,27 +157,27 @@ deploy:
 
 Eine Erstellung einer groben Skizze stellt den ersten Schritt zur Websitegestaltung dar. Darauf wurden Wireframes aufgebaut, welche bereits eine grobe Skizzierung der Websitefunktionalität darstellen. Diese wiederum wurden nach der Auswahl von Farb- und Stilkonventionen in einen Prototypen umgesetzt.
 
-<h2 align="center"><a href="<a href="https://github.com/Dxree/MyCargonaut/tree/main/documentation/Skizze">Skizze</a></h2>
+### [Skizze](https://github.com/Dxree/MyCargonaut/tree/main/documentation/Skizze)
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Skizze/1.jpeg" alt="Screenshot of HomeSite in Skizze" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Skizze/1.jpeg?raw=true" alt="Screenshot of HomeSite in Skizze" width="60%" height="60%">
 </p>
 
 <h1 align="center">
   ↓
 </h1>
 
-<h2 align="center"><a href="<a href="https://github.com/Dxree/MyCargonaut/tree/main/documentation/Wireframes">Wireframe</a></h2>
+### [Wireframe](https://github.com/Dxree/MyCargonaut/tree/main/documentation/Wireframes)
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Wireframes/Home.png" alt="Screenshot of HomeSite in Wireframes" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Wireframes/Home.png?raw=true" alt="Screenshot of HomeSite in Wireframes" width="60%" height="60%">
 </p>
 
 <h1 align="center">
   ↓
 </h1>
 
-<h2 align="center"><a href="<a href="https://www.figma.com/proto/SRY39RYSBVFst1yHjrowCf/KMS-My-Cargonaut?node-id=4%3A18&scaling=min-zoom">Prototyp</a></h2>
+### [Prototyp](https://www.figma.com/proto/SRY39RYSBVFst1yHjrowCf/KMS-My-Cargonaut?node-id=4%3A18&scaling=min-zoom)
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/prototyp_home.png" alt="Screenshot of HomeSite in Ptrototyp" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/prototyp_home.png?raw=true" alt="Screenshot of HomeSite in Ptrototyp" width="60%" height="60%">
 </p>
 
 ## UML-Klassendiagramm
@@ -185,7 +185,7 @@ Eine Erstellung einer groben Skizze stellt den ersten Schritt zur Websitegestalt
 Es wurde für eine bessere Strukturierung des Projektes ein UML-Klassendiagramm erstellt. Die zentrale Einheit als Nutzer bildet der Cargonaut. Dieser kann Posts erstellen und besitzt Fahrzeuge. Außerdem kann er als Fahrer oder Teilnehmer einer Fahrt ein Fahrzeug nutzen und Bewertung abgeben/erhalten. Zusätzlich kann ein Cargonaut Chatnachrichten in Chats verfassen, welche jeweils immer genau 2 Cargonauten zugeordnet sind.
 
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/MyCargonautDomains.png" alt="Screenshot of UML" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/MyCargonautDomains.png?raw=true" alt="Screenshot of UML" width="60%" height="60%">
 </p>
 
 
@@ -193,7 +193,7 @@ Es wurde für eine bessere Strukturierung des Projektes ein UML-Klassendiagramm 
 Während der Aufbau ähnlich wie beim Klassenmodell ist, wurden beim Datenbankmodell die Primär- und Fremdschlüssel ergänzt und diese miteinander verknüpft. Beim Löschen werden verknüpfte Einträge ebenfalls gelöscht, um das Ansammeln von Datenleichen zu verhindern und trotzdem zu gewährleisten, dass ein Nutzer etwas löschen kann. Außerdem wurden kleinere Anpassungen im Vergleich zum Klassenmodell vorgenommen. Beispielsweise durch die Zwischentablle "buchung".
 
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/screenshot_dbmodell.png" alt="Screenshot of DataBase Model" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/screenshot_dbmodell.png?raw=true" alt="Screenshot of DataBase Model" width="60%" height="60%">
 </p>
 
 
@@ -210,7 +210,7 @@ Werden neue Funktionalitäten in MyCargonaut eingepflegt, zusätzliche Pakete od
 
 ### Testing
 
-Für genauere Erklärung siehe [Testing und CI/CD](#Testing-und-CI/CD). Für neue Angular-Komponenten oder neue Angular-Services sind in der entsprechenden spec-Datei der Komponente / des Services Tests nach den Konventionen der [Angular-Testing Dokumentation](https://angular.io/guide/testing-services) zu schreiben.
+Für genauere Erklärung siehe [Testing und CI/CD](#testing-und-cicd). Für neue Angular-Komponenten oder neue Angular-Services sind in der entsprechenden spec-Datei der Komponente / des Services Tests nach den Konventionen der [Angular-Testing Dokumentation](https://angular.io/guide/testing-services) zu schreiben.
 
 ### Farbkonvention
 
@@ -218,22 +218,22 @@ Folgende Farben sind zu verwenden:
 
 <ul>
   <li style="color: #005b52">Grün: #005b52</li>
-  <li style="color: #005b52">Hell-Grau: #f5f5f5</li>
-  <li style="color: #005b52">Mittleres Grau: #e5e5e5</li>
-  <li style="color: #005b52">Dunkel-Grau: #c4c4c4</li>
-  <li style="color: #005b52">Weiss: #005b52</li>
+  <li style="color: #f5f5f5">Hell-Grau: #f5f5f5</li>
+  <li style="color: #e5e5e5">Mittleres Grau: #e5e5e5</li>
+  <li style="color: #c4c4c4">Dunkel-Grau: #c4c4c4</li>
+  <li style="color: #000000">Weiss: #fffff</li>
 </ul>
 
   
 ### Sprachkonvention
 
-Die Dokumentation ist in Deutsch zu verfassen. Der Code, Variablen, Funktionen etc. sind in Englisch anzugeben und die Seitentexte sind auf Deutsch (siehe [Prototyp](#Projektplanung-und-konventionen)).
+Die Dokumentation ist in Deutsch zu verfassen. Der Code, Variablen, Funktionen etc. sind in Englisch anzugeben und die Seitentexte sind auf Deutsch (siehe [Prototyp](#projektplanung-und-konventionen)).
 
 ### Programmierkonvention
 
 Für Bezeichner aus mehreren Wörtern ist der CamelCase zu verwenden.
 Es ist sind soweit möglich die Programmierkonventionen von [Angular](https://angular.io/guide/property-binding-best-practices) einzuhalten.
-Parallel zur Entwicklung sind entsprechende Tests zu schreibe, siehe [Testing und CI/CD](#Testing-und-CI/CD).
+Parallel zur Entwicklung sind entsprechende Tests zu schreibe, siehe [Testing und CI/CD](#testing-und-cicd).
 Die Verwendung von Bootstrap Flexbox und eine dementsprechende Responsivität ist erwartet.
 
 # Funktionalität von MyCargonaut
@@ -243,7 +243,7 @@ Auf der Startseite der Anwendung sind aktuelle Posts von anderen Cargonauten zu 
 lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um nach Posts mit spezifischen Inhalten zu suchen.
 
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/start.PNG" alt="Startseite von MyCargonaut" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/start.PNG?raw=true" alt="Startseite von MyCargonaut" width="60%" height="60%">
 </p>
 
 ## Authentifizierung
@@ -251,20 +251,20 @@ lassen sich die Suchergebnisse einschränken. Außerdem gibt es ein Suchfeld, um
 
 Über den Button "Registrieren" bekommt der Nutzer die Möglichkeit, einen neuen Cargonauten auf der Plattform anzulegen und sich anschließend mit diesem anzumelden.
 <p align="center">
-   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/registrieren.PNG" alt="Registrierungsfenster von MyCargonaut" width="60%" height="60%">
+   <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/registrieren.PNG?raw=true" alt="Registrierungsfenster von MyCargonaut" width="60%" height="60%">
 </p>
 
 
 Über den Button "anmelden" können sich Nutzer, die bereits ein Nutzerprofil haben, in ihr Profil einloggen. Dadurch können selbst Posts erstellt und gebucht, 
 sowie das persönliche Profil bearbeitet werden.
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/login.PNG" alt="Anmeldefenster von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/login.PNG?raw=true" alt="Anmeldefenster von MyCargonaut" width="60%" height="60%">
 </p>
 
 ## Persönliches Profil
 Nach der Anmeldung ist der Button "Profil" in der Navigationsleiste sichtbar. Dieser führt zum eigenen Profil, welches die bei der Registrierung angegebenen Informationen beinhaltet.
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/profil.PNG" alt="Profil von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/profil.PNG?raw=true" alt="Profil von MyCargonaut" width="60%" height="60%">
 </p>
 
 ### Fahrzeugverwaltung
@@ -274,7 +274,7 @@ Sitzplätze und einen Kommentar eingeben. Die Informationen über die erstellten
 Die Fahrzeuge können beim Erstellen eines Angebots ausgewählt werden, um so die Daten eines Fahrzeugs in einen Post zu übernehmen.
 
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/fahrzeug.PNG" alt="Fahzeugverwaltung von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/fahrzeug.PNG?raw=true" alt="Fahzeugverwaltung von MyCargonaut" width="60%" height="60%">
 </p>
 
 ### Bewertungen
@@ -289,7 +289,7 @@ allgemeinen Informationen angegeben werden (Zeit, Startort, Zielort, Bezahlart, 
 Bei Auswahl eines Fahrzeugs werden die Anzahl der Sitzplätze und der Laderraum in den Post übernommen, können aber auch noch angepasst werden.
 
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/postErstellen.PNG?raw=true" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
 ## Eigene Buchungen einsehen
@@ -310,7 +310,7 @@ Autor des Posts, sowie für abgeschlossene Buchungen die Möglichkeit, eine Buch
 #### Buchung bewerten
 
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/bookings_2.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/bookings_2.PNG?raw=true" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
 Über den Button "Bewerten" öffnet sich ein Akkordionelement, in dem der Benutzer eine
@@ -324,7 +324,7 @@ abgesendet, folgt eine automatische Weiterleitung auf das Profil des bewerteten 
 
 
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_view.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_view.PNG?raw=true" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
 
@@ -346,7 +346,7 @@ werden.
 #### Autoren-Ansicht
 
 <p align="center">
-    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_edit.PNG" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
+    <img src="https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/post_edit.PNG?raw=true" alt="Post Erstellen Formular von MyCargonaut" width="60%" height="60%">
 </p>
 
 Gelangt ein Cargonaut auf einen von ihm selbst verfassten Post, hat er die Möglichkeit,
