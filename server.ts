@@ -353,7 +353,7 @@ export function app(): express.Express {
         });
       }
     });
-    const query = 'DELETE cargonaut_db.FROM cargonaut_db.cargonaut WHERE id = $1;';
+    const query = 'DELETE FROM cargonaut_db.cargonaut WHERE id = $1;';
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
       if (result.rowCount === 1) {
