@@ -26,6 +26,9 @@ import {Chat} from './src/shared/chat.model';
 import {ChatMessage} from './src/shared/chat-message.model';
 import {Hold} from './src/shared/hold.model';
 
+const {Client} = require('pg');
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'public/tmp/uploads');
@@ -57,7 +60,15 @@ export function app(): express.Express {
   const server = express();
   const distFolder = join(process.cwd(), 'dist/MyCargonaut/browser');
   const indexHtml = existsSync(join(distFolder, 'index.original.html')) ? 'index.original.html' : 'index';
-  const database: Connection = mysql.createConnection(Configuration.mysqlOptions);
+  // const database: Connection = mysql.createConnection(Configuration.mysqlOptions);
+  const database = new Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+      rejectUnauthorized: false
+    }
+  });
+// new Client(Configuration.postgresOptions);
+
 
   // Our Universal express-engine (found @ https://github.com/angular/universal/tree/master/modules/express-engine)
   server.engine('html', ngExpressEngine({
@@ -67,7 +78,7 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  database.connect((err: MysqlError) => {
+  database.connect((err) => {
     if (err) {
       console.log('Database connection failed: ', err);
     } else {
@@ -85,15 +96,7 @@ export function app(): express.Express {
   });
 
   async function queryPromise(sql: string, data: any[]): Promise<any> {
-    return new Promise((resolve, reject) => {
-      database.query(sql, data, (err: MysqlError, rows: any) => {
-        if (err) {
-          reject(rows);
-        } else {
-          resolve(rows);
-        }
-      });
-    });
+    return database.query(sql, data);
   }
 
   function updateCookie(req: Request, res: Response, next: any) {
@@ -151,11 +154,12 @@ export function app(): express.Express {
     const email: string = req.body.email;
     const password: string = req.body.password;
     const data: [string, string] = [email, cryptoJS.SHA512(password).toString()];
-    const query = 'SELECT * FROM cargonaut WHERE email = ? AND password = ?;';
-    queryPromise(query, data).then(rows => {
+    const query = 'SELECT * FROM cargonaut WHERE email = $1 and password = $2;';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
       if (rows.length === 1) {
         const user: Cargonaut = {
-          id: rows[0].id,
+          id: parseInt(rows[0].id, 10),
           firstname: rows[0].firstname,
           lastname: rows[0].lastname,
           email: rows[0].email,
@@ -177,7 +181,7 @@ export function app(): express.Express {
       }
     }).catch(err => {
       res.status(500).send({
-        message: 'Datenbank Fehler: ' + err,
+        message: 'Datenbank Fehler: ' + err.stack,
       });
     });
   });
@@ -194,8 +198,9 @@ export function app(): express.Express {
 // Registrieren
   server.post('/api/cargonaut', async (req: Request, res: Response) => {
     const email: string = req.body.email;
-    const emailQuery = 'SELECT * FROM cargonaut where email = ?;';
-    queryPromise(emailQuery, [email]).then(rows => {
+    const emailQuery = 'SELECT * FROM cargonaut where email = $1;';
+    queryPromise(emailQuery, [email]).then(result => {
+      const rows = result.rows;
       if (rows.length > 0) {
         res.status(409).send({
           message: 'Fehler beim Erstellen eines Nutzers. Email Adresse bereits vergeben.',
@@ -218,11 +223,10 @@ export function app(): express.Express {
           iban,
           bic
         ];
-        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?);';
-        queryPromise(query, data).then(results => {
+        const query = 'INSERT INTO cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (nextval(\'cargonaut_id_seq\'), $1, $2, $3, $4, $5, $6, $7, $8);';
+        queryPromise(query, data).then(() => {
           res.status(201).send({
-            message: 'Neuer Nutzer erstellt!',
-            createdUser: results.insertId,
+            message: 'Neuer Nutzer erstellt!'
           });
         }).catch(() => {
             res.status(400).send({
@@ -242,9 +246,9 @@ export function app(): express.Express {
       password,
       id,
     ];
-    const query = 'UPDATE cargonaut SET password = ? WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET password = $1 WHERE id = $2;';
     queryPromise(query, data).then(result => {
-      if (result.affectedRows > 0) {
+      if (result.rowCount > 0) {
         res.status(200).send({
           message: `Updated Password for user ${id}`,
         });
@@ -272,13 +276,14 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT firstname, lastname FROM cargonaut WHERE id = ?;';
-    queryPromise(query, data).then(results => {
-      if (results.length > 0) {
+    const query = 'SELECT id, firstname, lastname FROM cargonaut WHERE id = $1;';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
+      if (rows.length > 0) {
         const user: Cargonaut = {
-          id: results[0].id,
-          firstname: results[0].firstname,
-          lastname: results[0].lastname,
+          id: parseInt(rows[0].id, 10),
+          firstname: rows[0].firstname,
+          lastname: rows[0].lastname,
           // email: results[0].email,
           // birthday: results[0].geburtsdatum,
         };
@@ -309,9 +314,9 @@ export function app(): express.Express {
       birthday,
       id
     ];
-    const query = 'UPDATE cargonaut SET firstname = ?, lastname = ?, geburtsdatum = ? WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET firstname = $1, lastname = $2, geburtsdatum = $3 WHERE id = $4;';
     queryPromise(query, data).then(result => {
-      if (result.affectedRows > 0) {
+      if (result.rowCount > 0) {
         // @ts-ignore
         req.session.user.firstname = firstname;
         // @ts-ignore
@@ -336,9 +341,10 @@ export function app(): express.Express {
   // Delete Cargonaut
   server.delete('/api/cargonaut/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
+    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
     let imageFile = null;
-    queryPromise(imageQuery, [id]).then(rows => {
+    queryPromise(imageQuery, [id]).then(result => {
+      const rows = result.rows;
       if (rows.length === 1) {
         imageFile = rows[0].image;
       } else {
@@ -347,10 +353,10 @@ export function app(): express.Express {
         });
       }
     });
-    const query = 'DELETE FROM cargonaut WHERE id = ?;';
+    const query = 'DELETE FROM cargonaut WHERE id = $1;';
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
-      if (result.affectedRows === 1) {
+      if (result.rowCount === 1) {
         if (imageFile) {
           imageFile = onWindows ? imageFile.replace('/', '\\') : imageFile;
           fs.unlink(rootDir + imageFile, (err) => {
@@ -380,8 +386,9 @@ export function app(): express.Express {
   server.post('/api/cargonaut/:id/upload', upload.single('image'), (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     let oldFile = null;
-    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
-    queryPromise(imageQuery, [id]).then(rows => {
+    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
+    queryPromise(imageQuery, [id]).then(result => {
+      const rows = result.rows;
       if (rows.length === 1) {
         oldFile = rows[0].image;
       } else {
@@ -394,10 +401,10 @@ export function app(): express.Express {
       req.file.path,
       id
     ];
-    const query = 'UPDATE cargonaut SET image = ? WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET image = $1 WHERE id = $2;';
     queryPromise(query, data).then(result => {
       // Check if database response contains at least one entry
-      if (result.affectedRows === 1) {
+      if (result.rowCount === 1) {
         if (oldFile) {
           oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
           fs.unlink(rootDir + oldFile, (err) => {
@@ -429,8 +436,9 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT image FROM cargonaut WHERE id = ?;';
-    queryPromise(query, data).then(rows => {
+    const query = 'SELECT image FROM cargonaut WHERE id = $1;';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
       if (rows.length === 1) {
         res.setHeader('Cache-Control', 'no-cache');
         if (rows[0].image) {
@@ -451,8 +459,9 @@ export function app(): express.Express {
   server.delete('/api/cargonaut/:id/image', (req: Request, res: Response) => {
     const id: string = req.params.id;
     let oldFile = null;
-    const imageQuery = 'SELECT image from cargonaut WHERE id = ?';
-    queryPromise(imageQuery, [id]).then(rows => {
+    const imageQuery = 'SELECT image from cargonaut WHERE id = $1';
+    queryPromise(imageQuery, [id]).then(result => {
+      const rows = result.rows;
       if (rows.length === 1) {
         oldFile = rows[0].image;
       } else {
@@ -461,10 +470,10 @@ export function app(): express.Express {
         });
       }
     });
-    const query = 'UPDATE cargonaut SET image = NULL WHERE id = ?;';
+    const query = 'UPDATE cargonaut SET image = NULL WHERE id = $1;';
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
-      if (result.affectedRows === 1) {
+      if (result.rowCount === 1) {
         if (oldFile) {
           oldFile = onWindows ? oldFile.replace('/', '\\') : oldFile;
           fs.unlink(rootDir + oldFile, (err) => {
@@ -515,9 +524,9 @@ export function app(): express.Express {
         hoehe,
       ];
 
-      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
-        ladeflaeche = result.insertId;
+        ladeflaeche = result.rows[0].id;
         const data: [string, number, number, string, string, string] = [
           art,
           anzahlSitzplaetze,
@@ -526,11 +535,11 @@ export function app(): express.Express {
           modell,
           kommentar
         ];
-        const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (NULL, ?, ?, ?, ?, ?, ?);';
+        const query = 'INSERT INTO fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (nextval(\'fahrzeug_id_seq\'), $1, $2, $3, $4, $5, $6) RETURNING id;';
         queryPromise(query, data).then(results => {
           res.status(201).send({
             message: 'Neues Fahrzeug erstellt!',
-            createdVehicle: results.insertId,
+            createdVehicle: results.rows[0].id,
           });
         }).catch(() => {
             res.status(400).send({
@@ -558,15 +567,17 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM fahrzeug WHERE id = ?;';
-    const query2 = 'SELECT * FROM laderaum WHERE id =?;';
-    queryPromise(query, data).then(results => {
-      if (results.length > 0) {
-        const data2: [string] = [results[0].ladeflaeche];
-        queryPromise(query2, data2).then(results2 => {
+    const query = 'SELECT * FROM fahrzeug WHERE id = $1;';
+    const query2 = 'SELECT * FROM laderaum WHERE id =$1;';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
+      if (rows.length > 0) {
+        const data2: [string] = [rows[0].ladeflaeche];
+        queryPromise(query2, data2).then(result2 => {
+          const rows2 = result2.rows;
           res.status(200).send({
-            vehicle: results[0],
-            hold: results2[0]
+            vehicle: rows[0],
+            hold: rows2[0]
           });
         }).catch(() => {
           res.status(400).send({
@@ -591,12 +602,13 @@ export function app(): express.Express {
     const data: [string] = [
       cargonaut,
     ];
-    const query = 'SELECT * FROM fahrzeug WHERE besitzer = ?;';
+    const query = 'SELECT * FROM fahrzeug WHERE besitzer = $1;';
     queryPromise(query, data).then(results => {
+      const rows = results.rows;
       const vehicles: Vehicle [] = [];
-      for (const result of results) {
+      for (const result of rows) {
         const vehicle: Vehicle = {
-          id: result.id,
+          id: parseInt(result.id, 10),
           type: {
             type: result.art
           },
@@ -607,7 +619,7 @@ export function app(): express.Express {
         vehicles.push(vehicle);
       }
       res.status(200).send({
-        vehicles: results,
+        vehicles: rows,
       });
     }).catch(() => {
       res.status(400).send({
@@ -619,11 +631,11 @@ export function app(): express.Express {
 // delete vehicle
   server.delete('/api/vehicle/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const query = 'DELETE FROM fahrzeug WHERE id = ?;';
+    const query = 'DELETE FROM fahrzeug WHERE id = $1;';
 
     queryPromise(query, [id]).then(result => {
       // Check if database response contains at least one entry
-      if (result.affectedRows === 1) {
+      if (result.rowCount === 1) {
         res.status(200).send({
           message: `Fahrzeug gelöscht`,
         });
@@ -657,9 +669,9 @@ export function app(): express.Express {
       breite,
       hoehe,
     ];
-    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+    const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
     queryPromise(queryLade, dataLade).then(result => {
-      ladeflaeche = result.insertId;
+      ladeflaeche = result.rows[0].id;
       const data: [string, number, number, string, string, number] = [
         art,
         anzahlSitzplaetze,
@@ -668,11 +680,11 @@ export function app(): express.Express {
         kommentar,
         id
       ];
-      const query = 'UPDATE fahrzeug SET art = ?, anzahl_sitzplaetze = ?, ladeflaeche = ?, modell = ?, kommentar = ? WHERE id = ?;';
+      const query = 'UPDATE fahrzeug SET art = $1, anzahl_sitzplaetze = $2, ladeflaeche = $3, modell = $4, kommentar = $5 WHERE id = $6 RETURNING id;';
       queryPromise(query, data).then(results => {
         res.status(201).send({
           message: 'Fahrzeug aktualisiert!',
-          createdVehicle: results.insertId,
+          createdVehicle: results.rows[0].id,
         });
       }).catch(() => {
           res.status(400).send({
@@ -681,7 +693,8 @@ export function app(): express.Express {
         }
       );
 
-    }).catch(() => {
+    }).catch((err) => {
+      console.log(err);
       res.status(400).send({
         message: 'Fehler beim Aktualisieren des Laderaums.',
       });
@@ -723,9 +736,9 @@ export function app(): express.Express {
         hoehe,
       ];
       if (laenge && breite && hoehe) {
-        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+        const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
         await queryPromise(queryLade, dataLaderaum).then(resu => {
-          laderaum = resu.insertId;
+          laderaum = resu.rows[0].id;
           // create Post
         }).catch(() => {
             res.status(400).send({
@@ -742,22 +755,23 @@ export function app(): express.Express {
         startzeit,
         ankunftZeit,
         bezahlungsart,
-        laderaum ? laderaum : null,
-        fahrzeug ? fahrzeug : null,
+        laderaum,
+        fahrzeug,
         anzahlSitzplaetze,
         beschreibung,
         typ,
         cargonaut,
         preis,
-        fahrzeugTyp ? fahrzeugTyp : null
+        fahrzeugTyp
       ];
-      const query = 'INSERT INTO `post` (`id`, `standort`, `zielort`, `startzeit`, `ankunft_zeit`, `bezahlungsart`, `laderaum`, `fahrzeug`, `gebucht`, `anzahl_sitzplaetze`, `beschreibung`, `typ`, `verfasser`, `status`, `preis`, fahrzeug_typ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, \'0\',?, ?, ?, ?, \'ausstehend\', ?, ?);';
+      const query = 'INSERT INTO  post  ( id ,  standort ,  zielort ,  startzeit ,  ankunft_zeit ,  bezahlungsart ,  laderaum ,  fahrzeug ,  gebucht ,  anzahl_sitzplaetze ,  beschreibung ,  typ ,  verfasser ,  status ,  preis , fahrzeug_typ) VALUES (nextval(\'post_id_seq\'), $1, $2, $3, $4, $5, $6, $7, false, $8, $9, $10, $11, \'ausstehend\', $12, $13) RETURNING id;';
       queryPromise(query, data).then(resultPost => {
         res.status(201).send({
           message: 'Neuer Post erstellt!',
-          createdVehicle: resultPost.insertId,
+          createdVehicle: resultPost.rows[0].id,
         });
-      }).catch(() => {
+      }).catch((err) => {
+          console.log(err);
           res.status(400).send({
             message: 'Fehler beim Erstellen eines Posts.',
           });
@@ -777,12 +791,12 @@ export function app(): express.Express {
     const data: [string] = [
       id,
     ];
-    const query = 'SELECT * FROM post WHERE id = ?;';
+    const query = 'SELECT * FROM post WHERE id = $1;';
     queryPromise(query, data).then(async results => {
-      const result = results[0];
+      const result = results.rows[0];
       const laderaum = result?.laderaum;
       const post: Post = {
-        id: result.id,
+        id: parseInt(result.id, 10),
         startlocation: result.standort,
         endlocation: result.zielort,
         start_time: result.startzeit,
@@ -798,21 +812,22 @@ export function app(): express.Express {
         status: result.status,
         vehicleType: result.fahrzeug_typ
       };
-      const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+      const holdQuery = 'SELECT * FROM laderaum WHERE id = $1;';
       if (laderaum) {
         await queryPromise(holdQuery, [laderaum]).then(r => {
-            const hold = r[0];
+            const hold = r.rows[0];
             post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
           }, error => {
             console.log('Error: ' + error);
             res.status(400).send({message: 'Fehler beim Laderaum.'});
           }
-        );
+        ).catch(err => console.log(err));
       }
       res.status(200).send({
         post
       });
     }).catch((err) => {
+      console.log(err);
       res.status(400).send({
         message: 'Fehler beim getten des Posts!',
       });
@@ -829,25 +844,26 @@ export function app(): express.Express {
         break;
     }
   */
-    const query = 'SELECT * FROM post WHERE gebucht = ? ORDER BY id DESC;';
-    queryPromise(query, [0]).then(async results => {
+    const query = 'SELECT * FROM post WHERE gebucht = $1 ORDER BY id DESC;';
+    queryPromise(query, [false]).then(async results => {
+      const rows = results.rows;
       const posts: Post [] = [];
-      for (const result of results) {
+      for (const result of rows) {
         const laderaum = result?.laderaum;
         const post: Post = {
-          id: result.id,
+          id: parseInt(result.id, 10),
           startlocation: result.standort,
           endlocation: result.zielort,
           start_time: result.startzeit,
           end_time: result.ankunft_zeit,
           payment: result.bezahlungsart,
           vehicle: {
-            id: result?.fahrzeug
+            id: parseInt(result?.fahrzeug, 10)
           },
           seats: result.anzahl_sitzplaetze,
           type: result.typ,
           author: {
-            id: result.verfasser
+            id: parseInt(result.verfasser, 10)
           },
           price: result.preis,
           closed: result.gebucht,
@@ -855,13 +871,13 @@ export function app(): express.Express {
           status: result.status,
           vehicleType: result.fahrzeug_typ
         };
-        const holdQuery = 'SELECT * FROM laderaum WHERE id = ?;';
+        const holdQuery = 'SELECT * FROM laderaum WHERE id = $1;';
         if (laderaum) {
           await queryPromise(holdQuery, [laderaum]).then(r => {
-              const hold = r[0];
+              const hold = r.rows[0];
               post.hold = new Hold(hold.ladeflaeche_laenge_cm, hold.ladeflaeche_breite_cm, hold.ladeflaeche_hoehe_cm);
             }, error => {
-              console.log('Error: ' + error);
+              console.log('Error here: ' + error);
               res.status(400).send({message: 'Fehler beim Laderaum.'});
             }
           );
@@ -871,14 +887,15 @@ export function app(): express.Express {
       res.status(200).send({
         posts,
       });
-    }).catch(() => {
+    }).catch((err) => {
+      console.log(err);
       res.status(400).send({
         message: 'Fehler beim getten der Posts!',
       });
     });
   });
 
-// Update post - FIXME
+  // Update post
   server.put('/api/post/:id', (req: Request, res: Response) => {
 
     const id: number = Number(req.params.id);
@@ -902,7 +919,7 @@ export function app(): express.Express {
       fahrzeugTyp,
       id
     ];
-    const query = 'UPDATE post SET startzeit = ?, ankunft_zeit = ?, bezahlungsart = ?, anzahl_sitzplaetze = ?, beschreibung = ?, preis = ?, fahrzeug_typ = ? WHERE id = ?;';
+    const query = 'UPDATE post SET startzeit = $1, ankunft_zeit = $2, bezahlungsart = $3, anzahl_sitzplaetze = $4, beschreibung = $5, preis = $6, fahrzeug_typ = $7 WHERE id = $8;';
     queryPromise(query, data).then(() => {
       res.status(200).send({
         message: `Updated post ${id}`,
@@ -936,20 +953,26 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
-      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (NULL, ?, ?, ?);';
+      const queryLade = 'INSERT INTO laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
-        ladeflaeche = result.insertId;
+        ladeflaeche = result.rows[0].id;
         const data: [number, number, number, number] = [
           kaeufer,
           ladeflaeche,
           anzahlSitzplaetze,
           post,
         ];
-        const query = 'INSERT INTO buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (NULL, ?, ?, ?, ?);';
-        queryPromise(query, data).then(results => {
-          res.status(201).send({
-            message: 'Gebucht!'
-          });
+        const query = 'INSERT INTO buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (nextval(\'buchung_id_seq\'), $1, $2, $3, $4);';
+        queryPromise(query, data).then(() => {
+          queryPromise('UPDATE post SET gebucht = true WHERE id = $1;', [post]).then(() => {
+            res.status(201).send({
+              message: 'Gebucht!'
+            });
+          }).catch(() => {
+              res.status(400).send({
+                message: 'Fehler beim buchen.',
+              });
+            });
         }).catch(() => {
             res.status(400).send({
               message: 'Fehler beim buchen.',
@@ -971,14 +994,14 @@ export function app(): express.Express {
 // Get buchungen/:cargonaut -> Alle Buchungen, die ein bestimmter Cargonaut gebucht ODER VON IHM GEBUCHT WURDEN
   server.get('/api/buchungen/:cargonaut', (req: Request, res: Response) => {
     const cargonaut: number = Number(req.params.cargonaut);
-    const data: [number, number] = [
-      cargonaut,
-      cargonaut,
+    const data: [number] = [
+      cargonaut
     ];
-    const query = 'SELECT * FROM buchung, post WHERE buchung.post = post.id AND (buchung.gebucht_von = ? OR post.verfasser = ?)';
-    queryPromise(query, data).then(results => {
+    const query = 'SELECT * FROM buchung, post WHERE buchung.post = post.id AND (buchung.gebucht_von = $1 OR post.verfasser = $1)';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
       res.status(200).send({
-        buchungen: results,
+        buchungen: rows,
       });
     }).catch(() => {
       res.status(400).send({
@@ -992,8 +1015,8 @@ export function app(): express.Express {
     const id: number = Number(req.params.post);
     const status: string = req.body.data.status;
     const data: [string, number] = [status, id];
-    const query = 'UPDATE post SET status= ? WHERE id = ?';
-    queryPromise(query, data).then(results => {
+    const query = 'UPDATE post SET status= $1 WHERE id = $2';
+    queryPromise(query, data).then(() => {
       res.status(200).send({
         message: 'Updated!'
       });
@@ -1024,8 +1047,8 @@ export function app(): express.Express {
         punktzahl,
         kommentar,
       ];
-      const query = 'INSERT INTO bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (NULL, ?, ?, ?, ?);';
-      queryPromise(query, data).then(results => {
+      const query = 'INSERT INTO bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (nextval(\'bewertung_id_seq\'), $1, $2, $3, $4);';
+      queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Bewertung abgegeben!'
         });
@@ -1048,16 +1071,17 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ? ORDER BY id DESC';
-    queryPromise(query, data).then(results => {
+    const query = 'SELECT bewertung.id, bewertung.verfasser, bewertung.fahrt, bewertung.punktzahl, bewertung.kommentar FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = $1 ORDER BY id DESC';
+    queryPromise(query, data).then(result => {
+      const rows = result.rows;
       const ratings: Rating [] = [];
-      for (const result of results) {
+      for (const row of rows) {
         const rating: Rating = {
-          id: result.id,
-          author: result.verfasser,
-          trip: result.fahrt,
-          ratingStars: result.punktzahl,
-          comment: result.kommentar
+          id: parseInt(row.id, 10),
+          author: row.verfasser,
+          trip: row.fahrt,
+          ratingStars: row.punktzahl,
+          comment: row.kommentar
         };
         ratings.push(rating);
       }
@@ -1076,12 +1100,13 @@ export function app(): express.Express {
     const data: [number] = [
       post,
     ];
-    const query = 'SELECT * FROM bewertung WHERE fahrt = ? ORDER BY id DESC';
+    const query = 'SELECT * FROM bewertung WHERE fahrt = $1 ORDER BY id DESC';
     queryPromise(query, data).then(results => {
+      const rows = results.rows;
       const ratings: Rating [] = [];
-      for (const result of results) {
+      for (const result of rows) {
         const rating: Rating = {
-          id: result.id,
+          id: parseInt(result.id, 10),
           author: result.verfasser,
           trip: result.fahrt,
           ratingStars: result.punktzahl,
@@ -1104,10 +1129,11 @@ export function app(): express.Express {
     const data: [number] = [
       cargonaut,
     ];
-    const query = 'SELECT AVG(punktzahl) AS avg FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = ?';
+    const query = 'SELECT AVG(punktzahl) AS avg FROM bewertung, post WHERE bewertung.fahrt = post.id AND post.verfasser = $1';
     queryPromise(query, data).then(results => {
+      const rows = results.rows;
       res.status(200).send({
-        avgBewertung: results[0],
+        avgBewertung: rows[0],
       });
     }).catch(() => {
       res.status(400).send({
@@ -1115,20 +1141,23 @@ export function app(): express.Express {
       });
     });
   });
+
   /*****************************************************************************
    *           Chat        * //
    *****************************************************************************/
+
   server.get('/api/chats/:cargonaut', (req, res) => {
     const cargonaut: number = Number(req.params.cargonaut);
     const data: [number, number] = [
       cargonaut,
       cargonaut
     ];
-    const query = 'SELECT * FROM `chat` WHERE cargonaut_1 = ? OR cargonaut_2 = ?';
+    const query = 'SELECT * FROM chat WHERE cargonaut_1 = $1 OR cargonaut_2 = $2';
     queryPromise(query, data).then(results => {
+      const rows = results.rows;
       const chats: Chat [] = [];
-      for (const result of results) {
-        const chat: Chat = {id: result.id, fstMember: result.cargonaut_1, sndMember: result.cargonaut_2};
+      for (const result of rows) {
+        const chat: Chat = {id: parseInt(result.id, 10), fstMember: result.cargonaut_1, sndMember: result.cargonaut_2};
         chats.push(chat);
       }
       res.status(200).send({
@@ -1150,8 +1179,8 @@ export function app(): express.Express {
         message,
         zeit
       ];
-      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (NULL, ?, ?, ?, TIMESTAMP(?));';
-      queryPromise(query, data).then(results => {
+      const query = 'INSERT INTO chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (nextval(\'chatnachricht_id_seq\'), $1, $2, $3, $4);';
+      queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Chatnachricht gesendet!'
         });
@@ -1173,16 +1202,15 @@ export function app(): express.Express {
     const cargonaut1: number = Number(req.body.cargonaut1);
     const cargonaut2: number = Number(req.body.cargonaut2);
     if (cargonaut1 && cargonaut2) {
-      const data: [number, number, number, number] = [
-        cargonaut1,
-        cargonaut2,
+      const data: [number, number] = [
         cargonaut1,
         cargonaut2
       ];
-      const query = 'SELECT * FROM `chat` WHERE (cargonaut_1 = ? AND cargonaut_2 = ?) OR (cargonaut_2 = ? AND cargonaut_1 = ?)';
+      const query = 'SELECT * FROM chat WHERE (cargonaut_1 = $1 AND cargonaut_2 = $2) OR (cargonaut_2 = $1 AND cargonaut_1 = $2)';
       queryPromise(query, data).then(results => {
-        if (results.length > 0) {
-          const result = results[0];
+        const rows = results.rows;
+        if (rows.length > 0) {
+          const result = rows[0];
           res.status(200).send({
             chatId: result.id
           });
@@ -1191,10 +1219,10 @@ export function app(): express.Express {
             cargonaut1,
             cargonaut2
           ];
-          const innerQuery = 'INSERT INTO `chat` (`id`, `cargonaut_1`, `cargonaut_2`) VALUES (NULL, ?, ?)';
+          const innerQuery = 'INSERT INTO chat (id, cargonaut_1, cargonaut_2) VALUES (nextval(\'chat_id_seq\'), $1, $2) RETURNING id';
           queryPromise(innerQuery, innerData).then(createdChat => {
             res.status(201).send({
-              chatId: createdChat.insertId
+              chatId: parseInt(createdChat.rows[0].id, 10)
             });
           });
         }
@@ -1213,9 +1241,10 @@ export function app(): express.Express {
 
   server.get('/api/chat/:id', (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
-    const query = 'SELECT * FROM `chat` WHERE id = ?';
+    const query = 'SELECT * FROM chat WHERE id = $1';
     queryPromise(query, [id]).then(results => {
-      const chat: Chat = {id: results[0].id, fstMember: results[0].cargonaut_1, sndMember: results[0].cargonaut_2};
+      const rows = results.rows;
+      const chat: Chat = {id: parseInt(rows[0].id, 10), fstMember: rows[0].cargonaut_1, sndMember: rows[0].cargonaut_2};
       res.status(200).send({
         chat
       });
@@ -1225,13 +1254,14 @@ export function app(): express.Express {
   server.get('/api/chatMessages/:chatId', (req: Request, res: Response) => {
     const id: number = Number(req.params.chatId);
     const messages: ChatMessage [] = [];
-    const query = 'SELECT * FROM `chatnachricht` WHERE chat = ?';
+    const query = 'SELECT * FROM chatnachricht WHERE chat = $1';
     queryPromise(query, [id]).then(results => {
-      for (const result of results) {
+      const rows = results.rows;
+      for (const result of rows) {
         const message: ChatMessage = {
           author: result.verfasser,
           chat: result.chat,
-          id: result.id,
+          id: parseInt(result.id, 10),
           message: result.nachricht,
           sentAt: result.zeit
         };
@@ -1248,7 +1278,7 @@ export function app(): express.Express {
    *           Angular        * //
    *****************************************************************************/
   server.get('/api/**', (req, res) => {
-    res.status(404).send('this data request is  not supported');
+    res.status(404).send('this data request is not supported');
   });
 
 // Example Express Rest API endpoints

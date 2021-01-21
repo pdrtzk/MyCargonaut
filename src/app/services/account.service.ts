@@ -102,7 +102,7 @@ export class AccountService {
   public async getAverageUserRating(userId: number): Promise<number> {
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.get('http://localhost:4200/api/avgBewertung/' + userId).toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/avgBewertung/' + userId).toPromise().then((res: any) => {
         resolve(res.avgBewertung.avg);
       }).catch(error => {
         console.log('Error: ' + error.message);
@@ -140,7 +140,6 @@ export class AccountService {
       if (this.user.id === user.id) {
         await http.delete('https://mycargonaut.herokuapp.com/api/cargonaut/' + user.id).toPromise().then((res: any) => {
           this.logout();
-        }
           resolve();
         }).catch(error => {
           console.log('Error: ' + error.message);
@@ -196,7 +195,10 @@ export class AccountService {
   public getImage(userId: number): Promise<string | ArrayBuffer> {
     const reader = new FileReader();
     return new Promise<string | ArrayBuffer>(async (resolve, reject) => {
-      await this.http.get(`\`https://mycargonaut.herokuapp.com/api/cargonaut/${userId}/image\``, {responseType: 'blob', observe: 'response'}).toPromise().then((res: any) => {
+      await this.http.get(`https://mycargonaut.herokuapp.com/api/cargonaut/${userId}/image`, {
+        responseType: 'blob',
+        observe: 'response'
+      }).toPromise().then((res: any) => {
         if (res.status === 204) {
           console.log(`User with id ${userId} has no image`);
           resolve(null); // no image set

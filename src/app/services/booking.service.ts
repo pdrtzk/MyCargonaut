@@ -18,7 +18,7 @@ export class BookingService {
       await http.get('http://localhost:4200/api/buchungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         const bookings: Post[] = [];
         res.buchungen.forEach(booking => bookings.push({
-          id: booking.id,
+          id: parseInt(booking.id, 10),
           description: booking.description,
           startlocation: booking.standort,
           endlocation: booking.zielort,
@@ -26,13 +26,13 @@ export class BookingService {
           end_time: booking.zeit,
           payment: booking.bezahlungsart,
           vehicle: {
-            id: booking.fahrzeug
+            id: parseInt(booking.fahrzeug, 10)
           },
           bookedBy: [{id: booking.gebucht_von}],
-          seats: booking.anzahl_sitzplätze,
+          seats: parseInt(booking.anzahl_sitzplätze, 10),
           type: booking.typ,
           author: {
-            id: booking.verfasser
+            id: parseInt(booking.verfasser, 10)
           },
           price: booking.preis,
           closed: booking.gebucht === 1,

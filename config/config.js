@@ -8,19 +8,25 @@ var Configuration = /** @class */ (function () {
         database: 'cargonaut_db',
         host: 'localhost',
         password: '',
-        user: 'root',
+        user: 'root'
+    };
+    Configuration.postgresOptions = {
+        database: 'cargonaut_db',
+        host: 'localhost',
+        password: 'postgres',
+        user: 'postgres',
+        port: 5432
     };
     Configuration.sessionOptions = {
         cookie: {
-            maxAge: 5 * 60 * 1000,
+            maxAge: 5 * 60 * 1000
         },
         name: 'MaCookie',
         resave: true,
         rolling: true,
         saveUninitialized: true,
-        secret: 'Secret',
+        secret: 'Secret'
     };
     return Configuration;
 }());
 exports.Configuration = Configuration;
-//# sourceMappingURL=config.js.map

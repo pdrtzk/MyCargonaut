@@ -43,7 +43,7 @@ export class PostService {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
       await http.get('http://localhost:4200/api/post/' + postId).toPromise().then((res: any) => {
-        res.post.author = {id: res.post.author};
+        res.post.author = {id: parseInt(res.post.author, 10)};
         res.post.vehicle = {id: res.post.vehicle};
         res.post.end_time = new Date(res.post.end_time);
         res.post.start_time = new Date(res.post.start_time);
