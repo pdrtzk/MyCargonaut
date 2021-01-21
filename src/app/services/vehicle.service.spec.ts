@@ -55,7 +55,7 @@ describe('VehicleService', () => {
         expect(res[0].type.description).toEqual(testData.vehicles[0].modell);
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicles/12');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicles/12');
     expect(req.request.method).toEqual('GET');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -79,7 +79,7 @@ describe('VehicleService', () => {
         expect(res[0].type.description).toEqual(exVehicle.type.description);
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicles/12');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicles/12');
     expect(req.request.method).toEqual('GET');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -100,7 +100,7 @@ describe('VehicleService', () => {
         expect(res.hold.height).toEqual(1);
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicle/20');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicle/20');
     expect(req.request.method).toEqual('GET');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -120,7 +120,7 @@ describe('VehicleService', () => {
         expect(res).toEqual(20); // newly assigned id of created vehicle
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicle/12'); // 12 is owner
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicle/12'); // 12 is owner
     expect(req.request.method).toEqual('POST');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -135,7 +135,7 @@ describe('VehicleService', () => {
         expect(res).toEqual('Fahrzeug aktualisiert!');
       }
     );
-    const req2 = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicle/20'); // 12 is owner
+    const req2 = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicle/20'); // 12 is owner
     expect(req2.request.method).toEqual('PUT');
     req2.flush(testData2); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -155,7 +155,7 @@ describe('VehicleService', () => {
         expect(res).toEqual(20); // newly assigned id of created vehicle
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicle/12'); // 12 is owner
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicle/12'); // 12 is owner
     expect(req.request.method).toEqual('POST');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests
@@ -175,7 +175,7 @@ describe('VehicleService', () => {
         expect(res).toEqual(true); // newly assigned id of created vehicle
       }
     );
-    const req = httpTestingController.expectOne(' https://mycargonaut.herokuapp.com/api/vehicle/20'); // 12 is owner
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/vehicle/20'); // 12 is owner
     expect(req.request.method).toEqual('DELETE');
     req.flush(testData); // return data
     httpTestingController.verify(); // no outstandig requests

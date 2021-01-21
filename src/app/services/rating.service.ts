@@ -15,7 +15,7 @@ export class RatingService {
   getRatingsForUser(cargonautId: number): Promise<any> {
     const http = this.http;
     return new Promise<Rating[]>(async (resolve, reject) => {
-      await http.get(' https://mycargonaut.herokuapp.com/api/bewertungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/bewertungen/' + cargonautId.toString(), {}).toPromise().then((res: any) => {
         const tempRatings: Rating[] = [];
         res.ratings.forEach(elem => {
           const r: Rating = new Rating();
@@ -34,7 +34,7 @@ export class RatingService {
 
   async addRating(rating: Rating): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
-        await this.http.post(' https://mycargonaut.herokuapp.com/api/bewertung/' + rating.author.id.toString(), {
+        await this.http.post('https://mycargonaut.herokuapp.com/api/bewertung/' + rating.author.id.toString(), {
           fahrt: rating.trip.id, // todo remove 0
           punktzahl: rating.ratingStars,
           kommentar: rating.comment,

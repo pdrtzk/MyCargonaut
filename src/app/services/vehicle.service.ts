@@ -21,7 +21,7 @@ export class VehicleService {
     const headersY = new HttpHeaders({'Content-Type': 'application/json'});
     const http = this.http;
     return new Promise<Vehicle[]>(async (resolve, reject) => {
-      await http.get(' https://mycargonaut.herokuapp.com/api/vehicles/' + cargonautId.toString(), {
+      await http.get('https://mycargonaut.herokuapp.com/api/vehicles/' + cargonautId.toString(), {
         headers: headersY
       }).toPromise().then((res: any) => {
         res.vehicles.forEach(elem => {
@@ -43,7 +43,7 @@ export class VehicleService {
 
   public async getVehicleHold(ve: Vehicle): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
-      await this.http.get(' https://mycargonaut.herokuapp.com/api/vehicle/' + ve.id, {}).toPromise().then((res: any) => {
+      await this.http.get('https://mycargonaut.herokuapp.com/api/vehicle/' + ve.id, {}).toPromise().then((res: any) => {
         if (ve.hold) {
           ve.hold.height = parseFloat(res.hold.ladeflaeche_hoehe_cm);
           ve.hold.width = parseFloat(res.hold.ladeflaeche_breite_cm);
@@ -61,7 +61,7 @@ export class VehicleService {
   public async updateVehicle(vehicle: Vehicle): Promise<string> {
     const http = this.http;
     return new Promise<string>(async (resolve, reject) => {
-      await http.put(' https://mycargonaut.herokuapp.com/api/vehicle/' + vehicle.id.toString(), {
+      await http.put('https://mycargonaut.herokuapp.com/api/vehicle/' + vehicle.id.toString(), {
         vehicle
       }).toPromise().then((res: any) => {
         resolve(res.message);
@@ -84,7 +84,7 @@ export class VehicleService {
 
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.post(' https://mycargonaut.herokuapp.com/api/vehicle/' + cargonautId.toString(), {
+      await http.post('https://mycargonaut.herokuapp.com/api/vehicle/' + cargonautId.toString(), {
         model,
         type,
         length,
@@ -105,7 +105,7 @@ export class VehicleService {
   public async deleteVehicle(vehicleId: number): Promise<boolean> {
     const http = this.http;
     return new Promise<boolean>(async (resolve, reject) => {
-      await http.delete(' https://mycargonaut.herokuapp.com/api/vehicle/' + vehicleId.toString(), {}).toPromise().then((res: any) => {
+      await http.delete('https://mycargonaut.herokuapp.com/api/vehicle/' + vehicleId.toString(), {}).toPromise().then((res: any) => {
         resolve(true);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -132,7 +132,7 @@ export class VehicleService {
 
   async getVehicleTypeForVehicle(vehicleId: number): Promise<Vehicle> {
     return new Promise<Vehicle>(async (resolve, reject) => {
-      await this.http.get(' https://mycargonaut.herokuapp.com/api/vehicle/' + vehicleId, {
+      await this.http.get('https://mycargonaut.herokuapp.com/api/vehicle/' + vehicleId, {
       }).toPromise().then((res: any) => {
         const vehicleData: Vehicle = {id: vehicleId};
         vehicleData.type = {

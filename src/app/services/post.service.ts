@@ -16,7 +16,7 @@ export class PostService {
   public async createPost(cargonaut: Cargonaut, post: Post): Promise<number> {
     const http = this.http;
     return new Promise<number>(async (resolve, reject) => {
-      await http.post(' https://mycargonaut.herokuapp.com/api/post/' + cargonaut.id, {
+      await http.post('https://mycargonaut.herokuapp.com/api/post/' + cargonaut.id, {
         post
       }).toPromise().then((res: any) => {
         resolve(res.createdVehicle);
@@ -30,7 +30,7 @@ export class PostService {
   public async getAllPosts(): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
-      await http.get(' https://mycargonaut.herokuapp.com/api/posts').toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/posts').toPromise().then((res: any) => {
         resolve(res.posts);
       }).catch(error => {
         console.log('Error: ' + error);
@@ -42,7 +42,7 @@ export class PostService {
   public async getSpecificPost(postId: number): Promise<Post> {
     const http = this.http;
     return new Promise<Post>(async (resolve, reject) => {
-      await http.get(' https://mycargonaut.herokuapp.com/api/post/' + postId).toPromise().then((res: any) => {
+      await http.get('https://mycargonaut.herokuapp.com/api/post/' + postId).toPromise().then((res: any) => {
         res.post.author = {id: parseInt(res.post.author, 10)};
         res.post.vehicle = {id: res.post.vehicle};
         res.post.end_time = new Date(res.post.end_time);
@@ -61,7 +61,7 @@ export class PostService {
       post.description = 'no description';
     }
     return new Promise<Post>(async (resolve, reject) => {
-      await http.put(' https://mycargonaut.herokuapp.com/api/post/' + postId, {
+      await http.put('https://mycargonaut.herokuapp.com/api/post/' + postId, {
         post
       }).toPromise().then((res: any) => {
         resolve(res.post);
@@ -75,7 +75,7 @@ export class PostService {
   async getMorePosts(): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
-      await http.get(' https://mycargonaut.herokuapp.com/api/posts')
+      await http.get('https://mycargonaut.herokuapp.com/api/posts')
         .toPromise().then((res: any) => {
           res.posts.forEach(post => {
             post.start_time = new Date(post.start_time);
