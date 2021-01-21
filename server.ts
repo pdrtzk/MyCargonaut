@@ -223,7 +223,7 @@ export function app(): express.Express {
           iban,
           bic
         ];
-        const query = 'INSERT INTO cargonaut_db.cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (nextval(\'cargonaut_id_seq\'), $1, $2, $3, $4, $5, $6, $7, $8);';
+        const query = 'INSERT INTO cargonaut_db.cargonaut (id, firstname, lastname, password, email, geburtsdatum, kontoinhaber, iban, bic) VALUES (nextval(\'cargonaut_db.cargonaut_id_seq\'), $1, $2, $3, $4, $5, $6, $7, $8);';
         queryPromise(query, data).then(() => {
           res.status(201).send({
             message: 'Neuer Nutzer erstellt!'
@@ -524,7 +524,7 @@ export function app(): express.Express {
         hoehe,
       ];
 
-      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'cargonaut_db.laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.rows[0].id;
         const data: [string, number, number, string, string, string] = [
@@ -535,7 +535,7 @@ export function app(): express.Express {
           modell,
           kommentar
         ];
-        const query = 'INSERT INTO cargonaut_db.fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (nextval(\'fahrzeug_id_seq\'), $1, $2, $3, $4, $5, $6) RETURNING id;';
+        const query = 'INSERT INTO cargonaut_db.fahrzeug (id, art, anzahl_sitzplaetze, ladeflaeche, besitzer, modell, kommentar) VALUES (nextval(\'cargonaut_db.fahrzeug_id_seq\'), $1, $2, $3, $4, $5, $6) RETURNING id;';
         queryPromise(query, data).then(results => {
           res.status(201).send({
             message: 'Neues Fahrzeug erstellt!',
@@ -669,7 +669,7 @@ export function app(): express.Express {
       breite,
       hoehe,
     ];
-    const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+    const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'cargonaut_db.laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
     queryPromise(queryLade, dataLade).then(result => {
       ladeflaeche = result.rows[0].id;
       const data: [string, number, number, string, string, number] = [
@@ -736,7 +736,7 @@ export function app(): express.Express {
         hoehe,
       ];
       if (laenge && breite && hoehe) {
-        const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+        const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'cargonaut_db.laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
         await queryPromise(queryLade, dataLaderaum).then(resu => {
           laderaum = resu.rows[0].id;
           // create Post
@@ -764,7 +764,7 @@ export function app(): express.Express {
         preis,
         fahrzeugTyp
       ];
-      const query = 'INSERT INTO cargonaut_db.post  ( id ,  standort ,  zielort ,  startzeit ,  ankunft_zeit ,  bezahlungsart ,  laderaum ,  fahrzeug ,  gebucht ,  anzahl_sitzplaetze ,  beschreibung ,  typ ,  verfasser ,  status ,  preis , fahrzeug_typ) VALUES (nextval(\'post_id_seq\'), $1, $2, $3, $4, $5, $6, $7, false, $8, $9, $10, $11, \'ausstehend\', $12, $13) RETURNING id;';
+      const query = 'INSERT INTO cargonaut_db.post  ( id ,  standort ,  zielort ,  startzeit ,  ankunft_zeit ,  bezahlungsart ,  laderaum ,  fahrzeug ,  gebucht ,  anzahl_sitzplaetze ,  beschreibung ,  typ ,  verfasser ,  status ,  preis , fahrzeug_typ) VALUES (nextval(\'cargonaut_db.post_id_seq\'), $1, $2, $3, $4, $5, $6, $7, false, $8, $9, $10, $11, \'ausstehend\', $12, $13) RETURNING id;';
       queryPromise(query, data).then(resultPost => {
         res.status(201).send({
           message: 'Neuer Post erstellt!',
@@ -953,7 +953,7 @@ export function app(): express.Express {
         breite,
         hoehe,
       ];
-      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
+      const queryLade = 'INSERT INTO cargonaut_db.laderaum (id, ladeflaeche_laenge_cm, ladeflaeche_breite_cm, ladeflaeche_hoehe_cm) VALUES (nextval(\'cargonaut_db.laderaum_id_seq\'), $1, $2, $3) RETURNING id;';
       queryPromise(queryLade, dataLade).then(result => {
         ladeflaeche = result.rows[0].id;
         const data: [number, number, number, number] = [
@@ -962,7 +962,7 @@ export function app(): express.Express {
           anzahlSitzplaetze,
           post,
         ];
-        const query = 'INSERT INTO cargonaut_db.buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (nextval(\'buchung_id_seq\'), $1, $2, $3, $4);';
+        const query = 'INSERT INTO cargonaut_db.buchung (id, gebucht_von, ladeflaeche, anzahl_sitzplaetze, post) VALUES (nextval(\'cargonaut_db.buchung_id_seq\'), $1, $2, $3, $4);';
         queryPromise(query, data).then(() => {
           queryPromise('UPDATE cargonaut_db.post SET gebucht = true WHERE id = $1;', [post]).then(() => {
             res.status(201).send({
@@ -1047,7 +1047,7 @@ export function app(): express.Express {
         punktzahl,
         kommentar,
       ];
-      const query = 'INSERT INTO cargonaut_db.bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (nextval(\'bewertung_id_seq\'), $1, $2, $3, $4);';
+      const query = 'INSERT INTO cargonaut_db.bewertung (id, verfasser, fahrt, punktzahl, kommentar) VALUES (nextval(\'cargonaut_db.bewertung_id_seq\'), $1, $2, $3, $4);';
       queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Bewertung abgegeben!'
@@ -1179,7 +1179,7 @@ export function app(): express.Express {
         message,
         zeit
       ];
-      const query = 'INSERT INTO cargonaut_db.chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (nextval(\'chatnachricht_id_seq\'), $1, $2, $3, $4);';
+      const query = 'INSERT INTO cargonaut_db.chatnachricht (id, verfasser, chat, nachricht, zeit) VALUES (nextval(\'cargonaut_db.chatnachricht_id_seq\'), $1, $2, $3, $4);';
       queryPromise(query, data).then(() => {
         res.status(201).send({
           message: 'Chatnachricht gesendet!'
@@ -1219,7 +1219,7 @@ export function app(): express.Express {
             cargonaut1,
             cargonaut2
           ];
-          const innerQuery = 'INSERT INTO cargonaut_db.chat (id, cargonaut_1, cargonaut_2) VALUES (nextval(\'chat_id_seq\'), $1, $2) RETURNING id';
+          const innerQuery = 'INSERT INTO cargonaut_db.chat (id, cargonaut_1, cargonaut_2) VALUES (nextval(\'cargonaut_db.chat_id_seq\'), $1, $2) RETURNING id';
           queryPromise(innerQuery, innerData).then(createdChat => {
             res.status(201).send({
               chatId: parseInt(createdChat.rows[0].id, 10)
