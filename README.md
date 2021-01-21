@@ -14,25 +14,64 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 
 # Inhaltsverzeichnis
 
-- [Das Projekt aufsetzen](#Das-Projekt-aufsetzen)
+- [Projekt Setup](#Projekt-Setup)
 - [Paketübersicht](#Verwendete-Pakete)
 - [Testing und CI/CD](#Testing-und-CI/CD)
 - [Projektplanung und Konventionen](#Projektplanung-und-Konventionen)
 - [Funktionalität von MyCargonaut](#Funktionalität-von-MyCargonaut)
 
 
-## Das Projekt aufsetzen
-- [Das Projekt forken](https://github.com/Dxree/MyCargonaut)
-- Installiere [node.js](https://github.com/nodejs)
-- Importiere [die SQL-Datenbank](https://github.com/Dxree/MyCargonaut/blob/main/config/cargonaut_new.sql) into a preferred SQL-Webserver-Application.
-- Du wirst die [server.ts](https://github.com/Dxree/MyCargonaut/blob/main/server.ts) nicht compilieren brauchen.
-- Rufe die [config.skeleton](https://github.com/Dxree/MyCargonaut/blob/main/config/config.skeleton) auf, generiere anhand dieser eine neue config.ts und verändere die Einstellungen falls nötig. Dann kompiliere deine config.ts.
-- Installiere die [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json) via `npm install`
-- Um das Projekt mitsamt des Servers zu starten schreibe `ng run MyCargonaut:serve-ssr` in die Konsole des Projektpfads oder starte es einfach über die [package.json](https://github.com/Dxree/MyCargonaut/blob/main/package.json).
-- Jetzt sollte das Projekt local auf localhost laufen (siehe Konsole).
+# Projekt Setup
+
+## Vorraussetzungen
+- Abgeschlossene Installation von [node.js](https://github.com/nodejs)
+- Abgeschlossene Installation von [MySQL](https://www.mysql.com/de/)
+- Dieses [Projekt](https://github.com/Dxree/MyCargonaut) heruntergeladen bzw. geforkt
+
+## Installation aller Abhängingkeiten
+Um die Anwendung starten zu können, müssen zunächst alle Abhängigkeiten installiert werden. Das geht über das Terminal mit dem Befehl `npm install`.
+
+```sh
+cd MyCargonaut
+npm install
+```
+
+## Setup der Datenbank
+Das Projekt verwendet eine lokale MySQL Datenbank. Zur Einrichtung dieser sind folgende Schritte nötig:
+
+1. Benutzer in MySQL wie folgt anlegen:
+    * Benutzername: `root`
+    * Host: `localhost`
+    * Passwort: *keins*
+2. Datenbank für Benutzer `root@localhost` namens `cargonaut_db` anlegen.
+3. Das SQL-Skript, das unter [config/cargonaut_db.sql](https://github.com/Dxree/MyCargonaut/blob/main/config/cargonaut_db_.sql) zu finden ist, ausführen.
+4. Überprüfen ob Datenbank erfolgreich eingerichtet wurde:
+    Dazu die folgende Query ausführen und den Output vergleichen.
+    ```sql
+    SELECT COUNT(*) FROM cargonaut;
+    ```
+    Ist das Ergebnis `5`? Dann wurde alles richtig gemacht und die Datenbank ist jetzt einsatzbereit.
 
 
-## Verwendete Pakete
+### Individuellen Datenbank Einstellungen verwenden
+Alternativ kann auch Benutzername, Host, Passwort und Datenbankname individuell gewählt werden. Dazu müssen die entsprechenden Felder in der [config/config.skeleton](https://github.com/Dxree/MyCargonaut/blob/main/config/config.skeleton) geändert werden, eine `config.ts`-Datei daraus erstellt werden und im Anschluss mittels `tsc config/config.ts` kompiliert werden.
+
+Es kann auch direkt die [config/config.js](https://github.com/Dxree/MyCargonaut/blob/main/config/config.js)-Datei angepasst werden.
+
+### Setup unter Linux
+Wird das Projekt unter Linux eingerichtet muss beim Datenbank-Setup darauf geachtet werden, dass die Authentifizierungsmethode des MySQL-Benutzers auf `mysql_native_password` (und nicht `auth_socket`) gesetzt ist. Diese ist nicht immer voreingestellt.
+Weitere Infos dazu [hier](https://thequickblog.com/how-to-change-authentication-method-in-mysql/).
+
+
+## Anwendung starten
+Die Anwendung wird über das Terminal mit dem Befehl
+```sh
+npm run dev:ssr
+```
+gestartet. Anschließend kann unter http://localhost:4200/ darauf zugegriffen werden.
+
+
+# Verwendete Pakete
 
 [![npm](https://img.shields.io/npm/v/npm)](https://www.npmjs.com/package/npm)
 [![npm](https://img.shields.io/npm/v/@angular/cli?label=AngularCLI)](https://www.npmjs.com/package/@angular/cli)
@@ -49,31 +88,68 @@ Dieses Projekt wurde generiert mit [Angular CLI](https://github.com/angular/angu
 
 # Testing und CI/CD
 
-## Development server
+## Testing
 
-Run `ng run MyCargonaut:serve-ssr` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
-If you just want to start the Angular FrontEnd Webserver, type `ng serve` or `ng build --watch` or just compile the Angular project with `ng build`
+Zum Testen der Anwendung wurden verschiedene Testszenarien für die einzelnen Angular Komponenten und Services geschrieben. Diese sind im MyCargonaut/src-Ordner in verteilten `.spec`-Dateien definiert. Als Framework für diese Tests wurde Karma (mit Jasmine) genutzt.
+Die weiteren Einstellungen zu Karma können der [karma.conf.js](https://github.com/Dxree/MyCargonaut/blob/main/karma.conf.js) entnommen werden.
 
-## Code scaffolding
+Um die Szenarien lokal zu testen muss der Befehl `ng test` ausgeführt werden. Dabei kann die Option `--watch=false` genutzt werden, um den Testprozess nach einmaliger Ausführung direkt wieder zu beenden und nicht auf Änderungen im Code zu warten.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+**Info:** Die Karma Tests werden in einem HeadlessChrome-Browser ausgeführt, damit diese auch innerhalb einer CI Pipeline getestet werden können.
 
-## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Continuous Integration [![Build Status](https://travis-ci.com/Dxree/MyCargonaut.svg?branch=main)](https://travis-ci.com/Dxree/MyCargonaut)
 
-## Running unit tests
+Pushes und Pull Requests im [GitHub-Repository]() des Projekts wurden mittels [Travis CI](https://travis-ci.com/) automatisiert getestet.
+Dabei wurden folgende Befehle ausgeführt bzw. getestet:
+* Statische Code-Analyse: `ng lint`
+* Kompilieren und bauen des Servers und Angular Frontends: `npm run build:ssr`
+* Ausführen der spec-Tests des Angular Frontends: `ng test --watch=false`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+**Info:** Das gratis Credit-Kontingent für Travis CI wurde am 12.01.2020 aufgebraucht, weshalb seit dem keine weiteren Builds stattgefunden haben. Stattdessen sollte vor jedem Push mittels der oben aufgeführen Strategie manuell und lokal getestet werden.
 
-## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Deployment
 
-## Further help
+Da es sich bei der Anwendung um eine Fullstack Anwendung mit Server und Datenbank handelt, kann diese nicht auf statischen Website-Hosting Services, wie GitHub Pages, deployt werden.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+**Disclaimer:** Die Anwendung ist nirgends vollständig deployt, jedoch teilweise auf Heroku. Zu den Gründen kann man in den nachfolgenden Abschnitten mehr lesen.
 
+### Deployment mit Firebase
+
+Angular Universal Projekte können ganz leicht auf [Firebase](https://firebase.google.com/) deployt werden. Dazu müssen nur zwei Befehle ausgeführt werden:
+```sh
+ng add @angular/Firebase
+ng deploy
+```
+Leider gehört das Deployment einer Serverseitig gerenderten App bei Firebase jedoch zu den Funktionen für die eine Kreditkarte hinterlegt werden muss, auch wenn die eigentliche Funktion kostenlos ist und auch so beworben wird. Das versuchte Deployment endete deshalb mit dieser Ausgabe auf der Konsole:
+
+![Firebase Deployment](https://github.com/Dxree/MyCargonaut/blob/main/documentation/Screenshots/firebase_deployment.png?raw=true)
+
+
+### Deployment mit Heroku
+
+[Heroku](https://www.heroku.com/) ist ein "Platform as a Service (PaaS)"-Dienst mit dem sich u.A. Node.js Projekte im Web bereitstellen lassen. Dabei bietet Heroku viele Einstellungsmöglichkeiten und Add-Ons.
+
+Das Angular Frontend und der Node.js w/ express Server ließen sich sehr gut dort deployen. Jedoch fehlt die Datenbank und macht die Anwendung in Folge dort unbenutzbar, da man lediglich die Seiten Home (ohne Angebote und Gesuche), Login und Registrieren ansehen kann, jedoch nicht deren Funktionalitäten, wie das Anmelden, benutzen kann, da keine Verbindung zu einer Datenbank besteht. Das hat den Grund, dass sich zu Beginn der Entwicklung für eine MySQL Datenbank entschieden wurde und Heroku grundsätzlich nur eine PostgreSQL Datnebank zur Verfügung stellt. Dennoch gibt es eine Auswahl an Add-Ons, die eine MySQL Datenbank in Heroku integrieren können. Diese sind [ClearDB MySQL](https://elements.heroku.com/addons/cleardb), [JawsDB MySQL](https://elements.heroku.com/addons/jawsdb) und [JawsDB Maria](https://elements.heroku.com/addons/jawsdb-maria). Obwohl alle einen ausreichenden und kostenlosen Bezahlplan haben wurde beim tatsächlichen Versuch eine Datenbank in Heroku damit einzurichten klar, dass man für die Nutzung dieser Add-Ons einen verifizierten Heroku-Account benötigt. Da dies auch hier nur mit einer Kreditkarte möglich ist und wir mitten in der Entwicklung unserer Anwendung nicht einfach die Datenbank wechseln wollten, kamen wir auch mit dieser Deployment-Variante nicht final ans Ziel.
+
+Dennoch ist die (teilweise) deployte Anwendung auf Heroku unter https://mycargonaut.herokuapp.com/ zu finden.
+*Nach längerem Nicht-Besuchen der Seite schläft die Anwendung ein. Das laden dieser Anwendung kann daher initial einige Momente dauern.*
+
+### Continuous Delivery
+
+Da es kein (vollständig) erfolgreiches Deployment gibt, gibt es auch *keine* Nutzung einer Continuous Delivery und die Anwendung wurde bisher nur manuell bereitgestellt. Das Einbauen eines automatischen Deployments für den `main`-Branch nach erfolgreichem Testen über Travis CI war geplant und kann jedezeit ergänzt werden.
+
+Dazu muss lediglich die [travis.yml](https://github.com/Dxree/MyCargonaut/blob/main/.travis.yml) um den folgenden Abschnitt erweitert werden:
+```yml
+deploy:
+  provider: heroku
+  api_key:
+    secure: "API KEY HERE"
+  app: mycargonaut
+  on:
+    branch: main
+```
 
 # Projektplanung und Konventionen
 
