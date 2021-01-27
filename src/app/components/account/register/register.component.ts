@@ -37,8 +37,8 @@ export class RegisterComponent implements OnInit {
         Validators.required, Validators.minLength(22),
         Validators.pattern('DE[ ]*[0-9]{2}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{4}[ ]*[0-9]{2}[ ]*')
       ]],
-      bic: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(11),
-                  WhitespaceValidator.cannotBeWhitespace, Validators.pattern('[0-9A-Z]{11}')]],
+      bic: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(11),
+                  WhitespaceValidator.cannotBeWhitespace, Validators.pattern('([a-zA-Z]{4}[a-zA-Z]{2}[a-zA-Z0-9]{2}([a-zA-Z0-9]{3})?)')]],
       consent: [false, Validators.requiredTrue]
     });
   }
