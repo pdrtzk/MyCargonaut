@@ -302,7 +302,7 @@ export function app(): express.Express {
     });
   });
 
-// Put Cargonaut // TODO: Check if logged in user is same as user id in request + birthday?
+// Put Cargonaut
   server.put('/api/cargonaut/:id', async (req: Request, res: Response) => {
     const id: number = Number(req.params.id);
     const firstname: string = req.body.firstname;

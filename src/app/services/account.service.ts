@@ -69,7 +69,7 @@ export class AccountService {
     user.email = user.email.trim();
     user.account_holder = user.account_holder.trim().replace(/[ ]+/g, ' ');
     user.iban = user.iban.trim().replace(/\s/g, '');
-    user.bic = user.bic.trim();
+    user.bic = user.bic.trim().toUpperCase();
     if (user.account_holder === '') {
       user.account_holder = user.firstname + ' ' + user.lastname;
     }
@@ -111,7 +111,7 @@ export class AccountService {
     });
   }
 
-  public async update(user: Cargonaut): Promise<void> { // TODO: check if logged in user is updates user
+  public async update(user: Cargonaut): Promise<void> {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       if (this.user.id === user.id) {

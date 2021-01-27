@@ -35,7 +35,7 @@ export class RatingService {
   async addRating(rating: Rating): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
         await this.http.post('https://mycargonaut.herokuapp.com/api/bewertung/' + rating.author.id.toString(), {
-          fahrt: rating.trip.id, // todo remove 0
+          fahrt: rating.trip.id,
           punktzahl: rating.ratingStars,
           kommentar: rating.comment,
         })

@@ -67,7 +67,7 @@
       <div *ngIf="submitted && f.bic.errors" class="invalid-feedback">
         <div *ngIf="f.bic.errors.required || f.bic.errors.cannotBeWhitespace">BIC wird benötigt</div>
         <div *ngIf="(f.bic.errors.minlength || f.bic.errors.maxlength || f.bic.errors.pattern) && !(f.bic.errors.required || f.bic.errors.cannotBeWhitespace)">
-          BIC muss aus genau 11 Zahlen und/oder Großbuchstaben bestehen und darf keine Leerzeichen enthalten</div>
+          Keine gültige BIC</div>
       </div>
     </div>
     <div class="form-group form-check">

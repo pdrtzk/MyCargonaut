@@ -10,8 +10,6 @@ export class BookingService {
   constructor(private http: HttpClient) {
   }
 
-  // todo query data for 1 specific cargonaut
-
   getBookingsForCargonaut(cargonautId: number): Promise<Post[]> {
     const http = this.http;
     return new Promise<Post[]>(async (resolve, reject) => {
@@ -51,10 +49,10 @@ export class BookingService {
     const http = this.http;
     return new Promise<void>(async (resolve, reject) => {
       await http.post('https://mycargonaut.herokuapp.com/api/buchung/' + customerID.toString(), {
-        length: 1, // todo
-        width: 1, // todo
-        height: 1, // todo
-        seats: 1, // todo
+        length: 1, // TODO: remove laderaum from db and server
+        width: 1,
+        height: 1,
+        seats: 1,
         post: postID
       }).toPromise().then((res: any) => {
         resolve();
@@ -67,7 +65,7 @@ export class BookingService {
 
   public async updateStatus(booking: Post): Promise<string> {
     const http = this.http;
-    const data = { status: this.getStatusToString(booking.status)};
+    const data = {status: this.getStatusToString(booking.status)};
     return new Promise<string>(async (resolve, reject) => {
       await http.put('https://mycargonaut.herokuapp.com/api/buchungen/' + booking.id.toString(), {
         data
@@ -81,11 +79,15 @@ export class BookingService {
   }
 
   getStatusToString(status: number) {
-    switch (status){
-      case 0: return 'ausstehend';
-      case 1: return 'unterwegs';
-      case 2: return 'abgeschlossen';
-      default: return 'ausstehend';
+    switch (status) {
+      case 0:
+        return 'ausstehend';
+      case 1:
+        return 'unterwegs';
+      case 2:
+        return 'abgeschlossen';
+      default:
+        return 'ausstehend';
     }
   }
 
