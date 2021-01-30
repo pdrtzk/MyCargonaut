@@ -1,6 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
 
-import { StarRatingComponent } from './star-rating.component';
+import {StarRatingComponent} from './star-rating.component';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 describe('StarRatingComponent', () => {
   let component: StarRatingComponent;
@@ -8,9 +9,11 @@ describe('StarRatingComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StarRatingComponent ]
+      declarations: [StarRatingComponent],
+      imports: [FormsModule, ReactiveFormsModule],
+      providers: [FormBuilder]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {
@@ -22,4 +25,20 @@ describe('StarRatingComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('clicking star icon should call setStarCount', fakeAsync(() => {
+    component.ngOnInit();
+    component.canEdit = true;
+    fixture.detectChanges();
+
+    const compiled = fixture.debugElement.nativeElement;
+    spyOn(component, 'setStarCount');
+    const starIcon = compiled.querySelector('#starIcon3');
+    expect(starIcon).toBeTruthy();
+    starIcon.click();
+    tick();
+    fixture.detectChanges();
+
+    expect(component.setStarCount).toHaveBeenCalled();
+  }));
 });

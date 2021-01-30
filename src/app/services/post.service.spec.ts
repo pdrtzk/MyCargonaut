@@ -23,7 +23,7 @@ describe('PostService', () => {
     httpClient = TestBed.inject(HttpClient);
     httpTestingController = TestBed.inject(HttpTestingController);
 
-    service = TestBed.inject(PostService);
+    service = new PostService(httpClient);
   });
 
   afterEach(() => {
@@ -35,9 +35,72 @@ describe('PostService', () => {
     expect(service).toBeTruthy();
   });
 
+  it('should create Post', async () => {
+    const testPost: Post = {
+      description: 'Test Post'
+    };
+    const author: Cargonaut = {
+      firstname: 'Donald',
+      lastname: 'Duck',
+      id: 123
+    };
+    const result = {message: 'Bewertung abgegben'};
+    service.createPost(author, testPost).then(res => {
+    });
+    const req = httpTestingController.expectOne('http://localhost:4200/api/post/123');
+    expect(req.request.method).toEqual('POST');
+    req.flush(result);
+    httpTestingController.verify();
+  });
+
+  it('getAllPosts should be a get request', async () => {
+    const testData = {posts: []};
+    service.getAllPosts().then(res => {
+      expect(res.length).toEqual(0);
+    });
+    const req = httpTestingController.expectOne('http://localhost:4200/api/posts');
+    expect(req.request.method).toEqual('GET');
+    req.flush(testData);
+    httpTestingController.verify();
+  });
+
+  it('getSpecificPost should work', async () => {
+    const testData = {
+      posts: [{id: 5, description: 'Test1'}, {id: 7, description: 'Test2'}]
+    };
+    service.getSpecificPost(5).then(res => {
+      expect(res.description).toEqual('Test1');
+    });
+    const req = httpTestingController.expectOne('http://localhost:4200/api/post/5');
+    expect(req.request.method).toEqual('GET');
+    req.flush(testData);
+    httpTestingController.verify();
+  });
+
+  it('updating Post should send PUT request', async () => {
+    const testData = {
+      posts: [{id: 5, description: 'Test1'}, {id: 7, description: 'Test2'}]
+    };
+    service.updatePost({description: 'updated!'}, 5).then(res => {});
+    const req = httpTestingController.expectOne('http://localhost:4200/api/post/5');
+    expect(req.request.method).toEqual('PUT');
+    req.flush(testData);
+    httpTestingController.verify();
+  });
+
+  it('getMorePosts Post should get posts', async () => {
+    const testData = {
+      posts: [{id: 5, description: 'Test1'}, {id: 7, description: 'Test2'}]
+    };
+    service.getMorePosts().then(res => {});
+    const req = httpTestingController.expectOne('http://localhost:4200/api/posts');
+    expect(req.request.method).toEqual('GET');
+    req.flush(testData);
+    httpTestingController.verify();
+  });
 });
 
-function getPosts() {
+function getPosts(): Post[] {
   const testPost: Post[] = [
     {
       startlocation: 'Berlin',
@@ -74,5 +137,6 @@ function getPosts() {
       description: 'Eine weitere Description'
     }
   ];
+  return testPost;
 }
 
