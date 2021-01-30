@@ -66,7 +66,7 @@ export class ChatListComponent implements OnInit {
 
   /*
   removeChat(c: Chat){
-    // todo: remove from server
+    // TODO: add 'remove chat' to server
     const index = this.chats.findIndex(s => s.id === c.id);
     if (index > -1) {
       this.chats.splice(index, 1);

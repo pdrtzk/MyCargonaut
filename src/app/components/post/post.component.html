@@ -174,7 +174,7 @@
       <label for="vehicle-offer">
         Fahrzeug
       </label>
-      <select id="vehicle-offer" [(ngModel)]="updatedPost.vehicle" name="vehicle"> <!- todo fix if wanted ->
+      <select id="vehicle-offer" [(ngModel)]="updatedPost.vehicle" name="vehicle"> <!- TODO: fix 'update vehicle', if wanted ->
         <option *ngFor="let vehicle of vehicles" value="{{vehicle}}">{{vehicle?.type?.description}}({{vehicle.type.type}})</option>
       </select>
     </div> -->
@@ -190,7 +190,6 @@
       </label>
       <div style="display: flex; flex-direction: row;">
         <label for="startdate"></label><input id="startdate" type="date" [(ngModel)]="startdate" name="startdate"/>
-        <!-- todo -->
         <input id="starttime" type="time" [(ngModel)]="starttime" name="starttime"/>
       </div>
     </div>

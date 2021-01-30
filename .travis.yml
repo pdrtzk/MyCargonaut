@@ -12,15 +12,5 @@ install:
   - npm install
 script:
   - ng lint
-  - npm run build:ssr # builds angular project (for production) and server
-#  - ng build --prod --base-href https://dxree.github.io/MyCargonaut/
-#  - cp dist/MyCargonaut/browser/index.html dist/MyCargonaut/404.html
+  - npm run build:ssr
   - ng test --watch=false
-#deploy:
-#  provider: pages
-#  skip_cleanup: true
-#  github_token: $GITHUB_TOKEN#
-#  local_dir: dist/MyCargonaut
-#  keep_history: true
-#  on:
-#    branch: main

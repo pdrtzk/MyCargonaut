@@ -150,7 +150,6 @@ export class ProfileComponent implements OnInit {
   }
 
   submitEditUser(user: Cargonaut): void {
-    // todo: error
     this.accountService.update(user).then(() => {
       this.user = user;
       document.getElementById('editProfileForm').style.display = 'none';
