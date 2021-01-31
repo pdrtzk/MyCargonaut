@@ -47,7 +47,7 @@ describe('PostService', () => {
     const result = {message: 'Bewertung abgegben'};
     service.createPost(author, testPost).then(res => {
     });
-    const req = httpTestingController.expectOne('http://localhost:4200/api/post/123');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/post/123');
     expect(req.request.method).toEqual('POST');
     req.flush(result);
     httpTestingController.verify();
@@ -58,7 +58,7 @@ describe('PostService', () => {
     service.getAllPosts().then(res => {
       expect(res.length).toEqual(0);
     });
-    const req = httpTestingController.expectOne('http://localhost:4200/api/posts');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/posts');
     expect(req.request.method).toEqual('GET');
     req.flush(testData);
     httpTestingController.verify();
@@ -71,7 +71,7 @@ describe('PostService', () => {
     service.getSpecificPost(5).then(res => {
       expect(res.description).toEqual('Test1');
     });
-    const req = httpTestingController.expectOne('http://localhost:4200/api/post/5');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/post/5');
     expect(req.request.method).toEqual('GET');
     req.flush(testData);
     httpTestingController.verify();
@@ -82,7 +82,7 @@ describe('PostService', () => {
       posts: [{id: 5, description: 'Test1'}, {id: 7, description: 'Test2'}]
     };
     service.updatePost({description: 'updated!'}, 5).then(res => {});
-    const req = httpTestingController.expectOne('http://localhost:4200/api/post/5');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/post/5');
     expect(req.request.method).toEqual('PUT');
     req.flush(testData);
     httpTestingController.verify();
@@ -93,7 +93,7 @@ describe('PostService', () => {
       posts: [{id: 5, description: 'Test1'}, {id: 7, description: 'Test2'}]
     };
     service.getMorePosts().then(res => {});
-    const req = httpTestingController.expectOne('http://localhost:4200/api/posts');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/posts');
     expect(req.request.method).toEqual('GET');
     req.flush(testData);
     httpTestingController.verify();

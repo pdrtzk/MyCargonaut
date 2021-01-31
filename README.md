@@ -68,7 +68,7 @@ Die Anwendung wird über das Terminal mit dem Befehl
 ```sh
 npm run dev:ssr
 ```
-gestartet. Anschließend kann unter http://localhost:4200/ darauf zugegriffen werden.
+gestartet. Anschließend kann unter https://mycargonaut.herokuapp.com/ darauf zugegriffen werden.
 
 
 # Verwendete Pakete

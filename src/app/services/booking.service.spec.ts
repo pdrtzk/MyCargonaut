@@ -32,7 +32,7 @@ describe('BookingService', () => {
     service.getBookingsForCargonaut(12).then(res => {
       expect(res.length).toEqual(1);
     });
-    const req = httpTestingController.expectOne('http://localhost:4200/api/buchungen/12');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/buchungen/12');
     expect(req.request.method).toEqual('GET');
     req.flush(testData);
     httpTestingController.verify();
@@ -40,7 +40,7 @@ describe('BookingService', () => {
 
   it('addBooking should send PUSH request', async () => {
     service.addBooking(1, 12);
-    const req = httpTestingController.expectOne('http://localhost:4200/api/buchung/12');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/buchung/12');
     expect(req.request.method).toEqual('POST');
     httpTestingController.verify();
   });
@@ -55,7 +55,7 @@ describe('BookingService', () => {
 
     service.updateStatus({id: 2, status: DriveStatus.ABGESCHLOSSEN}).then(res => {
     });
-    const req = httpTestingController.expectOne('http://localhost:4200/api/buchungen/2');
+    const req = httpTestingController.expectOne('https://mycargonaut.herokuapp.com/api/buchungen/2');
     expect(req.request.method).toEqual('PUT');
     httpTestingController.verify();
   });

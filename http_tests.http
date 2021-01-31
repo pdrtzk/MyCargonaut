@@ -7,13 +7,13 @@
 #                Static routes                    #
 ######################################################
 ### get / --> Angular Project
-GET http://localhost:4200/ HTTP/1.1
+GET https://mycargonaut.herokuapp.com/ HTTP/1.1
 
 ######################################################
 #                Authentication                    #
 ######################################################
 ### correct login
-POST http://localhost:4200/api/login HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/login HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -23,7 +23,7 @@ Cookie:
 }
 
 ### incorrect login -> Falsches Passwort
-POST http://localhost:4200/api/login HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/login HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -33,12 +33,12 @@ Cookie:
 }
 
 ###logout
-POST http://localhost:4200/api/logout HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/logout HTTP/1.1
 Content-Type: application/json
 Cookie:
 
 ### Register
-POST http://localhost:4200/api/cargonaut HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/cargonaut HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -51,22 +51,22 @@ Cookie:
 }
 
 ###logout
-DELETE http://localhost:4200/api/cargonaut/30 HTTP/1.1
+DELETE https://mycargonaut.herokuapp.com/api/cargonaut/30 HTTP/1.1
 
 
 ######################################################
 #                Cargonaut                    #
 ######################################################
 ### get Cargonaut
-GET http://localhost:4200/api/cargonaut/5 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/cargonaut/5 HTTP/1.1
 Cookie:
 
 ### get Cargonaut - nicht vorhanden
-GET http://localhost:4200/api/cargonaut/0 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/cargonaut/0 HTTP/1.1
 Cookie:
 
 ### Update Cargonaut
-PUT http://localhost:4200/api/cargonaut/8 HTTP/1.1
+PUT https://mycargonaut.herokuapp.com/api/cargonaut/8 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -77,7 +77,7 @@ Cookie:
 }
 
 ### Update Cargonaut - only 1 parameter
-PUT http://localhost:4200/api/cargonaut/8 HTTP/1.1
+PUT https://mycargonaut.herokuapp.com/api/cargonaut/8 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -86,7 +86,7 @@ Cookie:
 }
 
 ### Update Cargonaut - user nicht vorhanden
-PUT http://localhost:4200/api/cargonaut/0 HTTP/1.1
+PUT https://mycargonaut.herokuapp.com/api/cargonaut/0 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -99,7 +99,7 @@ Cookie:
 #                Fahrzeuge                    #
 ######################################################
 ### post vehicle
-POST http://localhost:4200/api/vehicle/5 HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/vehicle/5 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -112,15 +112,15 @@ Cookie:
 }
 
 ### get vehicle
-GET http://localhost:4200/api/vehicle/5 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/vehicle/5 HTTP/1.1
 Cookie:
 
 ### get vehicles from cargonaut
-GET http://localhost:4200/api/vehicles/5 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/vehicles/5 HTTP/1.1
 Cookie:
 
 ### get vehicles from cargonaut
-DELETE http://localhost:4200/api/vehicle/6 HTTP/1.1
+DELETE https://mycargonaut.herokuapp.com/api/vehicle/6 HTTP/1.1
 Cookie:
 
 
@@ -128,7 +128,7 @@ Cookie:
 #                Post                    #
 ######################################################
 ### create Post
-POST http://localhost:4200/api/post/5 HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/post/5 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -155,15 +155,15 @@ Cookie:
 }
 
 ### get post
-GET http://localhost:4200/api/post/1 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/post/1 HTTP/1.1
 Cookie:
 
 ### get posts
-GET http://localhost:4200/api/posts HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/posts HTTP/1.1
 Cookie:
 
 ### Update Post
-PUT http://localhost:4200/api/post/3 HTTP/1.1
+PUT https://mycargonaut.herokuapp.com/api/post/3 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -182,7 +182,7 @@ Cookie:
 #                Buchungen                  #
 ######################################################
 ### post Buchung
-POST http://localhost:4200/api/buchung/5 HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/buchung/5 HTTP/1.1
 
 Cookie:
 
@@ -195,7 +195,7 @@ Cookie:
 }
 
 ### get Buchungen
-GET http://localhost:4200/api/buchungen/5 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/buchungen/5 HTTP/1.1
 Cookie:
 
 
@@ -203,7 +203,7 @@ Cookie:
 #                Bewertung                    #
 ######################################################
 ### post Bewertung
-POST http://localhost:4200/api/bewertung/5 HTTP/1.1
+POST https://mycargonaut.herokuapp.com/api/bewertung/5 HTTP/1.1
 Content-Type: application/json
 Cookie:
 
@@ -214,5 +214,5 @@ Cookie:
 }
 
 ### get Bewertungen
-GET http://localhost:4200/api/bewertungen/5 HTTP/1.1
+GET https://mycargonaut.herokuapp.com/api/bewertungen/5 HTTP/1.1
 Cookie:
