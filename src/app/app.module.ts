@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {BookingPageComponent} from './components/booking-page/booking-page.component';
 import {BookingCardComponent} from './components/booking-page/booking-card/booking-card.component';
 import {BookingListComponent} from './components/booking-page/booking-list/booking-list.component';
-
+import {FooterComponent} from './components/footer/footer.component';
 import {PostComponent} from './components/post/post.component';
 import {PostDisplayCardComponent} from './components/post/post-display-card/post-display-card.component';
 import {StarRatingComponent} from './components/post/star-rating/star-rating.component';
@@ -70,7 +70,8 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     SidebarRightComponent,
     NewPostModalComponent,
     HomePostComponent,
-    ChatComponent
+    ChatComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule.withServerTransition({appId: 'serverApp'}),
