@@ -113,7 +113,7 @@ Dabei wurden folgende Befehle ausgeführt bzw. getestet:
 
 Da es sich bei der Anwendung um eine Fullstack Anwendung mit Server und Datenbank handelt, kann diese nicht auf statischen Website-Hosting Services, wie GitHub Pages, deployt werden.
 
-**Disclaimer:** Die Anwendung ist nirgends vollständig deployt, jedoch teilweise auf Heroku. Zu den Gründen kann man in den nachfolgenden Abschnitten mehr lesen.
+**Disclaimer:** ~~Die Anwendung ist nirgends vollständig deployt, jedoch teilweise auf Heroku. Zu den Gründen kann man in den nachfolgenden Abschnitten mehr lesen.~~ Die Anwendung ist mittlerweile live, mehr dazu unter Update im Abschnitt Heroku.
 
 ### Deployment mit Firebase
 
@@ -133,7 +133,8 @@ Leider gehört das Deployment einer Serverseitig gerenderten App bei Firebase je
 
 Das Angular Frontend und der Node.js w/ express Server ließen sich sehr gut dort deployen. Jedoch fehlt die Datenbank und macht die Anwendung in Folge dort unbenutzbar, da man lediglich die Seiten Home (ohne Angebote und Gesuche), Login und Registrieren ansehen kann, jedoch nicht deren Funktionalitäten, wie das Anmelden, benutzen kann, da keine Verbindung zu einer Datenbank besteht. Das hat den Grund, dass sich zu Beginn der Entwicklung für eine MySQL Datenbank entschieden wurde und Heroku grundsätzlich nur eine PostgreSQL Datnebank zur Verfügung stellt. Dennoch gibt es eine Auswahl an Add-Ons, die eine MySQL Datenbank in Heroku integrieren können. Diese sind [ClearDB MySQL](https://elements.heroku.com/addons/cleardb), [JawsDB MySQL](https://elements.heroku.com/addons/jawsdb) und [JawsDB Maria](https://elements.heroku.com/addons/jawsdb-maria). Obwohl alle einen ausreichenden und kostenlosen Bezahlplan haben wurde beim tatsächlichen Versuch eine Datenbank in Heroku damit einzurichten klar, dass man für die Nutzung dieser Add-Ons einen verifizierten Heroku-Account benötigt. Da dies auch hier nur mit einer Kreditkarte möglich ist und wir mitten in der Entwicklung unserer Anwendung nicht einfach die Datenbank wechseln wollten, kamen wir auch mit dieser Deployment-Variante nicht final ans Ziel.
 
-Dennoch ist die (teilweise) deployte Anwendung auf Heroku unter https://mycargonaut.herokuapp.com/ zu finden.
+**Update:** Die Anwendung ist mittlerweile vollständig live unter https://mycargonaut.herokuapp.com/. Diese wird manuell vom branch _heroku_ deployt, da dort eine PostgreSql-Datenbank eingerichtet werden musste und es sich dabei nur um eine lokale Änderung handeln sollte.
+
 *Nach längerem Nicht-Besuchen der Seite schläft die Anwendung ein. Das laden dieser Anwendung kann daher initial einige Momente dauern.*
 
 ### Continuous Delivery
